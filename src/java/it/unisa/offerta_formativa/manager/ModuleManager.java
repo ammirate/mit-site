@@ -1,4 +1,4 @@
-package manager;
+package it.unisa.offerta_formativa.manager;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -6,8 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import beans.Module;
-import beans.Teaching;
+import it.unisa.offerta_formativa.beans.Module;
+import it.unisa.offerta_formativa.beans.Teaching;
 
 /**
  * 

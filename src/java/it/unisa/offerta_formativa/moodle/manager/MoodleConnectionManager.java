@@ -3,17 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package it.unisa.offerta_formativa.moodle.moodlerest;
+package it.unisa.offerta_formativa.moodle.manager;
 
 /**
  *
- * @author root
+ * @author Davide
  */
-
-public enum MoodleContactAction {
-        CREATE,
-        DELETE,
-        BLOCK,
-        UNBLOCK
+public class MoodleConnectionManager {
+    
 }

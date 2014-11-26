@@ -1,4 +1,4 @@
-package preServlet;
+package it.unisa.offerta_formativa.preServlet;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;
@@ -6,17 +6,17 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 
-import beans.ClassPartition;
-import beans.Department;
-import beans.Module;
-import beans.ProfModuleClass;
-import beans.Teaching;
-import manager.ClassManager;
-import manager.DegreeManager;
-import manager.DepartmentManager;
-import manager.ModuleManager;
-import manager.ProfModuleClassManager;
-import manager.TeachingManager;
+import it.unisa.offerta_formativa.beans.ClassPartition;
+import it.unisa.offerta_formativa.beans.Department;
+import it.unisa.offerta_formativa.beans.Module;
+import it.unisa.offerta_formativa.beans.ProfModuleClass;
+import it.unisa.offerta_formativa.beans.Teaching;
+import it.unisa.offerta_formativa.manager.ClassManager;
+import it.unisa.offerta_formativa.manager.DegreeManager;
+import it.unisa.offerta_formativa.manager.DepartmentManager;
+import it.unisa.offerta_formativa.manager.ModuleManager;
+import it.unisa.offerta_formativa.manager.ProfModuleClassManager;
+import it.unisa.offerta_formativa.manager.TeachingManager;
 
 public class InsertionTeachingFacade {
 	

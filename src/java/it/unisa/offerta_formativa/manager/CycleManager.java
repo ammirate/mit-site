@@ -1,4 +1,4 @@
-package manager;
+package it.unisa.offerta_formativa.manager;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import beans.Cycle;
+import it.unisa.offerta_formativa.beans.Cycle;
 
 public class CycleManager {
 	

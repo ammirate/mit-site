@@ -1,4 +1,4 @@
-package servlet;
+package it.unisa.offerta_formativa.servlet;
 
 import java.io.IOException;
 
@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import beans.Degree;
-import beans.Department;
-import manager.DegreeManager;
-import manager.DepartmentManager;
+import it.unisa.offerta_formativa.beans.Degree;
+import it.unisa.offerta_formativa.beans.Department;
+import it.unisa.offerta_formativa.manager.DegreeManager;
+import it.unisa.offerta_formativa.manager.DepartmentManager;
 
 /**
  * Servlet implementation class GetDepartmentServlet

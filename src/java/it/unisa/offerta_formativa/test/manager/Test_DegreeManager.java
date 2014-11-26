@@ -1,14 +1,14 @@
-package test.manager;
+package it.unisa.offerta_formativa.test.manager;
 
 import java.util.ArrayList;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import manager.DegreeManager;
+import it.unisa.offerta_formativa.manager.DegreeManager;
 
 import org.junit.Test;
 
-import beans.Degree;
+import it.unisa.offerta_formativa.beans.Degree;
 
 
 /**

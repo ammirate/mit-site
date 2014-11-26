@@ -1,15 +1,15 @@
-package test.manager;
+package it.unisa.offerta_formativa.test.manager;
 
 import java.util.ArrayList;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import manager.TeachingManager;
+import it.unisa.offerta_formativa.manager.TeachingManager;
 
 import org.junit.Test;
 
-import beans.Teaching;
-import beans.Teaching;
+import it.unisa.offerta_formativa.beans.Teaching;
+import it.unisa.offerta_formativa.beans.Teaching;
 
 
 /**

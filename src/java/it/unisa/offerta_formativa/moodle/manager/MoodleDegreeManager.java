@@ -1,8 +1,8 @@
-package moodle.manager;
+package it.unisa.offerta_formativa.moodle.manager;
 
 import java.io.UnsupportedEncodingException;
 
-import moodle.moodlerest.*;
+import it.unisa.offerta_formativa.moodle.moodlerest.*;
 
 /**
  * 

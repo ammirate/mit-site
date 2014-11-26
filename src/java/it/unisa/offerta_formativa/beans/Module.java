@@ -1,4 +1,4 @@
-package beans;
+package it.unisa.offerta_formativa.beans;
 
 /**
  * 

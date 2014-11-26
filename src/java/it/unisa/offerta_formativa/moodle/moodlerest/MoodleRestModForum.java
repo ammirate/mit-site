@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package moodle.moodlerest;
+package it.unisa.offerta_formativa.moodle.moodlerest;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

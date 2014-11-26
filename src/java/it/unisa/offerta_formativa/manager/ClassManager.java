@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package manager;
+package it.unisa.offerta_formativa.manager;
 
-import beans.ClassPartition;
-import beans.Teaching;
+import it.unisa.offerta_formativa.beans.ClassPartition;
+import it.unisa.offerta_formativa.beans.Teaching;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

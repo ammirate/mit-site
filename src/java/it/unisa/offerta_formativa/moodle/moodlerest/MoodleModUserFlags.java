@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package moodle.moodlerest;
+package it.unisa.offerta_formativa.moodle.moodlerest;
 
 import java.io.Serializable;
 import java.util.ArrayList;

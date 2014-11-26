@@ -2,17 +2,17 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package moodle.moodlerest;
+package it.unisa.offerta_formativa.moodle.moodlerest;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-import moodle.moodlerest.MoodleGradeArea.GradeDefinition.Guide;
-import moodle.moodlerest.MoodleGradeArea.GradeDefinition.Guide.GuideComment;
-import moodle.moodlerest.MoodleGradeArea.GradeDefinition.Guide.GuideCriteria;
-import moodle.moodlerest.MoodleGradeArea.GradeDefinition.Rubric.RubricCriteria.Level;
+import it.unisa.offerta_formativa.moodle.moodlerest.MoodleGradeArea.GradeDefinition.Guide;
+import it.unisa.offerta_formativa.moodle.moodlerest.MoodleGradeArea.GradeDefinition.Guide.GuideComment;
+import it.unisa.offerta_formativa.moodle.moodlerest.MoodleGradeArea.GradeDefinition.Guide.GuideCriteria;
+import it.unisa.offerta_formativa.moodle.moodlerest.MoodleGradeArea.GradeDefinition.Rubric.RubricCriteria.Level;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

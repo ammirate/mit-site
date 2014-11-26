@@ -1,4 +1,4 @@
-package servlet;
+package it.unisa.offerta_formativa.servlet;
 
 import java.io.IOException;
 
@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import manager.CycleManager;
-import manager.DepartmentManager;
+import it.unisa.offerta_formativa.manager.CycleManager;
+import it.unisa.offerta_formativa.manager.DepartmentManager;
 
 /**
  * Servlet implementation class ShowInsertDegreeServlet

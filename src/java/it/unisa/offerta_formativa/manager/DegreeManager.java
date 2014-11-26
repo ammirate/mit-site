@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package manager;
+package it.unisa.offerta_formativa.manager;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import beans.Degree;
-import beans.Teaching;
+import it.unisa.offerta_formativa.beans.Degree;
+import it.unisa.offerta_formativa.beans.Teaching;
 
 import java.sql.ResultSet;
 import java.sql.Statement;

@@ -1,4 +1,4 @@
-package servlet;
+package it.unisa.offerta_formativa.servlet;
 
 import java.io.IOException;
 
@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import beans.Curriculum;
-import manager.CurriculumManager;
+import it.unisa.offerta_formativa.beans.Curriculum;
+import it.unisa.offerta_formativa.manager.CurriculumManager;
 
 /**
  * Servlet implementation class GetDepartmentServlet

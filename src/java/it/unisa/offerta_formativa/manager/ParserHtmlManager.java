@@ -1,4 +1,4 @@
-package manager;
+package it.unisa.offerta_formativa.manager;
 
 import java.io.IOException;
 
@@ -6,8 +6,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import moodle.manager.MoodleDegreeManager;
-import moodle.moodlerest.MoodleCallRestWebService;
 
 /**
  * 
@@ -22,7 +20,6 @@ public class ParserHtmlManager {
 	private static ParserHtmlManager instance = null;
 	
 	private ParserHtmlManager(){
-		MoodleCallRestWebService.init("http://localhost/moodle/webservice/rest/server.php", "da78811c3a6c52452b5b50bdf570061e", false);
 	}
 	
 	/**

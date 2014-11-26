@@ -1,12 +1,12 @@
-package test.manager;
+package it.unisa.offerta_formativa.test.manager;
 
-import manager.ModuleManager;
+import it.unisa.offerta_formativa.manager.ModuleManager;
 
 import org.junit.Test;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import beans.Module;
+import it.unisa.offerta_formativa.beans.Module;
 
 /**
  * 

@@ -1,11 +1,11 @@
-package moodle.testMoodle;
+package it.unisa.offerta_formativa.moodle.testMoodle;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
 import javax.management.relation.RoleInfo;
 
-import moodle.moodlerest.*;
+import it.unisa.offerta_formativa.moodle.moodlerest.*;
 
 public class Test {
 

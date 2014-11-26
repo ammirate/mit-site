@@ -1,4 +1,4 @@
-package servlet;
+package it.unisa.offerta_formativa.servlet;
 
 import java.io.IOException;
 import java.util.Map;
@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import beans.Degree;
-import manager.DegreeManager;
-import moodle.manager.MoodleDegreeManager;
+import it.unisa.offerta_formativa.beans.Degree;
+import it.unisa.offerta_formativa.manager.DegreeManager;
+import it.unisa.offerta_formativa.moodle.manager.MoodleDegreeManager;
 
 /**
  * Servlet implementation class Servlet

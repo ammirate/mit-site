@@ -16,21 +16,22 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package moodle.moodlerest;
+package it.unisa.offerta_formativa.moodle.moodlerest;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-import moodle.moodlerest.MoodleModAssignGrades.Grade;
-import moodle.moodlerest.MoodleModAssignSubmissions.Submission;
-import moodle.moodlerest.MoodleModAssignSubmissions.Submission.Plugin;
-import moodle.moodlerest.MoodleModAssignSubmissions.Submission.Plugin.EditorField;
-import moodle.moodlerest.MoodleModAssignSubmissions.Submission.Plugin.FileArea;
-import moodle.moodlerest.MoodleModAssignSubmissions.Submission.Plugin.FileArea.File;
-import moodle.moodlerest.MoodleModAssignUserFlags.UserFlags;
-import moodle.moodlerest.MoodleModAssignUserMappings.UserMappings;
+
+import it.unisa.offerta_formativa.moodle.moodlerest.MoodleModAssignGrades.Grade;
+import it.unisa.offerta_formativa.moodle.moodlerest.MoodleModAssignSubmissions.Submission;
+import it.unisa.offerta_formativa.moodle.moodlerest.MoodleModAssignSubmissions.Submission.Plugin;
+import it.unisa.offerta_formativa.moodle.moodlerest.MoodleModAssignSubmissions.Submission.Plugin.EditorField;
+import it.unisa.offerta_formativa.moodle.moodlerest.MoodleModAssignSubmissions.Submission.Plugin.FileArea;
+import it.unisa.offerta_formativa.moodle.moodlerest.MoodleModAssignSubmissions.Submission.Plugin.FileArea.File;
+import it.unisa.offerta_formativa.moodle.moodlerest.MoodleModAssignUserFlags.UserFlags;
+import it.unisa.offerta_formativa.moodle.moodlerest.MoodleModAssignUserMappings.UserMappings;
 
 import org.w3c.dom.NodeList;
 

@@ -1,11 +1,11 @@
-package manager;
+package it.unisa.offerta_formativa.manager;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import beans.ProfModuleClass;
+import it.unisa.offerta_formativa.beans.ProfModuleClass;
 
 /**
  * 
