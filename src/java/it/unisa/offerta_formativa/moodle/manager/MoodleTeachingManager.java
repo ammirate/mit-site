@@ -16,17 +16,17 @@ public class MoodleTeachingManager {
 	 */
 	private static MoodleTeachingManager instance = null;
 	
-	private MoodleTeachingManager(){
-		MoodleCallRestWebService.init("http://localhost/moodle/webservice/rest/server.php", "2c6f2faa8aac80fc912cff9f6f8bad66", false);
+	private MoodleTeachingManager(String urlMoodle,String token){
+		MoodleCallRestWebService.init(urlMoodle, token, false);
 	}
 	
 	/**
 	 * Singleton Pattern
 	 * @return the unique instance of this class
 	 */
-	public static MoodleTeachingManager getInstance(){
+	public static MoodleTeachingManager getInstance(String urlMoodle,String token){
 		if(instance == null){
-			instance = new MoodleTeachingManager();
+			instance = new MoodleTeachingManager(urlMoodle, token);
 		}
 		return instance;
 	}

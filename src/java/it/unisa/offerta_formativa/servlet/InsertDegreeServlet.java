@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import it.unisa.offerta_formativa.beans.Degree;
 import it.unisa.offerta_formativa.manager.DegreeManager;
+import it.unisa.offerta_formativa.moodle.manager.MoodleConnectionManager;
 import it.unisa.offerta_formativa.moodle.manager.MoodleDegreeManager;
 
 /**
@@ -21,13 +22,16 @@ public class InsertDegreeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private MoodleDegreeManager moodleDegreeMng=null;
     private DegreeManager degreeMng=null;
+    private MoodleConnectionManager moodleConnector=null;
     
     /**
      * @see HttpServlet#HttpServlet()
      */
     public InsertDegreeServlet() {
         super();
-        moodleDegreeMng = MoodleDegreeManager.getInstance();
+        moodleConnector = MoodleConnectionManager.getInstance();
+        int id=1;
+        moodleDegreeMng = MoodleDegreeManager.getInstance(moodleConnector.getUrlMoodle(id),moodleConnector.getToken(id));
         degreeMng = DegreeManager.getInstance();
         // TODO Auto-generated constructor stub
     }

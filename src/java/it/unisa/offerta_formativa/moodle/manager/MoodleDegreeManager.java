@@ -16,18 +16,17 @@ public class MoodleDegreeManager {
 	 */
 	private static MoodleDegreeManager instance = null;
 	
-	private MoodleDegreeManager(){
-		MoodleCallRestWebService.init("http://localhost/moodle/webservice/rest/server.php", "2c6f2faa8aac80fc912cff9f6f8bad66", false);
-		//LINEA PER ALESSANDRO: MoodleCallRestWebService.init("http://localhost/moodle/webservice/rest/server.php", "d5f0d0c6c4e01b46ace2acd538d9ddad", false);
+	private MoodleDegreeManager(String urlMoodle,String token){
+		MoodleCallRestWebService.init(urlMoodle, token, false);
 	}
 	
 	/**
 	 * Singleton Pattern
 	 * @return the unique instance of this class
 	 */
-	public static MoodleDegreeManager getInstance(){
+	public static MoodleDegreeManager getInstance(String urlMoodle,String token){
 		if(instance == null){
-			instance = new MoodleDegreeManager();
+			instance = new MoodleDegreeManager(urlMoodle, token);
 		}
 		return instance;
 	}

@@ -64,7 +64,7 @@ public class Test_DepartmentManager extends TestCase{
 	}
 
 	/**
-	 * TestCase 1.2 that test the creation of a new Bachelor in the DB
+	 * TestCase 1.2 that test the creation of a new Department in the DB
 	 */
 	public void TC_1_2_createDepartment() {
 		System.out.print("Executing Test 1.2...");
@@ -75,7 +75,7 @@ public class Test_DepartmentManager extends TestCase{
 	}
 
 	/**
-	 * TestCase 1.3 that test the update of a Bachelor in the DB
+	 * TestCase 1.3 that test the update of a Department in the DB
 	 */
 	public void TC_1_3_updateDepartment() {
 		System.out.print("Executing Test 1.3...");
@@ -86,7 +86,7 @@ public class Test_DepartmentManager extends TestCase{
 	}
 
 	/**
-	 * TestCase 1.4 that test the read operation of a Bachelor from the DB
+	 * TestCase 1.4 that test the read a Department from the DB
 	 */
 	public void TC_1_4_readDepartment() {
 		System.out.print("Executing Test 1.4...");
@@ -98,7 +98,7 @@ public class Test_DepartmentManager extends TestCase{
 
 	
 	/**
-	 * TestCase 1.5 that test the deletion of a Bachelor from the DB
+	 * TestCase 1.5 that test the deletion of a Department from the DB
 	 */
 	public void TC_1_5_deleteDepartment() {
 		System.out.print("Executing Test 1.5...");
