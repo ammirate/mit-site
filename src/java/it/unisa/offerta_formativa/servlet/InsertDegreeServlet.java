@@ -1,0 +1,66 @@
+package servlet;
+
+import java.io.IOException;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import beans.Degree;
+import manager.DegreeManager;
+import moodle.manager.MoodleDegreeManager;
+
+/**
+ * Servlet implementation class Servlet
+ */
+@WebServlet("/InsertDegreeServlet")
+public class InsertDegreeServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+    private MoodleDegreeManager moodleDegreeMng=null;
+    private DegreeManager degreeMng=null;
+    
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public InsertDegreeServlet() {
+        super();
+        moodleDegreeMng = MoodleDegreeManager.getInstance();
+        degreeMng = DegreeManager.getInstance();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		createDegree(request.getParameter("matricula"),
+					request.getParameter("title"),
+					request.getParameter("link"),
+					Integer.parseInt(request.getParameter("idCycle")),
+					Integer.parseInt(request.getParameter("idDepartment")));
+	}
+
+	private void createDegree(String matricula, String title, String link, int cycle, int department) {
+		// TODO Auto-generated method stub
+		if(moodleDegreeMng.createDegree(title, cycle)){
+			degreeMng.createDegree(new Degree(matricula,link,title,cycle,department));
+		}
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		createDegree(request.getParameter("matricula"),
+				request.getParameter("title"),
+				request.getParameter("link"),
+				Integer.parseInt(request.getParameter("idCycle")),
+				Integer.parseInt(request.getParameter("idDepartment")));
+	}
+
+}
