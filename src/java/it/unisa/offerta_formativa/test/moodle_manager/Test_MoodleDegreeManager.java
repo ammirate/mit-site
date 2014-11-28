@@ -1,7 +1,9 @@
 package it.unisa.offerta_formativa.test.moodle_manager;
 
 import it.unisa.offerta_formativa.moodle.manager.MoodleDegreeManager;
-import it.unisa.offerta_formativa.moodle.moodlerest.MoodleCourse;
+import it.unisa.offerta_formativa.moodle.moodle_rest.MoodleCategory;
+import it.unisa.offerta_formativa.moodle.moodle_rest.MoodleCourse;
+import it.unisa.offerta_formativa.moodle.moodle_rest.MoodleRestCourse;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
@@ -53,7 +55,9 @@ public class Test_MoodleDegreeManager extends TestCase{
 	public void TC_1_2_createDegree() {
 		System.out.print("Executing Test 1.2...");
 		MoodleDegreeManager d_db = MoodleDegreeManager.getInstance("http://localhost/moodle/webservice/rest/server.php","2c6f2faa8aac80fc912cff9f6f8bad66");
-		assertTrue(d_db.createDegree("Prova",2));
+		MoodleCategory cat= new MoodleCategory("Prova", Long.parseLong(String.valueOf(2)));
+                d_db.createDegree("Prova",2);
+                
 		System.out.println("Done");
 	}
 

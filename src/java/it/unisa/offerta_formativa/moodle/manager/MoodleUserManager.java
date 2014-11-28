@@ -1,8 +1,12 @@
 package it.unisa.offerta_formativa.moodle.manager;
 
+import it.unisa.offerta_formativa.moodle.moodle_rest.UserFieldSearch;
+import it.unisa.offerta_formativa.moodle.moodle_rest.MoodleCallRestWebService;
+import it.unisa.offerta_formativa.moodle.moodle_rest.MoodleRestException;
+import it.unisa.offerta_formativa.moodle.moodle_rest.MoodleRestUser;
+import it.unisa.offerta_formativa.moodle.moodle_rest.MoodleUser;
 import java.io.UnsupportedEncodingException;
 
-import it.unisa.offerta_formativa.moodle.moodlerest.*;
 
 /**
  * 
