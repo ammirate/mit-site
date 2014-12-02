@@ -9,65 +9,65 @@ package it.unisa.offerta_formativa.beans;
  *
  * @author Alessandro
  */
-public class Degree{
-	/**
-	 * id of the bachelr. it's composed of 5 digit.
-	 */
-	private String matricula;
-	/**
-	 * title of the degree
-	 */
-	private String title;
-	
-	/**
-	 * link to the degree program on esse3
-	 */
-	private String link;
-	
-	private int idDepartment;
-	
-	
-	/**
-	 * cycle = 1 -> Bachelor degree
-	 * cycle = 2 -> Degree
-	 * cycle = 3 -> PhD
-	 * others...
-	 **/
+public class Degree {
+
+    /**
+     * id of the degree and primary key in the DB. it's composed of 5 digit.
+     */
+    private String serialNumber;
+    /**
+     * title of the degree
+     */
+    private String title;
+
+    /**
+     * link to the degree program on esse3
+     */
+    private String link;
+
+    /**
+     * department to which this degree belongs.
+     */
+    private String departmentAbbreviation;
+
+    /**
+     * cycle = 1 -> Bachelor degree cycle = 2 -> Degree cycle = 3 -> PhD
+     * others...
+	 *
+     */
     private int cycle;
 
-    public Degree(){
-    	this.matricula=null;
-    	this.link=null;
-    	this.title=null;
-    	this.cycle=-1;
-    	this.idDepartment = -1;
-    }
-    
-    public int getDeptId() {
-		return idDepartment;
-	}
 
-	public void setDeptId(int deptId) {
-		this.idDepartment = deptId;
-	}
-
-	public Degree(String matricola, String link, String titolo, int ciclo, int dipartimento) {
-        this.matricula = matricola;
+    /**
+     * Constructor
+     * @param matricola
+     * @param link
+     * @param titolo
+     * @param ciclo
+     * @param departmentAbb 
+     */
+    public Degree(String matricola, String link, String titolo, int ciclo, String departmentAbb) {
+        this.serialNumber = matricola;
         this.link = link;
         this.title = titolo;
         this.cycle = ciclo;
-        this.idDepartment = dipartimento;
+        this.departmentAbbreviation = departmentAbb;
     }
 
-    public String getMatricula() {
-        return matricula;
+    public String getSerialNumber(){
+        return this.serialNumber;
     }
 
-	public void setMatricula(String matricola) {
-		if(matricola.equals("") || matricola.length()>5) 
-			throw new RuntimeException("Empty serial number for new degree");
-		this.matricula = matricola;
-	}
+    /**
+     * 
+     * @param sn the serial number of the degree
+     */
+    public void setSerialNumber(String sn) {
+        if (sn.equals("") || sn.length() > 5) {
+            throw new RuntimeException("Empty serial number for new degree");
+        }
+        this.serialNumber = sn;
+    }
 
     public String getLink() {
         return link;
@@ -81,46 +81,64 @@ public class Degree{
         return title;
     }
 
-	public void setTitle(String title) {
-		if(title.equals("")) 
-			throw new RuntimeException("Empty tile for new degree");
-		this.title = title;
-	}
-
+    public void setTitle(String title) {
+        if (title.equals("")) {
+            throw new RuntimeException("Empty tile for new degree");
+        }
+        this.title = title;
+    }
 
     public int getCycle() {
         return cycle;
     }
 
-	public void setCycle(int cycle) {
-		if(cycle<=0)
-			throw new IllegalArgumentException("Cycle cannot be less than 1");
-		this.cycle = cycle;
-	}
+    public void setCycle(int cycle) {
+        if (cycle <= 0) {
+            throw new IllegalArgumentException("Cycle cannot be less than 1");
+        }
+        this.cycle = cycle;
+    }
 
     @Override
     public String toString() {
-        return "matricula=\"" + matricula + "\", link=\"" + link + "\", title=\"" + title + "\", cycle=\"" + cycle+"\", idDepartment="+idDepartment;
+        String esc = "\'";
+        return "serial_number=" + esc + serialNumber + esc + "," + 
+                "title=" + esc + title + esc + "," +
+                "link" + esc + link + esc + "," +
+                "cycle=" + cycle + "," + 
+                "department_abbreviation=" + esc + departmentAbbreviation + esc;
     }
-    
-    
-    public String toStringQueryInsert(){
-    	return "\"" + matricula + "\",\"" + link +  "\",\"" + title +  "\"," + cycle +","+ idDepartment +")";
-    }
-    
-    
-    public Boolean equals(Degree b){
-    	if(this.matricula.equalsIgnoreCase(b.getMatricula()) &&
-    			this.title.equalsIgnoreCase(b.getTitle()) &&
-    			this.getLink().equals(b.getLink()) &&
-    			this.getCycle() == b.getCycle()
-    	   ){
-    		return true;
-    	}else 
-    		return false;
 
+    public String toStringQueryInsert() {
+        String esc = "\'";
+        return esc + title + esc + "," + 
+               esc + serialNumber + esc + "," + 
+               esc + link + esc + "," + 
+               esc + departmentAbbreviation + esc + "," + 
+               cycle;
+//        return "\"" + serialNumber + "\",\"" + link + "\",\"" + title + "\"," + cycle + "," + serialNumber + ")";
+    }
+
+    public Boolean equals(Degree b) {
+        if (this.serialNumber.equalsIgnoreCase(b.getSerialNumber())
+                && this.title.equalsIgnoreCase(b.getTitle())
+                && this.getLink().equals(b.getLink())
+                && this.getCycle() == b.getCycle()
+                && this.getDepartmentAbbreviation().equalsIgnoreCase(b.getDepartmentAbbreviation())) {
+            return true;
+        } 
+        else {
+            return false;
+        }
 
     }
-    
-    
+
+    public String getDepartmentAbbreviation() {
+        return departmentAbbreviation;
+    }
+
+    public void setDepartmentAbbreviation(String departmentAbbreviation) {
+        this.departmentAbbreviation = departmentAbbreviation;
+    }
+
 }
