@@ -457,12 +457,14 @@
                     stringa+="<h3>Associa Docenti a Classe "+j+" - "+ $("#className"+j).val() +"</h3>";
                     for(i=1;i<=moduleNum;i++){
                         stringa+="<div class='row'>";
-                        stringa+="<div class='form-group col-sm-2'><label for='module'>"+$("#moduleName"+i).val()+"</label><select class='form-control' id='docente'></select></div>";
+                        stringa+="<div class='form-group col-sm-2'><label for='module'>"+$("#moduleName"+i).val()+"</label><select class='form-control' id='docente"+i+"'></select></div>";
                         stringa+="</div>";
                     }
                 }
             $("#lastDiv").html(stringa);
+            //loadProfessor();
         }
+        
         </script>
 	<script src="assets/js/bootstrap.min.js"></script>
 	<script src="assets/js/TweenMax.min.js"></script>

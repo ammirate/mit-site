@@ -4,20 +4,20 @@
  * and open the template in the editor.
  */
 package it.unisa.offerta_formativa.manager;
-    
-    private static String TABLE = "professor";
-    private static String PKEY="email";
-    private Connection conn=null;
-    private Statement stmt;
-    private ResultSet rs;
-    
-    private static ProfessorManager instance = null;
+
+import it.unisa.offerta_formativa.beans.Person;
+import it.unisa.offerta_formativa.beans.Professor;
+import java.util.ArrayList;
 
 /**
  *
  * @author Alessandro
  */
 public class ProfessorManager {
+    private static ProfessorManager instance=null;
+    
+    private ProfessorManager(){
+    }
     
     public static ProfessorManager getInstance(){
         if(instance==null){
@@ -25,5 +25,17 @@ public class ProfessorManager {
         }
         return instance;
     }
+    
+    public ArrayList<Person> getProfessorByDepartment(String abbreviation){
+        ArrayList<Person> toRet = new ArrayList<Person>();
+        Person p= new Person();
+        p.setName("Andrea De Lucia");
+        toRet.add(p);
+        p.setName("Filomena Ferrucci");
+        toRet.add(p);
+        return toRet;
+    }
+    
+    
     
 }
