@@ -2,61 +2,44 @@ package it.unisa.offerta_formativa.beans;
 
 /**
  * 
- * @author Alessandro
+ * @author Alessandro, Antonio
  *
  */
 public class Module {
-	private int idModule;
-	private String idTeaching;
-	private String title;
+    
+	private String teachingSN;
+;	private String title;
 	
-	public Module(){
-		idModule=-1;
-		idTeaching=null;
-		title=null;
-	}
-	
-	public Module(int idModule,String idTeaching, String title){
-		this(idTeaching, title);
-		this.idModule=idModule;
-	}
 	
 	public Module(String idTeaching, String title) {
 		if(idTeaching!=null && title!=null){
 			if(!idTeaching.equals("") && !title.equals("")){
-				this.idTeaching = idTeaching;
+				this.teachingSN = idTeaching;
 				this.title = title;
 			}else{
 				throw new IllegalArgumentException("id teaching and title cannot be void");
 			}
 		}else{throw new IllegalArgumentException("id teaching and title cannot be null");}
-		this.idModule=-1;
+		
 	}
 
-	public int getIdModule() {
-		return idModule;
+        /**
+         * 
+         * @return the teaching serial number
+         */
+	public String getTeachingSN() {
+		return teachingSN;
 	}
 
-	public void setIdModule(int idModule) {
-		if(idModule>0){
-			this.idModule = idModule;
-		}else{
-			throw new IllegalArgumentException("id module cannot be negative");
-		}
-	}
-
-	public String getIdTeaching() {
-		return idTeaching;
-	}
-
-	public void setIdTeaching(String idTeaching) {
-		if(idTeaching!=null){
-			if(!idTeaching.equals("")){
-				this.idTeaching = idTeaching;
+        
+	public void setTeachingSN(String serialNumber) {
+		if(serialNumber!=null){
+			if(!serialNumber.equals("")){
+				this.teachingSN = serialNumber;
 			}else{
-				throw new IllegalArgumentException("id teaching cannot be void");
+				throw new IllegalArgumentException("teaching serialNumber cannot be void");
 			}
-		}else{throw new IllegalArgumentException("id teaching cannot be null");}
+		}else{throw new IllegalArgumentException("teaching serialNumber cannot be null");}
 	}
 
 	public String getTitle() {
@@ -78,22 +61,25 @@ public class Module {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "idModule="+idModule+", idTeaching=\""+idTeaching+"\",title=\""+title+"\"";
+		return "idTeaching=\""+teachingSN+"\",title=\""+title+"\"";
 	}
 	
 	public String toStringQueryInsert(){
-		return "\""+idTeaching+"\",\""+title+"\"";
+		return "\""+teachingSN+"\",\""+title+"\"";
 	}
 	
 	@Override
 	public boolean equals(Object arg0) {
 		// TODO Auto-generated method stub
 		Module toComp = (Module) arg0;
-		if(this.idModule==toComp.getIdModule() &&
-			this.idTeaching.equalsIgnoreCase(toComp.getIdTeaching()) &&
-			this.title.equalsIgnoreCase(toComp.getTitle())
-		)return true;
-		else return false;
+		if(this.teachingSN.equalsIgnoreCase(toComp.getTeachingSN()) &&
+		   this.title.equalsIgnoreCase(toComp.getTitle())
+		){
+                    return true;
+                }
+		else {
+                    return false;
+                }
 	}
 	
 	

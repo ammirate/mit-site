@@ -1,34 +1,33 @@
 package it.unisa.offerta_formativa.beans;
 
+
+/**
+ * 
+ * @author Antonio
+ */
 public class Department {
 
 	private String title;
 	private String urlMoodle;
 	private String token;
-	private int id;
+	private String abbreviation; //primaty key
 	
-	public Department(String title, String urlMoodle, String token){
+        /**
+         * Constructor
+         * @param abbreviation
+         * @param title
+         * @param urlMoodle
+         * @param token 
+         */
+	public Department(String abbreviation, String title, String urlMoodle, String token){
 		if(title.equalsIgnoreCase("")) throw new IllegalArgumentException("Title cannot be null");
-		this.title=title;
+		this.abbreviation = abbreviation;
+                this.title=title;
 		this.urlMoodle=urlMoodle;
 		this.token=token;
 	}
-	
-	public Department(int id,String title, String urlMoodle, String token){
-		this(title,urlMoodle,token);
-		if(id<=0) throw new IllegalArgumentException("id cannot be less than one");
-		this.id=id;
-	}
-	
-	public Department() {
-		// TODO Auto-generated constructor stub
-		this.id=-1;
-		this.title="";
-		this.urlMoodle="";
-		this.token="";
-	}
 
-	public String getTitle() {
+        public String getTitle() {
 		return title;
 	}
 	public void setTitle(String title) {
@@ -47,33 +46,37 @@ public class Department {
 	public void setToken(String token) {
 		this.token = token;
 	}
-	public int getId() {
-		return id;
+	public String getAbbreviation() {
+		return abbreviation;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setAbbreviation(String abbreviation) {
+		this.abbreviation = abbreviation;
 	}
 
 	public String toStringQueryInsert() {
-		// TODO Auto-generated method stub
-		return "\""+title+"\",\" "+urlMoodle+ "\",\""+token+"\"";
+            String esc = "\'";		
+            String toReturn =  esc + abbreviation + esc + "," + esc + title + esc + "," + esc + urlMoodle + esc + "," +  esc + token + esc;
+            return toReturn;
 	}
 	
 	
-
-	@Override
+        @Override
 	public String toString() {
-		return "title=\"" + title + "\", urlMoodle=\"" + urlMoodle
-				+ "\", token=\"" + token + "\", id=" + id;
+                String esc = "\'";		
+
+		return  "abbreviation=" + esc + abbreviation + esc + "," +
+                        "title=" + esc + title + esc + "," +
+                        "urlMoodle=" + esc + urlMoodle + esc + "," +
+                         "token=" + esc + token + esc;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		// TODO Auto-generated method stub
-		Department d = (Department) obj;
-		if(this.getTitle().equalsIgnoreCase(d.getTitle()) &&
-				this.getUrlMoodle().equalsIgnoreCase(d.getUrlMoodle())){return true;}
-		return false;
+	public boolean equals(Object dep) {
+            Department obj = (Department) dep;
+            if(this.getAbbreviation().equals(obj.getAbbreviation()) &&
+		this.getTitle().equalsIgnoreCase(obj.getTitle()) &&
+		this.getUrlMoodle().equalsIgnoreCase(obj.getUrlMoodle())){return true;}
+            return false;
 	}
 	
 	
