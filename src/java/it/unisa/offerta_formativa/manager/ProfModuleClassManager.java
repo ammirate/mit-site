@@ -35,7 +35,17 @@ public class ProfModuleClassManager {
     
     public boolean create(ProfModuleClass pmc){
     	try {
-            if(stmt.executeUpdate("INSERT INTO "+TABLE+"(idProfessor,idClass,idModule) VALUES("+pmc.toStringInsertQuery()+")")==1){
+            String esc = "\'";
+            String query = "INSERT INTO "+TABLE+"(class_title, " + 
+                    "class_teaching_matricula, module_title, module_teaching_matricula" + 
+                    "professor_email) VALUES("+
+                    esc + pmc.getClassTitle() + esc + "," +
+                    esc + pmc.getTeachingMatricula() + esc + "," + 
+                    esc + pmc.getModuleTitle() + esc + "," +
+                    esc + pmc.getTeachingMatricula() + esc + "," + 
+                    esc + pmc.getProfEmail() + esc +
+                    ")";
+            if(stmt.executeUpdate(query)==1){
             	return true;
             }
         } catch (SQLException ex) {
@@ -48,7 +58,9 @@ public class ProfModuleClassManager {
     
     
     public static ProfModuleClassManager getInstance(){
-    	if(instance==null)instance=new ProfModuleClassManager();
+    	if(instance==null){
+            instance=new ProfModuleClassManager();
+        }
     	return instance;
     }
     

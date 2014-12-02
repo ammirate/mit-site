@@ -50,7 +50,7 @@ public class ClassManager {
      */
     public boolean createClass(ClassPartition classp){
         try {
-            if(stmt.executeUpdate("INSERT INTO "+TABLE+"(idTeaching,title) VALUES("+classp.toStringQueryInsert()+")")==1){
+            if(stmt.executeUpdate("INSERT INTO "+TABLE+"(teaching_matricula,title) VALUES("+classp.toStringQueryInsert()+")")==1){
                 return true;
             }
         } catch (SQLException ex) {
@@ -68,7 +68,7 @@ public class ClassManager {
     public ClassPartition readClass(String teachingMatricula, String title){
         String esc = "\'";
         try {
-            String query = "SELECT * FROM "+TABLE+" WHERE title=" +esc + title + esc + "," + 
+            String query = "SELECT * FROM "+TABLE+" WHERE title=" +esc + title + esc + " and " + 
                   "teaching_matricula" + esc +  teachingMatricula + esc;
             rs = stmt.executeQuery(query);
             while(rs.next())
@@ -88,7 +88,7 @@ public class ClassManager {
     public boolean updateClass(ClassPartition classp){
         String esc = "\'";
         try {
-            String query = "UPDATE "+TABLE+" SET "+classp.toString() + "WHERE title=" +esc + classp.getTitle() + esc + "," + 
+            String query = "UPDATE "+TABLE+" SET "+classp.toString() + "WHERE title=" +esc + classp.getTitle() + esc + " and " + 
                   "teaching_matricula" + esc +  classp.getMatricula() + esc;
             if(stmt.executeUpdate(query)==1)return true;
         } catch (SQLException ex) {
@@ -106,7 +106,7 @@ public class ClassManager {
     public boolean deleteClass(String teachingMatricula, String title){
         String esc = "\'";
         try {
-            String query = "DELETE FROM "+TABLE+" WHERE title=" +esc + title + esc + "," + 
+            String query = "DELETE FROM "+TABLE+" WHERE title=" +esc + title + esc + " and " + 
                   "teaching_matricula" + esc +  teachingMatricula + esc;
             if(stmt.executeUpdate(query)==1){
                 return true;
