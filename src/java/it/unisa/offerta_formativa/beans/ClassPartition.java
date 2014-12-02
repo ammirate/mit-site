@@ -12,7 +12,7 @@ package it.unisa.offerta_formativa.beans;
 public class ClassPartition {
 
     private String title = "";
-    private String teachingSN = "";
+    private String matricula = "";
 
     public ClassPartition() {
 
@@ -29,14 +29,14 @@ public class ClassPartition {
         }
     }
 
-    public String getTeacgingSN() {
-        return teachingSN;
+    public String getMatricula() {
+        return matricula;
     }
 
-    public void setTeachingSN(String idTeaching) {
+    public void setMatricula(String idTeaching) {
         if (idTeaching != null) {
             if (!idTeaching.equals("")) {
-                this.teachingSN = idTeaching;
+                this.matricula = idTeaching;
             } else {
                 throw new IllegalArgumentException("id teaching cannot be void");
             }
@@ -65,18 +65,18 @@ public class ClassPartition {
     @Override
     public String toString() {
         // TODO Auto-generated method stub
-        return "idTeaching=\"" + teachingSN + "\", title=\"" + title + "\"";
+        return "teaching_matricula=\"" + matricula + "\", title=\"" + title + "\"";
     }
 
     public String toStringQueryInsert() {
-        return "\"" + teachingSN + "\", \"" + title + "\"";
+        return "\"" + matricula + "\", \"" + title + "\"";
     }
 
     @Override
     public boolean equals(Object arg0) {
         // TODO Auto-generated method stub
         ClassPartition toComp = (ClassPartition) arg0;
-        if (this.teachingSN.equalsIgnoreCase(toComp.getTeacgingSN())
+        if (this.matricula.equalsIgnoreCase(toComp.getMatricula())
                 && this.getTitle().equals(toComp.getTitle())) {
             return true;
         } else {

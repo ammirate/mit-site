@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 public class ClassManager {
     private final Connection conn;
     private static String TABLE = "class";
-    private static String PKEY="idClass";
     private Statement stmt;
     private ResultSet rs;
     
@@ -43,6 +42,7 @@ public class ClassManager {
     }
     
     
+    
     /**
      * Create a new ClassPartition record
      * @param classp - An instance of the ClassPartition bean
@@ -50,7 +50,9 @@ public class ClassManager {
      */
     public boolean createClass(ClassPartition classp){
         try {
-            if(stmt.executeUpdate("INSERT INTO "+TABLE+"(idTeaching,title) VALUES("+classp.toStringQueryInsert()+")")==1)return true;
+            if(stmt.executeUpdate("INSERT INTO "+TABLE+"(idTeaching,title) VALUES("+classp.toStringQueryInsert()+")")==1){
+                return true;
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RuntimeException("Query failed to create a class");
@@ -63,11 +65,14 @@ public class ClassManager {
      * @param idClass of ClassPartition entity
      * @return ClassPartition read. empty instance if not found
      */
-    public ClassPartition readClass(int idClass){
+    public ClassPartition readClass(String teachingMatricula, String title){
+        String esc = "\'";
         try {
-            rs = stmt.executeQuery("SELECT * FROM "+TABLE+" WHERE "+PKEY+"="+idClass);
+            String query = "SELECT * FROM "+TABLE+" WHERE title=" +esc + title + esc + "," + 
+                  "teaching_matricula" + esc +  teachingMatricula + esc;
+            rs = stmt.executeQuery(query);
             while(rs.next())
-            	return new ClassPartition(rs.getInt("idClass"),rs.getString("idTeaching"),rs.getString("title"));
+            	return new ClassPartition(rs.getString("teaching_matricula"),rs.getString("title"));
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RuntimeException("Query failed to read a class");
@@ -81,8 +86,11 @@ public class ClassManager {
      * @return true if done.
      */
     public boolean updateClass(ClassPartition classp){
+        String esc = "\'";
         try {
-            if(stmt.executeUpdate("UPDATE "+TABLE+" SET "+classp.toString() + "WHERE "+PKEY+"="+classp.getIdClass())==1)return true;
+            String query = "UPDATE "+TABLE+" SET "+classp.toString() + "WHERE title=" +esc + classp.getTitle() + esc + "," + 
+                  "teaching_matricula" + esc +  classp.getMatricula() + esc;
+            if(stmt.executeUpdate(query)==1)return true;
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RuntimeException("Query failed to update class");
@@ -95,9 +103,14 @@ public class ClassManager {
      * @param idClass of ClassPartition bean
      * @return true if done.
      */
-    public boolean deleteClass(int idClass){
+    public boolean deleteClass(String teachingMatricula, String title){
+        String esc = "\'";
         try {
-            if(stmt.executeUpdate("DELETE FROM "+TABLE+" WHERE "+PKEY+"="+idClass)==1)return true;
+            String query = "DELETE FROM "+TABLE+" WHERE title=" +esc + title + esc + "," + 
+                  "teaching_matricula" + esc +  teachingMatricula + esc;
+            if(stmt.executeUpdate(query)==1){
+                return true;
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RuntimeException("Query failed to delete class");
@@ -129,9 +142,10 @@ public class ClassManager {
 			throw new IllegalArgumentException("Id cannot be null!");
 		}else{
 			try {
-	            rs = stmt.executeQuery("SELECT * FROM "+TABLE+" WHERE idTeaching=\""+idTeaching+"\"");
+                     String query = "SELECT * FROM "+TABLE+" WHERE teaching_matricula=\""+idTeaching+"\"";
+	            rs = stmt.executeQuery(query);
 	            while(rs.next()){
-	            	toReturn.add(new ClassPartition(rs.getInt("idClass"),rs.getString("idTeaching"),rs.getString("title")));
+	            	toReturn.add(new ClassPartition(idTeaching, rs.getString("title")));
 	            }  
 	        } catch (SQLException ex) {
 	            ex.printStackTrace();
@@ -151,7 +165,7 @@ public class ClassManager {
 		try {
             rs = stmt.executeQuery("SELECT * FROM "+TABLE);
             while(rs.next()){
-            	toReturn.add(new ClassPartition(rs.getInt("idClass"),rs.getString("idTeaching"),rs.getString("title")));
+            	toReturn.add(new ClassPartition(rs.getString("teaching_matricula"),rs.getString("title")));
             }  
         } catch (SQLException ex) {
             ex.printStackTrace();
