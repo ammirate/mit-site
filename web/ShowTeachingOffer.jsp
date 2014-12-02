@@ -1,10 +1,20 @@
+<%@page import="it.unisa.offerta_formativa.beans.Degree"%>
+<%@page import="it.unisa.offerta_formativa.beans.Teaching"%>
+
+<%@page import="it.unisa.offerta_formativa.beans.Department"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%! public String htmlparser; %>
+
+<%! public ArrayList<Degree> degrees; 
+    public ArrayList<Department> departments; 
+    public ArrayList<Teaching> teachings;
+%>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
@@ -99,7 +109,9 @@
 
 </head>
 <body class="page-body">
-	<% 	htmlparser = (String)request.getAttribute("htmlparser");
+	<% 	teachings = (ArrayList<Teaching>)request.getAttribute("teachings");
+		departments = (ArrayList<Department>)request.getAttribute("departments");
+		degrees= (ArrayList<Degree>) request.getAttribute("degrees");
 	%>
 	<nav class="navbar horizontal-menu navbar-fixed-top">
 		<!-- set fixed position by adding class "navbar-fixed-top" -->
@@ -241,14 +253,51 @@
 				});
 			</script>
 
-			<div class="text-justify">
-                            <div class="container-fluid">
-			<%  out.print(htmlparser); %>
+			
+			
+			<div class="jumbotron">
+                           
+                                <% out.print(departments.size()); %>
+			<%
+							if (departments.size() != 0)
+								for (Department d : departments) {
+                                                                    %><dl><dt class="panel-heading col-xs-12 col-sm-6 col-md-7" style="background-color:#9FA8DA; "><%out.print(d.getTitle());%></dt><dd><dl>
+								<% if (degrees.size() != 0) {
+                                                                        for (Degree de : degrees) {
+                                                                            
+                                                                            if(de.getDepartmentAbbreviation().equalsIgnoreCase(d.getAbbreviation())){
+                                                                        %>
+                                                                            <dt class="list-group-item col-xs-12 col-sm-6 col-md-7" style="background-color:#C5CAE9"><%out.print(de.getTitle());%></dt> 
+                                                                        
+                                                                                <%for (Teaching te : teachings){
+                                                                               
+                                                                                // bisogna inserire if per controllo teachings di una degree
+                                                                                %>
+                                                                                <dd class="list-group-item col-xs-12 col-sm-6 col-md-7" id="<%out.print(te.getMatricula());%>"><%out.print(te.getTitle());%></dd>
+                                                                                <% } %>
+                                                                        
+                                                                            <% } %>
+                                                                                
+                                                                        <%
+                                                                            }
+                                                                    }
+                                                                        %>
+                                                                            </dl></dd></dl>
+							<%
+								}
+							%>
+                                                               
+                         
 			<!-- Main Footer -->
 			<!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->
 			<!-- Add class "sticky" to  always stick the footer to the end of page (if page contents is small) -->
 			<!-- Or class "fixed" to  always fix the footer to the end of page -->
-			<footer class="main-footer sticky footer-type-1">
+			
+		</div>
+
+	</div>
+	
+               <footer class="main-footer sticky footer-type-1">
 
 				<div class="footer-inner">
 
@@ -269,12 +318,7 @@
 
 				</div>
 
-			</footer>
-		</div>
-
-	</div>
-	
-               
+		</footer>
 	<div class="page-loading-overlay">
 		<div class="loader-2"></div>
 	</div>
@@ -296,7 +340,13 @@
 	<script src="assets/js/joinable.js"></script>
 	<script src="assets/js/xenon-api.js"></script>
 	<script src="assets/js/xenon-toggles.js"></script>
+        <script>
+			$('dt').click(function(e){
+                        $(this).nextUntil('dt').toggle();
+                        });
 
+                        $('dd').hide();
+	</script>
 
 	<!-- JavaScripts initializations and stuff -->
 	<script src="assets/js/xenon-custom.js"></script>
