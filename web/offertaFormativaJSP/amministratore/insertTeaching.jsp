@@ -260,7 +260,7 @@
 							<%
 								if (departments.size() != 0)
 									for (Department d : departments) {
-							%><option value=<%out.print(d.getId());%>>
+							%><option value=<%out.print(d.getAbbreviation());%>>
 								<%
 									out.print(d.getTitle());
 								%>
@@ -277,7 +277,7 @@
 							<%
 								if (cycles.size() != 0)
 									for (Cycle c : cycles) {
-							%><option value=<%out.print(c.getId());%>>
+							%><option value=<%out.print(c.getNumber());%>>
 								<%
 									out.print(c.getTitle());
 								%>
@@ -453,18 +453,15 @@
             //$("#lastDiv").html($("#moduleName1").val());
             var moduleNum=$("#moduleNumber option:selected").val();
             var classNum = $("#classNumber option:selected").val();
-            
-            for(i=1;i<=moduleNum;i++){
-                stringa ="<h3>Associa Docenti a Classe "+i+"</h3>";
                 for(j=1;j<=classNum;j++){
-                    //stringa+="<div class='row'>";
-                    //stringa+="<div class='form-group col-sm-2'><label for='year'>"+$("#moduleName"+j+" option:selected").val()+"</label></div>";
-                    //stringa+="</div>";
+                    stringa+="<h3>Associa Docenti a Classe "+j+" - "+ $("#className"+j).val() +"</h3>";
+                    for(i=1;i<=moduleNum;i++){
+                        stringa+="<div class='row'>";
+                        stringa+="<div class='form-group col-sm-2'><label for='module'>"+$("#moduleName"+i).val()+"</label><select class='form-control' id='docente'></select></div>";
+                        stringa+="</div>";
+                    }
                 }
-            }
-            
             $("#lastDiv").html(stringa);
-            
         }
         </script>
 	<script src="assets/js/bootstrap.min.js"></script>

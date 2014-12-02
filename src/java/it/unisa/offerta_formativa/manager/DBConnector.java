@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class DBConnector {
     private static Connection conn=null;
-    private static String CONNECTION_STRING="jdbc:mysql://localhost:3306/itpsm";
+    private static String CONNECTION_STRING="jdbc:mysql://localhost:3306/offerta_didattica_db";
     
     public static java.sql.Connection getConnection(){
         try {
