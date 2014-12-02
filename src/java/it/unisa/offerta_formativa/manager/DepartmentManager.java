@@ -26,7 +26,7 @@ public class DepartmentManager {
     private Connection conn=null;
     private Statement stmt;
     public static String TABLE="department";
-    public static String PKEY="id";
+    public static String PKEY="abbreviation";
     private ResultSet rs = null;
     
     private static DepartmentManager instance = null;
@@ -70,7 +70,7 @@ public class DepartmentManager {
         try {
             stmt = conn.createStatement();
             if(stmt.executeUpdate("UPDATE " + TABLE +" SET " + dept.toString() + " WHERE " 
-            + PKEY + "=" + dept.getId()) == 1){
+            + PKEY + "=" + dept.getAbbreviation()) == 1){
             	return true;
             }
         } catch (SQLException ex) {
@@ -86,23 +86,23 @@ public class DepartmentManager {
      * @param id of the department
      * @return a department object if it is present in the DB, else empty department bean
      */
-    public Department readDepartment(int id){
-    	if(id<=0){
+    public Department readDepartment(String abbreviation){
+    	if(abbreviation.equalsIgnoreCase("")){
 			throw new IllegalArgumentException("Can't read a degree from the Database using id less than one");
 		}else{
 	        try {
 	            stmt = conn.createStatement();
 	            rs= stmt.executeQuery("SELECT * FROM " + TABLE 
-	            		+ " WHERE " + PKEY + "=\"" + id+"\"");
+	            		+ " WHERE " + PKEY + "=\"" + abbreviation+"\"");
 	            while(rs.next()) {
-	            	return new Department(rs.getInt("id"),rs.getString("title"),rs.getString("urlMoodle"),rs.getString("token"));
+	            	return new Department(rs.getString("abbreviation"),rs.getString("title"),rs.getString("urlMoodle"),rs.getString("token"));
 	            } 
 	        } catch (SQLException ex) {
 	        	ex.printStackTrace();
 	        	throw new RuntimeException("Read Query failed!");
 	        }
 		}
-	    return new Department();
+	    return null;
     }
     
 
@@ -111,11 +111,11 @@ public class DepartmentManager {
      * @param id of department
      * @return true if deleted.
      */
-    public boolean deleteDepartment(int id){
+    public boolean deleteDepartment(String abbreviation){
         try {
             stmt = conn.createStatement();
             if(stmt.executeUpdate("DELETE FROM " + TABLE + 
-            		" WHERE " + PKEY + "=\"" + id + "\"") == 1){
+            		" WHERE " + PKEY + "=\"" + abbreviation + "\"") == 1){
             	return true;
             }
         } catch (SQLException ex) {
@@ -183,10 +183,10 @@ public class DepartmentManager {
     private Department getDepartmentFromResultSet(ResultSet rs){
     	try {
 			String tit = rs.getString("title");
-			int id = rs.getInt("id");
+			String abbreviation = rs.getString("abbreviation");
 			String url = rs.getString("urlMoodle");
 			String token = rs.getString("token");
-	    	return new Department(id, tit, url, token);
+	    	return new Department(abbreviation, tit, url, token);
 		} 
     	catch (SQLException e) {
 			e.printStackTrace();

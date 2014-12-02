@@ -14,7 +14,7 @@ public class Degree {
     /**
      * id of the degree and primary key in the DB. it's composed of 5 digit.
      */
-    private String serialNumber;
+    private String matricula;
     /**
      * title of the degree
      */
@@ -47,26 +47,26 @@ public class Degree {
      * @param departmentAbb 
      */
     public Degree(String matricola, String link, String titolo, int ciclo, String departmentAbb) {
-        this.serialNumber = matricola;
+        this.matricula = matricola;
         this.link = link;
         this.title = titolo;
         this.cycle = ciclo;
         this.departmentAbbreviation = departmentAbb;
     }
 
-    public String getSerialNumber(){
-        return this.serialNumber;
+    public String getMatricula(){
+        return this.matricula;
     }
 
     /**
      * 
      * @param sn the serial number of the degree
      */
-    public void setSerialNumber(String sn) {
+    public void setMatricula(String sn) {
         if (sn.equals("") || sn.length() > 5) {
             throw new RuntimeException("Empty serial number for new degree");
         }
-        this.serialNumber = sn;
+        this.matricula = sn;
     }
 
     public String getLink() {
@@ -102,7 +102,7 @@ public class Degree {
     @Override
     public String toString() {
         String esc = "\'";
-        return "serial_number=" + esc + serialNumber + esc + "," + 
+        return "serial_number=" + esc + matricula + esc + "," + 
                 "title=" + esc + title + esc + "," +
                 "link" + esc + link + esc + "," +
                 "cycle=" + cycle + "," + 
@@ -112,7 +112,7 @@ public class Degree {
     public String toStringQueryInsert() {
         String esc = "\'";
         return esc + title + esc + "," + 
-               esc + serialNumber + esc + "," + 
+               esc + matricula + esc + "," + 
                esc + link + esc + "," + 
                esc + departmentAbbreviation + esc + "," + 
                cycle;
@@ -120,7 +120,7 @@ public class Degree {
     }
 
     public Boolean equals(Degree b) {
-        if (this.serialNumber.equalsIgnoreCase(b.getSerialNumber())
+        if (this.matricula.equalsIgnoreCase(b.getMatricula())
                 && this.title.equalsIgnoreCase(b.getTitle())
                 && this.getLink().equals(b.getLink())
                 && this.getCycle() == b.getCycle()

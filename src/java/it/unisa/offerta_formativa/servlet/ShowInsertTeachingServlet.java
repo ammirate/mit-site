@@ -50,7 +50,7 @@ public class ShowInsertTeachingServlet extends HttpServlet {
 		request.setAttribute("departments",dm.getAllDepartments());
 		request.setAttribute("cycles", cm.getAllCycles());
 		request.setAttribute("degrees", degreeMng.getDegreesByCycle(2));
-		request.getRequestDispatcher("/insertTeaching.jsp").forward(request, response);
+		request.getRequestDispatcher("/offertaFormativaJSP/amministratore/insertTeaching.jsp").forward(request, response);
 	}
 
 }

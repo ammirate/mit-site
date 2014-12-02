@@ -97,14 +97,14 @@ public class DegreeManager {
 	            rs= stmt.executeQuery("SELECT * FROM " + TABLE 
 	            		+ " WHERE " + PKEY + "=\"" + matricula+"\"");
 	            while(rs.next()) {
-	            	return new Degree(rs.getString("matricula"),rs.getString("link"),rs.getString("title"),rs.getInt("cycle"),rs.getInt("idDepartment"));
+	            	return new Degree(rs.getString("matricula"),rs.getString("link"),rs.getString("title"),rs.getInt("cycle"),rs.getString("department_abbreviation"));
 	            } 
 	        } catch (SQLException ex) {
 	        	ex.printStackTrace();
 	        	throw new RuntimeException("Read Query failed!");
 	        }
 		}
-	    return new Degree();
+	    return null;
     }
     
 
@@ -215,7 +215,7 @@ public class DegreeManager {
 			String matr = rs.getString("matricula");
 			String link = rs.getString("link");
 			int cycle = rs.getInt("cycle");
-			int dpt = rs.getInt("idDepartment");
+			String dpt = rs.getString("department_abbreviation");
 	
 	    	return new Degree(matr, link, tit, cycle,dpt);
 		} 
