@@ -15,7 +15,7 @@ public class CycleManager {
 	private Statement stmt;
 	private ResultSet rs;
 	private static String TABLE="cycle";
-	private static String PKEY ="id";
+	private static String PKEY ="cycle_number";
 	
 	private CycleManager(){
 		conn = DBConnector.getConnection();
@@ -29,7 +29,7 @@ public class CycleManager {
 	
 	public boolean createCycle(Cycle c){
 		try {
-			if(stmt.executeUpdate("INSERT INTO "+TABLE+"(id,title) VALUES("+c.getInsertQuery()+")")==1)return true;
+			if(stmt.executeUpdate("INSERT INTO "+TABLE+"(cycle_number,title) VALUES("+c.getInsertQuery()+")")==1)return true;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -55,7 +55,7 @@ public class CycleManager {
 			System.out.println("SELECT * FROM "+TABLE);
 			rs = stmt.executeQuery("SELECT * FROM "+TABLE);
 			while(rs.next()){
-				toReturn.add(new Cycle(rs.getInt("id"),rs.getString("title")));
+				toReturn.add(new Cycle(rs.getInt("cycle_number"),rs.getString("title")));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

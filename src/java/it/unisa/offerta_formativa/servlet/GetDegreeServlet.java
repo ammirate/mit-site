@@ -51,7 +51,7 @@ public class GetDegreeServlet extends HttpServlet {
 			int i=1;
 			String toRet="";
 			for(Degree d : degreeMng.getDegreesByCycle(Integer.parseInt(request.getParameter("idCycle")))){
-				toRet+="<option value="+d.getMatricula()+">"+d.getTitle()+"</option>"; 
+				//toRet+="<option value="+d.getMatricula()+">"+d.getTitle()+"</option>"; 
 				i++;
 			}
 			response.getWriter().write(toRet);

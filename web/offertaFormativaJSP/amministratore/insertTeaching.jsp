@@ -457,19 +457,10 @@
             for(i=1;i<=moduleNum;i++){
                 stringa ="<h3>Associa Docenti a Classe "+i+"</h3>";
                 for(j=1;j<=classNum;j++){
-                    stringa+="<div class='row'>";
-                    stringa+="<div class='form-group col-sm-2'><label for='year'>"+$("#moduleName"+j+" option:selected").val()+"</label> 
-						<select name="year"class="form-control">
-							<option value=1>1</option>
-							<option value=2>2</option>
-							<option value=3>3</option>
-							<option value=4>4</option>
-							<option value=5>5</option>
-						</select>
-                	</div>"
-                    stringa+="</div>";
+                    //stringa+="<div class='row'>";
+                    //stringa+="<div class='form-group col-sm-2'><label for='year'>"+$("#moduleName"+j+" option:selected").val()+"</label></div>";
+                    //stringa+="</div>";
                 }
-                
             }
             
             $("#lastDiv").html(stringa);
