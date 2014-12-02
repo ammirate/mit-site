@@ -1,7 +1,8 @@
+<%@page import="it.unisa.offerta_formativa.beans.Degree"%>
+<%@page import="it.unisa.offerta_formativa.beans.Department"%>
+<%@page import="it.unisa.offerta_formativa.beans.Cycle"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="beans.Cycle"%>
-<%@page import="beans.Department"%>
-<%@page import="beans.Degree"%>
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%! public ArrayList<Cycle> cycles; %>
