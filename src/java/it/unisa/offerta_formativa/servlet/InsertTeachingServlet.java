@@ -17,8 +17,8 @@ import it.unisa.offerta_formativa.moodle.manager.MoodleDegreeManager;
 /**
  * Servlet implementation class Servlet
  */
-@WebServlet("/InsertDegreeServlet")
-public class InsertDegreeServlet extends HttpServlet {
+@WebServlet("/InsertTeachingServlet")
+public class InsertTeachingServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private MoodleDegreeManager moodleDegreeMng = null;
@@ -28,7 +28,7 @@ public class InsertDegreeServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public InsertDegreeServlet() {
+    public InsertTeachingServlet() {
         super();
         moodleConnector = MoodleConnectionManager.getInstance();
         int id = 1;
@@ -43,19 +43,10 @@ public class InsertDegreeServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        createDegree(request.getParameter("matricula"),
-                request.getParameter("title"),
-                request.getParameter("link"),
-                Integer.parseInt(request.getParameter("idCycle")),
-                request.getParameter("idDepartment"));
+        
     }
 
-    private void createDegree(String matricula, String title, String link, int cycle, String depAbb) {
-        // TODO Auto-generated method stub
-        if (moodleDegreeMng.createDegree(title, cycle)) {
-            degreeMng.createDegree(new Degree(matricula, link, title, cycle, depAbb));
-        }
-    }
+    
 
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
@@ -63,11 +54,7 @@ public class InsertDegreeServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        createDegree(request.getParameter("matricula"),
-        request.getParameter("title"),
-        request.getParameter("link"),
-        Integer.parseInt(request.getParameter("idCycle")),
-        request.getParameter("idDepartment"));
+        
     }
 
 }

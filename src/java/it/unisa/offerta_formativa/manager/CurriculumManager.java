@@ -235,4 +235,16 @@ public class CurriculumManager {
         }
         return false;
     }
+
+    public void setCurriculumTeaching(String teaching_matricula,String curriculum_matricula) {
+        try {
+            String esc = "\'";
+            String query = "INSERT INTO "+ TABLE_LINK + "(teaching_matricula, curriculum_matricula) VALUES("+esc+teaching_matricula+esc+","+esc+curriculum_matricula+esc+")";
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(CurriculumManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

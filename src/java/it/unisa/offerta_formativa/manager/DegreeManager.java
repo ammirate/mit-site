@@ -151,22 +151,38 @@ public class DegreeManager {
     
     
     /**
-	 * Insert all the degrees in the list into the Database
-	 * @param list is the list of degrees to insert
-	 * @return the list of degrees which had an error during the insertion process. 
-	 * So, check if this list is empty to make sure of the insertion process.
-	 */
-	public ArrayList<Degree> insertDegree(ArrayList<Degree> list){
-		ArrayList<Degree> notInserted = new ArrayList<Degree>();
-		
-		for(Degree b : list){
-			if(!createDegree(b)){
-				notInserted.add(b);
-			}
-		}
-		return notInserted;
-	}
+    * Insert all the degrees in the list into the Database
+    * @param list is the list of degrees to insert
+    * @return the list of degrees which had an error during the insertion process. 
+    * So, check if this list is empty to make sure of the insertion process.
+    */
+   public ArrayList<Degree> insertDegree(ArrayList<Degree> list){
+           ArrayList<Degree> notInserted = new ArrayList<Degree>();
+
+           for(Degree b : list){
+                   if(!createDegree(b)){
+                           notInserted.add(b);
+                   }
+           }
+           return notInserted;
+   }
     
+        
+    public ArrayList<Degree> getDegreesByDepartment(String abbreviation){
+        String esc="\"";
+        ArrayList<Degree> toReturn = new ArrayList<Degree>();
+        try {
+			stmt = conn.createStatement();
+			rs= stmt.executeQuery("SELECT * FROM " + TABLE+ " WHERE degree_abbreviation="+esc+abbreviation+esc);
+			while(rs.next()) {
+				Degree b = getDegreeFromResultSet(rs);
+				toReturn.add(b);
+            } 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+        return toReturn;
+    }    
     
     /**
      * Get all the degrees in the lists with a given cycle

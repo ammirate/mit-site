@@ -219,6 +219,26 @@ public class TeachingManager {
         return toReturn;
     }
     
+    public ArrayList<Teaching> getTeachingsByCurriculum(String curriculum_matricula) {
+        ResultSet rs2;
+        String esc = "\"";
+        ArrayList<Teaching> toReturn = new ArrayList<Teaching>();
+        try {
+            stmt = conn.createStatement();
+            rs2 = stmt.executeQuery("SELECT * FROM " + TABLE_LINK + " WHERE curriculum_matricula=" + esc + curriculum_matricula + esc);
+            while (rs2.next()) {
+                rs = stmt.executeQuery("SELECT * FROM " + TABLE + " WHERE matricula=" + rs2.getString("teaching_matricula"));
+                Teaching t = getTeachingFromResultSet(rs,rs2);
+                toReturn.add(t);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toReturn;
+    }
+    
+    
     /**
      * Create a Teaching from a ResultSet object
      *
