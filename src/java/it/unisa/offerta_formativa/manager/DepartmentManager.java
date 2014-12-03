@@ -49,7 +49,7 @@ public class DepartmentManager {
     public boolean createDepartment(Department dept){
         try {
             stmt = conn.createStatement();
-            String query = "INSERT INTO " + TABLE + "(title,urlMoodle,token) VALUES(" +dept.toStringQueryInsert()+")";
+            String query = "INSERT INTO " + TABLE + "(title,url_moodle,token) VALUES(" +dept.toStringQueryInsert()+")";
             if(stmt.executeUpdate(query) == 1){
             	return true;
             } 
@@ -95,7 +95,7 @@ public class DepartmentManager {
 	            rs= stmt.executeQuery("SELECT * FROM " + TABLE 
 	            		+ " WHERE " + PKEY + "=\"" + abbreviation+"\"");
 	            while(rs.next()) {
-	            	return new Department(rs.getString("abbreviation"),rs.getString("title"),rs.getString("urlMoodle"),rs.getString("token"));
+	            	return new Department(rs.getString("abbreviation"),rs.getString("title"),rs.getString("url_moodle"),rs.getString("token"));
 	            } 
 	        } catch (SQLException ex) {
 	        	ex.printStackTrace();

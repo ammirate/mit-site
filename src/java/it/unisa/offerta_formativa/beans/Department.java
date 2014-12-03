@@ -66,7 +66,7 @@ public class Department {
 
 		return  "abbreviation=" + esc + abbreviation + esc + "," +
                         "title=" + esc + title + esc + "," +
-                        "urlMoodle=" + esc + urlMoodle + esc + "," +
+                        "url_moodle=" + esc + urlMoodle + esc + "," +
                          "token=" + esc + token + esc;
 	}
 

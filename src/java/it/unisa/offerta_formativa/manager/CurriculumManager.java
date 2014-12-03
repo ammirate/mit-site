@@ -19,6 +19,8 @@ public class CurriculumManager {
     private Connection conn = null;
     private Statement stmt;
     public static String TABLE = "curriculum";
+    public static String PKEY="matricula";
+    public static String TABLE_LINK = "curriculum_has_teaching";
     private ResultSet rs = null;
 
     private static CurriculumManager instance = null;
@@ -42,7 +44,7 @@ public class CurriculumManager {
     public boolean createCurriculum(Curriculum curr) {
         try {
             stmt = conn.createStatement();
-            String query = "INSERT INTO " + TABLE + "(title,degree_matricula) VALUES(" + curr.toStringQueryInsert() + ")";
+            String query = "INSERT INTO " + TABLE + "(matricula,title,degree_matricula) VALUES(" + curr.toStringQueryInsert() + ")";
             if (stmt.executeUpdate(query) == 1) {
                 return true;
             }
@@ -62,9 +64,7 @@ public class CurriculumManager {
     public boolean updateCurriculum(Curriculum curr) {
         String esc = "\'";
         try {
-            String query = "UPDATE " + TABLE + " SET " + curr.toString() + " WHERE title ="
-                    + esc + curr.getTitle() + esc + " and "
-                    + "teaching_matricula=" + esc + curr.getDegreeId() + esc;
+            String query = "UPDATE " + TABLE + " SET " + curr.toString() + " WHERE "+PKEY+"="+esc+curr.getMatricula() + esc;
             stmt = conn.createStatement();
             if (stmt.executeUpdate(query) == 1) {
                 return true;
@@ -83,18 +83,15 @@ public class CurriculumManager {
      * @return a curriculum object if it is present in the DB, else empty
      * curriculum bean
      */
-    public Curriculum readCurriculum(String title, String degreeMatricula) {
+    public Curriculum readCurriculum(String matricula) {
 
         try {
             String esc = "\'";
-            String query = "SELECT * FROM " + TABLE
-                    + " WHERE title ="
-                    + esc + title + esc + " and "
-                    + "teaching_matricula=" + esc + degreeMatricula + esc;
+            String query = "SELECT * FROM " + TABLE + " WHERE "+PKEY+"="+ esc +matricula+ esc;
             stmt = conn.createStatement();
             rs = stmt.executeQuery(query);
             while (rs.next()) {
-                return new Curriculum(rs.getString("title"), rs.getString("degree_matricula"));
+                return new Curriculum(rs.getString("matricula"), rs.getString("title"), rs.getString("degree_matricula"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(CurriculumManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -108,14 +105,10 @@ public class CurriculumManager {
      * @param id of curriculum
      * @return true if deleted.
      */
-    public boolean deleteCurriculum(String title, String degreeMatricula) {
+    public boolean deleteCurriculum(String matricula) {
         try {
-            
             String esc = "\'";
-            String query = "DELETE FROM " + TABLE
-                    + " WHERE title ="+ esc + title + esc + " and "
-                    + "teaching_matricula=" + esc + degreeMatricula + esc;
-            
+            String query = "DELETE FROM " + TABLE + " WHERE "+PKEY+"="+ esc + matricula + esc;
             stmt = conn.createStatement();
             if (stmt.executeUpdate(query) == 1) {
                 return true;
@@ -186,9 +179,10 @@ public class CurriculumManager {
      */
     private Curriculum getCurriculumFromResultSet(ResultSet rs) {
         try {
+            String matr = rs.getString("matricula");
             String tit = rs.getString("title");
             String idDegree = rs.getString("degree_matricula");
-            return new Curriculum(tit, idDegree);
+            return new Curriculum(matr,tit, idDegree);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -200,7 +194,7 @@ public class CurriculumManager {
         ArrayList<Curriculum> toReturn = new ArrayList<Curriculum>();
         try {
             stmt = conn.createStatement();
-            rs = stmt.executeQuery("SELECT * FROM " + TABLE + "WHERE idDegree=\"" + degree + "\"");
+            rs = stmt.executeQuery("SELECT * FROM " + TABLE + "WHERE degree_matricula=\"" + degree + "\"");
 
             while (rs.next()) {
                 Curriculum b = getCurriculumFromResultSet(rs);
@@ -211,5 +205,34 @@ public class CurriculumManager {
             e.printStackTrace();
         }
         return toReturn;
+    }
+    
+    public int getCurriculumNumberByDegree(String matricula){
+        try {
+            String esc = "\'";
+            String query = "SELECT * FROM " + TABLE + " WHERE degree_matricula="+esc+matricula+esc;
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
+            rs.last();
+            return rs.getRow();
+        } catch (SQLException ex) {
+            Logger.getLogger(CurriculumManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+    
+    public boolean curriculumHasTeaching(String curriculum_matricula, String teaching_matricula){
+        try {
+            String esc = "\'";
+            String query = "SELECT * FROM " + TABLE_LINK + " WHERE teaching_matricula="+
+                    esc+teaching_matricula+esc+" AND curriculum_matricula="+esc+curriculum_matricula+esc;
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
+            rs.last();
+            return (rs.getRow()==0)?false:true;
+        } catch (SQLException ex) {
+            Logger.getLogger(CurriculumManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 }

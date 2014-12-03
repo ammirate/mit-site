@@ -102,10 +102,10 @@ public class Degree {
     @Override
     public String toString() {
         String esc = "\'";
-        return "serial_number=" + esc + matricula + esc + "," + 
+        return "matricula=" + esc + matricula + esc + "," + 
                 "title=" + esc + title + esc + "," +
-                "link" + esc + link + esc + "," +
-                "cycle=" + cycle + "," + 
+                "link=" + esc + link + esc + "," +
+                "cycle_number=" + cycle + "," + 
                 "department_abbreviation=" + esc + departmentAbbreviation + esc;
     }
 

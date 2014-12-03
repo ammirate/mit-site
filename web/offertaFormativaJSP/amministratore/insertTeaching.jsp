@@ -427,6 +427,7 @@
 	function loadDegree(i){
 	    $.ajax({url:"GetDegreeServlet?idCycle="+i,success:function(result){
 	    	$("#degree").html(result);
+                
 	    }});
 	}
         
@@ -438,6 +439,7 @@
                 stringa+="<div class='row'><div class='form-group col-sm-4'><input type='text' name='moduleName"+j+"' id='moduleName"+j+"' placeholder='Inserisci il modulo "+j+"' class='form-control' onkeyup='loadAssociation();'></div></div>";
             }
             $("#modules").html(stringa);
+            loadAssociation();
         }
         function loadClasses(i){
             var stringa="<h3>Inserisci Classi</h3>";
@@ -445,6 +447,7 @@
                 stringa+="<div class='row'><div class='form-group col-sm-4'><input type='text' name='className"+j+"' id='className"+j+"' placeholder='Inserisci la classe "+j+"' class='form-control' onkeyup='loadAssociation();'></div></div>";
             }
             $("#classes").html(stringa);
+            loadAssociation();
         }
         function loadAssociation(){
             var stringa ="<h2>Associa Docente</h2>";
@@ -457,12 +460,32 @@
                     stringa+="<h3>Associa Docenti a Classe "+j+" - "+ $("#className"+j).val() +"</h3>";
                     for(i=1;i<=moduleNum;i++){
                         stringa+="<div class='row'>";
-                        stringa+="<div class='form-group col-sm-2'><label for='module'>"+$("#moduleName"+i).val()+"</label><select class='form-control' id='docente"+i+"'></select></div>";
+                        stringa+="<div class='form-group col-sm-2'><label for='module'>"+$("#moduleName"+i).val()+"</label><select class='form-control' id='docente"+i+"-"+j+"'></select></div>";
                         stringa+="</div>";
                     }
                 }
             $("#lastDiv").html(stringa);
-            //loadProfessor();
+            //$.ajax({url:"GetProfessorServlet?abbreviation="+$("#idDepartment").val(),success:function(result){
+            $.ajax({url:"GetProfessorServlet?abbreviation=1",success:function(result){
+                for(j=1;j<=classNum;j++){
+                    for(i=1;i<=moduleNum;i++){
+                        $("#docente"+i+"-"+j).html(result);
+                    }
+                }
+            }});
+        }
+        function loadProfessor(){
+            var string="";
+            $.ajax({url:"GetProfessorServlet?abbreviation="+$("#idDepartment").val(),success:function(result){
+                string=result;
+            }});
+            var moduleNum=$("#moduleNumber option:selected").val();
+            var classNum = $("#classNumber option:selected").val();
+            for(j=1;j<=classNum;j++){
+                for(i=1;i<=moduleNum;i++){
+                    //$("#docente"+i+"-"+j+).html(string);
+                }
+            }
         }
         
         </script>

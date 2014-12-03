@@ -35,7 +35,7 @@ public class Cycle {
 
 	@Override
 	public String toString() {
-		return "id=" + number + ", title=" + title;
+		return "cycle_number=" + number + ", title=" + title;
 	}
 	
 	

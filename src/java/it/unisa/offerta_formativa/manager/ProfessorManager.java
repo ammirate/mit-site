@@ -31,6 +31,7 @@ public class ProfessorManager {
         Person p= new Person();
         p.setName("Andrea De Lucia");
         toRet.add(p);
+        p=new Person();
         p.setName("Filomena Ferrucci");
         toRet.add(p);
         return toRet;

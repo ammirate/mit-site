@@ -49,7 +49,7 @@ public class DegreeManager {
         try {
             stmt = conn.createStatement();
             String query = "INSERT INTO " + TABLE + 
-            		"(matricula,link,title,cycle,idDepartment) VALUES(" +
+            		"(matricula,link,title,cycle_number,department_abbreviation) VALUES(" +
             		degree.toStringQueryInsert();
             if(stmt.executeUpdate(query) == 1){
             	return true;
@@ -97,7 +97,7 @@ public class DegreeManager {
 	            rs= stmt.executeQuery("SELECT * FROM " + TABLE 
 	            		+ " WHERE " + PKEY + "=\"" + matricula+"\"");
 	            while(rs.next()) {
-	            	return new Degree(rs.getString("matricula"),rs.getString("link"),rs.getString("title"),rs.getInt("cycle"),rs.getString("department_abbreviation"));
+	            	return new Degree(rs.getString("matricula"),rs.getString("link"),rs.getString("title"),rs.getInt("cycle_number"),rs.getString("department_abbreviation"));
 	            } 
 	        } catch (SQLException ex) {
 	        	ex.printStackTrace();
@@ -179,7 +179,7 @@ public class DegreeManager {
 		}else{
 	        try {
 				stmt = conn.createStatement();
-				rs= stmt.executeQuery("SELECT * FROM " + TABLE + " WHERE CYCLE=" + cycle);
+				rs= stmt.executeQuery("SELECT * FROM " + TABLE + " WHERE cycle_number=" + cycle);
 	           
 				while(rs.next()) {
 					Degree b = getDegreeFromResultSet(rs);
@@ -214,7 +214,7 @@ public class DegreeManager {
 			String tit = rs.getString("title");
 			String matr = rs.getString("matricula");
 			String link = rs.getString("link");
-			int cycle = rs.getInt("cycle");
+			int cycle = rs.getInt("cycle_number");
 			String dpt = rs.getString("department_abbreviation");
 	
 	    	return new Degree(matr, link, tit, cycle,dpt);
