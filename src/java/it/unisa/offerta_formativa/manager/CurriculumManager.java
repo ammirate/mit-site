@@ -132,7 +132,7 @@ public class CurriculumManager {
      *
      * @return an ArrayList of Curriculum
      */
-    public ArrayList<Curriculum> getAllDepartments() {
+    public ArrayList<Curriculum> getAllCurriculum() {
         ArrayList<Curriculum> toReturn = new ArrayList<Curriculum>();
         try {
             stmt = conn.createStatement();

@@ -184,7 +184,7 @@ public class DepartmentManager {
     	try {
 			String tit = rs.getString("title");
 			String abbreviation = rs.getString("abbreviation");
-			String url = rs.getString("urlMoodle");
+			String url = rs.getString("url_moodle");
 			String token = rs.getString("token");
 	    	return new Department(abbreviation, tit, url, token);
 		} 

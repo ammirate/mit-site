@@ -1,17 +1,6 @@
-<%@page import="it.unisa.offerta_formativa.beans.Curriculum"%>
-<%@page import="it.unisa.offerta_formativa.beans.Degree"%>
-<%@page import="it.unisa.offerta_formativa.beans.Teaching"%>
-
-<%@page import="it.unisa.offerta_formativa.beans.Department"%>
-<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
-<%! public ArrayList<Degree> degrees; 
-    public ArrayList<Department> departments; 
-    public ArrayList<Teaching> teachings;
-    public ArrayList<Curriculum> curriculums;
-%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -111,11 +100,7 @@
 
 </head>
 <body class="page-body">
-	<% 	teachings = (ArrayList<Teaching>)request.getAttribute("teachings");
-		departments = (ArrayList<Department>)request.getAttribute("departments");
-		degrees= (ArrayList<Degree>) request.getAttribute("degrees");
-                curriculums = (ArrayList<Curriculum>) request.getAttribute("curriculums");
-	%>
+	
 	<nav class="navbar horizontal-menu navbar-fixed-top">
 		<!-- set fixed position by adding class "navbar-fixed-top" -->
 
@@ -257,42 +242,59 @@
 			</script>
 
 			
-			<div class="text-left">
+			
+			<div class="text-justify">
                             <div class="container">
-                           
-                               
-			<%
-							if (departments.size() != 0)
-								for (Department d : departments) {
-                                                                    %><dl><dt class="panel-heading col-xs-12 col-sm-6 col-md-7" style="background-color:#9FA8DA; cursor: pointer; "><%out.print(d.getTitle());%></dt><dd><dl>
-								<% if (degrees.size() != 0) {
-                                                                        for (Degree de : degrees) {
-                                                                            
-                                                                            if(de.getDepartmentAbbreviation().equalsIgnoreCase(d.getAbbreviation())){
-                                                                        %>
-                                                                            <dt class="list-group-item col-xs-12 col-sm-6 col-md-7" style="background-color:#C5CAE9; "><%out.print(de.getTitle());%></dt> 
-                                                                        
-                                                                                <%for (Curriculum cu : curriculums){
-                                                                               
-                                                                                        if(cu.getDegreeId().equalsIgnoreCase(de.getMatricula())) {
-                                                                                %>
-                                                                                            <dd class="list-group-item col-xs-12 col-sm-6 col-md-7" ><%out.print(cu.getTitle());%></dd>
-                                                                                
-                                                                                        <% } %>
-                                                                                <% } %>
-                                                                        
-                                                                            <% } %>
-                                                                                
-                                                                        <%
-                                                                            }
-                                                                    }
-                                                                        %>
-                                                                            </dl></dd></dl>
-							<%
-								}
-							%>
-                                                               
-                         
+			
+			
+			<dl>
+				
+				
+                            <dt class="panel-heading col-xs-12 col-sm-6 col-md-7" style="background-color:#9FA8DA; ">Dipartimento di Studi e Ricerche Aziendali - Management & IT </dt>
+						<dd>
+						<dl>
+						  <dt class="list-group-item col-xs-12 col-sm-6 col-md-7" style="background-color:#C5CAE9">Management e gestione delle imprese</dt>
+                                                  <dd><dl><dt class="list-group-item col-xs-12 col-sm-6 col-md-7 style="background-color:#C5CAE9"">Curriculum1</dt>
+                                                      <dd class="list-group-item col-xs-12 col-sm-6 col-md-7">Inglese II</dd>
+                                                      </dl></dd>
+                                                  <dd><dl><dt class="list-group-item col-xs-12 col-sm-6 col-md-7 style="background-color:#C5CAE9"">Curriculum2</dt>
+                                                    <dd class="list-group-item col-xs-12 col-sm-6 col-md-7">Inglese 3</dd>
+                                                      </dl></dd>
+                                                  
+                                                  
+						  <dt class="list-group-item col-xs-12 col-sm-6 col-md-7" style="background-color:#C5CAE9">Management & Information Technology</dt>
+						  <dd class="list-group-item col-xs-12 col-sm-6 col-md-7">IT Project and Service Management</dd>
+                                                  <dd class="list-group-item col-xs-12 col-sm-6 col-md-7">Management and Control System</dd>
+						</dl>
+						</dd>
+		
+		
+		</dl>
+		<dl>
+				
+				
+                            <dt class="panel-heading col-xs-12 col-sm-6 col-md-7" style="background-color:#9FA8DA; margin-top:1px;">Dipartimento di Studi e Ricerche Aziendali - Management & IT </dt>
+						<dd>
+						<dl>
+						  <dt class="list-group-item col-xs-12 col-sm-6 col-md-7" style="background-color:#C5CAE9">Management e gestione delle imprese</dt>
+						  <dd class="list-group-item col-xs-12 col-sm-6 col-md-7">Economia Aziendale</dd>
+                                                  <dd class="list-group-item col-xs-12 col-sm-6 col-md-7">Inglese II</dd>
+                                                  <dd class="list-group-item col-xs-12 col-sm-6 col-md-7">Statistica</dd>
+						  <dt class="list-group-item col-xs-12 col-sm-6 col-md-7" style="background-color:#C5CAE9">Management & Information Technology</dt>
+						  <dd class="list-group-item col-xs-12 col-sm-6 col-md-7">IT Project and Service Management</dd>
+                                                  <dd class="list-group-item col-xs-12 col-sm-6 col-md-7">Management and Control System</dd>
+						</dl>
+						</dd>
+			
+		</dl>
+			
+			
+			
+			
+			
+			
+			
+			
 			<!-- Main Footer -->
 			<!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->
 			<!-- Add class "sticky" to  always stick the footer to the end of page (if page contents is small) -->
@@ -323,7 +325,7 @@
 
 				</div>
 
-		</footer>
+			</footer>
 	<div class="page-loading-overlay">
 		<div class="loader-2"></div>
 	</div>
@@ -333,6 +335,11 @@
 
 	<!-- Bottom Scripts -->
 	<script type="text/javascript">
+	function loadDegree(i){
+	    $.ajax({url:"GetDegreeServlet?idCycle="+i,success:function(result){
+	    	$("#degree").html(result);
+	    }});
+	}
 	</script>
 	<script src="assets/js/bootstrap.min.js"></script>
 	<script src="assets/js/TweenMax.min.js"></script>

@@ -6,6 +6,7 @@
 package it.unisa.offerta_formativa.servlet;
 
 
+import it.unisa.offerta_formativa.manager.CurriculumManager;
 import it.unisa.offerta_formativa.manager.DegreeManager;
 import it.unisa.offerta_formativa.manager.DepartmentManager;
 import it.unisa.offerta_formativa.manager.TeachingManager;
@@ -26,6 +27,7 @@ public class ShowTeachingOfferServlet extends HttpServlet {
     private DepartmentManager dm;
     private DegreeManager degreeMng;
     private TeachingManager tm;
+    private CurriculumManager cm;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -35,6 +37,7 @@ public class ShowTeachingOfferServlet extends HttpServlet {
         dm = DepartmentManager.getInstance();
         degreeMng = DegreeManager.getInstance();
         tm = TeachingManager.getInstance();
+        cm = CurriculumManager.getInstance();
     }
     
     /**
@@ -54,6 +57,7 @@ public class ShowTeachingOfferServlet extends HttpServlet {
 		request.setAttribute("departments",dm.getAllDepartments());
 		request.setAttribute("teachings", tm.getAllTeachings());
 		request.setAttribute("degrees", degreeMng.getAllDegrees());
+                request.setAttribute("curriculums", cm.getAllCurriculum());
 		request.getRequestDispatcher("/ShowTeachingOffer.jsp").forward(request, response);
 	}
 }
