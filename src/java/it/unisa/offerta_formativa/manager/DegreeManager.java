@@ -173,7 +173,7 @@ public class DegreeManager {
         ArrayList<Degree> toReturn = new ArrayList<Degree>();
         try {
 			stmt = conn.createStatement();
-			rs= stmt.executeQuery("SELECT * FROM " + TABLE+ " WHERE degree_abbreviation="+esc+abbreviation+esc);
+			rs= stmt.executeQuery("SELECT * FROM " + TABLE+ " WHERE department_abbreviation="+esc+abbreviation+esc);
 			while(rs.next()) {
 				Degree b = getDegreeFromResultSet(rs);
 				toReturn.add(b);

@@ -49,10 +49,7 @@ public class Teaching {
 	 */
 	private Boolean active;
         
-        /**
-         * Array list of curriculums matricula to whom this teaching belongs to
-         */
-        private ArrayList<String> belongingCurriculum;
+        
 
         
         
@@ -66,7 +63,7 @@ public class Teaching {
          * @param semestre
          * @param attivo 
          */
-	public Teaching(String titolo, String abbreviazione, String matricola, String link, int anno, int semestre, boolean attivo,ArrayList<String> belongingCurriculum) {
+	public Teaching(String titolo, String abbreviazione, String matricola, String link, int anno, int semestre, boolean attivo) {
 		this.title = titolo;
 		this.abbreviation = abbreviazione;
 		this.matricula = matricola;
@@ -74,16 +71,10 @@ public class Teaching {
 		this.year = anno;
 		this.semester = semestre;
 		this.active = attivo;
-                this.belongingCurriculum=belongingCurriculum;
+                
 	}
         
-        public ArrayList<String> getBelongingCurriculum() {
-            return belongingCurriculum;
-        }
-
-        private void setBelongingCurriculum(ArrayList<String> belongingCurriculum) {
-            this.belongingCurriculum = belongingCurriculum;
-        }
+        
 
 	public String getTitle() {
 		return title;

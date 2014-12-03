@@ -191,10 +191,11 @@ public class CurriculumManager {
 
     public ArrayList<Curriculum> getCurriculumByDegree(String degree) {
         // TODO Auto-generated method stub
+        String esc="\"";
         ArrayList<Curriculum> toReturn = new ArrayList<Curriculum>();
         try {
             stmt = conn.createStatement();
-            rs = stmt.executeQuery("SELECT * FROM " + TABLE + "WHERE degree_matricula=\"" + degree + "\"");
+            rs = stmt.executeQuery("SELECT * FROM " + TABLE+ " WHERE degree_matricula="+esc+degree+esc);
 
             while (rs.next()) {
                 Curriculum b = getCurriculumFromResultSet(rs);

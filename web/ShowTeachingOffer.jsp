@@ -1,3 +1,4 @@
+<%@page import="java.util.HashMap"%>
 <%@page import="it.unisa.offerta_formativa.beans.Curriculum"%>
 <%@page import="it.unisa.offerta_formativa.beans.Degree"%>
 <%@page import="it.unisa.offerta_formativa.beans.Teaching"%>
@@ -7,10 +8,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
-<%! public ArrayList<Degree> degrees; 
-    public ArrayList<Department> departments; 
-    public ArrayList<Teaching> teachings;
-    public ArrayList<Curriculum> curriculums;
+<%! public HashMap <Department,HashMap<Degree,HashMap<Curriculum,ArrayList<Teaching>>>> map;
 %>
 
 <!DOCTYPE html>
@@ -111,10 +109,7 @@
 
 </head>
 <body class="page-body">
-	<% 	teachings = (ArrayList<Teaching>)request.getAttribute("teachings");
-		departments = (ArrayList<Department>)request.getAttribute("departments");
-		degrees= (ArrayList<Degree>) request.getAttribute("degrees");
-                curriculums = (ArrayList<Curriculum>) request.getAttribute("curriculums");
+	<% map =(HashMap < Department, HashMap <Degree, HashMap<Curriculum , ArrayList<Teaching>>>>)request.getAttribute("map");
 	%>
 	<nav class="navbar horizontal-menu navbar-fixed-top">
 		<!-- set fixed position by adding class "navbar-fixed-top" -->
@@ -259,38 +254,42 @@
 			
 			<div class="text-left">
                             <div class="container">
-                           
-                               
+                            
 			<%
-							if (departments.size() != 0)
-								for (Department d : departments) {
+							if (!map.isEmpty()){
+								for (Department d : map.keySet()) {
                                                                     %><dl><dt class="panel-heading col-xs-12 col-sm-6 col-md-7" style="background-color:#9FA8DA; cursor: pointer; "><%out.print(d.getTitle());%></dt><dd><dl>
-								<% if (degrees.size() != 0) {
-                                                                        for (Degree de : degrees) {
-                                                                            
-                                                                            if(de.getDepartmentAbbreviation().equalsIgnoreCase(d.getAbbreviation())){
-                                                                        %>
-                                                                            <dt class="list-group-item col-xs-12 col-sm-6 col-md-7" style="background-color:#C5CAE9; "><%out.print(de.getTitle());%></dt> 
+                                                                 <% if (map.get(d).keySet().size() != 0) {
+                                                                        for (Degree de : map.get(d).keySet()) {                                             
+                                                                    %>
+                                                                        <dt class="list-group-item col-xs-12 col-sm-6 col-md-7" style="background-color:#C5CAE9; "><%out.print(de.getTitle());%></dt> 
                                                                         
-                                                                                <%for (Curriculum cu : curriculums){
-                                                                               
-                                                                                        if(cu.getDegreeId().equalsIgnoreCase(de.getMatricula())) {
-                                                                                %>
-                                                                                            <dd class="list-group-item col-xs-12 col-sm-6 col-md-7" ><%out.print(cu.getTitle());%></dd>
-                                                                                
-                                                                                        <% } %>
-                                                                                <% } %>
-                                                                        
-                                                                            <% } %>
-                                                                                
+                                                                        <%  if(map.get(d).get(de).keySet().size() != 0){                                                                            
+                                                                                for (Curriculum cu : map.get(d).get(de).keySet()){
+                                                                            if(map.get(d).get(de).keySet().size() <= 1){ %>
+                                                                                <dd><dl><dt class="list-group-item col-xs-12 col-sm-6 col-md-7" ><%out.print(cu.getTitle());%></dt>
+                                                                                        <% } if(map.get(d).get(de).get(cu).size() != 0){
+                                                                                                            for(Teaching te : map.get(d).get(de).get(cu)){ 
+                                                                                                            %>
+                                                                                                            <dd class="list-group-item col-xs-12 col-sm-6 col-md-7" id="<%te.getMatricula();%>"><%out.print(te.getTitle());%></dd>     
+                                                                                                          <%}
+                                                                                           }
+                                                                                                    
+                                                                                                    if(map.get(d).get(de).keySet().size() <= 1){  %>
+                                                                                                    </dl></dd>  
+                                                                                        <%  } }
+                                                                            }  %>      
                                                                         <%
-                                                                            }
+                                                                        }
                                                                     }
                                                                         %>
                                                                             </dl></dd></dl>
 							<%
-								}
+								}}
 							%>
+                                                        
+                                                        
+                                                        
                                                                
                          
 			<!-- Main Footer -->

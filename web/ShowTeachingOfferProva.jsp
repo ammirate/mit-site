@@ -254,10 +254,10 @@
 						<dd>
 						<dl>
 						  <dt class="list-group-item col-xs-12 col-sm-6 col-md-7" style="background-color:#C5CAE9">Management e gestione delle imprese</dt>
-                                                  <dd><dl><dt class="list-group-item col-xs-12 col-sm-6 col-md-7 style="background-color:#C5CAE9"">Curriculum1</dt>
+                                                  <dd><dl><dt class="list-group-item col-xs-12 col-sm-6 col-md-7" style="background-color:#C5CAE9">Curriculum1</dt>
                                                       <dd class="list-group-item col-xs-12 col-sm-6 col-md-7">Inglese II</dd>
                                                       </dl></dd>
-                                                  <dd><dl><dt class="list-group-item col-xs-12 col-sm-6 col-md-7 style="background-color:#C5CAE9"">Curriculum2</dt>
+                                                  <dd><dl><dt class="list-group-item col-xs-12 col-sm-6 col-md-7" style="background-color:#C5CAE9">Curriculum2</dt>
                                                     <dd class="list-group-item col-xs-12 col-sm-6 col-md-7">Inglese 3</dd>
                                                       </dl></dd>
                                                   
@@ -288,6 +288,22 @@
 			
 		</dl>
 			
+                                
+                                <dl><dt class="panel-heading col-xs-12 col-sm-6 col-md-7" style="background-color:#9FA8DA; cursor: pointer; ">prova</dt><dd><dl>
+                                                                
+                                                                        <dt class="list-group-item col-xs-12 col-sm-6 col-md-7" style="background-color:#C5CAE9; ">prova1</dt> 
+                                                                        
+                                                                        
+                                                                                <dd><dl><dt class="list-group-item col-xs-12 col-sm-6 col-md-7" >prova2</dt>
+                                                                                        
+                                                                                                            <dd class="list-group-item col-xs-12 col-sm-6 col-md-7" id="2">prova3</dd>     
+                                                                                                          
+                                                                                                    
+                                                                                                    
+                                                                                                    </dl></dd>  
+                                                                                    
+                                                                            </dl></dd></dl>
+							
 			
 			
 			

@@ -22,11 +22,12 @@ import java.util.logging.Logger;
  */
 public class TeachingManager {
 
+   
     private static String TABLE = "teaching";
     private static String PKEY = "matricula";
-    public static String TABLE_LINK = "curriculum_has_teaching";
+    public static String TABLE_LINK = "curriculum_teaching";
     private Connection conn = null;
-    private Statement stmt;
+    private Statement stmt, stmt2;
     private ResultSet rs;
 
     private static TeachingManager instance = null;
@@ -130,7 +131,6 @@ public class TeachingManager {
                     return getTeachingFromResultSet(rs, rs2);
                 }
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 throw new RuntimeException("Read Query failed!");
             }
         }
@@ -167,7 +167,6 @@ public class TeachingManager {
                 toReturn.add(getTeachingFromResultSet(rs, rs2));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
         }
         return toReturn;
     }
@@ -190,7 +189,6 @@ public class TeachingManager {
                 toReturn.add(t);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
         }
         return toReturn;
     }
@@ -203,7 +201,7 @@ public class TeachingManager {
     public ArrayList<Teaching> getTeachingsBySemester(int semester) {
         ResultSet rs2;
         String esc = "\"";
-        ArrayList<Teaching> toReturn = new ArrayList<Teaching>();
+        ArrayList<Teaching> toReturn = new ArrayList<>();
         try {
             stmt = conn.createStatement();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " WHERE semester=" + semester);
@@ -220,20 +218,23 @@ public class TeachingManager {
     }
     
     public ArrayList<Teaching> getTeachingsByCurriculum(String curriculum_matricula) {
-        ResultSet rs2;
+        ResultSet rs2,rs3;
         String esc = "\"";
-        ArrayList<Teaching> toReturn = new ArrayList<Teaching>();
+        ArrayList<Teaching> toReturn = new ArrayList<>();
         try {
             stmt = conn.createStatement();
+            stmt2 = conn.createStatement();
             rs2 = stmt.executeQuery("SELECT * FROM " + TABLE_LINK + " WHERE curriculum_matricula=" + esc + curriculum_matricula + esc);
+            
             while (rs2.next()) {
-                rs = stmt.executeQuery("SELECT * FROM " + TABLE + " WHERE matricula=" + rs2.getString("teaching_matricula"));
-                Teaching t = getTeachingFromResultSet(rs,rs2);
+                
+                rs = stmt2.executeQuery("SELECT * FROM " + TABLE + " WHERE matricula=" + esc + rs2.getString("teaching_matricula")+ esc );
+                Teaching t = getTeachingFromResultSet(rs);
                 toReturn.add(t);
+               
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
         }
         return toReturn;
     }
@@ -243,10 +244,9 @@ public class TeachingManager {
      * Create a Teaching from a ResultSet object
      *
      * @param rs - result set of teachings
-     * @param rs2 - result set of related curriculum
      * @return
      */
-    private Teaching getTeachingFromResultSet(ResultSet rs, ResultSet rs2) {
+    private Teaching getTeachingFromResultSet(ResultSet rs) {
         try {
             String tit = rs.getString("title");
             String matr = rs.getString("matricula");
@@ -255,11 +255,7 @@ public class TeachingManager {
             int year = rs.getInt("year");
             int sem = rs.getInt("semester");
             Boolean active = rs.getBoolean("active");
-            ArrayList<String> lista = new ArrayList<String>();
-            while (rs2.next()) {
-                lista.add(rs.getString("curriculum_matricula"));
-            }
-            return new Teaching(tit, abb, matr, link, year, sem, active, lista);
+            return new Teaching(tit, abb, matr, link, year, sem, active);
         } catch (SQLException e) {
             e.printStackTrace();
         }
