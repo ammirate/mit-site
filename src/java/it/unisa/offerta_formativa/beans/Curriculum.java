@@ -20,11 +20,11 @@ public class Curriculum {
      */
     private String matricula; 
 
-    public String getDegree_matricula() {
+    public String getDegreeMatricula() {
         return degree_matricula;
     }
 
-    public void setDegree_matricula(String degree_matricula) {
+    public void setDegreeMatricula(String degree_matricula) {
         this.degree_matricula = degree_matricula;
     }
 
