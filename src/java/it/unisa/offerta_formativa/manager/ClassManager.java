@@ -6,15 +6,12 @@
 package it.unisa.offerta_formativa.manager;
 
 import it.unisa.offerta_formativa.beans.ClassPartition;
-import it.unisa.offerta_formativa.beans.Teaching;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -40,9 +37,7 @@ public class ClassManager {
         	throw new RuntimeException("Statement creation failed");
 		}
     }
-    
-    
-    
+
     /**
      * Create a new ClassPartition record
      * @param classp - An instance of the ClassPartition bean

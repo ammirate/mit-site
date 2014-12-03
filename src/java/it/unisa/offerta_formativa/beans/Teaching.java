@@ -5,6 +5,8 @@
  */
 package it.unisa.offerta_formativa.beans;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Alessandro, Antonio
@@ -46,9 +48,25 @@ public class Teaching {
 	 * value that indicates whether the course is on or off
 	 */
 	private Boolean active;
+        
+        /**
+         * Array list of curriculums matricula to whom this teaching belongs to
+         */
+        private ArrayList<String> belongingCurriculum;
 
-
-	public Teaching(String titolo, String abbreviazione, String matricola, String link, int anno, int semestre, boolean attivo) {
+        
+        
+        /**
+         * 
+         * @param titolo
+         * @param abbreviazione
+         * @param matricola
+         * @param link
+         * @param anno
+         * @param semestre
+         * @param attivo 
+         */
+	public Teaching(String titolo, String abbreviazione, String matricola, String link, int anno, int semestre, boolean attivo,ArrayList<String> belongingCurriculum) {
 		this.title = titolo;
 		this.abbreviation = abbreviazione;
 		this.matricula = matricola;
@@ -56,7 +74,16 @@ public class Teaching {
 		this.year = anno;
 		this.semester = semestre;
 		this.active = attivo;
+                this.belongingCurriculum=belongingCurriculum;
 	}
+        
+        public ArrayList<String> getBelongingCurriculum() {
+            return belongingCurriculum;
+        }
+
+        private void setBelongingCurriculum(ArrayList<String> belongingCurriculum) {
+            this.belongingCurriculum = belongingCurriculum;
+        }
 
 	public String getTitle() {
 		return title;
