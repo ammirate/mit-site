@@ -29,13 +29,14 @@ public class ProfModuleClassManager {
 
         try {
             String esc = "\'";
-            String query = "INSERT INTO " + TABLE + "(class_title, "
-                    + "class_teaching_matricula, module_title, module_teaching_matricula"
-                    + "professor_email) VALUES("
+            String query = "INSERT INTO " + TABLE 
+                    + "(class_title, "
+                    + "teaching_matricula, " 
+                    + "module_title,"
+                    + "email_account) VALUES("
                     + esc + pmc.getClassTitle() + esc + ","
                     + esc + pmc.getTeachingMatricula() + esc + ","
                     + esc + pmc.getModuleTitle() + esc + ","
-                    + esc + pmc.getTeachingMatricula() + esc + ","
                     + esc + pmc.getProfEmail() + esc
                     + ")";
             if (stmt.executeUpdate(query) == 1) {
