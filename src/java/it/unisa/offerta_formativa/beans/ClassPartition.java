@@ -29,6 +29,7 @@ public class ClassPartition {
                 throw new IllegalArgumentException("Parameters cannot be void");
             }
             this.title = titolo;
+            this.teachingMatricula = teachingMatricula;
         } else {
             throw new IllegalArgumentException("Parameters cannot be null");
         }
@@ -84,7 +85,8 @@ public class ClassPartition {
     }
 
     public String toStringQueryInsert() {
-        return "\"" + teachingMatricula + "\", \"" + title + "\"";
+        String esc = "\'";
+        return esc+ teachingMatricula + esc + "," + esc + title + esc;
     }
 
     @Override
