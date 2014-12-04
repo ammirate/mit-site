@@ -1,15 +1,10 @@
-package it.unisa.offerta_formativa.test.manager;
+
 
 import java.util.ArrayList;
-
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import it.unisa.offerta_formativa.manager.DegreeManager;
 import it.unisa.offerta_formativa.manager.DepartmentManager;
-
 import org.junit.Test;
-
-import it.unisa.offerta_formativa.beans.Degree;
 import it.unisa.offerta_formativa.beans.Department;
 
 
@@ -38,11 +33,11 @@ public class Test_DepartmentManager extends TestCase{
 	
 	public static TestSuite suite() {
 		TestSuite suite= new TestSuite();
-		//suite.addTest(new Test_DepartmentManager("TC_1_1_getInstance"));
-		//suite.addTest(new Test_DepartmentManager("TC_1_2_createDepartment"));
-		//suite.addTest(new Test_DepartmentManager("TC_1_3_updateDepartment"));
-		//suite.addTest(new Test_DepartmentManager("TC_1_4_readDepartment"));
-		//suite.addTest(new Test_DepartmentManager("TC_1_5_deleteDepartment"));
+		suite.addTest(new Test_DepartmentManager("TC_1_1_getInstance"));
+		suite.addTest(new Test_DepartmentManager("TC_1_2_createDepartment"));
+		suite.addTest(new Test_DepartmentManager("TC_1_3_updateDepartment"));
+		suite.addTest(new Test_DepartmentManager("TC_1_4_readDepartment"));
+		suite.addTest(new Test_DepartmentManager("TC_1_5_deleteDepartment"));
 		suite.addTest(new Test_DepartmentManager("TC_1_6_getAllDepartment"));
 
 		return suite;
@@ -69,8 +64,8 @@ public class Test_DepartmentManager extends TestCase{
 	public void TC_1_2_createDepartment() {
 		System.out.print("Executing Test 1.2...");
 		mng = DepartmentManager.getInstance();
-		Department bach = new Department("DISTRA-MIT", "aaaa", "bbb");
-		assertTrue(mng.createDepartment(bach));
+		Department degree = new Department("DISTRA-MIT", "aaaa", "bbb","");
+		assertTrue(mng.createDepartment(degree));
 		System.out.println("Done");
 	}
 
@@ -80,8 +75,8 @@ public class Test_DepartmentManager extends TestCase{
 	public void TC_1_3_updateDepartment() {
 		System.out.print("Executing Test 1.3...");
 		mng = DepartmentManager.getInstance();
-		Department bach = new Department(1,"DISTRA-MIT", "bbbb", "bbb");
-		assertTrue(mng.updateDepartment(bach));
+		Department degree = new Department("DISTRA-MIT", "aaaaaaaaaaaaa", "bbbbbbbbb","");
+		assertTrue(mng.updateDepartment(degree));
 		System.out.println("Done");
 	}
 
@@ -91,8 +86,8 @@ public class Test_DepartmentManager extends TestCase{
 	public void TC_1_4_readDepartment() {
 		System.out.print("Executing Test 1.4...");
 		mng = DepartmentManager.getInstance();
-		Department bach = new Department("DISTRA-MIT", "aaaa", "bbb");
-		assertTrue(bach.equals(mng.readDepartment(bach.getId())));
+		Department degree = new Department("DISTRA-MIT", "aaaa", "bbb","");
+		assertTrue(degree.equals(mng.readDepartment(degree.getAbbreviation())));
 		System.out.println("Done");
 	}
 
@@ -103,8 +98,8 @@ public class Test_DepartmentManager extends TestCase{
 	public void TC_1_5_deleteDepartment() {
 		System.out.print("Executing Test 1.5...");
 		mng = DepartmentManager.getInstance();
-		Department bach = new Department(1,"DISTRA-MIT", "aaaa", "bbb");
-		assertTrue(mng.deleteDepartment(bach.getId()));
+		Department degree = new Department("DISTRA-MIT", "aaaa", "bbb","");
+		assertTrue(mng.deleteDepartment(degree.getAbbreviation()));
 		System.out.println("Done");
 	}
 	
@@ -112,17 +107,17 @@ public class Test_DepartmentManager extends TestCase{
 	public void TC_1_6_getAllDepartment(){
 		System.out.print("Executing Test 1.6...");
 		mng = DepartmentManager.getInstance();
-		Department b1 = new Department("DISTRA-MIT", "aaaa", "bbb");
-		Department b2 = new Department("DISTRA-MIT", "aaaa", "bbb");
+		Department d1 = new Department("DISTRA-MIT", "aaaa", "bbb","");
+		Department d2 = new Department("DISES", "ccccc", "ddddd","");
 		
-		mng.createDepartment(b1);
-		mng.createDepartment(b2);		
+		mng.createDepartment(d1);
+		mng.createDepartment(d2);		
 		
 		ArrayList<Department> results = mng.getAllDepartments();
 		assertEquals(2, results.size());
 		System.out.println("Done");
-		mng.deleteDepartment(b1.getId());
-		mng.deleteDepartment(b2.getId());
+		mng.deleteDepartment(d1.getAbbreviation());
+		mng.deleteDepartment(d2.getAbbreviation());
 		
 	}
 

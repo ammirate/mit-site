@@ -19,7 +19,7 @@ import java.util.ArrayList;
  */
 public class ClassManager {
     private final Connection conn;
-    private static String TABLE = "class";
+    private static final String TABLE = "class";
     private Statement stmt;
     private ResultSet rs;
     
@@ -57,7 +57,8 @@ public class ClassManager {
     
     /**
      * Read the ClassPartition entity with the given idClass
-     * @param idClass of ClassPartition entity
+     * @param teachingMatricula
+     * @param title
      * @return ClassPartition read. empty instance if not found
      */
     public ClassPartition readClass(String teachingMatricula, String title){
@@ -84,7 +85,7 @@ public class ClassManager {
         String esc = "\'";
         try {
             String query = "UPDATE "+TABLE+" SET "+classp.toString() + "WHERE title=" +esc + classp.getTitle() + esc + " and " + 
-                  "teaching_matricula" + esc +  classp.getMatricula() + esc;
+                  "teaching_matricula" + esc +  classp.getTeachingMatricula() + esc;
             if(stmt.executeUpdate(query)==1)return true;
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -95,7 +96,8 @@ public class ClassManager {
     
     /**
      * Delete the record from DB with the given id
-     * @param idClass of ClassPartition bean
+     * @param teachingMatricula
+     * @param title
      * @return true if done.
      */
     public boolean deleteClass(String teachingMatricula, String title){
@@ -117,6 +119,7 @@ public class ClassManager {
     /**
      * Return an instance if it exists. Otherwise creates it.
      * 
+     * @return 
      */
     public static ClassManager getInstance(){
     	if(instance == null){
@@ -156,7 +159,7 @@ public class ClassManager {
      * @return an ArrayList of ClassPartition. Empty if not found any.
      */
 	public ArrayList<ClassPartition> getAllClasses() {
-		ArrayList<ClassPartition> toReturn = new ArrayList<ClassPartition>();
+		ArrayList<ClassPartition> toReturn = new ArrayList<>();
 		try {
             rs = stmt.executeQuery("SELECT * FROM "+TABLE);
             while(rs.next()){

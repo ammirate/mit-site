@@ -87,7 +87,7 @@ public class ModuleManager {
         try {
             String esc = "\'";
             String query = "UPDATE " + TABLE + " SET " + m.toString() + " WHERE title=" + m.getTitle()
-                    + " and teaching_matricula=" + m.getTeachingSN();
+                    + " and teaching_matricula=" + m.getTeachingMatricula();
             if (stmt.executeUpdate(query) == 1) {
                 return true;
             }

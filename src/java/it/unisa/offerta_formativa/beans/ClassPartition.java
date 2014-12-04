@@ -12,15 +12,20 @@ package it.unisa.offerta_formativa.beans;
 public class ClassPartition {
 
     private String title = "";
-    private String matricula = "";
+    private String teachingMatricula = "";
 
     public ClassPartition() {
 
     }
 
-    public ClassPartition(String idTeaching, String titolo) {
-        if (idTeaching != null && titolo != null) {
-            if (idTeaching.equals("") || titolo.equals("")) {
+    /**
+     * Constructor
+     * @param teachingMatricula
+     * @param titolo 
+     */
+    public ClassPartition(String teachingMatricula, String titolo) {
+        if (teachingMatricula != null && titolo != null) {
+            if (teachingMatricula.equals("") || titolo.equals("")) {
                 throw new IllegalArgumentException("Parameters cannot be void");
             }
             this.title = titolo;
@@ -29,14 +34,19 @@ public class ClassPartition {
         }
     }
 
-    public String getMatricula() {
-        return matricula;
+    
+    public String getTeachingMatricula() {
+        return teachingMatricula;
     }
 
-    public void setMatricula(String idTeaching) {
+    /**
+     * 
+     * @param idTeaching 
+     */
+    public void setTeachingMatricula(String idTeaching) {
         if (idTeaching != null) {
             if (!idTeaching.equals("")) {
-                this.matricula = idTeaching;
+                this.teachingMatricula = idTeaching;
             } else {
                 throw new IllegalArgumentException("id teaching cannot be void");
             }
@@ -49,6 +59,11 @@ public class ClassPartition {
         return title;
     }
 
+    
+    /**
+     * 
+     * @param title 
+     */
     public void setTitle(String title) {
         if (title != null) {
             if (!title.equals("")) {
@@ -65,18 +80,18 @@ public class ClassPartition {
     @Override
     public String toString() {
         // TODO Auto-generated method stub
-        return "teaching_matricula=\"" + matricula + "\", title=\"" + title + "\"";
+        return "teaching_matricula=\"" + teachingMatricula + "\", title=\"" + title + "\"";
     }
 
     public String toStringQueryInsert() {
-        return "\"" + matricula + "\", \"" + title + "\"";
+        return "\"" + teachingMatricula + "\", \"" + title + "\"";
     }
 
     @Override
     public boolean equals(Object arg0) {
         // TODO Auto-generated method stub
         ClassPartition toComp = (ClassPartition) arg0;
-        if (this.matricula.equalsIgnoreCase(toComp.getMatricula())
+        if (this.teachingMatricula.equalsIgnoreCase(toComp.getTeachingMatricula())
                 && this.getTitle().equals(toComp.getTitle())) {
             return true;
         } else {

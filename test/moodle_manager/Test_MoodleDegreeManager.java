@@ -1,4 +1,4 @@
-package it.unisa.offerta_formativa.test.moodle_manager;
+package moodle_manager;
 
 import it.unisa.offerta_formativa.moodle.manager.MoodleDegreeManager;
 import it.unisa.offerta_formativa.moodle.moodle_rest.MoodleCategory;

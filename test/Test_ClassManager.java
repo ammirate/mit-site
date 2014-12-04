@@ -1,4 +1,4 @@
-package it.unisa.offerta_formativa.test.manager;
+
 
 import it.unisa.offerta_formativa.manager.ClassManager;
 
@@ -49,18 +49,21 @@ public class Test_ClassManager extends TestCase{
 		System.out.println("Done");
 	}
 	
+        /**
+         * insert a class into the DB
+         */
 	public void TC_7_2_createClass(){
 		System.out.print("Executing TC_7_2...");
 		ClassManager mdb = ClassManager.getInstance();
-		assertTrue(mdb.createClass(new ClassPartition("0510201111","Classe 1 - congrue 1")));
+		assertTrue(mdb.createClass(new ClassPartition("0510201111","Classe 1 - Congrue 1")));
 		System.out.println("Done");
 	}
 	
 	public void TC_7_3_readClass(){
 		System.out.print("Executing TC_7_3....");
 		ClassManager mdb = ClassManager.getInstance();
-		ClassPartition test = new ClassPartition(1,"0510201111","Classe 1 - congrue 1");
-		ClassPartition m = mdb.readClass(1);
+		ClassPartition test = new ClassPartition("0510201111","Classe 1 - Congrue 1");
+		ClassPartition m = mdb.readClass("0510201111","congrua 1");
 		assertTrue(test.equals(m));
 		System.out.println("Done");
 	}
@@ -68,14 +71,14 @@ public class Test_ClassManager extends TestCase{
 	public void TC_7_4_UpdateClass(){
 		System.out.print("Executing TC_7_4....");
 		ClassManager mdb = ClassManager.getInstance();
-		assertTrue(mdb.updateClass(new ClassPartition(1,"0510201111","Classe 2 - Congrue 2")));
+		assertTrue(mdb.updateClass(new ClassPartition("0510201111","Classe 1 - Congrue 2")));
 		System.out.println("Done");
 	}
 	
 	public void TC_7_5_DeleteClass(){
 		System.out.print("Executing TC_7_5....");
 		ClassManager mdb = ClassManager.getInstance();
-		assertTrue(mdb.deleteClass(1));
+		assertTrue(mdb.deleteClass("0510201111","Classe 1 - Congrue 2"));
 		System.out.println("Done");
 	}
 	
@@ -87,8 +90,8 @@ public class Test_ClassManager extends TestCase{
 		mdb.createClass(new ClassPartition("0510201111","Classe 2 - congrue 2"));
 		assertEquals(2,mdb.getClassesByTeaching("0510201111").size());
 		System.out.println("Done");
-		mdb.deleteClass(2);
-		mdb.deleteClass(3);
+		mdb.deleteClass("0510201111","Classe 1 - congrue 1");
+		mdb.deleteClass("0510201111","Classe 2 - congrue 2");
 	}
 	
 	public void TC_7_7_getAllClasses() {
@@ -98,8 +101,8 @@ public class Test_ClassManager extends TestCase{
 		mdb.createClass(new ClassPartition("0510201111","Classe 1 - congrue 1"));
 		mdb.createClass(new ClassPartition("0510201111","Classe 2 - congrue 2"));
 		assertEquals(2,mdb.getClassesByTeaching("0510201111").size());
-		mdb.deleteClass(4);
-		mdb.deleteClass(5);
+		mdb.deleteClass("0510201111","Classe 1 - congrue 1");
+		mdb.deleteClass("0510201111","Classe 2 - congrue 2");
 		System.out.println("Done");
 	}
 	
