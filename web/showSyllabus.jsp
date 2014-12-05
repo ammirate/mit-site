@@ -221,7 +221,14 @@
                     <div class="col-sm-1"></div>
                     <div class="col-sm-10">
                         <div class="panel panel-default">
+                            
+                            <div class="panel-heading">
+                                <% 
+                                String result = htmlSyllabus.substring(htmlSyllabus.indexOf("<h1>") + 1, htmlSyllabus.indexOf("</h1>"));
+                                out.print(result);
+                                %>
 
+                            </div>
                             <div>
                                 <div class="row"> <br> </div>
                                 <script>

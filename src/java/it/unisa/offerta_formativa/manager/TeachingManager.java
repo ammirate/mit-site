@@ -236,7 +236,7 @@ public class TeachingManager {
         ArrayList<Teaching> toReturn = new ArrayList<>();
         try {
             stmt = DBConnector.openConnection();
-            stmt2 = conn.createStatement();
+            stmt2 = DBConnector.openConnection();
             rs2 = stmt.executeQuery("SELECT * FROM " + TABLE_LINK + " WHERE curriculum_matricula=" + esc + curriculum_matricula + esc);
 
             while (rs2.next()) {
@@ -293,7 +293,7 @@ public class TeachingManager {
         String htmlToReturn = null;
         String esc = "\"";
         try {
-            stmt = conn.createStatement();
+          
             rs = stmt.executeQuery("SELECT esse3_content FROM " + TABLE + " WHERE matricula=" + esc + teaching_matricula + esc);
             
             while (rs.next()) {

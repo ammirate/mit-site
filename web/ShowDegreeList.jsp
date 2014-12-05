@@ -13,6 +13,7 @@
 <html lang="en">
     <head>
 
+
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
@@ -232,7 +233,7 @@
 
 
                             </div>
-                            <div>
+                            <div class="panel-body">
                                 <div class="row"> <br> </div>
 
 
@@ -260,67 +261,63 @@
 
 
 
-                                <div class="container">
-
-                                   
-
-                                        <form class="form-horizontal" role="form" method="post" action="InsertDegreeServlet">
-
-                                            <div class="row">
-                                                <div class="col-sm-1"></div>
-                                                <div class="form-group col-sm-3">
-                                                    <label>Dipartimento</label> <select name="department" class="form-control"></select> 
-                                                </div>
-                                                <div class="col-sm-1"></div>
-                                                <div class="col-sm-3">
-                                                    <label>Ciclo</label> <select name="cycle" class="form-control"></select> 
-                                                </div>
-                                                 <div class="col-sm-1"></div>
-                                            </div>
-                                            <div class="row">
-                                                <table class="table col-sm-8">
-                                                    <thead>
-                                                        <tr>
-                                                            <td id="title">Titolo</td>
-                                                            <td>Matricola</td>
-                                                            <td>Link</td>
-                                                            <td>Attivo</td>
-                                                            <td></td>
-                                                            <td></td>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>Titolo corso</td>
-                                                            <td>Matricola</td>
-                                                            <td>htttsfsfds</td>
-                                                            <td>Attivo</td>
-                                                            <td>Modifica</td>
-                                                            <td>Elimina</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                           
 
 
+                                    <div class="row">
 
+                                        <div class="form-group col-sm-3">
+                                            <label>Dipartimento</label> <select name="department" class="form-control"></select> 
+                                        </div>
 
+                                        <div class="col-sm-3">
+                                            <label>Ciclo</label> <select name="cycle" class="form-control"></select> 
+                                        </div>
+                                        
+                                        <div class="col-sm-3">
+                                            <label>Cerca</label> <input type="search" class="form-control" id="searchDegree">
+                                        </div>
+                                        <div> <br> </div>
+                                        <div> <br> </div>
+                                        <div> <br> </div>
+                                        <div> <br> </div>
+                                        <div> <br> </div>
 
+                                    </div>
+                                    
+                                    <div class="row col-sm-10">
+                                        <div class="table-condensed table-striped"> 
+                                            <table  class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <td>Titolo</td>
+                                                        <td>Matricola</td>
+                                                        <td>Link</td>
+                                                        <td>Attivo</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Titolo corso</td>
+                                                        <td>Matricola</td>
+                                                        <td>htttsfsfds</td>
+                                                        <td>Attivo</td>
+                                                        <td>Modifica</td>
+                                                        <td>Elimina</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
 
-                                        </form>
-
-                                  
-
-
-
-
-
-                                    <!-- Main Footer -->
-                                    <!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->
-                                    <!-- Add class "sticky" to  always stick the footer to the end of page (if page contents is small) -->
-                                    <!-- Or class "fixed" to  always fix the footer to the end of page -->
-
-                                </div>
+                                        <!-- Main Footer -->
+                                        <!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->
+                                        <!-- Add class "sticky" to  always stick the footer to the end of page (if page contents is small) -->
+                                        <!-- Or class "fixed" to  always fix the footer to the end of page -->
+                                    </div>
+                                    
+                               
 
 
 
@@ -336,15 +333,7 @@
 
                     <div class="col-sm-1"></div>
 
-                </div>                                            
-
-
-
-
-
-
-
-
+                </div>     
 
                 <footer class="main-footer sticky footer-type-1">
 

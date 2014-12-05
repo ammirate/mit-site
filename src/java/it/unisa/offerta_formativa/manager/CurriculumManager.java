@@ -205,7 +205,7 @@ public class CurriculumManager {
         stmt = DBConnector.openConnection();
 
         try {
-            stmt = conn.createStatement();
+            
             rs = stmt.executeQuery("SELECT * FROM " + TABLE+ " WHERE degree_matricula="+esc+degree+esc + "ORDER BY title");
 
             while (rs.next()) {
