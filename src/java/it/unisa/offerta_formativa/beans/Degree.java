@@ -36,6 +36,9 @@ public class Degree {
 	 *
      */
     private int cycle;
+    
+    private boolean active;
+
 
 
     /**
@@ -52,6 +55,17 @@ public class Degree {
         this.title = titolo;
         this.cycle = ciclo;
         this.departmentAbbreviation = departmentAbb;
+        this.active = true;
+    }
+    
+    
+    public Degree(String matricola, String link, String titolo, int ciclo, String departmentAbb, boolean active) {
+        this.matricula = matricola;
+        this.link = link;
+        this.title = titolo;
+        this.cycle = ciclo;
+        this.departmentAbbreviation = departmentAbb;
+        this.active = active;
     }
 
     public String getMatricula(){
@@ -106,30 +120,26 @@ public class Degree {
                 "title=" + esc + title + esc + "," +
                 "link=" + esc + link + esc + "," +
                 "cycle_number=" + cycle + "," + 
-                "department_abbreviation=" + esc + departmentAbbreviation + esc;
+                "department_abbreviation=" + esc + departmentAbbreviation + esc + "," +
+                "active=" + (this.active? 1 : 0); 
     }
 
     public String toStringQueryInsert() {
         String esc = "\'";
-        return esc + title + esc + "," + 
-               esc + matricula + esc + "," + 
-               esc + link + esc + "," + 
-               esc + departmentAbbreviation + esc + "," + 
-               cycle;
+        return esc + title + esc + "," +
+                esc + matricula + esc + "," +
+                esc + link + esc + "," + cycle + "," +
+               esc + departmentAbbreviation + esc + "," +
+                (this.active? 1 : 0);
 //        return "\"" + serialNumber + "\",\"" + link + "\",\"" + title + "\"," + cycle + "," + serialNumber + ")";
     }
 
-    public Boolean equals(Degree b) {
-        if (this.matricula.equalsIgnoreCase(b.getMatricula())
+    public boolean equals(Degree b) {
+        return this.matricula.equalsIgnoreCase(b.getMatricula())
                 && this.title.equalsIgnoreCase(b.getTitle())
                 && this.getLink().equals(b.getLink())
                 && this.getCycle() == b.getCycle()
-                && this.getDepartmentAbbreviation().equalsIgnoreCase(b.getDepartmentAbbreviation())) {
-            return true;
-        } 
-        else {
-            return false;
-        }
+                && this.getDepartmentAbbreviation().equalsIgnoreCase(b.getDepartmentAbbreviation());
 
     }
 
@@ -139,6 +149,16 @@ public class Degree {
 
     public void setDepartmentAbbreviation(String departmentAbbreviation) {
         this.departmentAbbreviation = departmentAbbreviation;
+    }
+    
+    
+    
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
 }
