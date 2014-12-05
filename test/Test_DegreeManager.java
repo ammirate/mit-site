@@ -36,13 +36,13 @@ public class Test_DegreeManager extends TestCase{
 	
 	public static TestSuite suite() {
 		TestSuite suite= new TestSuite();
-		suite.addTest(new Test_DegreeManager("TC_1_1_getInstance"));
-		suite.addTest(new Test_DegreeManager("TC_1_2_createDegree"));
-		suite.addTest(new Test_DegreeManager("TC_1_3_updateDegree"));
-		suite.addTest(new Test_DegreeManager("TC_1_4_readDegree"));
-		suite.addTest(new Test_DegreeManager("TC_1_5_deleteDegree"));
-		//suite.addTest(new Test_DegreeDB("TC_1_6_getAllDegrees"));
-		//suite.addTest(new Test_DegreeDB("TC_1_7_getDegreesOfCycle"));
+		suite.addTest(new Test_DegreeManager("TC_2_1_getInstance"));
+		suite.addTest(new Test_DegreeManager("TC_2_2_createDegree"));
+		suite.addTest(new Test_DegreeManager("TC_2_3_updateDegree"));
+		suite.addTest(new Test_DegreeManager("TC_2_4_readDegree"));
+		suite.addTest(new Test_DegreeManager("TC_2_5_deleteDegree"));
+		//suite.addTest(new Test_DegreeDB("TC_2_6_getAllDegrees"));
+		//suite.addTest(new Test_DegreeDB("TC_2_7_getDegreesOfCycle"));
 
 		return suite;
 	}
@@ -50,8 +50,8 @@ public class Test_DegreeManager extends TestCase{
 	/**
 	 * TestCase 1.1 that test the connection to the DB
 	 */
-	public void TC_1_1_getInstance() {
-		System.out.print("Executing Test 1.1...");
+	public void TC_2_1_getInstance() {
+		System.out.print("Executing Test 2.1...");
 		//check if instantiation is correct
 		DegreeManager b_db = DegreeManager.getInstance();
 		assertNotNull(b_db);
@@ -65,8 +65,8 @@ public class Test_DegreeManager extends TestCase{
 	/**
 	 * TestCase 1.2 that test the creation of a new Bachelor in the DB
 	 */
-	public void TC_1_2_createDegree() {
-		System.out.print("Executing Test 1.2...");
+	public void TC_2_2_createDegree() {
+		System.out.print("Executing Test 2.2...");
 		degreeManager = DegreeManager.getInstance();
 		Degree degree = new Degree("02226", "www.unisa.it", "Tecnologie informatiche e Management", 2,"TIM");
 		assertTrue(degreeManager.createDegree(degree));
@@ -76,8 +76,8 @@ public class Test_DegreeManager extends TestCase{
 	/**
 	 * TestCase 1.3 that test the update of a Bachelor in the DB
 	 */
-	public void TC_1_3_updateDegree() {
-		System.out.print("Executing Test 1.3...");
+	public void TC_2_3_updateDegree() {
+		System.out.print("Executing Test 2.3...");
 		degreeManager = DegreeManager.getInstance();
 		Degree degree = new Degree("02226", "www.unisa.it", "Tecnologie informatiche e Management", 2,"TIM");
 		assertTrue(degreeManager.updateDegree(degree));
@@ -87,8 +87,8 @@ public class Test_DegreeManager extends TestCase{
 	/**
 	 * TestCase 1.4 that test the read operation of a Bachelor from the DB
 	 */
-	public void TC_1_4_readDegree() {
-		System.out.print("Executing Test 1.4...");
+	public void TC_2_4_readDegree() {
+		System.out.print("Executing Test 2.4...");
 		degreeManager = DegreeManager.getInstance();
 		Degree degree = new Degree("02226", "www.unisa.it", "Tecnologie informatiche e Management", 2,"TIM");
 		assertTrue(degree.equals(degreeManager.readDegree(degree.getMatricula())));
@@ -99,8 +99,8 @@ public class Test_DegreeManager extends TestCase{
 	/**
 	 * TestCase 1.5 that test the deletion of a Bachelor from the DB
 	 */
-	public void TC_1_5_deleteDegree() {
-		System.out.print("Executing Test 1.5...");
+	public void TC_2_5_deleteDegree() {
+		System.out.print("Executing Test 2.5...");
 		degreeManager = DegreeManager.getInstance();
 		Degree bach = new Degree("02226", "www.unisa.it", "Tecnologie informatiche e Management", 2,"TIM");
 		assertTrue(degreeManager.deleteDegree(bach.getMatricula()));
@@ -108,8 +108,8 @@ public class Test_DegreeManager extends TestCase{
 	}
 	
 	
-	public void TC_1_6_getAllDegrees(){
-		System.out.print("Executing Test 1.6...");
+	public void TC_2_6_getAllDegrees(){
+		System.out.print("Executing Test 2.6...");
 		degreeManager = DegreeManager.getInstance();
 		Degree d1 = new Degree("02226", "www.unisa.it", "Tecnologie informatiche e Management", 2,"TIM");
 		Degree d2 = new Degree("00001", "www.sito2.it", "ABCD", 2,"ABC");
@@ -126,8 +126,8 @@ public class Test_DegreeManager extends TestCase{
 	}
 	
 	
-	public void TC_1_7_getDegreesOfCycle(){
-		System.out.print("Executing Test 1.7...");
+	public void TC_2_7_getDegreesOfCycle(){
+		System.out.print("Executing Test 2.7...");
 		degreeManager = DegreeManager.getInstance();
 		Degree b1 = new Degree("00000", "www.sito1.it", "ABC", 1,"ABC");
 		Degree b2 = new Degree("00001", "www.sito2.it", "DEF", 1,"DEF");

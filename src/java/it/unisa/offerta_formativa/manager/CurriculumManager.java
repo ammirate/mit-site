@@ -203,12 +203,12 @@ public class CurriculumManager {
         stmt = DBConnector.openConnection();
 
         try {
-            stmt = conn.createStatement();
-            rs = stmt.executeQuery("SELECT * FROM " + TABLE+ " WHERE degree_matricula="+esc+degree+esc + "ORDER BY title");
+            stmt = DBConnector.openConnection();
+            rs = stmt.executeQuery("SELECT * FROM " + TABLE+ " WHERE degree_matricula="+esc+degreeMatricula+esc + "ORDER BY title");
 
             while (rs.next()) {
-                Curriculum b = getCurriculumFromResultSet(rs);
-                toReturn.add(b);
+                Curriculum c = getCurriculumFromResultSet(rs);
+                toReturn.add(c);
             }
 
         } catch (SQLException e) {
