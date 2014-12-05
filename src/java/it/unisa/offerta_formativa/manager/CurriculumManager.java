@@ -202,9 +202,8 @@ public class CurriculumManager {
         ArrayList<Curriculum> toReturn = new ArrayList<Curriculum>();
         stmt = DBConnector.openConnection();
 
-        try {
-            stmt = conn.createStatement();
-            rs = stmt.executeQuery("SELECT * FROM " + TABLE+ " WHERE degree_matricula="+esc+degree+esc + "ORDER BY title");
+        try {      
+            rs = stmt.executeQuery("SELECT * FROM " + TABLE+ " WHERE degree_matricula="+esc+degreeMatricula+esc + "ORDER BY title");
 
             while (rs.next()) {
                 Curriculum b = getCurriculumFromResultSet(rs);
