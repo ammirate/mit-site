@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost:3306
--- Generation Time: Dic 04, 2014 alle 09:29
+-- Generation Time: Dic 05, 2014 alle 03:02
 -- Versione del server: 5.5.40
 -- PHP Version: 5.4.33
 
@@ -168,6 +168,13 @@ CREATE TABLE IF NOT EXISTS `curriculum_teaching` (
   `curriculum_matricula` varchar(45) NOT NULL,
   `teaching_matricula` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dump dei dati per la tabella `curriculum_teaching`
+--
+
+INSERT INTO `curriculum_teaching` (`curriculum_matricula`, `teaching_matricula`) VALUES
+('02225P0001', '0222500002');
 
 -- --------------------------------------------------------
 
