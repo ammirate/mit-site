@@ -121,18 +121,16 @@ public class TeachingManager {
         stmt = DBConnector.openConnection();
 
         String esc = "\"";
-        ResultSet rs2;
         if (matricula == null || matricula.equals("") || matricula.length() > 10) {
             throw new IllegalArgumentException("Matricula format incorrect");
         } else {
             try {
                 rs = stmt.executeQuery("SELECT * FROM " + TABLE
-                        + " WHERE " + PKEY + "=\"" + matricula + "\"");
+                        + " WHERE " + PKEY + "=" + esc + matricula + esc);
                 while (rs.next()) {
-                    rs2 = stmt.executeQuery("SELECT * FROM " + TABLE_LINK + " WHERE teaching_matricula=" + esc + matricula + esc);
-
                     return getTeachingFromResultSet(rs);
                 }
+
             } catch (SQLException ex) {
                 throw new RuntimeException("Read Query failed!");
             } finally {
