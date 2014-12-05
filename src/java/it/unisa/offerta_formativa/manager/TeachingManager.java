@@ -22,7 +22,6 @@ import java.util.logging.Logger;
  */
 public class TeachingManager {
 
-   
     private static String TABLE = "teaching";
     private static String PKEY = "matricula";
     public static String TABLE_LINK = "curriculum_teaching";
@@ -36,16 +35,6 @@ public class TeachingManager {
      * Constructor
      */
     private TeachingManager() {
-        conn = DBConnector.getConnection();
-        if (conn == null) {
-            throw new RuntimeException("Unable to connect to the DB");
-        }
-        try {
-            stmt = conn.createStatement();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            throw new RuntimeException("Statement Creation failed");
-        }
     }
 
     /**
@@ -54,6 +43,8 @@ public class TeachingManager {
      * @return
      */
     public boolean createTeaching(Teaching ins) {
+        stmt = DBConnector.openConnection();
+
         if (ins == null) {
             throw new IllegalArgumentException("The teaching which you're trying to insert is null");
         } else {
@@ -64,6 +55,8 @@ public class TeachingManager {
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 throw new RuntimeException("Insert Query Failed");
+            } finally {
+                DBConnector.closeConnection();
             }
         }
         return false;
@@ -75,6 +68,8 @@ public class TeachingManager {
      * @return
      */
     public boolean deleteTeaching(String matricula) {
+        stmt = DBConnector.openConnection();
+
         if (matricula == null || matricula.equals("") || matricula.length() > 10) {
             throw new IllegalArgumentException("Matricula format incorrect");
         } else {
@@ -85,6 +80,8 @@ public class TeachingManager {
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 throw new RuntimeException("Delete Query failed!");
+            } finally {
+                DBConnector.closeConnection();
             }
         }
         return false;
@@ -96,6 +93,8 @@ public class TeachingManager {
      * @return
      */
     public boolean updateTeaching(Teaching ins) {
+        stmt = DBConnector.openConnection();
+
         if (ins == null) {
             throw new IllegalArgumentException("The teaching which you're trying to update is null");
         } else {
@@ -106,6 +105,8 @@ public class TeachingManager {
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 throw new RuntimeException("Update Query Failed");
+            } finally {
+                DBConnector.closeConnection();
             }
         }
         return false;
@@ -117,6 +118,8 @@ public class TeachingManager {
      * @return
      */
     public Teaching readTeaching(String matricula) {
+        stmt = DBConnector.openConnection();
+
         String esc = "\"";
         ResultSet rs2;
         if (matricula == null || matricula.equals("") || matricula.length() > 10) {
@@ -128,16 +131,16 @@ public class TeachingManager {
                 while (rs.next()) {
                     rs2 = stmt.executeQuery("SELECT * FROM " + TABLE_LINK + " WHERE teaching_matricula=" + esc + matricula + esc);
 
-                    return getTeachingFromResultSet(rs, rs2);
+                    return getTeachingFromResultSet(rs);
                 }
             } catch (SQLException ex) {
                 throw new RuntimeException("Read Query failed!");
+            } finally {
+                DBConnector.closeConnection();
             }
         }
         return null;
     }
-
-    
 
     /**
      *
@@ -151,7 +154,7 @@ public class TeachingManager {
 
     /**
      * Get all the teachings in the lists
-     * 
+     *
      * @return an ArrayList of teachings
      */
     public ArrayList<Teaching> getAllTeachings() {
@@ -159,20 +162,24 @@ public class TeachingManager {
         ResultSet rs2;
         String esc = "\"";
         try {
-            stmt = conn.createStatement();
+            stmt = DBConnector.openConnection();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE);
             while (rs.next()) {
 
                 rs2 = stmt.executeQuery("SELECT * FROM " + TABLE_LINK + " WHERE teaching_matricula=" + esc + rs.getString("matricula") + esc);
-                toReturn.add(getTeachingFromResultSet(rs, rs2));
+                toReturn.add(getTeachingFromResultSet(rs));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBConnector.closeConnection();
         }
         return toReturn;
     }
 
     /**
      * Get all the bachelor in the lists with a given year
+     *
      * @param year of study
      * @return an ArrayList of teaching at the year @param year
      */
@@ -181,21 +188,25 @@ public class TeachingManager {
         String esc = "\"";
         ArrayList<Teaching> toReturn = new ArrayList<Teaching>();
         try {
-            stmt = conn.createStatement();
+            stmt = DBConnector.openConnection();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " WHERE year=" + year);
             while (rs.next()) {
                 rs2 = stmt.executeQuery("SELECT * FROM " + TABLE_LINK + " WHERE teaching_matricula=" + esc + rs.getString("matricula") + esc);
-                Teaching t = getTeachingFromResultSet(rs, rs2);
+                Teaching t = getTeachingFromResultSet(rs);
                 toReturn.add(t);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBConnector.closeConnection();
         }
         return toReturn;
     }
 
     /**
      * Get all the bachelor in the lists with a given semester
-     * @param semester 
+     *
+     * @param semester
      * @return an ArrayList of teaching at the year @param semester
      */
     public ArrayList<Teaching> getTeachingsBySemester(int semester) {
@@ -203,29 +214,31 @@ public class TeachingManager {
         String esc = "\"";
         ArrayList<Teaching> toReturn = new ArrayList<>();
         try {
-            stmt = conn.createStatement();
+            stmt = DBConnector.openConnection();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " WHERE semester=" + semester);
             while (rs.next()) {
                 rs2 = stmt.executeQuery("SELECT * FROM " + TABLE_LINK + " WHERE teaching_matricula=" + esc + rs.getString("matricula") + esc);
-                Teaching t = getTeachingFromResultSet(rs,rs2);
+                Teaching t = getTeachingFromResultSet(rs);
                 toReturn.add(t);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            DBConnector.closeConnection();
         }
         return toReturn;
     }
-    
+
     public ArrayList<Teaching> getTeachingsByCurriculum(String curriculum_matricula) {
         ResultSet rs2;
         String esc = "\"";
         ArrayList<Teaching> toReturn = new ArrayList<>();
         try {
-            stmt = conn.createStatement();
+            stmt = DBConnector.openConnection();
             stmt2 = conn.createStatement();
             rs2 = stmt.executeQuery("SELECT * FROM " + TABLE_LINK + " WHERE curriculum_matricula=" + esc + curriculum_matricula + esc);
-            
+
             while (rs2.next()) {
                 
                 rs = stmt2.executeQuery("SELECT * FROM " + TABLE + " WHERE matricula=" + esc + rs2.getString("teaching_matricula")+ esc );
@@ -239,11 +252,13 @@ public class TeachingManager {
             }
 
         } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBConnector.closeConnection();
         }
         return toReturn;
     }
-    
-    
+
     /**
      * Create a Teaching from a ResultSet object
      *
@@ -262,6 +277,8 @@ public class TeachingManager {
             return new Teaching(tit, abb, matr, link, year, sem, active);
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            DBConnector.closeConnection();
         }
         return null;
         

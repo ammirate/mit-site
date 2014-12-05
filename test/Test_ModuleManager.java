@@ -1,4 +1,4 @@
-package it.unisa.offerta_formativa.test.manager;
+
 
 import it.unisa.offerta_formativa.manager.ModuleManager;
 
@@ -58,8 +58,8 @@ public class Test_ModuleManager extends TestCase{
 	public void TC_5_3_readModule(){
 		System.out.println("Executing TC_5_3....");
 		ModuleManager mdb = ModuleManager.getInstance();
-		Module m = mdb.readModule(1);
-		Module test = new Module(1,"0510201111","Service Management");
+		Module m = mdb.readModule("0510201111","Service Management");
+		Module test = new Module("0510201111","Service Management");
 		assertTrue(m.equals(test));
 		System.out.print("Done");
 	}
@@ -67,14 +67,14 @@ public class Test_ModuleManager extends TestCase{
 	public void TC_5_4_UpdateModule(){
 		System.out.println("Executing TC_5_4....");
 		ModuleManager mdb = ModuleManager.getInstance();
-		assertTrue(mdb.updateModule(new Module(1,"0510201111","Project Management")));
+		assertTrue(mdb.updateModule(new Module("0510201111","Project Management")));
 		System.out.print("Done");
 	}
 	
 	public void TC_5_5_DeleteModule(){
 		System.out.println("Executing TC_5_5....");
 		ModuleManager mdb = ModuleManager.getInstance();
-		assertTrue(mdb.deleteModule(1));
+		assertTrue(mdb.deleteModule("0510201111","Project Management"));
 		System.out.print("Done");
 	}
 	
@@ -86,8 +86,8 @@ public class Test_ModuleManager extends TestCase{
 		mdb.createModule(new Module("0510201111","Project Management"));
 		assertEquals(2,mdb.getModulesByTeaching("0510201111").size());
 		System.out.print("Done");
-		mdb.deleteModule(2);
-		mdb.deleteModule(3);
+		mdb.deleteModule("0510201111","Service Management");
+		mdb.deleteModule("0510201111","Project Management");
 	}
 	
 	public void TC_5_7_getAllModules() {
@@ -98,8 +98,8 @@ public class Test_ModuleManager extends TestCase{
 		mdb.createModule(new Module("0510201111","Project Management"));
 		assertEquals(2,mdb.getAllModules().size());
 		System.out.print("Done");
-		mdb.deleteModule(4);
-		mdb.deleteModule(5);
+		mdb.deleteModule("0510201111","Service Management");
+		mdb.deleteModule("0510201111","Project Management");
 	}
 	
 }

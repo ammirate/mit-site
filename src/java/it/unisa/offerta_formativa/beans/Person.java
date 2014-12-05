@@ -11,7 +11,7 @@ package it.unisa.offerta_formativa.beans;
  */
 public class Person {
     
-    private String fiscalCode;
+    private String SSN;
     private String name;
     private String surname;
     private String phone;
@@ -20,16 +20,22 @@ public class Person {
     private String zipCode;
     private String cityzenship;
     private char gender;
+    private String accountEmail;
+    private String departmentAbbreviation;
+    private String webPage;
+    private String university;
+    private String matricula;
+    
     
     public Person(){
     }
 
-    public String getFiscalCode() {
-        return fiscalCode;
+    public String getSSN() {
+        return SSN;
     }
 
-    public void setFiscalCode(String fiscalCode) {
-        this.fiscalCode = fiscalCode;
+    public void setSSN(String SSN) {
+        this.SSN = SSN;
     }
 
     public String getName() {

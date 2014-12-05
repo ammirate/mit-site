@@ -7,14 +7,14 @@ package it.unisa.offerta_formativa.beans;
  */
 public class Module {
     
-	private String teachingSN;
-;	private String title;
+	private String teachingMatricula;
+	private String title;
 	
 	
-	public Module(String idTeaching, String title) {
-		if(idTeaching!=null && title!=null){
-			if(!idTeaching.equals("") && !title.equals("")){
-				this.teachingSN = idTeaching;
+	public Module(String teachingMatricula, String title) {
+		if(teachingMatricula!=null && title!=null){
+			if(!teachingMatricula.equals("") && !title.equals("")){
+				this.teachingMatricula = teachingMatricula;
 				this.title = title;
 			}else{
 				throw new IllegalArgumentException("id teaching and title cannot be void");
@@ -27,15 +27,15 @@ public class Module {
          * 
          * @return the teaching serial number
          */
-	public String getTeachingSN() {
-		return teachingSN;
+	public String getTeachingMatricula() {
+		return teachingMatricula;
 	}
 
         
-	public void setTeachingSN(String serialNumber) {
+	public void setTeachingMatricula(String serialNumber) {
 		if(serialNumber!=null){
 			if(!serialNumber.equals("")){
-				this.teachingSN = serialNumber;
+				this.teachingMatricula = serialNumber;
 			}else{
 				throw new IllegalArgumentException("teaching serialNumber cannot be void");
 			}
@@ -61,18 +61,18 @@ public class Module {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "idTeaching=\""+teachingSN+"\",title=\""+title+"\"";
+		return "idTeaching=\""+teachingMatricula+"\",title=\""+title+"\"";
 	}
 	
 	public String toStringQueryInsert(){
-		return "\""+teachingSN+"\",\""+title+"\"";
+		return "\""+teachingMatricula+"\",\""+title+"\"";
 	}
 	
 	@Override
 	public boolean equals(Object arg0) {
 		// TODO Auto-generated method stub
 		Module toComp = (Module) arg0;
-		if(this.teachingSN.equalsIgnoreCase(toComp.getTeachingSN()) &&
+		if(this.teachingMatricula.equalsIgnoreCase(toComp.getTeachingMatricula()) &&
 		   this.title.equalsIgnoreCase(toComp.getTitle())
 		){
                     return true;

@@ -11,12 +11,12 @@ import it.unisa.offerta_formativa.beans.Teaching;
 
 /**
  *
- * @author Alessandro
+ * @author Alessandro, Antonio
  *
  */
 public class ModuleManager {
 
-    private Connection conn;
+    private Connection conn = null;
     private Statement stmt;
     private static String TABLE = "module";
     private static String PKEY = "idModule";
@@ -25,16 +25,6 @@ public class ModuleManager {
     private static ModuleManager instance = null;
 
     private ModuleManager() {
-        conn = DBConnector.getConnection();
-        if (conn == null) {
-            throw new RuntimeException("Unable to connect to the DB");
-        }
-        try {
-            stmt = conn.createStatement();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -44,6 +34,8 @@ public class ModuleManager {
      * @return true if done.
      */
     public boolean createModule(Module m) {
+        stmt = DBConnector.openConnection();
+
         try {
             if (stmt.executeUpdate("INSERT INTO " + TABLE + "(idTeaching,title) VALUES(" + m.toStringQueryInsert() + ")") == 1) {
                 return true;
@@ -51,6 +43,8 @@ public class ModuleManager {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        } finally {
+            DBConnector.closeConnection();
         }
         return false;
     }
@@ -62,6 +56,8 @@ public class ModuleManager {
      * @return Module bean read. Empty if not found any.
      */
     public Module readModule(String title, String teachinMatricula) {
+        stmt = DBConnector.openConnection();
+
         try {
             String esc = "\'";
             String query = "SELECT * FROM " + TABLE + " WHERE title=" + esc + title + esc
@@ -73,6 +69,8 @@ public class ModuleManager {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        } finally {
+            DBConnector.closeConnection();
         }
         return null;
     }
@@ -84,16 +82,20 @@ public class ModuleManager {
      * @return true if done.
      */
     public boolean updateModule(Module m) {
+        stmt = DBConnector.openConnection();
+
         try {
             String esc = "\'";
             String query = "UPDATE " + TABLE + " SET " + m.toString() + " WHERE title=" + m.getTitle()
-                    + " and teaching_matricula=" + m.getTeachingSN();
+                    + " and teaching_matricula=" + m.getTeachingMatricula();
             if (stmt.executeUpdate(query) == 1) {
                 return true;
             }
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        } finally {
+            DBConnector.closeConnection();
         }
         return false;
     }
@@ -105,6 +107,8 @@ public class ModuleManager {
      * @return true if deleted.
      */
     public boolean deleteModule(String title, String teachinMatricula) {
+        stmt = DBConnector.openConnection();
+
         try {
             String esc = "\'";
             String query = "DELETE FROM " + TABLE + " WHERE title=" + esc + title + esc
@@ -115,6 +119,8 @@ public class ModuleManager {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        } finally {
+            DBConnector.closeConnection();
         }
         return false;
     }
@@ -133,7 +139,7 @@ public class ModuleManager {
      * @return ArrayList<Module>, empty if it has not found any
      */
     public ArrayList<Module> getModulesByTeaching(String idTeaching) {
-        // TODO Auto-generated method stub
+        stmt = DBConnector.openConnection();
 
         ArrayList<Module> toReturn = new ArrayList<Module>();
         if (idTeaching == null) {
@@ -147,6 +153,8 @@ public class ModuleManager {
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
+            } finally {
+                DBConnector.closeConnection();
             }
         }
         return toReturn;
@@ -158,7 +166,7 @@ public class ModuleManager {
      * @return ArrayList of Module. Empty if not found any.
      */
     public ArrayList<Module> getAllModules() {
-        // TODO Auto-generated method stub
+        stmt = DBConnector.openConnection();
         ArrayList<Module> toReturn = new ArrayList<Module>();
         try {
             rs = stmt.executeQuery("SELECT * FROM " + TABLE);
@@ -168,6 +176,8 @@ public class ModuleManager {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        } finally {
+            DBConnector.closeConnection();
         }
         return toReturn;
     }
