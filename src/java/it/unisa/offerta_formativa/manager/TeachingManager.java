@@ -229,7 +229,7 @@ public class TeachingManager {
     }
 
     public ArrayList<Teaching> getTeachingsByCurriculum(String curriculum_matricula) {
-        ResultSet rs2, rs3;
+        ResultSet rs2;
         String esc = "\"";
         ArrayList<Teaching> toReturn = new ArrayList<>();
         try {
@@ -238,11 +238,15 @@ public class TeachingManager {
             rs2 = stmt.executeQuery("SELECT * FROM " + TABLE_LINK + " WHERE curriculum_matricula=" + esc + curriculum_matricula + esc);
 
             while (rs2.next()) {
-
-                rs = stmt2.executeQuery("SELECT * FROM " + TABLE + " WHERE matricula=" + esc + rs2.getString("teaching_matricula") + esc);
-                Teaching t = getTeachingFromResultSet(rs);
-                toReturn.add(t);
-
+                
+                rs = stmt2.executeQuery("SELECT * FROM " + TABLE + " WHERE matricula=" + esc + rs2.getString("teaching_matricula")+ esc );
+                if(rs.next()){
+                    Teaching t = getTeachingFromResultSet(rs);
+                    toReturn.add(t);
+                
+                }
+                
+               
             }
 
         } catch (SQLException e) {
@@ -275,5 +279,26 @@ public class TeachingManager {
             DBConnector.closeConnection();
         }
         return null;
+        
+    }
+    
+    /**
+     * 
+     * @param teaching_matricula
+     * @return 
+     */
+    public String getHtmlSyllabus(String teaching_matricula){
+        String htmlToReturn = null;
+        String esc = "\"";
+        try {
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("SELECT esse3_content FROM " + TABLE + " WHERE matricula=" + esc + teaching_matricula + esc);
+            
+            while (rs.next()) {
+                htmlToReturn = rs.getString("esse3_content");   
+            }
+        } catch (SQLException e) {
+        }
+        return htmlToReturn;
     }
 }
