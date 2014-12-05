@@ -76,8 +76,8 @@ public class ShowTeachingOfferServlet extends HttpServlet {
                     map.get(d).get(deg).put(c, new ArrayList<Teaching>());
 
                     for (Teaching t : tm.getTeachingsByCurriculum(c.getMatricula())) {
-
-                        map.get(d).get(deg).get(cm).add(t);
+                        if(map.get(d).get(deg).get(c)==null) System.out.println(" è null");
+                        map.get(d).get(deg).get(c).add(t);
                     }
                 }
             }
