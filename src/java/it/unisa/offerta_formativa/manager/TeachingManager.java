@@ -237,15 +237,13 @@ public class TeachingManager {
      * @return
      */
     public ArrayList<Teaching> getTeachingsByCurriculum(String curriculum_matricula) {
-        ResultSet rs2;
         String esc = "\"";
         ArrayList<Teaching> toReturn = new ArrayList<>();
         try {
             stmt = DBConnector.openConnection();
             String query = "SELECT * FROM " + TABLE_LINK 
                     + " WHERE curriculum_matricula=" 
-                    + esc + curriculum_matricula + esc
-                    + " order by title";
+                    + esc + curriculum_matricula + esc;
             rs = stmt.executeQuery(query);
 
             while (rs.next()) {
