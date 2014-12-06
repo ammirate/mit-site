@@ -41,7 +41,7 @@ public class DepartmentManager {
     public boolean createDepartment(Department dept) {
         try {
             stmt = DBConnector.openConnection();
-            String query = "INSERT INTO " + TABLE + "(title,url_moodle,token) VALUES(" + dept.toStringQueryInsert() + ")";
+            String query = "INSERT INTO " + TABLE + "(abbreviation,title,url_moodle,token) VALUES(" + dept.toStringQueryInsert() + ")";
             if (stmt.executeUpdate(query) == 1) {
                 return true;
             }
@@ -57,14 +57,15 @@ public class DepartmentManager {
     /**
      * Update a department into the DB
      *
-     * @param department to update into the DB
      * @return true if the update was successfull
      */
-    public boolean updateDepartment(Department dept) {
+    public boolean updateDepartment(String abbrev, Department dept) {
         try {
+            String esc = "\'";
             stmt = DBConnector.openConnection();
-            if (stmt.executeUpdate("UPDATE " + TABLE + " SET " + dept.toString() + " WHERE "
-                    + PKEY + "=" + dept.getAbbreviation()) == 1) {
+            String query = "UPDATE " + TABLE + " SET " + dept.toString() + " WHERE "
+                    + PKEY + "=" + esc + abbrev + esc;
+            if (stmt.executeUpdate(query) == 1) {
                 return true;
             }
         } catch (SQLException ex) {
@@ -89,8 +90,9 @@ public class DepartmentManager {
         } else {
             try {
                 stmt = DBConnector.openConnection();
-                rs = stmt.executeQuery("SELECT * FROM " + TABLE
-                        + " WHERE " + PKEY + "=\"" + abbreviation + "\"");
+                String query = "SELECT * FROM " + TABLE
+                        + " WHERE " + PKEY + "=\'" + abbreviation + "\' ";
+                rs = stmt.executeQuery(query);
                 while (rs.next()) {
                     return new Department(rs.getString("abbreviation"), rs.getString("title"), rs.getString("url_moodle"), rs.getString("token"));
                 }
@@ -135,7 +137,7 @@ public class DepartmentManager {
         ArrayList<Department> toReturn = new ArrayList<Department>();
         try {
             stmt = DBConnector.openConnection();
-            rs = stmt.executeQuery("SELECT * FROM " + TABLE);
+            rs = stmt.executeQuery("SELECT * FROM " + TABLE + " order by title");
 
             while (rs.next()) {
                 Department b = getDepartmentFromResultSet(rs);
@@ -150,24 +152,6 @@ public class DepartmentManager {
         return toReturn;
     }
 
-    /**
-     * Insert all the department in the list into the Database
-     *
-     * @param list is the list of department to insert
-     * @return the list of department which had an error during the insertion
-     * process. So, check if this list is empty to make sure of the insertion
-     * process.
-     */
-    public ArrayList<Department> insertDepartment(ArrayList<Department> list) {
-        ArrayList<Department> notInserted = new ArrayList<Department>();
-
-        for (Department b : list) {
-            if (!createDepartment(b)) {
-                notInserted.add(b);
-            }
-        }
-        return notInserted;
-    }
 
     /**
      * used to get the unique instance of this class

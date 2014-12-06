@@ -7,7 +7,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import it.unisa.offerta_formativa.beans.Module;
-import it.unisa.offerta_formativa.beans.Teaching;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,10 +17,10 @@ import it.unisa.offerta_formativa.beans.Teaching;
  */
 public class ModuleManager {
 
-    private Connection conn = null;
+    private final Connection conn = null;
     private Statement stmt;
-    private static String TABLE = "module";
-    private static String PKEY = "idModule";
+    private static final String TABLE = "module";
+    private static final String PKEY = "idModule";
     private ResultSet rs;
 
     private static ModuleManager instance = null;
@@ -30,14 +31,18 @@ public class ModuleManager {
     /**
      * Create a new module DB record
      *
-     * @param module bean
+     * @param m
      * @return true if done.
      */
     public boolean createModule(Module m) {
         stmt = DBConnector.openConnection();
 
         try {
-            if (stmt.executeUpdate("INSERT INTO " + TABLE + "(idTeaching,title) VALUES(" + m.toStringQueryInsert() + ")") == 1) {
+            String query = "INSERT INTO " + TABLE
+                    + "(teaching_matricula,title) VALUES("
+                    + m.toStringQueryInsert() + ")";
+
+            if (stmt.executeUpdate(query) == 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -52,7 +57,8 @@ public class ModuleManager {
     /**
      * Get the module with the given id
      *
-     * @param idModule
+     * @param title
+     * @param teachinMatricula
      * @return Module bean read. Empty if not found any.
      */
     public Module readModule(String title, String teachinMatricula) {
@@ -60,11 +66,12 @@ public class ModuleManager {
 
         try {
             String esc = "\'";
-            String query = "SELECT * FROM " + TABLE + " WHERE title=" + esc + title + esc
+            String query = "SELECT * FROM " + TABLE + " WHERE title=" + esc +title  + esc
                     + " and " + "teaching_matricula=" + esc + teachinMatricula + esc;
+            //System.out.println(query);
             rs = stmt.executeQuery(query);
             while (rs.next()) {
-                return new Module(rs.getString("teaching_matricula"), rs.getString("title"));
+                return getModuleFromResultSet(rs);
             }
         } catch (SQLException e) {
             // TODO Auto-generated catch block
@@ -78,16 +85,19 @@ public class ModuleManager {
     /**
      * Update Module information with the given Module bean
      *
-     * @param module bean
+     * @param m
      * @return true if done.
      */
-    public boolean updateModule(Module m) {
+    public boolean updateModule(Module oldModule, String newTitle) {
         stmt = DBConnector.openConnection();
 
         try {
             String esc = "\'";
-            String query = "UPDATE " + TABLE + " SET " + m.toString() + " WHERE title=" + m.getTitle()
-                    + " and teaching_matricula=" + m.getTeachingMatricula();
+            String query = "UPDATE " + TABLE + " SET title=" + 
+                    esc + newTitle + esc 
+                    + " WHERE teaching_matricula=" + oldModule.getTeachingMatricula()
+                    + " AND " + "title=" + esc + oldModule.getTitle() + esc;
+            System.out.println(query);
             if (stmt.executeUpdate(query) == 1) {
                 return true;
             }
@@ -106,13 +116,13 @@ public class ModuleManager {
      * @param idModule
      * @return true if deleted.
      */
-    public boolean deleteModule(String title, String teachinMatricula) {
+    public boolean deleteModule(String title, String teachingMatricula) {
         stmt = DBConnector.openConnection();
 
         try {
             String esc = "\'";
             String query = "DELETE FROM " + TABLE + " WHERE title=" + esc + title + esc
-                    + " and " + "teaching_matricula=" + esc + teachinMatricula + esc;
+                    + " and " + "teaching_matricula=" + esc + teachingMatricula + esc;
             if (stmt.executeUpdate(query) == 1) {
                 return true;
             }
@@ -125,6 +135,11 @@ public class ModuleManager {
         return false;
     }
 
+    /**
+     * Singleton Pattern
+     *
+     * @return
+     */
     public static ModuleManager getInstance() {
         if (instance == null) {
             instance = new ModuleManager();
@@ -133,22 +148,27 @@ public class ModuleManager {
     }
 
     /**
-     * Given the idTeaching returns a collection of related Modules
+     * Given the teaching_matricula returns a collection of related Modules
      *
-     * @param idTeaching
+     * @param teaching_matricula
      * @return ArrayList<Module>, empty if it has not found any
      */
-    public ArrayList<Module> getModulesByTeaching(String idTeaching) {
+    public ArrayList<Module> getModulesByTeaching(String teaching_matricula) {
         stmt = DBConnector.openConnection();
 
         ArrayList<Module> toReturn = new ArrayList<Module>();
-        if (idTeaching == null) {
+        if (teaching_matricula == null) {
             throw new IllegalArgumentException("id cannot be null!");
         } else {
             try {
-                rs = stmt.executeQuery("SELECT * FROM " + TABLE + " WHERE idTeaching=\"" + idTeaching + "\"");
+                String query = "SELECT * FROM " + TABLE 
+                        + " WHERE teaching_matricula=\"" 
+                        + teaching_matricula + "\"" 
+                        + " order by title";
+                
+                rs = stmt.executeQuery(query);
                 while (rs.next()) {
-                    toReturn.add(new Module(rs.getString("teaching_matricula"), rs.getString("title")));
+                    toReturn.add(getModuleFromResultSet(rs));
                 }
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
@@ -169,7 +189,7 @@ public class ModuleManager {
         stmt = DBConnector.openConnection();
         ArrayList<Module> toReturn = new ArrayList<Module>();
         try {
-            rs = stmt.executeQuery("SELECT * FROM " + TABLE);
+            rs = stmt.executeQuery("SELECT * FROM " + TABLE+ " order by title");
             while (rs.next()) {
                 toReturn.add(new Module(rs.getString("teaching_matricula"), rs.getString("title")));
             }
@@ -182,4 +202,19 @@ public class ModuleManager {
         return toReturn;
     }
 
+    private Module getModuleFromResultSet(ResultSet rs) {
+        String title;
+        try {
+            title = rs.getString("title");
+            String teach_matr = rs.getString("teaching_matricula");
+            return new Module(title, teach_matr);
+        } catch (SQLException ex) {
+            Logger.getLogger(ModuleManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    
+    
+    
 }

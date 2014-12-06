@@ -64,7 +64,7 @@ public class Test_DepartmentManager extends TestCase{
 	public void TC_1_2_createDepartment() {
 		System.out.print("Executing Test 1.2...");
 		mng = DepartmentManager.getInstance();
-		Department degree = new Department("DISTRA-MIT", "aaaa", "bbb","");
+		Department degree = new Department("DI", "Dipartimento Informatica", "www.di.unisa.it","bresvgsss2651vgdtgch");
 		assertTrue(mng.createDepartment(degree));
 		System.out.println("Done");
 	}
@@ -75,8 +75,8 @@ public class Test_DepartmentManager extends TestCase{
 	public void TC_1_3_updateDepartment() {
 		System.out.print("Executing Test 1.3...");
 		mng = DepartmentManager.getInstance();
-		Department degree = new Department("DISTRA-MIT", "aaaaaaaaaaaaa", "bbbbbbbbb","");
-		assertTrue(mng.updateDepartment(degree));
+		Department degree = new Department("DIA", "Dipartimento di Informatica Applicata", "www.di.unisa.it","bresvgsss2651vgdtgch");
+		assertTrue(mng.updateDepartment("DI", degree));
 		System.out.println("Done");
 	}
 
@@ -86,8 +86,8 @@ public class Test_DepartmentManager extends TestCase{
 	public void TC_1_4_readDepartment() {
 		System.out.print("Executing Test 1.4...");
 		mng = DepartmentManager.getInstance();
-		Department degree = new Department("DISTRA-MIT", "aaaa", "bbb","");
-		assertTrue(degree.equals(mng.readDepartment(degree.getAbbreviation())));
+		Department degree = new Department("DIA", "Dipartimento di Informatica Applicata", "www.di.unisa.it","bresvgsss2651vgdtgch");
+		assertTrue(degree.equals(mng.readDepartment("DIA")));
 		System.out.println("Done");
 	}
 
@@ -98,8 +98,7 @@ public class Test_DepartmentManager extends TestCase{
 	public void TC_1_5_deleteDepartment() {
 		System.out.print("Executing Test 1.5...");
 		mng = DepartmentManager.getInstance();
-		Department degree = new Department("DISTRA-MIT", "aaaa", "bbb","");
-		assertTrue(mng.deleteDepartment(degree.getAbbreviation()));
+		assertTrue(mng.deleteDepartment("DIA"));
 		System.out.println("Done");
 	}
 	
@@ -107,17 +106,16 @@ public class Test_DepartmentManager extends TestCase{
 	public void TC_1_6_getAllDepartment(){
 		System.out.print("Executing Test 1.6...");
 		mng = DepartmentManager.getInstance();
-		Department d1 = new Department("DISTRA-MIT", "aaaa", "bbb","");
-		Department d2 = new Department("DISES", "ccccc", "ddddd","");
 		
+                Department d1 = new Department("DIA", "Dipartimento di Informatica Applicata", "www.di.unisa.it","bresvgsss2651vgdtgch");
 		mng.createDepartment(d1);
-		mng.createDepartment(d2);		
 		
 		ArrayList<Department> results = mng.getAllDepartments();
 		assertEquals(2, results.size());
+                //in the DB, testing version, there is already a department, so they are 2
 		System.out.println("Done");
+                
 		mng.deleteDepartment(d1.getAbbreviation());
-		mng.deleteDepartment(d2.getAbbreviation());
 		
 	}
 

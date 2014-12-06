@@ -159,7 +159,9 @@ public class ClassManager {
             throw new IllegalArgumentException("Id cannot be null!");
         } else {
             try {
-                String query = "SELECT * FROM " + TABLE + " WHERE teaching_matricula=\"" + idTeaching + "\"";
+                String query = "SELECT * FROM " + TABLE 
+                        + " WHERE teaching_matricula=\"" + idTeaching + "\""
+                        + " order by title" ;
                 rs = stmt.executeQuery(query);
                 while (rs.next()) {
                     toReturn.add(new ClassPartition(idTeaching, rs.getString("title")));
@@ -184,7 +186,7 @@ public class ClassManager {
 
         ArrayList<ClassPartition> toReturn = new ArrayList<>();
         try {
-            rs = stmt.executeQuery("SELECT * FROM " + TABLE);
+            rs = stmt.executeQuery("SELECT * FROM " + TABLE + " order by title");
             while (rs.next()) {
                 toReturn.add(new ClassPartition(rs.getString("teaching_matricula"), rs.getString("title")));
             }

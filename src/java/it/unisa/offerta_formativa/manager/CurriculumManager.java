@@ -146,7 +146,7 @@ public class CurriculumManager {
 
         ArrayList<Curriculum> toReturn = new ArrayList<Curriculum>();
         try {
-            rs = stmt.executeQuery("SELECT * FROM " + TABLE);
+            rs = stmt.executeQuery("SELECT * FROM " + TABLE + " order by title");
 
             while (rs.next()) {
                 Curriculum b = getCurriculumFromResultSet(rs);
@@ -204,7 +204,9 @@ public class CurriculumManager {
 
         try {
             stmt = DBConnector.openConnection();
-            rs = stmt.executeQuery("SELECT * FROM " + TABLE+ " WHERE degree_matricula="+esc+degreeMatricula+esc + "ORDER BY title");
+            rs = stmt.executeQuery("SELECT * FROM " + TABLE 
+                    + " WHERE degree_matricula=" + esc + degreeMatricula 
+                    + esc + "ORDER BY title");
 
             while (rs.next()) {
                 Curriculum c = getCurriculumFromResultSet(rs);
@@ -258,7 +260,8 @@ public class CurriculumManager {
         try {
 
             String query = "SELECT * FROM " + TABLE_LINK
-                    + " WHERE curriculum_matricula=" + esc + curriculum_matricula + esc;
+                    + " WHERE curriculum_matricula=" + esc 
+                    + curriculum_matricula + esc ;
             rs = stmt.executeQuery(query);
             System.out.println("getTeachingsByCurriculm query " + query);
 

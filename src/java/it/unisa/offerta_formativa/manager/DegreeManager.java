@@ -79,7 +79,7 @@ public class DegreeManager {
                     + " SET " + degree.toString() + " WHERE "
                     + PKEY + "=" + esc + matricula + esc;
             System.out.println(query);
-            
+
             if (stmt.executeUpdate(query) == 1) {
                 return true;
             }
@@ -151,7 +151,7 @@ public class DegreeManager {
         ArrayList<Degree> toReturn = new ArrayList<>();
         try {
             stmt = DBConnector.openConnection();
-            rs = stmt.executeQuery("SELECT * FROM " + TABLE);
+            rs = stmt.executeQuery("SELECT * FROM " + TABLE + " order by title");
 
             while (rs.next()) {
                 Degree b = getDegreeFromResultSet(rs);
@@ -196,7 +196,10 @@ public class DegreeManager {
         ArrayList<Degree> toReturn = new ArrayList<>();
         try {
             stmt = DBConnector.openConnection();
-            rs = stmt.executeQuery("SELECT * FROM " + TABLE + " WHERE department_abbreviation=" + esc + abbreviation + esc);
+            rs = stmt.executeQuery("SELECT * FROM " + TABLE
+                    + " WHERE department_abbreviation="
+                    + esc + abbreviation + esc
+                    + " order by title");
             while (rs.next()) {
                 Degree b = getDegreeFromResultSet(rs);
                 toReturn.add(b);
@@ -222,7 +225,9 @@ public class DegreeManager {
         } else {
             try {
                 stmt = DBConnector.openConnection();
-                String query = "SELECT * FROM " + TABLE + " WHERE cycle_number=" + cycle;
+                String query = "SELECT * FROM " + TABLE
+                        + " WHERE cycle_number=" + cycle
+                        + " order by title";
                 rs = stmt.executeQuery(query);
 
                 while (rs.next()) {
@@ -242,7 +247,8 @@ public class DegreeManager {
 
     /**
      * used to get the unique instance of this class
-     * @return 
+     *
+     * @return
      */
     public static DegreeManager getInstance() {
         if (instance == null) {
@@ -250,8 +256,6 @@ public class DegreeManager {
         }
         return instance;
     }
-    
-    
 
     private Degree getDegreeFromResultSet(ResultSet rs) {
         String matricula;
@@ -263,16 +267,13 @@ public class DegreeManager {
             String dep = rs.getString("department_abbreviation");
             int active = rs.getInt("active");
             return new Degree(matricula, link, title, cycle, dep, (active > 0));
-        } 
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return null;
     }
-    
-    
-    
-    public List<Degree> getDegreesByDepartmentAndCycle(String depAbbreviation, int cycle){
+
+    public List<Degree> getDegreesByDepartmentAndCycle(String depAbbreviation, int cycle) {
         List<Degree> toReturn = new ArrayList<>();
         String esc = "\'";
         if (cycle < 1) {
@@ -280,9 +281,10 @@ public class DegreeManager {
         } else {
             try {
                 stmt = DBConnector.openConnection();
-                String query = "SELECT * FROM " + TABLE +
-                        " WHERE cycle_number=" + cycle + " AND " + 
-                        "department_abbreviation=" + esc + depAbbreviation + esc;
+                String query = "SELECT * FROM " + TABLE
+                        + " WHERE cycle_number=" + cycle + " AND "
+                        + "department_abbreviation=" + esc + depAbbreviation + esc
+                        + " order by title";
                 rs = stmt.executeQuery(query);
 
                 while (rs.next()) {
@@ -296,9 +298,9 @@ public class DegreeManager {
                 DBConnector.closeConnection();
             }
         }
-        
+
         return toReturn;
-        
+
     }
 
 }

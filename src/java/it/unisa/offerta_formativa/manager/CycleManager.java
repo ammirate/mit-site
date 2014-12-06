@@ -17,11 +17,11 @@ import java.util.logging.Logger;
 public class CycleManager {
 
     private static CycleManager instance = null;
-    private Connection conn = null;
+    private final Connection conn = null;
     private Statement stmt;
     private ResultSet rs;
-    private static String TABLE = "cycle";
-    private static String PKEY = "cycle_number";
+    private static final String TABLE = "cycle";
+    private static final String PKEY = "cycle_number";
 
     private CycleManager() {
     }
@@ -117,8 +117,8 @@ public class CycleManager {
         stmt = DBConnector.openConnection();
 
         try {
-            System.out.println("SELECT * FROM " + TABLE);
-            rs = stmt.executeQuery("SELECT * FROM " + TABLE);
+//            System.out.println("SELECT * FROM " + TABLE);
+            rs = stmt.executeQuery("SELECT * FROM " + TABLE + " order by title");
             while (rs.next()) {
                 toReturn.add(new Cycle(rs.getInt("cycle_number"), rs.getString("title")));
             }

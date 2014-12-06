@@ -5,16 +5,12 @@
  */
 package it.unisa.offerta_formativa.manager;
 
-import it.unisa.offerta_formativa.beans.Degree;
 import it.unisa.offerta_formativa.beans.Teaching;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -22,10 +18,10 @@ import java.util.logging.Logger;
  */
 public class TeachingManager {
 
-    private static String TABLE = "teaching";
-    private static String PKEY = "matricula";
+    private static final String TABLE = "teaching";
+    private static final String PKEY = "matricula";
     public static String TABLE_LINK = "curriculum_teaching";
-    private Connection conn = null;
+    private final Connection conn = null;
     private Statement stmt, stmt2;
     private ResultSet rs;
 
@@ -49,7 +45,11 @@ public class TeachingManager {
             throw new IllegalArgumentException("The teaching which you're trying to insert is null");
         } else {
             try {
-                if (stmt.executeUpdate("INSERT INTO " + TABLE + "(matricula,title,abbreviation,link,year,semester,active) VALUES(" + ins.toStringQueryInsert() + ")") == 1) {
+                String query = "INSERT INTO " + TABLE
+                        + "(matricula,title,abbreviation,link,year,semester,active) VALUES("
+                        + ins.toStringQueryInsert() + ")";
+
+                if (stmt.executeUpdate(query) == 1) {
                     return true;
                 }
             } catch (SQLException ex) {
@@ -64,7 +64,7 @@ public class TeachingManager {
 
     /**
      *
-     * @param ins
+     * @param matricula
      * @return
      */
     public boolean deleteTeaching(String matricula) {
@@ -74,7 +74,9 @@ public class TeachingManager {
             throw new IllegalArgumentException("Matricula format incorrect");
         } else {
             try {
-                if (stmt.executeUpdate("DELETE FROM " + TABLE + " WHERE " + PKEY + "=\"" + matricula + "\"") == 1) {
+                String query = "DELETE FROM " + TABLE
+                        + " WHERE " + PKEY + "=\"" + matricula + "\"";
+                if (stmt.executeUpdate(query) == 1) {
                     return true;
                 }
             } catch (SQLException ex) {
@@ -99,7 +101,10 @@ public class TeachingManager {
             throw new IllegalArgumentException("The teaching which you're trying to update is null");
         } else {
             try {
-                if (stmt.executeUpdate("UPDATE " + TABLE + " SET " + ins.toString() + " WHERE " + PKEY + "=" + ins.getMatricula()) == 1) {
+                String query = "UPDATE " + TABLE + " SET " + ins.toString()
+                        + " WHERE " + PKEY + "=" + ins.getMatricula();
+
+                if (stmt.executeUpdate(query) == 1) {
                     return true;
                 }
             } catch (SQLException ex) {
@@ -125,8 +130,10 @@ public class TeachingManager {
             throw new IllegalArgumentException("Matricula format incorrect");
         } else {
             try {
-                rs = stmt.executeQuery("SELECT * FROM " + TABLE
-                        + " WHERE " + PKEY + "=" + esc + matricula + esc);
+                String query = "SELECT * FROM " + TABLE
+                        + " WHERE " + PKEY + "=" + esc + matricula + esc;
+
+                rs = stmt.executeQuery(query);
                 while (rs.next()) {
                     return getTeachingFromResultSet(rs);
                 }
@@ -142,6 +149,7 @@ public class TeachingManager {
 
     /**
      *
+     * @return
      */
     public static TeachingManager getInstance() {
         if (instance == null) {
@@ -156,15 +164,12 @@ public class TeachingManager {
      * @return an ArrayList of teachings
      */
     public ArrayList<Teaching> getAllTeachings() {
-        ArrayList<Teaching> toReturn = new ArrayList<Teaching>();
-        ResultSet rs2;
+        ArrayList<Teaching> toReturn = new ArrayList<>();
         String esc = "\"";
         try {
             stmt = DBConnector.openConnection();
-            rs = stmt.executeQuery("SELECT * FROM " + TABLE);
+            rs = stmt.executeQuery("SELECT * FROM " + TABLE + " order by title");
             while (rs.next()) {
-
-                rs2 = stmt.executeQuery("SELECT * FROM " + TABLE_LINK + " WHERE teaching_matricula=" + esc + rs.getString("matricula") + esc);
                 toReturn.add(getTeachingFromResultSet(rs));
             }
         } catch (SQLException e) {
@@ -184,12 +189,11 @@ public class TeachingManager {
     public ArrayList<Teaching> getTeachingsByYear(int year) {
         ResultSet rs2;
         String esc = "\"";
-        ArrayList<Teaching> toReturn = new ArrayList<Teaching>();
+        ArrayList<Teaching> toReturn = new ArrayList<>();
         try {
             stmt = DBConnector.openConnection();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " WHERE year=" + year);
             while (rs.next()) {
-                rs2 = stmt.executeQuery("SELECT * FROM " + TABLE_LINK + " WHERE teaching_matricula=" + esc + rs.getString("matricula") + esc);
                 Teaching t = getTeachingFromResultSet(rs);
                 toReturn.add(t);
             }
@@ -215,7 +219,6 @@ public class TeachingManager {
             stmt = DBConnector.openConnection();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " WHERE semester=" + semester);
             while (rs.next()) {
-                rs2 = stmt.executeQuery("SELECT * FROM " + TABLE_LINK + " WHERE teaching_matricula=" + esc + rs.getString("matricula") + esc);
                 Teaching t = getTeachingFromResultSet(rs);
                 toReturn.add(t);
             }
@@ -228,27 +231,29 @@ public class TeachingManager {
         return toReturn;
     }
 
+    /**
+     *
+     * @param curriculum_matricula
+     * @return
+     */
     public ArrayList<Teaching> getTeachingsByCurriculum(String curriculum_matricula) {
         ResultSet rs2;
         String esc = "\"";
         ArrayList<Teaching> toReturn = new ArrayList<>();
         try {
             stmt = DBConnector.openConnection();
-            stmt2 = conn.createStatement();
-            rs2 = stmt.executeQuery("SELECT * FROM " + TABLE_LINK + " WHERE curriculum_matricula=" + esc + curriculum_matricula + esc);
+            String query = "SELECT * FROM " + TABLE_LINK 
+                    + " WHERE curriculum_matricula=" 
+                    + esc + curriculum_matricula + esc
+                    + " order by title";
+            rs = stmt.executeQuery(query);
 
-            while (rs2.next()) {
-                
-                rs = stmt2.executeQuery("SELECT * FROM " + TABLE + " WHERE matricula=" + esc + rs2.getString("teaching_matricula")+ esc );
-                if(rs.next()){
-                    Teaching t = getTeachingFromResultSet(rs);
-                    toReturn.add(t);
-                
-                }
-                
-               
+            while (rs.next()) {
+
+                Teaching t = getTeachingFromResultSet(rs);
+                toReturn.add(t);
+
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -279,23 +284,23 @@ public class TeachingManager {
             DBConnector.closeConnection();
         }
         return null;
-        
+
     }
-    
+
     /**
-     * 
+     *
      * @param teaching_matricula
-     * @return 
+     * @return
      */
-    public String getHtmlSyllabus(String teaching_matricula){
+    public String getHtmlSyllabus(String teaching_matricula) {
         String htmlToReturn = null;
         String esc = "\"";
         try {
             stmt = conn.createStatement();
             rs = stmt.executeQuery("SELECT esse3_content FROM " + TABLE + " WHERE matricula=" + esc + teaching_matricula + esc);
-            
+
             while (rs.next()) {
-                htmlToReturn = rs.getString("esse3_content");   
+                htmlToReturn = rs.getString("esse3_content");
             }
         } catch (SQLException e) {
         }
