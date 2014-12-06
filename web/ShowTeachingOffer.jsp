@@ -15,6 +15,7 @@
 <html lang="en">
     <head>
 
+        
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
@@ -233,10 +234,10 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
 
-
+                                <p style=" alignment-baseline: central;"> Offerta Formativa </p>
                             </div>
-                            <div>
-                                <div class="row"> <br> </div>
+                            <div class="panel-body">
+                               
 
 
                                 <script>
@@ -263,32 +264,32 @@
 
 
 
-                                <div class="container">
+                           
 
                                     <%
                                         if (!map.isEmpty()) {
                                             for (Department d : map.keySet()) {
-                                    %><dl><dt class="panel-heading col-xs-12 col-sm-6 col-md-8" style="background-color:#9FA8DA; cursor: pointer; vertical-align: middle; "><%out.print(d.getTitle());%></dt><dd><dl>
+                                    %><dl ><dt class="list-group-item col-xs-12 col-sm-6 col-md-8" style="background-color:#38548F; color:#A5C2FF; cursor: pointer; display:block;"><%out.print(d.getTitle());%></dt><dd><dl>
                                                 <% if (map.get(d).keySet().size() != 0) {
                                                         for (Degree de : map.get(d).keySet()) {
                                                 %>
-                                                <dt class="list-group-item col-xs-12 col-sm-6 col-md-8" style="background-color:#C5CAE9; cursor: pointer;"><%out.print(de.getTitle());%></dt> 
+                                                <dt class="list-group-item col-xs-12 col-sm-6 col-md-8" style="background-color:#546EA4; color:#A5C2FF; cursor: pointer; display:block;"><%out.print(de.getTitle());%></dt> 
 
                                                 <%  if (map.get(d).get(de).keySet().size() != 0) {
                                                         for (Curriculum cu : map.get(d).get(de).keySet()) {
-                                                            if (map.get(d).get(de).keySet().size() > 1) { %>
-                                                <dd><dl><dt class="list-group-item col-xs-12 col-sm-6 col-md-8" style="cursor: pointer;"><%out.print("Curriculum - " + cu.getTitle());%></dt>
-                                                        <% }
+                                                             %>
+                                                <dd><dl><dt class="list-group-item col-xs-12 col-sm-6 col-md-8" style="cursor: pointer; color:#FFFFFF; background-color:#8297C4"><%out.print("Curriculum - " + cu.getTitle());%></dt>
+                                                        <% 
                                                             if (map.get(d).get(de).get(cu).size() != 0) {
                                                                 for (Teaching te : map.get(d).get(de).get(cu)) {
                                                         %>
-                                                        <dd class="list-group-item col-xs-12 col-sm-6 col-md-8" ><a href="${pageContext.request.contextPath}/GetSyllabusServlet?teaching_matricula=<%out.print(te.getMatricula());%>"><%out.print(te.getTitle());%></a></dd> 
+                                                        <dd class="list-group-item col-xs-12 col-sm-6 col-md-8" style="position:relative;" ><a href="${pageContext.request.contextPath}/GetSyllabusServlet?teaching_matricula=<%out.print(te.getMatricula());%>"><%out.print("Corso di " +te.getTitle());%></a></dd> 
                                                             <%}
                                                                 }
 
-                                                                if (map.get(d).get(de).keySet().size() > 1) {  %>
+                                                                  %>
                                                     </dl></dd>  
-                                                    <%  }
+                                                    <%  
                                                             }
                                                         }  %>      
                                                     <%
@@ -310,7 +311,7 @@
                                     <!-- Add class "sticky" to  always stick the footer to the end of page (if page contents is small) -->
                                     <!-- Or class "fixed" to  always fix the footer to the end of page -->
 
-                                </div>
+                           
 
 
 
