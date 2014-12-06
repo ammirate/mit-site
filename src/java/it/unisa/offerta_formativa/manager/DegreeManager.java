@@ -11,8 +11,7 @@ import it.unisa.offerta_formativa.beans.Degree;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 
 /**
  *
@@ -20,7 +19,7 @@ import java.util.logging.Logger;
  */
 public class DegreeManager {
 
-    private Connection conn = null;
+    private final Connection conn = null;
     private Statement stmt;
     public static String TABLE = "degree";
     public static String PKEY = "matricula";
@@ -124,7 +123,7 @@ public class DegreeManager {
     /**
      * Delete a given Degree from the DB
      *
-     * @param matricola of the degree
+     * @param matricula of the degree
      * @return true if deleted.
      */
     public boolean deleteDegree(String matricula) {
@@ -149,7 +148,7 @@ public class DegreeManager {
      * @return an ArrayList of Degrees
      */
     public ArrayList<Degree> getAllDegrees() {
-        ArrayList<Degree> toReturn = new ArrayList<Degree>();
+        ArrayList<Degree> toReturn = new ArrayList<>();
         try {
             stmt = DBConnector.openConnection();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE);
@@ -176,7 +175,7 @@ public class DegreeManager {
      * process.
      */
     public ArrayList<Degree> insertDegree(ArrayList<Degree> list) {
-        ArrayList<Degree> notInserted = new ArrayList<Degree>();
+        ArrayList<Degree> notInserted = new ArrayList<>();
 
         for (Degree b : list) {
             if (!createDegree(b)) {
@@ -194,7 +193,7 @@ public class DegreeManager {
      */
     public ArrayList<Degree> getDegreesByDepartment(String abbreviation) {
         String esc = "\"";
-        ArrayList<Degree> toReturn = new ArrayList<Degree>();
+        ArrayList<Degree> toReturn = new ArrayList<>();
         try {
             stmt = DBConnector.openConnection();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " WHERE department_abbreviation=" + esc + abbreviation + esc);
@@ -218,8 +217,8 @@ public class DegreeManager {
      */
     public ArrayList<Degree> getDegreesByCycle(int cycle) {
         ArrayList<Degree> toReturn = new ArrayList<>();
-        if (cycle < 1 || cycle > 3) {
-            throw new IllegalArgumentException("Cycle must be between 1 an 3");
+        if (cycle < 1) {
+            throw new IllegalArgumentException("Cycle must be greater than 1");
         } else {
             try {
                 stmt = DBConnector.openConnection();
@@ -243,6 +242,7 @@ public class DegreeManager {
 
     /**
      * used to get the unique instance of this class
+     * @return 
      */
     public static DegreeManager getInstance() {
         if (instance == null) {
@@ -268,6 +268,37 @@ public class DegreeManager {
             ex.printStackTrace();
         }
         return null;
+    }
+    
+    
+    
+    public List<Degree> getDegreesByDepartmentAndCycle(String depAbbreviation, int cycle){
+        List<Degree> toReturn = new ArrayList<>();
+        String esc = "\'";
+        if (cycle < 1) {
+            throw new IllegalArgumentException("Cycle must be greater than 1");
+        } else {
+            try {
+                stmt = DBConnector.openConnection();
+                String query = "SELECT * FROM " + TABLE +
+                        " WHERE cycle_number=" + cycle + " AND " + 
+                        "department_abbreviation=" + esc + depAbbreviation + esc;
+                rs = stmt.executeQuery(query);
+
+                while (rs.next()) {
+                    Degree b = getDegreeFromResultSet(rs);
+                    toReturn.add(b);
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                DBConnector.closeConnection();
+            }
+        }
+        
+        return toReturn;
+        
     }
 
 }

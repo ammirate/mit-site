@@ -29,14 +29,16 @@ public class Test_DegreeManager extends TestCase {
 
     public static TestSuite suite() {
         TestSuite suite = new TestSuite();
-        suite.addTest(new Test_DegreeManager("TC_2_1_getInstance"));
-        suite.addTest(new Test_DegreeManager("TC_2_2_createDegree"));
-        suite.addTest(new Test_DegreeManager("TC_2_3_updateDegree"));
-        suite.addTest(new Test_DegreeManager("TC_2_4_readDegree"));
-        suite.addTest(new Test_DegreeManager("TC_2_5_deleteDegree"));
-        suite.addTest(new Test_DegreeManager("TC_2_6_getAllDegrees"));
-        suite.addTest(new Test_DegreeManager("TC_2_7_getDegreesByCycle"));
-        suite.addTest(new Test_DegreeManager("TC_2_8_getDegreesByDepartment"));
+//        suite.addTest(new Test_DegreeManager("TC_2_1_getInstance"));
+//        suite.addTest(new Test_DegreeManager("TC_2_2_createDegree"));
+//        suite.addTest(new Test_DegreeManager("TC_2_3_updateDegree"));
+//        suite.addTest(new Test_DegreeManager("TC_2_4_readDegree"));
+//        suite.addTest(new Test_DegreeManager("TC_2_5_deleteDegree"));
+//        suite.addTest(new Test_DegreeManager("TC_2_6_getAllDegrees"));
+//        suite.addTest(new Test_DegreeManager("TC_2_7_getDegreesByCycle"));
+//        suite.addTest(new Test_DegreeManager("TC_2_8_getDegreesByDepartment"));
+        suite.addTest(new Test_DegreeManager("TC_2_9_getDegreesByDepartmentAndCycle"));
+        
         
 
         return suite;
@@ -167,7 +169,38 @@ public class Test_DegreeManager extends TestCase {
         degreeManager.deleteDegree(b2.getMatricula());
         
         System.out.println("Done");
-
     }
+    
+    
+    /**
+     * 
+     */
+     public void TC_2_9_getDegreesByDepartmentAndCycle() {
+        System.out.print("Executing Test 2.7...");
+        degreeManager = DegreeManager.getInstance();
+
+        
+        Degree b1 = new Degree("00000", "www.sito1.it", "ABC", 1, "DISTRA");
+        Degree b2 = new Degree("00001", "www.sito2.it", "DEF", 2, "DISTRA");
+        degreeManager.createDegree(b2);
+        degreeManager.createDegree(b1);
+        //now there are 3 degree into the DB which belong to DISTRA:
+        //2 have cycle = 2 and 1 has cycle=1
+        
+        List<Degree> list = degreeManager.getDegreesByDepartmentAndCycle("DISTRA",1);
+        assertEquals((1), list.size());
+        //there is already a degree in the DB, testing version, so they are 2
+        
+        list = degreeManager.getDegreesByDepartmentAndCycle("DISTRA",2);
+          assertEquals((2), list.size());
+          
+        degreeManager.deleteDegree(b1.getMatricula());
+        degreeManager.deleteDegree(b2.getMatricula());
+        
+        System.out.println("Done");
+    }
+    
+    
+    
 
 }
