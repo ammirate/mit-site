@@ -1,10 +1,24 @@
+<%@page import="it.unisa.offerta_formativa.beans.Cycle"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="it.unisa.offerta_formativa.beans.Curriculum"%>
+<%@page import="it.unisa.offerta_formativa.beans.Degree"%>
+<%@page import="it.unisa.offerta_formativa.beans.Teaching"%>
+
+<%@page import="it.unisa.offerta_formativa.beans.Department"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1"%>
-<%! public String htmlSyllabus;%>
+
+<%! public HashMap<Department, HashMap<Degree, HashMap<Curriculum, ArrayList<Teaching>>>> map;
+    public ArrayList<Cycle> cycle;
+    public String cycleTitle;
+%>
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
+
+
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
@@ -98,7 +112,8 @@
 
     </head>
     <body class="page-body">
-        <% 	htmlSyllabus = (String) request.getAttribute("htmlSyllabus");
+        <% map = (HashMap< Department, HashMap<Degree, HashMap<Curriculum, ArrayList<Teaching>>>>) request.getAttribute("map");
+            cycle = (ArrayList<Cycle>) request.getAttribute("cycles");
         %>
         <nav class="navbar horizontal-menu navbar-fixed-top">
             <!-- set fixed position by adding class "navbar-fixed-top" -->
@@ -221,16 +236,14 @@
                     <div class="col-sm-1"></div>
                     <div class="col-sm-10">
                         <div class="panel panel-default">
-                            
                             <div class="panel-heading">
-                                <% 
-                                String result = htmlSyllabus.substring(htmlSyllabus.indexOf("<h1>") + 1, htmlSyllabus.indexOf("</h1>"));
-                                out.print(result);
-                                %>
 
+                                <p style=" alignment-baseline: central;"> Offerta Formativa </p>
                             </div>
-                            <div>
-                                <div class="row"> <br> </div>
+                            <div class="panel-body">
+
+
+
                                 <script>
                                     jQuery(document).ready(function ($) {
                                         $('a[href="#layout-variants"]').on('click', function (ev) {
@@ -253,17 +266,63 @@
                                     });
                                 </script>
 
-                                <div class="text-justify">
+                                <%
+                                    if (!map.isEmpty()) { %> <ul id="list" class="col-sm-12"> <%
+                                    for (Department d : map.keySet()) {
+                                    %><li class="list-group-item" style="cursor: pointer; font-size: large;"><span><%out.print("+ " + d.getTitle());%></span><ul>
+                                            <% if (map.get(d).keySet().size() != 0) {
+                                                    for (Degree de : map.get(d).keySet()) {
+                                                        for (Cycle cy : cycle) {
+                                                            if (cy.getNumber() == de.getCycle()) {
+                                                                cycleTitle= cy.getTitle();
+                                                            }
+                                                        }
+                                            %>
+                                            <li style="cursor: pointer; font-size: medium;"><span><%out.print(cycleTitle + " - " + de.getTitle());%></span><ul>
+                                                    <%  if (map.get(d).get(de).keySet().size() != 0) {
+                                                            for (Curriculum cu : map.get(d).get(de).keySet()) {
+                                                    %>
+                                                    <li style="cursor: pointer; font-size: medium;"><span><%out.print("Curriculum - " + cu.getTitle());%></span><ul>
+                                                            <%
+                                                                if (map.get(d).get(de).get(cu).size() != 0) {
+                                                                    for (Teaching te : map.get(d).get(de).get(cu)) {
+                                                            %>
+                                                            <li style="cursor: pointer; font-size: medium;"><span><a href="${pageContext.request.contextPath}/GetSyllabusServlet?teaching_matricula=<%out.print(te.getMatricula());%>"><%out.print("Corso di " + te.getTitle());%></a></span></li>
+                                                                        <%}
+                                                                            }
+
+                                                                        %>
+                                                        </ul></li>  
+                                                        <%                                                            }
+                                                            }  %>      
+                                                </ul></li>
+                                                <%
+                                                        }
+                                                    }
+                                                %>
+
+                                        </ul></li>
+                                        <%
+                                                }
+                                            }
+                                        %>  </ul>
 
 
-                                    <%  out.print(htmlSyllabus);%>
-                                    <!-- Main Footer -->
-                                    <!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->
-                                    <!-- Add class "sticky" to  always stick the footer to the end of page (if page contents is small) -->
-                                    <!-- Or class "fixed" to  always fix the footer to the end of page -->
-                                </div>
 
-                            </div>           
+
+
+                                <!-- Main Footer -->
+                                <!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->
+                                <!-- Add class "sticky" to  always stick the footer to the end of page (if page contents is small) -->
+                                <!-- Or class "fixed" to  always fix the footer to the end of page -->
+
+
+
+
+
+                            </div>
+
+
 
 
                         </div>
@@ -273,7 +332,14 @@
 
                     <div class="col-sm-1"></div>
 
-                </div>  
+                </div>                                            
+
+
+
+
+
+
+
 
 
                 <footer class="main-footer sticky footer-type-1">
@@ -298,25 +364,15 @@
                     </div>
 
                 </footer>
-
-
-
-
-
                 <div class="page-loading-overlay">
                     <div class="loader-2"></div>
                 </div>
 
 
 
-            </div>  
+            </div>
             <!-- Bottom Scripts -->
             <script type="text/javascript">
-                function loadDegree(i) {
-                    $.ajax({url: "GetDegreeServlet?idCycle=" + i, success: function (result) {
-                            $("#degree").html(result);
-                        }});
-                }
             </script>
             <script src="assets/js/bootstrap.min.js"></script>
             <script src="assets/js/TweenMax.min.js"></script>
@@ -324,7 +380,18 @@
             <script src="assets/js/joinable.js"></script>
             <script src="assets/js/xenon-api.js"></script>
             <script src="assets/js/xenon-toggles.js"></script>
+            <script>
+                $(function () {
+                    $('#list').find('SPAN').click(function (e) {
+                        $(this).parent().children('UL').toggle();
+                    });
+                });
+                $(function () {
+                    //hide or collapsed initially.
+                    $('#list').find('UL').hide();
 
+                });
+            </script>
 
             <!-- JavaScripts initializations and stuff -->
             <script src="assets/js/xenon-custom.js"></script>

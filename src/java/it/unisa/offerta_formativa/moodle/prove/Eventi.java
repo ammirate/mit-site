@@ -7,8 +7,6 @@ package it.unisa.offerta_formativa.moodle.prove;
 
 import it.unisa.offerta_formativa.moodle.moodle_rest.*;
 import java.io.UnsupportedEncodingException;
-import java.time.Clock;
-import java.util.Date;
 
 /**
  *

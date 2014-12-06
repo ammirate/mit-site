@@ -7,7 +7,6 @@ package it.unisa.offerta_formativa.servlet;
 
 import it.unisa.offerta_formativa.beans.Degree;
 import it.unisa.offerta_formativa.beans.Person;
-import it.unisa.offerta_formativa.manager.ProfessorManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletConfig;
@@ -38,15 +37,12 @@ public class GetProfessorServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        ProfessorManager pm = ProfessorManager.getInstance();
+        
         response.setContentType("text/plain");  
-			response.setCharacterEncoding("UTF-8"); 
-			int i=1;
-			String toRet="";
-			for(Person d : pm.getProfessorByDepartment(request.getParameter("abbreviation"))){
-				toRet+="<option value="+d.getName()+">"+d.getName()+"</option>"; 
-				i++;
-			}
+        response.setCharacterEncoding("UTF-8"); 
+        String toRet="";
+        toRet+="<option value=fferrucci@unisa.it>Filomena Ferrucci</option>"; 
+        toRet+="<option value=adelucia@unisa.it>Andrea De Lucia</option>"; 
         response.getWriter().write(toRet);
     }
 
@@ -60,18 +56,12 @@ public class GetProfessorServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ProfessorManager pm = ProfessorManager.getInstance();
-        //if(request.getParameterMap().containsKey("abbreviation")){
-			response.setContentType("text/plain");  
-			response.setCharacterEncoding("UTF-8"); 
-			int i=1;
-			String toRet="";
-			for(Person d : pm.getProfessorByDepartment(request.getParameter("abbreviation"))){
-				toRet+="<option value="+d.getName()+">"+d.getName()+"</option>"; 
-				i++;
-			}
-			response.getWriter().write(toRet);
-		//}
+         response.setContentType("text/plain");  
+        response.setCharacterEncoding("UTF-8"); 
+        String toRet="";
+        toRet+="<option value=fferrucci@unisa.it>Filomena Ferrucci</option>"; 
+        toRet+="<option value=adelucia@unisa.it>Andrea De Lucia</option>"; 
+        response.getWriter().write(toRet);
     }       
 
 }

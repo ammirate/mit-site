@@ -11,6 +11,7 @@ import it.unisa.offerta_formativa.beans.Degree;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -18,13 +19,15 @@ import java.util.ArrayList;
  */
 public class DegreeManager {
 
-    private Connection conn = null;
+    private final Connection conn = null;
     private Statement stmt;
     public static String TABLE = "degree";
     public static String PKEY = "matricula";
     private ResultSet rs = null;
 
     private static DegreeManager instance = null;
+
+    String esc = "\'";
 
     /**
      * Constructor for Singleton pattern
@@ -42,8 +45,14 @@ public class DegreeManager {
         try {
             stmt = DBConnector.openConnection();
             String query = "INSERT INTO " + TABLE
-                    + "(matricula,link,title,cycle_number,department_abbreviation) VALUES("
-                    + degree.toStringQueryInsert();
+                    + "(title, "
+                    + "matricula,"
+                    + "link,"
+                    + "cycle_number,"
+                    + "department_abbreviation, "
+                    + "active) VALUES("
+                    + degree.toStringQueryInsert() + ")";
+            System.out.println("Insertion query: " + query);
             if (stmt.executeUpdate(query) == 1) {
                 return true;
             }
@@ -59,15 +68,19 @@ public class DegreeManager {
     /**
      * Update a Degree into the DB
      *
+     * @param matricula
      * @param degree to update into the DB
      * @return true if the update was successfull
      */
-    public boolean updateDegree(Degree degree) {
+    public boolean updateDegree(String matricula, Degree degree) {
         try {
             stmt = DBConnector.openConnection();
-            if (stmt.executeUpdate("UPDATE " + TABLE
+            String query = "UPDATE " + TABLE
                     + " SET " + degree.toString() + " WHERE "
-                    + PKEY + "=\"" + degree.getMatricula() + "\"") == 1) {
+                    + PKEY + "=" + esc + matricula + esc;
+            System.out.println(query);
+            
+            if (stmt.executeUpdate(query) == 1) {
                 return true;
             }
         } catch (SQLException ex) {
@@ -82,7 +95,7 @@ public class DegreeManager {
     /**
      * Read a given Degree from the DB
      *
-     * @param matricola id the matricula of the degree
+     * @param matricula id the matricula of the degree
      * @return a Degree object if it is present in the DB, else empty Degree
      * bean
      */
@@ -95,7 +108,7 @@ public class DegreeManager {
                 rs = stmt.executeQuery("SELECT * FROM " + TABLE
                         + " WHERE " + PKEY + "=\"" + matricula + "\"");
                 while (rs.next()) {
-                    return new Degree(rs.getString("matricula"), rs.getString("link"), rs.getString("title"), rs.getInt("cycle_number"), rs.getString("department_abbreviation"));
+                    return getDegreeFromResultSet(rs);
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
@@ -110,7 +123,7 @@ public class DegreeManager {
     /**
      * Delete a given Degree from the DB
      *
-     * @param matricola of the degree
+     * @param matricula of the degree
      * @return true if deleted.
      */
     public boolean deleteDegree(String matricula) {
@@ -135,7 +148,7 @@ public class DegreeManager {
      * @return an ArrayList of Degrees
      */
     public ArrayList<Degree> getAllDegrees() {
-        ArrayList<Degree> toReturn = new ArrayList<Degree>();
+        ArrayList<Degree> toReturn = new ArrayList<>();
         try {
             stmt = DBConnector.openConnection();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE);
@@ -162,7 +175,7 @@ public class DegreeManager {
      * process.
      */
     public ArrayList<Degree> insertDegree(ArrayList<Degree> list) {
-        ArrayList<Degree> notInserted = new ArrayList<Degree>();
+        ArrayList<Degree> notInserted = new ArrayList<>();
 
         for (Degree b : list) {
             if (!createDegree(b)) {
@@ -172,9 +185,15 @@ public class DegreeManager {
         return notInserted;
     }
 
+    /**
+     * return all the degrees which belong to a given department
+     *
+     * @param abbreviation the department abbreviation
+     * @return a List of degree
+     */
     public ArrayList<Degree> getDegreesByDepartment(String abbreviation) {
         String esc = "\"";
-        ArrayList<Degree> toReturn = new ArrayList<Degree>();
+        ArrayList<Degree> toReturn = new ArrayList<>();
         try {
             stmt = DBConnector.openConnection();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " WHERE department_abbreviation=" + esc + abbreviation + esc);
@@ -193,16 +212,18 @@ public class DegreeManager {
     /**
      * Get all the degrees in the lists with a given cycle
      *
+     * @param cycle
      * @return ArrayList containing all the related Degrees
      */
     public ArrayList<Degree> getDegreesByCycle(int cycle) {
-        ArrayList<Degree> toReturn = new ArrayList<Degree>();
-        if (cycle < 1 || cycle > 3) {
-            throw new IllegalArgumentException("Cycle must be between 1 an 3");
+        ArrayList<Degree> toReturn = new ArrayList<>();
+        if (cycle < 1) {
+            throw new IllegalArgumentException("Cycle must be greater than 1");
         } else {
             try {
                 stmt = DBConnector.openConnection();
-                rs = stmt.executeQuery("SELECT * FROM " + TABLE + " WHERE cycle_number=" + cycle);
+                String query = "SELECT * FROM " + TABLE + " WHERE cycle_number=" + cycle;
+                rs = stmt.executeQuery(query);
 
                 while (rs.next()) {
                     Degree b = getDegreeFromResultSet(rs);
@@ -221,6 +242,7 @@ public class DegreeManager {
 
     /**
      * used to get the unique instance of this class
+     * @return 
      */
     public static DegreeManager getInstance() {
         if (instance == null) {
@@ -228,26 +250,55 @@ public class DegreeManager {
         }
         return instance;
     }
+    
+    
 
-    /**
-     * Create a Degree from a ResultSet object
-     *
-     * @param rs
-     * @return
-     */
     private Degree getDegreeFromResultSet(ResultSet rs) {
+        String matricula;
         try {
-            String tit = rs.getString("title");
-            String matr = rs.getString("matricula");
+            matricula = rs.getString("matricula");
             String link = rs.getString("link");
+            String title = rs.getString("title");
             int cycle = rs.getInt("cycle_number");
-            String dpt = rs.getString("department_abbreviation");
-
-            return new Degree(matr, link, tit, cycle, dpt);
-        } catch (SQLException e) {
-            e.printStackTrace();
+            String dep = rs.getString("department_abbreviation");
+            int active = rs.getInt("active");
+            return new Degree(matricula, link, title, cycle, dep, (active > 0));
+        } 
+        catch (SQLException ex) {
+            ex.printStackTrace();
         }
         return null;
+    }
+    
+    
+    
+    public List<Degree> getDegreesByDepartmentAndCycle(String depAbbreviation, int cycle){
+        List<Degree> toReturn = new ArrayList<>();
+        String esc = "\'";
+        if (cycle < 1) {
+            throw new IllegalArgumentException("Cycle must be greater than 1");
+        } else {
+            try {
+                stmt = DBConnector.openConnection();
+                String query = "SELECT * FROM " + TABLE +
+                        " WHERE cycle_number=" + cycle + " AND " + 
+                        "department_abbreviation=" + esc + depAbbreviation + esc;
+                rs = stmt.executeQuery(query);
+
+                while (rs.next()) {
+                    Degree b = getDegreeFromResultSet(rs);
+                    toReturn.add(b);
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                DBConnector.closeConnection();
+            }
+        }
+        
+        return toReturn;
+        
     }
 
 }

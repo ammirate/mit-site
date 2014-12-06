@@ -12,75 +12,74 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-
 /**
  *
  * @author Davide
  */
 public class MoodleConnectionManager {
+
     private static MoodleConnectionManager instance = null;
-    private Connection conn=null;
-    private Statement stmt;
-    public static String TABLE="department";
-    public static String PKEY="id";
+    private Connection conn = null;
+    private Statement stmt = null;
+    public static String TABLE = "department";
+    public static String PKEY = "id";
     private ResultSet rs = null;
+
     /**
      * Constructor for Singleton pattern
      */
-    private MoodleConnectionManager(){
-        conn = DBConnector.getConnection();
-        if(conn == null){
-        	throw new RuntimeException("Unable to connect to the DB");
+    private MoodleConnectionManager() {
+    }
+
+    public String getUrlMoodle(int id) {
+        if (id <= 0) {
+            throw new IllegalArgumentException("Can't read a degree from the Database using id less than one");
+        } else {
+            try {
+                stmt = DBConnector.openConnection();
+                rs = stmt.executeQuery("SELECT urlMoodle FROM " + TABLE
+                        + " WHERE " + PKEY + "=\"" + id + "\"");
+                while (rs.next()) {
+                    return rs.getString("urlMoodle");
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                throw new RuntimeException("Read Query failed!");
+            } finally {
+                DBConnector.closeConnection();
+            }
         }
+        return "error";
     }
-    
-     
-    public String getUrlMoodle(int id){
-            if(id<=0){
-			throw new IllegalArgumentException("Can't read a degree from the Database using id less than one");
-		}else{
-	        try {
-	            stmt = conn.createStatement();
-	            rs= stmt.executeQuery("SELECT urlMoodle FROM " + TABLE 
-	            		+ " WHERE " + PKEY + "=\"" + id+"\"");
-	            while(rs.next()) {
-	            	return rs.getString("urlMoodle");
-	            } 
-	        } catch (SQLException ex) {
-	        	ex.printStackTrace();
-	        	throw new RuntimeException("Read Query failed!");
-	        }
-		}
-	    return "error";
+
+    public String getToken(int id) {
+        if (id <= 0) {
+            throw new IllegalArgumentException("Can't read a degree from the Database using id less than one");
+        } else {
+            try {
+                stmt = DBConnector.openConnection();
+                rs = stmt.executeQuery("SELECT token FROM " + TABLE
+                        + " WHERE " + PKEY + "=\"" + id + "\"");
+                while (rs.next()) {
+                    return rs.getString("token");
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                throw new RuntimeException("Read Query failed!");
+            }finally {
+                DBConnector.closeConnection();
+            }
+        }
+        return "error";
     }
-    
-   
-    public String getToken(int id){
-            if(id<=0){
-			throw new IllegalArgumentException("Can't read a degree from the Database using id less than one");
-		}else{
-	        try {
-	            stmt = conn.createStatement();
-	            rs= stmt.executeQuery("SELECT token FROM " + TABLE 
-	            		+ " WHERE " + PKEY + "=\"" + id+"\"");
-	            while(rs.next()) {
-	            	return rs.getString("token");
-	            } 
-	        } catch (SQLException ex) {
-	        	ex.printStackTrace();
-	        	throw new RuntimeException("Read Query failed!");
-	        }
-		}
-	    return "error";
-    }
-    
+
     /**
      * used to get the unique instance of this class
      */
-    public static MoodleConnectionManager getInstance(){
-    	if(instance == null){
-    		instance = new MoodleConnectionManager();
-    	}
-    	return instance;
+    public static MoodleConnectionManager getInstance() {
+        if (instance == null) {
+            instance = new MoodleConnectionManager();
+        }
+        return instance;
     }
 }

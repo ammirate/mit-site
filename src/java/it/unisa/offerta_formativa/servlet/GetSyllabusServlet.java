@@ -7,6 +7,7 @@ package it.unisa.offerta_formativa.servlet;
 
 import it.unisa.offerta_formativa.manager.TeachingManager;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -38,10 +39,17 @@ public class GetSyllabusServlet extends HttpServlet {
 		doPost(request,response);
 	}
 
-        private String getHtml(String teaching_matricula){
-            String ret= tm.getHtmlSyllabus(teaching_matricula).replace("“", "\"");
-            String toReturn= ret.replace("”", "\"");
-            return toReturn.replace("’", "'");
+        private ArrayList<String> getHtml(String teaching_matricula){
+            ArrayList<String> toReturn=new ArrayList<String>();
+            String html= tm.getHtmlSyllabus(teaching_matricula);
+            String rep1= html.replace("“", "\"");
+            String rep2= rep1.replace("”", "\"");
+            String rep3= rep2.replace("’", "'");
+            String title = rep3.substring(rep3.indexOf("<h1>") + 4, rep3.indexOf("</h1>"));
+            String toReplace=rep3.substring(rep3.indexOf("<h1>") , rep3.indexOf("</h1>"));
+            toReturn.add(title);
+            toReturn.add( rep3.replace(toReplace, "").toLowerCase());
+            return toReturn;
         }
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

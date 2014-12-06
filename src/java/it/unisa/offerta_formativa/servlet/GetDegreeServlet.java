@@ -48,11 +48,9 @@ public class GetDegreeServlet extends HttpServlet {
 		if(request.getParameterMap().containsKey("idCycle")){
 			response.setContentType("text/plain");  
 			response.setCharacterEncoding("UTF-8"); 
-			int i=1;
-			String toRet="";
+			String toRet="<option value=0>Seleziona corso di laurea</option>";
 			for(Degree d : degreeMng.getDegreesByCycle(Integer.parseInt(request.getParameter("idCycle")))){
-				//toRet+="<option value="+d.getMatricula()+">"+d.getTitle()+"</option>"; 
-				i++;
+				toRet+="<option value="+d.getMatricula()+">"+d.getTitle()+"</option>"; 
 			}
 			response.getWriter().write(toRet);
 		}
