@@ -252,11 +252,11 @@
 
 			<div class="jumbotron">
 				<h2>Inserimento Insegnamento</h2>
-				<form action="InsertDegreeServlet" method="post" role="form" class="form-horizontal">
+				<form action="InsertTeachingServlet" method="post" role="form" class="form-horizontal">
 					<div class="row">
 					<div class="form-group col-sm-4">
 						<label for="department">Dipartimento:</label> 
-						<select name="idDepartment" id="idDepartment" class="form-control">
+						<select name="department" id="idDepartment" class="form-control">
 							<%
 								if (departments.size() != 0)
 									for (Department d : departments) {
@@ -273,7 +273,7 @@
 					<div class="col-sm-2"></div>
 					<div class="form-group col-sm-4">
 						<label for="cycle">Ciclo:</label> 
-						<select name="idCycle" class="form-control" onchange="loadDegree(this.value);">
+						<select name="cycle" class="form-control" onchange="loadDegree(this.value);">
 							<%
 								if (cycles.size() != 0)
 									for (Cycle c : cycles) {
@@ -290,8 +290,8 @@
 					</div>
 					<div class="row">
 					<div class="form-group col-sm-4">
-						<label for="degree">Corso di Laurea:</label> <select name="idDegree"
-							class="form-control" id="degree">
+						<label for="degree">Corso di Laurea:</label> 
+                                                <select name="degree" class="form-control" id="degree" onchange="loadCurriculum(this.value);">
 							
 						</select>
 					</div>
@@ -299,7 +299,7 @@
 					
 					<div class="form-group col-sm-4">
 						<label for="curriculum">Curriculum:</label> 
-						<select name="idCurriculum" class="form-control" id="curriculum">
+						<select name="curriculum" class="form-control" id="curriculum">
 							
 						</select>
 					</div>
@@ -321,7 +321,7 @@
 					<div class="row">
 					<div class="form-group col-sm-4">
                 		<label for="abbreviazione">Abbreviazione:</label>
-                		<input type="text" class="form-control" name="matricula" placeholder="Abbreviazione">
+                		<input type="text" class="form-control" name="abbreviation" placeholder="Abbreviazione">
                 	</div>
                 	<div class="col-sm-2"></div>
                 	<div class="form-group col-sm-2">
@@ -430,7 +430,12 @@
                 
 	    }});
 	}
-        
+        function loadCurriculum(i){
+	    $.ajax({url:"GetCurriculumServlet?degreeMatricula="+i,success:function(result){
+	    	$("#curriculum").html(result);
+                
+	    }});
+	}
 	</script>
         <script type="text/javascript">
         function loadModules(i){
@@ -460,7 +465,7 @@
                     stringa+="<h3>Associa Docenti a Classe "+j+" - "+ $("#className"+j).val() +"</h3>";
                     for(i=1;i<=moduleNum;i++){
                         stringa+="<div class='row'>";
-                        stringa+="<div class='form-group col-sm-2'><label for='module'>"+$("#moduleName"+i).val()+"</label><select class='form-control' id='docente"+i+"-"+j+"'></select></div>";
+                        stringa+="<div class='form-group col-sm-2'><label for='module'>"+$("#moduleName"+i).val()+"</label><select class='form-control' name='docente"+j+"-"+i+"' id='docente"+j+"-"+i+"'></select></div>";
                         stringa+="</div>";
                     }
                 }
@@ -469,7 +474,7 @@
             $.ajax({url:"GetProfessorServlet?abbreviation=1",success:function(result){
                 for(j=1;j<=classNum;j++){
                     for(i=1;i<=moduleNum;i++){
-                        $("#docente"+i+"-"+j).html(result);
+                        $("#docente"+j+"-"+i).html(result);
                     }
                 }
             }});

@@ -19,27 +19,41 @@ import it.unisa.offerta_formativa.manager.ModuleManager;
 import it.unisa.offerta_formativa.manager.ProfModuleClassManager;
 import it.unisa.offerta_formativa.manager.TeachingManager;
 
-public class InsertionTeachingFacade {
+public class InsertTeachingFacade {
 	
     private String department_abbreviation;
     private String degree_matricula;
-    private String curriculum_matricula;
+    private String curriculumMatricula;
     private Teaching teaching;
     
     private ClassManager classMng;
     private ModuleManager moduleMng;
     private TeachingManager teachingMng;
     private CurriculumManager currMng;
+    private ProfModuleClassManager pmcMng;
     
     private ArrayList<Module> listModule;
     private ArrayList<ClassPartition> listClass;
+    private ArrayList<ProfModuleClass> listProf;
 
+    public InsertTeachingFacade(){
+        teachingMng = TeachingManager.getInstance();
+        classMng = ClassManager.getInstance();
+        currMng = CurriculumManager.getInstance();
+        moduleMng = ModuleManager.getInstance();
+        pmcMng = ProfModuleClassManager.getInstance();
+    }
+    
     public void setDepartmentAbbreviation(String depAbb) {
         this.department_abbreviation = department_abbreviation;
     }
     
     public void setTeaching(Teaching t){
         teaching = t;
+    }
+    
+    public void setCurriculumMatricula(String matr){
+        curriculumMatricula=matr;
     }
     
     public void setModules(ArrayList<Module> list){
@@ -50,19 +64,23 @@ public class InsertionTeachingFacade {
         listClass=list;
     }
     
-    public void setProfessorsID(ArrayList<String> list){
-    
+    public void setProfModuleClass(ArrayList<ProfModuleClass> list){
+        listProf = list;
     }
     
     public boolean storeInDB(){
         teachingMng.createTeaching(teaching);
-        for(int i=0;i<listModule.size();i++){
-            moduleMng.createModule(listModule.get(i));
-        }
         for(int i=0;i<listClass.size();i++){
-            classMng.createClass(listClass.get(i));
+            classMng.createClass(listClass.get(i)); 
         }
-        currMng.setCurriculumTeaching(teaching.getMatricula());
+        for(int j=0;j<listModule.size();j++){
+                moduleMng.createModule(listModule.get(j));
+        }
+        for(int k=0;k<listProf.size();k++){
+            pmcMng.create(listProf.get(k));
+        }
         
+        currMng.setTeachingInCurriculum(teaching.getMatricula(),curriculumMatricula);
+        return true;
     }
 }

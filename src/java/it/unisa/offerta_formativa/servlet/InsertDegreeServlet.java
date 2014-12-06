@@ -30,10 +30,10 @@ public class InsertDegreeServlet extends HttpServlet {
      */
     public InsertDegreeServlet() {
         super();
-        moodleConnector = MoodleConnectionManager.getInstance();
+        //moodleConnector = MoodleConnectionManager.getInstance();
         int id = 1;
-        moodleDegreeMng = MoodleDegreeManager.getInstance(moodleConnector.getUrlMoodle(id), moodleConnector.getToken(id));
-        degreeMng = DegreeManager.getInstance();
+        //moodleDegreeMng = MoodleDegreeManager.getInstance(moodleConnector.getUrlMoodle(id), moodleConnector.getToken(id));
+        //degreeMng = DegreeManager.getInstance();
         // TODO Auto-generated constructor stub
     }
 
@@ -52,9 +52,9 @@ public class InsertDegreeServlet extends HttpServlet {
 
     private void createDegree(String matricula, String title, String link, int cycle, String depAbb) {
         // TODO Auto-generated method stub
-        if (moodleDegreeMng.createDegree(title, cycle)) {
+        //if (moodleDegreeMng.createDegree(title, cycle)) {
             degreeMng.createDegree(new Degree(matricula, link, title, cycle, depAbb));
-        }
+        //}
     }
 
     /**

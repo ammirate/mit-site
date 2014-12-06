@@ -43,13 +43,13 @@ public class GetCurriculumServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        if (request.getParameterMap().containsKey("idDegree")) {
+        if (request.getParameterMap().containsKey("degreeMatricula")) {
             response.setContentType("text/plain");
             response.setCharacterEncoding("UTF-8");
             int i = 1;
-            String toRet = "";
-            for (Curriculum c : currMng.getCurriculumByDegree(request.getParameter("idDegree"))) {
-                toRet += "<option value=" + i + ">" + c.getTitle() + "</option>";
+            String toRet = "<option value=0></option>";
+            for (Curriculum c : currMng.getCurriculumByDegree(request.getParameter("degreeMatricula"))) {
+                toRet += "<option value=" + c.getMatricula() + ">" + c.getTitle() + "</option>";
                 i++;
             }
             response.getWriter().write(toRet);
