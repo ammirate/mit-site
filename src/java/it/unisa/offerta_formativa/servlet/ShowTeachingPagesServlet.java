@@ -5,9 +5,13 @@
  */
 package it.unisa.offerta_formativa.servlet;
 
+import it.unisa.offerta_formativa.beans.Curriculum;
+import it.unisa.offerta_formativa.beans.Degree;
+import it.unisa.offerta_formativa.manager.CurriculumManager;
 import it.unisa.offerta_formativa.manager.CycleManager;
 import it.unisa.offerta_formativa.manager.DegreeManager;
 import it.unisa.offerta_formativa.manager.DepartmentManager;
+import it.unisa.offerta_formativa.manager.TeachingManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -23,15 +27,19 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "ShowTeachingPagesServlet", urlPatterns = {"/ShowTeachingPagesServlet"})
 public class ShowTeachingPagesServlet extends HttpServlet {
     
-    private DepartmentManager dm;
-    private CycleManager cm;
+    private DepartmentManager deptMng;
+    private CycleManager cycleMng;
     private DegreeManager degreeMng;
+    private TeachingManager teachingMng;
+    private CurriculumManager currMng;
     
     public ShowTeachingPagesServlet() {
         super();
-        dm = DepartmentManager.getInstance();
-        cm = CycleManager.getInstance();
+        deptMng = DepartmentManager.getInstance();
+        cycleMng = CycleManager.getInstance();
         degreeMng = DegreeManager.getInstance();
+        teachingMng = TeachingManager.getInstance();
+        currMng = CurriculumManager.getInstance();
     }
 
    
@@ -62,17 +70,31 @@ public class ShowTeachingPagesServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+            String path="/offertaFormativaJSP/amministratore/";
             String page="";
             if(request.getParameterMap().containsKey("page")){
                 page =request.getParameter("page");
-                request.setAttribute("departments",dm.getAllDepartments());
-                request.setAttribute("cycles", cm.getAllCycles());
-                //request.setAttribute("degrees", degreeMng.getDegreesByCycle(2));
+                request.setAttribute("departments",deptMng.getAllDepartments());
+                request.setAttribute("cycles", cycleMng.getAllCycles());
                 if(page.equalsIgnoreCase("insert")){
-                    request.getRequestDispatcher("/offertaFormativaJSP/amministratore/insertTeaching.jsp").forward(request, response);
+                    request.getRequestDispatcher(path+"insertTeaching.jsp").forward(request, response);
                 }
                 if(page.equalsIgnoreCase("list")){
-                    request.getRequestDispatcher("/offertaFormativaJSP/amministratore/listTeaching.jsp").forward(request, response);
+                    request.getRequestDispatcher(path+"listTeaching.jsp").forward(request, response);
+                }
+                if(page.equalsIgnoreCase("modify")){
+                    if(request.getParameterMap().containsKey("matricula") && request.getParameterMap().containsKey("curriculumMatricula")){
+                        String matricula = request.getParameter("matricula");
+                        String curriculumMatricula = request.getParameter("curriculumMatricula");
+                        Curriculum c = currMng.readCurriculum(curriculumMatricula);
+                        request.setAttribute("curriculum", c);
+                        request.setAttribute("teaching", teachingMng.readTeaching(matricula));
+                        Degree d = degreeMng.readDegree(c.getDegreeMatricula());
+                        request.setAttribute("degree",d);
+                        request.setAttribute("cycle", cycleMng.readCycle(d.getCycle()));
+                        request.setAttribute("department", deptMng.readDepartment(d.getDepartmentAbbreviation()));
+                        request.getRequestDispatcher(path+"modifyTeaching.jsp").forward(request, response);
+                    }
                 }
             }
     }

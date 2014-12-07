@@ -45,15 +45,15 @@ public class GetDegreeServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		if(request.getParameterMap().containsKey("idCycle")){
+		String toRet="<option value=0>Seleziona corso di laurea</option>";
+                if(request.getParameterMap().containsKey("idCycle")){
 			response.setContentType("text/plain");  
 			response.setCharacterEncoding("UTF-8"); 
-			String toRet="<option value=0>Seleziona corso di laurea</option>";
 			for(Degree d : degreeMng.getDegreesByCycle(Integer.parseInt(request.getParameter("idCycle")))){
 				toRet+="<option value="+d.getMatricula()+">"+d.getTitle()+"</option>"; 
 			}
-			response.getWriter().write(toRet);
 		}
+                response.getWriter().write(toRet);
 	}
 
 	/**
