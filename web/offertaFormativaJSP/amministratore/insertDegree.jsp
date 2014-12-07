@@ -1,3 +1,7 @@
+<%-- 
+    Document   : insertDegree
+    Author     : Alessandro
+--%>
 <%@page import="it.unisa.offerta_formativa.beans.Department"%>
 <%@page import="it.unisa.offerta_formativa.beans.Cycle"%>
 <%@page import="java.util.ArrayList"%>
@@ -189,7 +193,7 @@
                 		<% 
                 		if(cycles.size()!=0)
                 		for(Cycle c : cycles){
-                				%><option value=<% out.print(c.getId());%>><% out.print(c.getTitle());%></option>
+                				%><option value=<% out.print(c.getNumber());%>><% out.print(c.getTitle());%></option>
                 			<% } %>
                 		</select>
                 	</div>
@@ -199,7 +203,7 @@
                 			<%
                 			if(departments.size()!=0)
                 			for(Department d : departments){
-                				%><option value=<% out.print(d.getId());%>><% out.print(d.getTitle());%></option>
+                				%><option value=<% out.print(d.getAbbreviation());%>><% out.print(d.getTitle());%></option>
                 			<%}%>
                 		</select>
                 	</div>

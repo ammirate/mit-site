@@ -241,8 +241,8 @@ public class TeachingManager {
         ArrayList<Teaching> toReturn = new ArrayList<>();
         try {
             stmt = DBConnector.openConnection();
-            String query = "SELECT * FROM " + TABLE_LINK 
-                    + " WHERE curriculum_matricula=" 
+            String query = "SELECT * FROM (" + TABLE_LINK 
+                    + " JOIN "+ TABLE+" ON teaching_matricula=matricula) WHERE curriculum_matricula=" 
                     + esc + curriculum_matricula + esc;
             rs = stmt.executeQuery(query);
 

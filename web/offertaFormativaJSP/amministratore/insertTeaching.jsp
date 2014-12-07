@@ -1,3 +1,7 @@
+<%-- 
+    Document   : insertTeaching
+    Author     : Alessandro
+--%>
 <%@page import="it.unisa.offerta_formativa.beans.Degree"%>
 <%@page import="it.unisa.offerta_formativa.beans.Department"%>
 <%@page import="it.unisa.offerta_formativa.beans.Cycle"%>
