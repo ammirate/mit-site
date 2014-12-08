@@ -63,13 +63,6 @@ public class Curriculum {
         this.title = title;
     }
 
-    public String getDegree_matricula() {
-        return degree_matricula;
-    }
-
-    public void setDegree_matricula(String degree_matricula) {
-        this.degree_matricula = degree_matricula;
-    }
 
     public boolean isActive() {
         return active;

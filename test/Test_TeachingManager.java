@@ -1,9 +1,13 @@
+import it.unisa.offerta_formativa.beans.Curriculum;
 import java.util.ArrayList;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import it.unisa.offerta_formativa.manager.TeachingManager;
-import org.junit.Test;
+import java.util.List;
+import static junit.framework.Assert.assertEquals;
 import it.unisa.offerta_formativa.beans.Teaching;
+import it.unisa.offerta_formativa.manager.CurriculumManager;
+import org.junit.Test;
 
 /**
  *
@@ -30,10 +34,11 @@ public class Test_TeachingManager extends TestCase {
 //        suite.addTest(new Test_TeachingManager("TC_3_3_updateTeaching"));
 //        suite.addTest(new Test_TeachingManager("TC_3_4_readTeaching"));
 //        suite.addTest(new Test_TeachingManager("TC_3_5_deleteTeaching"));
-        suite.addTest(new Test_TeachingManager("TC_3_6_getAllTeachings"));
-        suite.addTest(new Test_TeachingManager("TC_3_7_getTeachingsByYear"));
-        suite.addTest(new Test_TeachingManager("TC_3_8_getTeachingsBySemester"));
+//        suite.addTest(new Test_TeachingManager("TC_3_6_getAllTeachings"));
+//        suite.addTest(new Test_TeachingManager("TC_3_7_getTeachingsByYear"));
+//        suite.addTest(new Test_TeachingManager("TC_3_8_getTeachingsBySemester"));
 //        suite.addTest(new Test_TeachingManager("TC_3_9_areEqual"));
+        suite.addTest(new Test_TeachingManager("TC_3_10_getTeachingsByCurriculum"));
 
         return suite;
     }
@@ -71,7 +76,7 @@ public class Test_TeachingManager extends TestCase {
         System.out.print("Executing Test 3.3...");
         teachingManager = TeachingManager.getInstance();
         Teaching teaching = new Teaching("Management & Control System", "MCS", "0222500100", "www.mcsmdistra.unisa.it", 1, 1, true);
-        assertTrue(teachingManager.updateTeaching(teaching));
+        assertTrue(teachingManager.updateTeaching("0222500100",teaching));
         System.out.println("Done");
     }
 
@@ -87,7 +92,6 @@ public class Test_TeachingManager extends TestCase {
         System.out.println("Done");
     }
 
-    
     /**
      * TestCase 3.5 that test the deletion of a Teaching from the DB
      */
@@ -108,9 +112,8 @@ public class Test_TeachingManager extends TestCase {
         System.out.println("Done");
     }
 
-    
     /**
-     * 
+     *
      */
     public void TC_3_7_getTeachingsByYear() {
         System.out.print("Executing Test 3.7...");
@@ -135,9 +138,8 @@ public class Test_TeachingManager extends TestCase {
         System.out.println("Done");
     }
 
-    
     /**
-     * 
+     *
      */
     public void TC_3_8_getTeachingsBySemester() {
         System.out.print("Executing Test 3.8...");
@@ -158,7 +160,6 @@ public class Test_TeachingManager extends TestCase {
 //        teachingManager.deleteTeaching(t2.getMatricula());
 //        teachingManager.deleteTeaching(t3.getMatricula());
 //        teachingManager.deleteTeaching(t4.getMatricula());
-
         assertEquals(1, results.size());
         System.out.println("Done");
     }
@@ -168,6 +169,36 @@ public class Test_TeachingManager extends TestCase {
         Teaching t2 = new Teaching("IT Project and Service Management", "itpsm", "0222500003", "itpsm.it", 1, 1, true);
         assertTrue(t1.equal(t2));
     }
-    
+
+    /**
+     *
+     */
+    public void TC_3_10_getTeachingsByCurriculum() {
+        System.out.print("Executing TC_3_10....");
+
+        //0222500002 teaching matricula in the DB
+        Teaching t1 = new Teaching("titolo1", "t1", "0222500998", "", 1, 1, true);
+        Teaching t2 = new Teaching("titolo2", "t2", "0222500999", "", 1, 1, true);
+
+        TeachingManager tManager = TeachingManager.getInstance();
+        tManager.createTeaching(t2);
+        tManager.createTeaching(t1);
+
+        CurriculumManager currManager = CurriculumManager.getInstance();
+        currManager.setTeachingInCurriculum(t1.getMatricula(), "02225P0001");
+        currManager.setTeachingInCurriculum(t2.getMatricula(), "02225P0001");
+
+        List<Teaching> teachsOfCurriculum;
+        teachsOfCurriculum = tManager.getTeachingsByCurriculum("02225P0001");
+
+        assertEquals((2 + 1), teachsOfCurriculum.size());
+        //int the DB, testing version, there is already a curriculum 
+        //for that teaching, so they are 3
+
+        tManager.deleteTeaching(t1.getMatricula());
+        tManager.deleteTeaching(t2.getMatricula());
+
+        System.out.println("Done");
+    }
 
 }

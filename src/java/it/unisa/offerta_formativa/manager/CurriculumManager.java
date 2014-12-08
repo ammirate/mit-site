@@ -204,8 +204,8 @@ public class CurriculumManager {
 
         try {
             stmt = DBConnector.openConnection();
-            rs = stmt.executeQuery("SELECT * FROM " + TABLE 
-                    + " WHERE degree_matricula=" + esc + degreeMatricula 
+            rs = stmt.executeQuery("SELECT * FROM " + TABLE
+                    + " WHERE degree_matricula=" + esc + degreeMatricula
                     + esc + "ORDER BY title");
 
             while (rs.next()) {
@@ -260,8 +260,8 @@ public class CurriculumManager {
         try {
 
             String query = "SELECT * FROM " + TABLE_LINK
-                    + " WHERE curriculum_matricula=" + esc 
-                    + curriculum_matricula + esc ;
+                    + " WHERE curriculum_matricula=" + esc
+                    + curriculum_matricula + esc;
             rs = stmt.executeQuery(query);
             System.out.println("getTeachingsByCurriculm query " + query);
 
@@ -319,7 +319,7 @@ public class CurriculumManager {
      * @return
      */
     private Teaching getTeachingFromResultSet(ResultSet rs) {
-        System.out.println("getTeachings FROM RESULT SET");
+//        System.out.println("getTeachings FROM RESULT SET");
 
         try {
             String matr = rs.getString("matricula");
@@ -338,4 +338,42 @@ public class CurriculumManager {
         return null;
     }
 
+    public List<Curriculum> getCurriculumsByTeaching(String teachingMatricula) {
+
+        List<Curriculum> toReturn = new ArrayList<>();
+        String whichCurriculumQUery = "SELECT * FROM "
+                + TABLE_LINK + " WHERE teaching_matricula = "
+                + esc + teachingMatricula + esc;
+
+        String tmpMatricula = "";
+        List<String> matriculas = new ArrayList<>();
+
+        stmt = DBConnector.openConnection();
+        try {
+            rs = stmt.executeQuery(whichCurriculumQUery);
+            while (rs.next()) {
+                matriculas.add(rs.getString("curriculum_matricula"));
+            }
+
+            for (String s : matriculas) {
+                String query = "SELECT * FROM " + TABLE
+                        + " WHERE " + PKEY + "= " + esc + s + esc;
+                System.out.println(query);
+
+                rs = stmt.executeQuery(query);
+                while (rs.next()) {
+                    Curriculum c = getCurriculumFromResultSet(rs);
+                    System.out.println("Curriculum: " + c);
+                    toReturn.add(c);
+                }
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(CurriculumManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DBConnector.closeConnection();
+        }
+
+        return toReturn;
+    }
 }

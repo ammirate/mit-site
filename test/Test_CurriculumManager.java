@@ -31,6 +31,7 @@ public class Test_CurriculumManager extends TestCase {
         suite.addTest(new Test_CurriculumManager("TC_6_8_curriculumHasTeaching"));
         suite.addTest(new Test_CurriculumManager("TC_6_9_getCurriculumByDegree"));
         suite.addTest(new Test_CurriculumManager("TC_6_10_setTeachingInCurriculum"));
+        suite.addTest(new Test_CurriculumManager("TC_6_11_getCurriculumsByTeaching"));
         return suite;
     }
 
@@ -148,20 +149,47 @@ public class Test_CurriculumManager extends TestCase {
 
         System.out.println("Done");
     }
-    
-    
-     /**
+
+    /**
      *
      */
     public void TC_6_10_setTeachingInCurriculum() {
         System.out.print("Executing TC_6_10....");
         CurriculumManager currManager = CurriculumManager.getInstance();
-        
+
         currManager.createCurriculum(new Curriculum("02225P0025", "Management -and IT ", "02225"));
-        boolean insert =  currManager.setTeachingInCurriculum("0222500002", "02225P0025");
+        boolean insert = currManager.setTeachingInCurriculum("0222500002", "02225P0025");
         assertTrue(insert);
+
+        System.out.println("Done");
+    }
+
+    /**
+     *
+     */
+    public void TC_6_11_getCurriculumsByTeaching() {
+        System.out.print("Executing TC_6_11....");
+
+        //0222500002 teaching matricula in the DB
+        Curriculum c1 = new Curriculum("02225P0010", "Curriculum1", "02225");
+        Curriculum c2 = new Curriculum("02225P0011", "Curriculum2", "02225");
+        CurriculumManager currManager = CurriculumManager.getInstance();
+        currManager.createCurriculum(c1);
+        currManager.createCurriculum(c2);
+                 
+        currManager.setTeachingInCurriculum("0222500002", "02225P0010");
+        currManager.setTeachingInCurriculum("0222500002", "02225P0011");
+ 
+        List<Curriculum> currsOfTeaching;
+        currsOfTeaching = currManager.getCurriculumsByTeaching("0222500002");
+
+        assertEquals((2 + 1), currsOfTeaching.size());
+        //int the DB, testing version, there is already a curriculum 
+        //for that teaching, so they are 3
         
-        
+        currManager.deleteCurriculum(c1.getDegreeMatricula());
+        currManager.deleteCurriculum(c2.getDegreeMatricula());
+
         System.out.println("Done");
     }
 

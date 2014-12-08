@@ -11,6 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -94,15 +97,16 @@ public class TeachingManager {
      * @param ins
      * @return
      */
-    public boolean updateTeaching(Teaching ins) {
+    public boolean updateTeaching(String teachingMatricula, Teaching ins) {
         stmt = DBConnector.openConnection();
 
         if (ins == null) {
             throw new IllegalArgumentException("The teaching which you're trying to update is null");
         } else {
             try {
+                String esc = "\'";
                 String query = "UPDATE " + TABLE + " SET " + ins.toString()
-                        + " WHERE " + PKEY + "=" + ins.getMatricula();
+                        + " WHERE " + PKEY + "=" +esc + teachingMatricula + esc;
 
                 if (stmt.executeUpdate(query) == 1) {
                     return true;
@@ -236,27 +240,44 @@ public class TeachingManager {
      * @param curriculum_matricula
      * @return
      */
-    public ArrayList<Teaching> getTeachingsByCurriculum(String curriculum_matricula) {
-        String esc = "\"";
-        ArrayList<Teaching> toReturn = new ArrayList<>();
+    public List<Teaching> getTeachingsByCurriculum(String curriculum_matricula) {
+        String esc = "\'";
+        List<Teaching> toReturn = new ArrayList<>();
+        String whichTeachingQUery = "SELECT * FROM "
+                + TABLE_LINK + " WHERE curriculum_matricula = "
+                + esc + curriculum_matricula + esc;
+
+        String tmpMatricula = "";
+        List<String> matriculas = new ArrayList<>();
+
+        stmt = DBConnector.openConnection();
         try {
-            stmt = DBConnector.openConnection();
-            String query = "SELECT * FROM (" + TABLE_LINK 
-                    + " JOIN "+ TABLE+" ON teaching_matricula=matricula) WHERE curriculum_matricula=" 
-                    + esc + curriculum_matricula + esc;
-            rs = stmt.executeQuery(query);
-
+            rs = stmt.executeQuery(whichTeachingQUery);
             while (rs.next()) {
-
-                Teaching t = getTeachingFromResultSet(rs);
-                toReturn.add(t);
-
+                matriculas.add(rs.getString("teaching_matricula"));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            rs.close();
+            
+            for (int i = 0; i < matriculas.size(); i++) {
+                String s = matriculas.get(i);
+
+                String query = "SELECT * FROM " + TABLE
+                        + " WHERE " + PKEY + "= " + esc + s + esc;
+                System.out.println(query);
+
+                ResultSet rs = stmt.executeQuery(query);
+                while (rs.next()) {
+                    Teaching t = getTeachingFromResultSet(rs);
+                    toReturn.add(t);
+                }
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(CurriculumManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             DBConnector.closeConnection();
         }
+
         return toReturn;
     }
 
@@ -278,9 +299,7 @@ public class TeachingManager {
             return new Teaching(tit, abb, matr, link, year, sem, active);
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            DBConnector.closeConnection();
-        }
+        } 
         return null;
 
     }
@@ -294,7 +313,7 @@ public class TeachingManager {
         String htmlToReturn = null;
         String esc = "\"";
         try {
-          
+
             rs = stmt.executeQuery("SELECT esse3_content FROM " + TABLE + " WHERE matricula=" + esc + teaching_matricula + esc);
 
             while (rs.next()) {
@@ -304,4 +323,37 @@ public class TeachingManager {
         }
         return htmlToReturn;
     }
+
+    /**
+     * store the esse3content for a given teaching into the DB
+     *
+     * @param teachingMatricula
+     * @param content
+     * @return true if the update has success, else false
+     */
+    public boolean setEsse3ContentForTeaching(String teachingMatricula, String content) {
+        try {
+            String esc = "\'";
+            String query = "UPDATE " + TABLE + " SET " + esc + "esse3_content" + esc
+                    + " WHERE " + PKEY + "=" + esc + teachingMatricula + esc;
+//UPDATE teaching SET `esse3_content`="new content" WHERE `matricula`='0222500002'
+            if (stmt.executeUpdate(query) == 1) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new RuntimeException("Update Query Failed");
+        } finally {
+            DBConnector.closeConnection();
+        }
+        return false;
+    }
+    
+    
+    
+    
+    public boolean isActive(String teachingMatricula){
+        return false;
+    }
+
 }
