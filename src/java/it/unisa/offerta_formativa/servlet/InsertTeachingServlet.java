@@ -88,7 +88,7 @@ public class InsertTeachingServlet extends HttpServlet {
         if(request.getParameterMap().containsKey("moduleNumber")){
             moduleNumber =Integer.parseInt(request.getParameter("moduleNumber"));
             for(int i=1;i<=moduleNumber;i++){
-                listModules.add(new Module(matricula,request.getParameter("moduleName"+i)));
+                listModules.add(new Module(request.getParameter("moduleName"+i),matricula));
             }
             facade.setModules(listModules);
         }

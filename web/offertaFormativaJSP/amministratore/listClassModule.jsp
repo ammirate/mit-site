@@ -1,24 +1,21 @@
 <%-- 
-    Document   : insertTeaching
+    Document   : listClassModule
     Author     : Alessandro
 --%>
+<%@page import="it.unisa.offerta_formativa.beans.Module"%>
+<%@page import="it.unisa.offerta_formativa.beans.ClassPartition"%>
 <%@page import="it.unisa.offerta_formativa.beans.Teaching"%>
 <%@page import="it.unisa.offerta_formativa.beans.Curriculum"%>
 <%@page import="it.unisa.offerta_formativa.beans.Degree"%>
 <%@page import="it.unisa.offerta_formativa.beans.Department"%>
 <%@page import="it.unisa.offerta_formativa.beans.Cycle"%>
 <%@page import="java.util.ArrayList"%>
-
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-<%! public ArrayList<Cycle> cycles; %>
-<%! public ArrayList<Department> departments;
-    public Department dept;
-    public Degree degree;
-    public Curriculum curr;
-    public Teaching teaching;
-    public Cycle cycle;
-%>
+<%@page import="it.unisa.offerta_formativa.beans.Department"%>
+<%@page import="it.unisa.offerta_formativa.beans.Cycle"%>
+<%@page import="java.util.ArrayList"%>
+<%! ArrayList<ClassPartition> classes;%>
+<%! ArrayList<Module> modules;%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,7 +42,7 @@
 
 <script src="assets/js/jquery-1.11.1.min.js"></script>
 <script>
-	jQuery(document).ready(
+	jQuery(document).ready(		
 			function($) {
 				/*bisogna metterla in ogni pagina*/
 				$(window).on('beforeunload', function(e) {
@@ -63,7 +60,7 @@
 					}
 				});
 
-				//quì ci vanno gli ID delle funzionalità che verranno messe all interno del menù laterale...basta copiare una riga e incollarla,
+				//quÃ¬ ci vanno gli ID delle funzionalitÃ  che verranno messe all interno del menÃ¹ laterale...basta copiare una riga e incollarla,
 				//facendo attenzione a cambiare l'ID
 				//Es: $("pippopaperino_"+localStorage.getItem("offertaFormativa")).empty();
 				//ovviamente la localStorage cambia a seconda se si sta nella pagina di offerta formativa, gestione tesi, ecc...
@@ -110,14 +107,10 @@
 
 </head>
 <body class="page-body">
-	<% 	cycles = (ArrayList<Cycle>)request.getAttribute("cycles");
-		departments = (ArrayList<Department>)request.getAttribute("departments");
-		teaching = (Teaching)request.getAttribute("teaching");
-                curr = (Curriculum) request.getAttribute("curriculum");
-                degree = (Degree) request.getAttribute("degree");
-                dept = (Department) request.getAttribute("department");
-                cycle = (Cycle)request.getAttribute("cycle");
-	%>
+    <% 	classes = (ArrayList<ClassPartition>) request.getAttribute("classes");
+        modules = (ArrayList<Module>) request.getAttribute("modules");
+    %>
+	
 	<nav class="navbar horizontal-menu navbar-fixed-top">
 		<!-- set fixed position by adding class "navbar-fixed-top" -->
 
@@ -258,113 +251,100 @@
 				});
 			</script>
 
-			<div class="jumbotron">
-				<h2>Modifica Insegnamento</h2>
-                                <form action="ModifyTeachingServlet" method="post" role="form" class="form-horizontal">
-                                    <div class="row">
-                                        <div class="form-group col-sm-4">
-                                            <label for="department">Dipartimento:</label> 
-                                            <select name="department" id="department" class="form-control" readonly onclick="enablePlacingFields()">
-                                                <% out.println("<option value="+dept.getAbbreviation()+">"+dept.getTitle()
-                                                        +"</option>");
-                                                %>
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-2"></div>
-                                        <div class="form-group col-sm-4">
-                                            <label for="cycle">Ciclo:</label> 
-                                            <select name="cycle" id="cycle" class="form-control" onchange="loadDegree(this.value);" readonly onclick="enablePlacingFields()">
-                                                <% out.println("<option value="+cycle.getNumber()+">"+cycle.getTitle()
-                                                        +"</option>");
-                                                %>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-sm-4">
-                                            <label for="degree">Corso di Laurea:</label> 
-                                            <select name="degree" class="form-control" id="degree" onchange="loadCurriculum(this.value);" readonly onclick="enablePlacingFields()">
-                                                <% out.println("<option value="+degree.getMatricula()+">"+degree.getTitle()
-                                                        +"</option>");
-                                                %>
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-2"></div>
+                            
+                        <h2><% out.print(""+request.getParameter("matricula")+" - "+request.getParameter("teachingTitle"));%></h2>
+                        <h1></h1>
+                                <div class="row ">
+                                    <div class="col-sm-1"></div>
+                                    <div class=" col-sm-10">
+                                    <div class="panel panel-default clearfix">
+                                        <!-- Default panel contents -->
+                                        <div class="panel-heading">Classi associate all'insegnamento</div>
+                                        <div class="panel-body ">
+                                        <!-- Table -->
+                                        <table class="table-responsive col-sm-12" id="tableClasses">
+                                            <thead>
+                                                <tr>
+                                                    <th>Titolo</th>
+                                                    <th></th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tablebodyClasses">
+                                                <%
+                                                    for(int i=0;i<classes.size();i++){
+                                                        out.println("<tr><td>"+classes.get(i).getTitle()+"</td><td><a href='ModifyClassServlet?teachingMatricula="+classes.get(i).getTeachingMatricula()+"&title="+classes.get(i).getTitle()+"'>Modifica</a></td><td>Elimina</td></tr>");
+                                                    }
 
-                                        <div class="form-group col-sm-4">
-                                            <label for="curriculum">Curriculum:</label> 
-                                            <select name="curriculum" class="form-control" id="curriculum" readonly onclick="enablePlacingFields()">
-                                                <% out.println("<option value="+curr.getMatricula()+">"+curr.getTitle()
-                                                        +"</option>");
                                                 %>
-                                            </select>
-                                        </div>
-
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-sm-4">
-                                            <label for="matricula">Vecchia Matricola:</label>
-                                            <input type="text" class="form-control" name="oldMatricula" id="oldMatricula" placeholder="Matricola" value="<%out.println(teaching.getMatricula());%>" readonly>
-                                        </div>
-                                        <div class="col-sm-2"></div>
-                                        <div class="form-group col-sm-4">
-                                            <label for="matricula">Nuova Matricola:</label>
-                                            <input type="text" class="form-control" name="newMatricula" id="newMatricula" placeholder="Matricola" value="<%out.println(teaching.getMatricula());%>" readonly onclick="check(this);">
-                                        </div>
-                                        <div class="col-sm-2"></div>
-
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="form-group col-sm-4">
-                                            <label for="title">Nome:</label>
-                                            <input type="text" class="form-control" name="title" id="title" placeholder="Nome dell'insegnamento" value="<% out.println(teaching.getTitle()); %>" readonly onclick="check(this)">
+                                            </tbody>
+                                        </table>
                                         </div>
                                         
-                                        <div class="col-sm-2"></div>
-                                        <div class="form-group col-sm-4">
-                                            <label for="abbreviazione">Abbreviazione:</label>
-                                            <input type="text" class="form-control" name="abbreviation" id="abbreviation" placeholder="Abbreviazione" value="<%out.println(teaching.getAbbreviation());%>" readonly onclick="check(this)">
-                                        </div>
-                                        <div class="col-sm-2"></div>
                                     </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-2">
-                                                <label for="year">Anno:</label> 
-                                                <select name="year" id="year" class="form-control" readonly onclick="check(this)">
-                                                    <%out.println("<option value="+teaching.getYear()+">"+teaching.getYear()+"</option>");%>
-                                                </select>
-                                            </div>
-
-                                            <div class="col-sm-2"></div>
-                                            <div class="form-group col-sm-2">
-                                                <label for="semester">Semestre:</label> 
-                                                <select name="semester" id="semester" class="form-control" readonly onclick="check(this)">
-                                                    <%out.println("<option value="+teaching.getSemester()+">"+teaching.getSemester()+"</option>");%>
-                                                </select>
-                                            </div>
-                                            <div class="col-sm-2"></div>
-                                            <div class="form-group col-sm-2">
-                                                <label for="active">Attivo:</label> 
-                                                <select name="active" id="active" class="form-control" readonly onclick="check(this)">
-                                                    <%out.println("<option value="+((teaching.isActive())?1:0)+">"+((teaching.isActive())?"SI":"NO")+"</option>");%>
-                                                </select>
-                                            </div>
-                                        </div>
-                                   
-                                    <div class="row">
-                                        <div class="form-group col-sm-12">
-                                            <label for="link">Link al sillabus:</label>
-                                            <input type="text" name="link" id="link" class="form-control" placeholder="link" value="<%out.println(teaching.getLink());%>" readonly onclick="check(this)">
+                                    </div>
+                                    <div class="col-sm-1"></div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-10">
+                                        <div class="panel panel-default">
+                                            <!-- Default panel contents -->
+                                            <div class="panel-heading">Moduli associati all'insegnamento</div>
+                                                <!-- Table -->
+                                                <div class="panel-body">
+                                                <table class="table-responsive col-sm-12" id="tableModules">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Titolo</th>
+                                                            <th></th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tablebodyModules">
+                                                        <%
+                                                            for(int i=0;i<modules.size();i++){
+                                                                out.println("<tr><td>"+modules.get(i).getTitle()+"</td><td><a href='ModifyModuleServlet?teachingMatricula="+modules.get(i).getTeachingMatricula()+"&title="+modules.get(i).getTitle()+"'>Modifica</a></td><td>Elimina</td></tr>");
+                                                            }
+                                                        %>
+                                                    </tbody>
+                                                </table>
+                                                </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="form-group col-sm-1">
-                                            <input type="submit" id="submit" class="btn btn-default">
+                                    <div class="col-sm-1"></div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-10">
+                                        <div class="panel panel-default">
+                                            <!-- Default panel contents -->
+                                            <div class="panel-heading">Associazione dei Docenti</div>
+                                                <!-- Table -->
+                                                <div class="panel-body">
+                                                <table class="table-responsive col-sm-12" id="tableModules">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Classe</th>
+                                                            <th>Modulo</th>
+                                                            <th>Professore</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tablebodyAssociation">
+                                                        <%
+                                                            //for(int i=0;i<modules.size();i++){
+                                                              //  out.println("<tr><td>"+modules.get(i).getTitle()+"</td><td><a href='ModifyModuleServlet?teachingMatricula="+modules.get(i).getTeachingMatricula()+"&title="+modules.get(i).getTitle()+"'>Modifica</a></td><td>Elimina</td></tr>");
+                                                            //}
+                                                        %>
+                                                    </tbody>
+                                                </table>
+                                                </div>
                                         </div>
                                     </div>
-                                </form>
-			</div>
+                                    <div class="col-sm-1"></div>
+                                </div>                    
+			
 			<!-- Main Footer -->
 			<!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->
 			<!-- Add class "sticky" to  always stick the footer to the end of page (if page contents is small) -->
@@ -405,35 +385,6 @@
 
 	<!-- Bottom Scripts -->
 	<script type="text/javascript">
-        function enablePlacingFields(){ //makes modificable the fields related to where a teaching is placed
-            $("#department").removeAttr('readonly');
-            $("#department").removeAttr('onclick');
-            $("#cycle").removeAttr('readonly');
-            $("#cycle").removeAttr('onclick');
-            $("#degree").removeAttr('readonly');
-            $("#degree").removeAttr('onclick');
-            $("#curriculum").removeAttr('readonly');
-            $("#curriculum").removeAttr('onclick');
-            getCycle();
-            getDepartment();
-            $.ajax({url:"GetDegreeServlet",success:function(result){
-	    	$("#degree").html(result);
-	    }});
-            loadCurriculum(0);
-        } 
-        function check(i){ //makes modificable the single field clicked
-            $("#"+i.attributes["id"].value).removeAttr('readonly');
-        }
-        function getCycle(){
-            $.ajax({url:"GetCycleServlet",success:function(result){
-                    $("#cycle").html(result);
-            }});
-        }
-        function getDepartment(){
-            $.ajax({url:"GetDepartmentServlet",success:function(result){
-                    $("#department").html(result);
-            }});
-        }
 	function loadDegree(i){
 	    $.ajax({url:"GetDegreeServlet?idCycle="+i,success:function(result){
 	    	$("#degree").html(result);
@@ -446,6 +397,12 @@
                 
 	    }});
 	}
+        function loadTeaching(i){
+            $.ajax({url:"GetTeachingServlet?curriculum="+i,success:function(result){
+	    	$("#tablebody").html(result);
+                $("#table").css("display","table");
+	    }});
+        }
 	</script>
 	<script src="assets/js/bootstrap.min.js"></script>
 	<script src="assets/js/TweenMax.min.js"></script>
