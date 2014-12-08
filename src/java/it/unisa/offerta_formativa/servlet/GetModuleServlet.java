@@ -5,8 +5,8 @@
  */
 package it.unisa.offerta_formativa.servlet;
 
-import it.unisa.offerta_formativa.beans.Teaching;
-import it.unisa.offerta_formativa.manager.TeachingManager;
+import it.unisa.offerta_formativa.manager.ClassManager;
+import it.unisa.offerta_formativa.manager.ModuleManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -19,12 +19,13 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Alessandro
  */
-@WebServlet(name = "GetTeachingServlet", urlPatterns = {"/GetTeachingServlet"})
-public class GetTeachingServlet extends HttpServlet {
-    private TeachingManager teachingMng;
+@WebServlet(name = "GetModuleServlet", urlPatterns = {"/GetModuleServlet"})
+public class GetModuleServlet extends HttpServlet {
 
-    public GetTeachingServlet() {
-        teachingMng = TeachingManager.getInstance();
+   
+    
+    public GetModuleServlet() {
+        
     }
 
     
@@ -42,28 +43,6 @@ public class GetTeachingServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
             doPost(request,response);
-            if(request.getParameterMap().containsKey("curriculum")){
-                        String curriculum= request.getParameter("curriculum");
-			response.setContentType("text/plain");  
-			response.setCharacterEncoding("UTF-8"); 
-			String toRet="";
-			for(Teaching t : teachingMng.getTeachingsByCurriculum(curriculum)){
-				toRet+="<tr>" +
-"                                      <td>"+t.getMatricula()+"</td>" +
-"                                      <td>"+t.getTitle()+"</td>" +
-"                                      <td>"+t.getAbbreviation()+"</td>" +
-"                                      <td>"+t.getLink()+"</td>" +
-"                                      <td>"+t.getYear()+"</td>" +
-"                                      <td>"+t.getSemester()+"</td>" +
-"                                      <td>"+((t.isActive())?"Attivo":"Disattivo")+"</td>"+
-                                       "<td><a href=ShowTeachingPagesServlet?page=modify&matricula="+t.getMatricula()+
-                                        "&curriculumMatricula="+curriculum+">Modifica</a></td>"+
-                                       "<td><a href=DeleteTeachingServlet?matricula="+t.getMatricula()+
-                                        "&curriculumMatricula="+curriculum+">Elimina</a></td>\n" +
-"                                            </tr>>"; 
-			}
-			response.getWriter().write(toRet);
-            }
     }
 
     /**
@@ -77,6 +56,7 @@ public class GetTeachingServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+            
     }
 
     /**
