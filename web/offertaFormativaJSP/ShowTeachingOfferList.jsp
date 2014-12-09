@@ -25,7 +25,6 @@
 <html lang="en">
     <head>
 
-
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
@@ -49,65 +48,7 @@
 
         <script src="assets/js/jquery-1.11.1.min.js"></script>
         <script>
-            jQuery(document).ready(
-                    function () {
-                        $.ajax({url: "GetDegreeServlet?idCycle=1", success: function (result) {
-                                $("#degree").html(result);
-                            }});
-                    },
-                    function ($) {
-                        /*bisogna metterla in ogni pagina*/
-                        $(window).on('beforeunload', function (e) {
-                            if (localStorage.getItem("rememberMeForLogin") == "no") {
-                                localStorage.removeItem("username");
-                                localStorage.removeItem("typology");
-                                localStorage.removeItem("primaryKey");
 
-                                localStorage.removeItem("offertaFormativa");
-                                localStorage.removeItem("gestioneTesi");
-                                localStorage.removeItem("gestioneTirocinio");
-                                localStorage.removeItem("dottorato");
-                                localStorage.removeItem("superAmministratore");
-                                window.location.href = "index.html";
-                            }
-                        });
-
-                        //quì ci vanno gli ID delle funzionalità che verranno messe all interno del menù laterale...basta copiare una riga e incollarla,
-                        //facendo attenzione a cambiare l'ID
-                        //Es: $("pippopaperino_"+localStorage.getItem("offertaFormativa")).empty();
-                        //ovviamente la localStorage cambia a seconda se si sta nella pagina di offerta formativa, gestione tesi, ecc...
-                        $(
-                                "#funzionalita1Permission_"
-                                + localStorage.getItem("offertaFormativa"))
-                                .empty();
-                        $(
-                                "#funzionalita3Permission_"
-                                + localStorage.getItem("offertaFormativa"))
-                                .empty();
-
-                        //if(localStorage.getItem("username")==null){
-                        //	window.location.replace("pageError.html");
-                        //}
-
-                        $("#spaceForUsername").html(
-                                localStorage.getItem("username") + ", "
-                                + localStorage.getItem("primaryKey")
-                                + ' <i class="fa-angle-down"></i>');
-
-                        $("#logout").click(function () {
-                            localStorage.removeItem("username");
-                            localStorage.removeItem("typology");
-                            localStorage.removeItem("primaryKey");
-                            window.location.href = "index.html";
-
-                            localStorage.removeItem("offertaFormativa");
-                            localStorage.removeItem("gestioneTesi");
-                            localStorage.removeItem("gestioneTirocinio");
-                            localStorage.removeItem("dottorato");
-                            localStorage.removeItem("superAmministratore");
-
-                        });
-                    });
         </script>
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -240,19 +181,19 @@
                                 </script>
 
                                 <%
-                                    if (!map.isEmpty()) { %> <ul id="list" class="col-sm-12" name="list_all"> <%
+                                    if (!map.isEmpty()) { %> <ul class="list-group" id="list" class="col-sm-12" name="list_all" style=" padding:0; "> <%
                                     // for (Department d : map.keySet()) {
                                     List<Department> deps = new ArrayList<Department>(map.keySet());
                                     Collections.sort(deps);
                                     for (int i = 0; i < deps.size(); i++) {
-                                    Department d = deps.get(i);
-                                    %><li class="list-group-item" style="font-size: large; color: black;"><span style="cursor: pointer;"><%out.print(d.getTitle());%></span><ul>
+                                        Department d = deps.get(i);
+                                    %><li class="list-group-item" style=" color: black; list-style-type: none; "><span style="cursor: pointer; font-weight: bold;"> <i class="glyphicon glyphicon-plus" style=" float: left;" onclick="setIcon(this)" ></i> &nbsp;&nbsp; <%out.print(d.getTitle());%></span><ul style=" padding:0;">
                                             <% if (map.get(d).keySet().size() != 0) {
 //                                                    for (Degree de : map.get(d).keySet()) {
                                                     List<Degree> degs = new ArrayList<Degree>(map.get(d).keySet());
                                                     Collections.sort(degs);
-                                                    for (int j=0;j<degs.size();j++) {
-                                                        Degree de= degs.get(j);
+                                                    for (int j = 0; j < degs.size(); j++) {
+                                                        Degree de = degs.get(j);
                                                         if (de.isActive()) {
                                                             for (Cycle cy : cycle) {
                                                                 if (cy.getNumber() == de.getCycle()) {
@@ -260,26 +201,26 @@
                                                                 }
                                                             }
                                             %>
-                                            <li style="font-size: medium; color: black"><span style="cursor: pointer;"><%out.print(cycleTitle + " - " + de.getTitle());%></span><ul>
-                                                    <%  if (map.get(d).get(de).keySet().size() != 0) {
-                                                            List<Curriculum> currs = new ArrayList<Curriculum>(map.get(d).get(de).keySet());
-                                                            Collections.sort(currs);
-                                                            //for (Curriculum cu : map.get(d).get(de).keySet()) {
-                                                            for (int k=0;k<currs.size();k++) {
-                                                                Curriculum cu=currs.get(k);
-                                                                if (cu.isActive()) {
-                                                    %>
-                                                    <li style="font-size: medium; color: black"><span style="cursor: pointer;"><%out.print("Curriculum - " + cu.getTitle());%></span><ul>
+                                            <li style=" color: #212121; margin: 10px; list-style-type: none; "><span style="cursor: pointer;"><i class="glyphicon glyphicon-plus" style=" float: left;" onclick="setIcon(this)" ></i> &nbsp;&nbsp; <%out.print(cycleTitle + " - " + de.getTitle());%> <a href="${pageContext.request.contextPath}/GetSyllabusServlet?teaching_matricula=1"> <i class="glyphicon glyphicon-info-sign" style=" font-size: medium; float: right;"  ></i></a></span><ul style=" padding:0;">
+                                                        <%  if (map.get(d).get(de).keySet().size() != 0) {
+                                                                List<Curriculum> currs = new ArrayList<Curriculum>(map.get(d).get(de).keySet());
+                                                                Collections.sort(currs);
+                                                                //for (Curriculum cu : map.get(d).get(de).keySet()) {
+                                                                for (int k = 0; k < currs.size(); k++) {
+                                                                    Curriculum cu = currs.get(k);
+                                                                    if (cu.isActive()) {
+                                                        %>
+                                                    <li style=" color: #D84315; margin: 10px; list-style-type: none; "><span style="cursor: pointer;"><i class="glyphicon glyphicon-plus" style=" float: left;" onclick="setIcon(this)" ></i> &nbsp;&nbsp; <%out.print("Curriculum - " + cu.getTitle());%></span><ul style=" padding:0;">
                                                             <%
                                                                 if (map.get(d).get(de).get(cu).size() != 0) {
                                                                     List<Teaching> teachs = new ArrayList<Teaching>(map.get(d).get(de).get(cu));
                                                                     Collections.sort(teachs);
                                                                     //for (Teaching te : map.get(d).get(de).get(cu)) {
-                                                                        for (int y=0;y<teachs.size();y++) {
-                                                                                Teaching te=teachs.get(y);
+                                                                    for (int y = 0; y < teachs.size(); y++) {
+                                                                        Teaching te = teachs.get(y);
                                                                         if (te.isActive()) {
                                                             %>
-                                                            <li style="font-size: medium; color: black"><span style="cursor: pointer;"><a href="${pageContext.request.contextPath}/GetSyllabusServlet?teaching_matricula=<%out.print(te.getMatricula());%>"><%out.print("Corso di " + te.getTitle());%></a></span></li>
+                                                            <li style="  margin: 10px; list-style-type: none; "><span style="cursor: pointer; color: #112B62;"> &nbsp;&nbsp; <a style="color: #112B62; font-weight: bold;" href="${pageContext.request.contextPath}/GetSyllabusServlet?teaching_matricula=<%out.print(te.getMatricula());%>"><%out.print("Corso di " + te.getTitle());%></a></span></li>
                                                                     <%}
                                                                             }
                                                                         }
@@ -301,10 +242,6 @@
                                                 }
                                             }
                                         %>  </ul>
-
-
-
-
 
                                 <!-- Main Footer -->
                                 <!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->
@@ -368,6 +305,11 @@
             </div>
             <!-- Bottom Scripts -->
             <script type="text/javascript">
+                function setIcon(obj) {
+                    if(obj.className == "glyphicon glyphicon-plus"){
+                    obj.className = "glyphicon glyphicon-minus";}
+                    else obj.className = "glyphicon glyphicon-plus";
+                }
             </script>
             <script src="assets/js/bootstrap.min.js"></script>
             <script src="assets/js/TweenMax.min.js"></script>

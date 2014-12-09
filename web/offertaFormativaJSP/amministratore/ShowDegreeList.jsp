@@ -404,11 +404,11 @@
                 if (map.size() != 0) {
                     for (Department d : map.keySet()) {%>
                         var dep= '<%=d.getAbbreviation()%>';
-                        if(dep == department){
+                        if(dep === department){
                       <%  if (map.get(d).size() != 0) {
                                for (Degree de : map.get(d)) { %>
                                    var cyc = '<%= de.getCycle()%>';
-                                   if(cyc == cycle){
+                                   if(cyc === cycle){
                                        
                                             stringa += "<tr><td style=' color: black'><%=de.getMatricula()%></td><td style=' color: black'><%=de.getTitle()%></td><td style=' color: black'><%=de.getDepartmentAbbreviation() %></td><td style=' color: black'><% if(de.isActive()){ out.print("Attivo");} else out.print("Disattivo"); %></td><td style=' color: black; font-weight: bold'><a href='${pageContext.request.contextPath}/ModifyDegreeServlet?degree_matricula=<%out.print(de.getMatricula());%>'>Modifica</a></td></tr>";
                                        

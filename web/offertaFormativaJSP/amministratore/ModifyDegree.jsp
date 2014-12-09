@@ -322,7 +322,7 @@
 
                                     <div class="col-sm-4">
                                         <label style="color: black; font-weight: bold">Ciclo:</label><select name="cycle" class="form-control" id="Select_cycle">
-                                            <option selected value="NoCycle">Seleziona il Ciclo</option>
+                                           
                                             <%
                                                 if (cycles.size() != 0)
                                                     for (Cycle c : cycles) {
