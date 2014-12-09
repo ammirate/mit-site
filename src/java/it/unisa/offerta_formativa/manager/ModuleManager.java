@@ -95,8 +95,8 @@ public class ModuleManager {
             String esc = "\'";
             String query = "UPDATE " + TABLE + " SET title=" + 
                     esc + newTitle + esc 
-                    + " WHERE teaching_matricula=" + oldModule.getTeachingMatricula()
-                    + " AND " + "title=" + esc + oldModule.getTitle() + esc;
+                    + " WHERE teaching_matricula=" + esc + oldModule.getTeachingMatricula() + esc + 
+                    " AND " + "title=" + esc + oldModule.getTitle() + esc;
             System.out.println(query);
             if (stmt.executeUpdate(query) == 1) {
                 return true;

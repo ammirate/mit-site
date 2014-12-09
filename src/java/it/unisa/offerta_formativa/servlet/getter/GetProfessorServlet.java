@@ -9,6 +9,8 @@ import it.unisa.offerta_formativa.beans.Degree;
 import it.unisa.offerta_formativa.beans.Person;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -37,13 +39,7 @@ public class GetProfessorServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        
-        response.setContentType("text/plain");  
-        response.setCharacterEncoding("UTF-8"); 
-        String toRet="";
-        toRet+="<option value=fferrucci@unisa.it>Filomena Ferrucci</option>"; 
-        toRet+="<option value=adelucia@unisa.it>Andrea De Lucia</option>"; 
-        response.getWriter().write(toRet);
+        doPost(request, response);
     }
 
     /**
@@ -55,13 +51,17 @@ public class GetProfessorServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-         response.setContentType("text/plain");  
-        response.setCharacterEncoding("UTF-8"); 
-        String toRet="";
-        toRet+="<option value=fferrucci@unisa.it>Filomena Ferrucci</option>"; 
-        toRet+="<option value=adelucia@unisa.it>Andrea De Lucia</option>"; 
-        response.getWriter().write(toRet);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response){
+        try {
+            response.setContentType("text/plain");
+            response.setCharacterEncoding("UTF-8");
+            String toRet="";
+            toRet+="<option value=fferrucci@unisa.it>Filomena Ferrucci</option>";
+            toRet+="<option value=adelucia@unisa.it>Andrea De Lucia</option>";
+            response.getWriter().write(toRet);
+        } catch (IOException ex) {
+            Logger.getLogger(GetProfessorServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }       
 
 }

@@ -70,6 +70,7 @@ public class ModifyTeachingServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if(request.getParameterMap().containsKey("oldMatricula")){
+            //FACCIO PRIMA L'UPDATE DEL TEACHING
             String oldMatricula = request.getParameter("oldMatricula");
             String newMatricula = request.getParameter("newMatricula");
             Teaching t = new Teaching(
@@ -81,15 +82,17 @@ public class ModifyTeachingServlet extends HttpServlet {
                         Integer.parseInt(request.getParameter("semester")),
                         (Integer.parseInt(request.getParameter("active"))==1)?true:false);
             
-            if(!request.getParameter("newMatricula").equalsIgnoreCase(oldMatricula)){
+            if(!request.getParameter("newMatricula").equalsIgnoreCase(oldMatricula)){ //se diversa da oldMatricula
                 t.setMatricula(newMatricula);
                 teachingMng.updateTeaching(oldMatricula,t);
-                //teachingMng.updateTeaching(oldMatricula,new Teaching());
+                
             }else{
                 teachingMng.updateTeaching(oldMatricula,t);
             }
+            //POI QUELLA DEL CURRICULUM ASSOCIATO SE NECESSARIO
             if(request.getParameterMap().containsKey("newCurriculumMatricula")){
-                //currMng.updateCurriculumTeaching(oldCurriculumMatricula,newCurriculumMatricula,oldTeachingMatricula,newTeachingMatricula);
+                //DA IMPLEMETARE!!
+                //currMng.updateCurriculumRelatedWithTeaching(oldCurrMatricula, newCurrMatricula,newMatricula);
             
             }
             

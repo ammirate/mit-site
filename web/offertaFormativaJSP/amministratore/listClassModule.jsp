@@ -2,6 +2,8 @@
     Document   : listClassModule
     Author     : Alessandro
 --%>
+<%@page import="java.util.Map.Entry"%>
+<%@page import="java.util.HashMap"%>
 <%@page import="it.unisa.offerta_formativa.beans.ProfModuleClass"%>
 <%@page import="it.unisa.offerta_formativa.beans.Person"%>
 <%@page import="it.unisa.offerta_formativa.beans.Module"%>
@@ -18,7 +20,7 @@
 <%! ArrayList<ClassPartition> classes;%>
 <%! ArrayList<Module> modules;%>
 <%! ArrayList<Person> professors;%>
-<%! ArrayList<ProfModuleClass> profmoduleclass;
+<%! HashMap<ProfModuleClass,String> profmoduleclass;
 Teaching teaching;
 %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -59,7 +61,7 @@ Teaching teaching;
 <body class="page-body">
     <% 	classes = (ArrayList<ClassPartition>) request.getAttribute("classes");
         modules = (ArrayList<Module>) request.getAttribute("modules");
-        profmoduleclass= (ArrayList<ProfModuleClass>) request.getAttribute("profmoduleclass");
+        profmoduleclass= (HashMap<ProfModuleClass,String>) request.getAttribute("profmoduleclass");
         teaching =(Teaching) request.getAttribute("teaching");
     %>
 	
@@ -226,7 +228,7 @@ Teaching teaching;
                                                 <%
                                                     for(int i=0;i<classes.size();i++){
                                                         out.print("<tr><td>"+classes.get(i).getTitle()+"</td><td>");
-                                                        out.print("<a href='ShowPagesServlet?page=modifyClass&matricula="+classes.get(i).getTeachingMatricula()+"&classTitle="+classes.get(i).getTitle()+"'>Modifica</a>");
+                                                        out.print("<a href='ShowModifyClassServlet?matricula="+classes.get(i).getTeachingMatricula()+"&classTitle="+classes.get(i).getTitle()+"'>Modifica</a>");
                                                         if(classes.size()==1)out.print("</td><td>Elimina</td></tr>");
                                                         else out.print("</td><td><a href='DeleteClassServlet?matricula="+teaching.getMatricula()+"&title="+classes.get(i).getTitle()+"Elimina</td></tr>");
                                                     }
@@ -259,7 +261,7 @@ Teaching teaching;
                                                     <tbody id="tablebodyModules">
                                                         <%
                                                             for(int i=0;i<modules.size();i++){
-                                                                out.println("<tr><td>"+modules.get(i).getTitle()+"</td><td><a href='ShowPagesServlet?page=modifyModule&matricula="+modules.get(i).getTeachingMatricula()+"&moduleTitle="+modules.get(i).getTitle()+"'>Modifica</a></td><td>");
+                                                                out.println("<tr><td>"+modules.get(i).getTitle()+"</td><td><a href='ShowModifyModuleServlet?matricula="+modules.get(i).getTeachingMatricula()+"&moduleTitle="+modules.get(i).getTitle()+"'>Modifica</a></td><td>");
                                                                 if(modules.size()==1)out.print("Elimina</td></tr>");
                                                                 else out.print("<a href='DeleteModuleServlet?matricula="+teaching.getMatricula()+"&title="+modules.get(i).getTitle()+"'>Elimina</a></td></tr>");
                                                             }
@@ -290,9 +292,12 @@ Teaching teaching;
                                                     </thead>
                                                     <tbody id="tablebodyAssociation">
                                                         <%
-                                                            //for(int i=0;i<profmoduleclass.size();i++){
-                                                              //  out.println("<tr><td>"+profmoduleclass.get(i).getClassTitle()+"</td><td>"+profmoduleclass.get(i).getModuleTitle()+"</td><td>"+profmoduleclass.get(i).getProfEmail()+"</td></tr>");
-                                                            //}
+                                                            for(Entry<ProfModuleClass,String> e: profmoduleclass.entrySet()){
+                                                                out.print("<tr><td>"+e.getKey().getClassTitle()+"</td><td>"+e.getKey().getModuleTitle()+"</td><td>"+e.getValue()+"</td>");
+                                                                out.print("<td><a href='ShowModifyProfAssociationServlet?classTitle="+e.getKey().getClassTitle());
+                                                                out.print("&moduleTitle="+e.getKey().getModuleTitle()+"&matricula="+e.getKey().getTeachingMatricula());
+                                                                out.print("&mail="+e.getKey().getProfEmail()+"'>Modifica</a></td></tr>");
+                                                            }
                                                         %>
                                                         
                                                     </tbody>

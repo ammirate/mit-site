@@ -32,9 +32,11 @@ public class Person {
         this.SSN = ssn;
     }
 
-    public Person(String ssn, String accountEmail) {
+    public Person(String ssn, String accountEmail,String name, String surname) {
         this.SSN = ssn;
         this.accountEmail = accountEmail;
+        this.name=name;
+        this.surname=surname;
     }
 
     public String getSSN() {

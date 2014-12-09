@@ -58,7 +58,7 @@ public class GetTeachingServlet extends HttpServlet {
 "                                      <td>"+((t.isActive())?"Attivo":"Disattivo")+"</td>"+
                                        "<td><a href=ShowModifyTeachingServlet?matricula="+t.getMatricula()+
                                         "&curriculumMatricula="+curriculum+">Modifica</a></td>"+
-                                        "<td><a href=ShowPagesServlet?page=listModuleClass&matricula="+t.getMatricula()+
+                                        "<td><a href=ShowAssociationServlet?matricula="+t.getMatricula()+
 "                                            >Dettagli</a></td></tr>>"; 
 			}
 			response.getWriter().write(toRet);

@@ -206,8 +206,8 @@ public Teaching teaching;
                                                     <label for="title">Nome Module:</label>
                                                     <input type="text" class="form-control" name="moduleTitle" value="<%out.print(title);%>">
                                                 </div>
-                                                <input type="text" hidden="true" name="oldModuleTitle" value=" <%out.print(title);%> ">
-                                                <input type="text" hidden="true" name="matricula" value=" <%out.print(teaching.getMatricula());%> ">
+                                                <input type="text" hidden="true" name="oldModuleTitle" value="<%out.print(title);%>">
+                                                <input type="text" hidden="true" name="matricula" value="<%out.print(teaching.getMatricula());%>">
                                             </div>
                                             <div class="row">
                                                 <div class="form-group col-sm-2">

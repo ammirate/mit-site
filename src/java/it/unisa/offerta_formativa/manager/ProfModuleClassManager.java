@@ -95,9 +95,9 @@ public class ProfModuleClassManager {
     private ProfModuleClass getProfModuleClassFromRS(ResultSet rs) {
         try {
             String classTitle = rs.getString("class_title");
-            String teachingMatricula = rs.getString("class_title");
-            String moduleTitle = rs.getString("class_title");
-            String profEmail = rs.getString("class_title");
+            String teachingMatricula = rs.getString("teaching_matricula");
+            String moduleTitle = rs.getString("module_title");
+            String profEmail = rs.getString("email_account");
             return new ProfModuleClass(classTitle, teachingMatricula, moduleTitle, profEmail);
 
         } catch (SQLException ex) {

@@ -7,6 +7,7 @@ package it.unisa.offerta_formativa.servlet.profmoduleclass;
 
 import it.unisa.offerta_formativa.beans.Curriculum;
 import it.unisa.offerta_formativa.beans.Degree;
+import it.unisa.offerta_formativa.beans.Person;
 import it.unisa.offerta_formativa.beans.ProfModuleClass;
 import it.unisa.offerta_formativa.manager.ClassManager;
 import it.unisa.offerta_formativa.manager.CurriculumManager;
@@ -14,10 +15,14 @@ import it.unisa.offerta_formativa.manager.CycleManager;
 import it.unisa.offerta_formativa.manager.DegreeManager;
 import it.unisa.offerta_formativa.manager.DepartmentManager;
 import it.unisa.offerta_formativa.manager.ModuleManager;
+import it.unisa.offerta_formativa.manager.PersonManager;
 import it.unisa.offerta_formativa.manager.ProfModuleClassManager;
 import it.unisa.offerta_formativa.manager.TeachingManager;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -39,6 +44,7 @@ public class ShowAssociationServlet extends HttpServlet {
     private final ModuleManager modMng;
     private final ClassManager classMng;
     private final ProfModuleClassManager pmcMng;
+    private final PersonManager personMng;
     
     public ShowAssociationServlet() {
         super();
@@ -50,6 +56,7 @@ public class ShowAssociationServlet extends HttpServlet {
         classMng = ClassManager.getInstance();
         modMng = ModuleManager.getInstance();
         pmcMng = ProfModuleClassManager.getInstance();
+        personMng = PersonManager.getInstance();
     }
 
    
@@ -82,10 +89,15 @@ public class ShowAssociationServlet extends HttpServlet {
             throws ServletException, IOException {
             String path="/offertaFormativaJSP/amministratore/";  
             if(request.getParameterMap().containsKey("matricula")){
-                request.setAttribute("teaching", teachingMng.readTeaching(request.getParameter("matricula")));
-                request.setAttribute("modules", modMng.getModulesByTeaching(request.getParameter("matricula")));
-                request.setAttribute("classes", classMng.getClassesByTeaching(request.getParameter("matricula")));
-                //request.setAttribute("profmoduleclass", pmcMng.);
+                String matricula =request.getParameter("matricula");
+                request.setAttribute("teaching", teachingMng.readTeaching(matricula));
+                request.setAttribute("modules", modMng.getModulesByTeaching(matricula));
+                request.setAttribute("classes", classMng.getClassesByTeaching(matricula));
+                HashMap<ProfModuleClass,String> map = new HashMap<>();
+                for(ProfModuleClass pmc :pmcMng.getByTeaching(matricula)){
+                    map.put(pmc, personMng.getPersonByEmail(pmc.getProfEmail()).getName()+" "+personMng.getPersonByEmail(pmc.getProfEmail()).getSurname());
+                }
+                request.setAttribute("profmoduleclass", map);
                 request.getRequestDispatcher(path+"listClassModule.jsp").forward(request, response);
             }
     }

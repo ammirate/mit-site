@@ -97,7 +97,7 @@ public class PersonManager {
             String position = rs.getString("position");
             int cyle = rs.getInt("cycle");
 
-            Person p = new Person(ssn, accountEmail);
+            Person p = new Person(ssn, accountEmail, name, surname);
             return p;
 
         } catch (SQLException ex) {
