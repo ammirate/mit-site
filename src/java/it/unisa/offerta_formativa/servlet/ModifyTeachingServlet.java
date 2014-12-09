@@ -80,14 +80,19 @@ public class ModifyTeachingServlet extends HttpServlet {
                         Integer.parseInt(request.getParameter("year")),
                         Integer.parseInt(request.getParameter("semester")),
                         (Integer.parseInt(request.getParameter("active"))==1)?true:false);
-            //ArrayList<Curriculum> currList = currMng.getCurriculumByTeaching(oldMatricula);
+            
             if(!request.getParameter("newMatricula").equalsIgnoreCase(oldMatricula)){
                 t.setMatricula(newMatricula);
-                teachingMng.updateTeaching(t);
+                teachingMng.updateTeaching(oldMatricula,t);
                 //teachingMng.updateTeaching(oldMatricula,new Teaching());
             }else{
-                teachingMng.updateTeaching(t);
+                teachingMng.updateTeaching(oldMatricula,t);
             }
+            if(request.getParameterMap().containsKey("newCurriculumMatricula")){
+                //currMng.updateCurriculumTeaching(oldCurriculumMatricula,newCurriculumMatricula,oldTeachingMatricula,newTeachingMatricula);
+            
+            }
+            
         }
     }
 

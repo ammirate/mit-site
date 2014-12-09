@@ -5,8 +5,11 @@
  */
 package it.unisa.offerta_formativa.servlet;
 
+import it.unisa.offerta_formativa.manager.ClassManager;
 import it.unisa.offerta_formativa.manager.CycleManager;
 import it.unisa.offerta_formativa.manager.DepartmentManager;
+import it.unisa.offerta_formativa.manager.ModuleManager;
+import it.unisa.offerta_formativa.manager.TeachingManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -19,17 +22,18 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Alessandro
  */
-@WebServlet(name = "DeleteTeachingServlet", urlPatterns = {"/DeleteTeachingServlet"})
-public class DeleteTeachingServlet extends HttpServlet {
+@WebServlet(name = "DeleteClassServlet", urlPatterns = {"/DeleteClassServlet"})
+public class DeleteClassServlet extends HttpServlet {
 
     
-    private DepartmentManager deptMng;
-    private CycleManager cycleMng;
-    public DeleteTeachingServlet() {
+    private ModuleManager moduleMng;
+    private ClassManager classMng;
+    TeachingManager teachingMng;
+    public DeleteClassServlet() {
         super();
-        deptMng = DepartmentManager.getInstance();
-        cycleMng = CycleManager.getInstance();
-        
+        moduleMng = ModuleManager.getInstance();
+        classMng = ClassManager.getInstance();
+        teachingMng = TeachingManager.getInstance();
     }
 
     
@@ -61,12 +65,13 @@ public class DeleteTeachingServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
             String path="/offertaFormativaJSP/amministratore/";
-            if(request.getParameterMap().containsKey("matricula") && request.getParameterMap().containsKey("curriculumMatricula")){
-                
+            if(request.getParameterMap().containsKey("matricula")){
+                classMng.deleteClass(request.getParameter("title"), request.getParameter("matricula"));
             }
-            request.setAttribute("departments",deptMng.getAllDepartments());
-            request.setAttribute("cycles", cycleMng.getAllCycles());
-            request.getRequestDispatcher(path+"listTeaching.jsp").forward(request, response);
+            request.setAttribute("teaching", teachingMng.readTeaching(request.getParameter("matricula")));
+            request.setAttribute("modules", moduleMng.getModulesByTeaching(request.getParameter("matricula")));
+            request.setAttribute("classes", classMng.getClassesByTeaching(request.getParameter("matricula")));
+            request.getRequestDispatcher("/offertaFormativaJSP/amministratore/listClassModule.jsp").forward(request, response);
     }
 
     /**

@@ -7,12 +7,14 @@ package it.unisa.offerta_formativa.servlet;
 
 import it.unisa.offerta_formativa.beans.Curriculum;
 import it.unisa.offerta_formativa.beans.Degree;
+import it.unisa.offerta_formativa.beans.ProfModuleClass;
 import it.unisa.offerta_formativa.manager.ClassManager;
 import it.unisa.offerta_formativa.manager.CurriculumManager;
 import it.unisa.offerta_formativa.manager.CycleManager;
 import it.unisa.offerta_formativa.manager.DegreeManager;
 import it.unisa.offerta_formativa.manager.DepartmentManager;
 import it.unisa.offerta_formativa.manager.ModuleManager;
+import it.unisa.offerta_formativa.manager.ProfModuleClassManager;
 import it.unisa.offerta_formativa.manager.TeachingManager;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -36,6 +38,7 @@ public class ShowPagesServlet extends HttpServlet {
     private CurriculumManager currMng;
     private final ModuleManager modMng;
     private final ClassManager classMng;
+    private final ProfModuleClassManager pmcMng;
     
     public ShowPagesServlet() {
         super();
@@ -46,6 +49,7 @@ public class ShowPagesServlet extends HttpServlet {
         currMng = CurriculumManager.getInstance();
         classMng = ClassManager.getInstance();
         modMng = ModuleManager.getInstance();
+        pmcMng = ProfModuleClassManager.getInstance();
     }
 
    
@@ -80,21 +84,43 @@ public class ShowPagesServlet extends HttpServlet {
             String page="";
             if(request.getParameterMap().containsKey("page")){
                 page =request.getParameter("page");
-                if(page.equalsIgnoreCase("insert")){
+                if(page.equalsIgnoreCase("insertClass")){
+                    request.setAttribute("departments",deptMng.getAllDepartments());
+                    request.setAttribute("cycles", cycleMng.getAllCycles());
+                    request.getRequestDispatcher(path+"insertClass.jsp").forward(request, response);
                     //request.getRequestDispatcher(path+"insertTeaching.jsp").forward(request, response);
                 }
-                if(page.equalsIgnoreCase("list")){
+                if(page.equalsIgnoreCase("insertModule")){
+                    request.setAttribute("departments",deptMng.getAllDepartments());
+                    request.setAttribute("cycles", cycleMng.getAllCycles());
+                    request.getRequestDispatcher(path+"insertModule.jsp").forward(request, response);
+                    //request.getRequestDispatcher(path+"insertTeaching.jsp").forward(request, response);
+                }
+                if(page.equalsIgnoreCase("listModuleClass")){
                     if(request.getParameterMap().containsKey("matricula")){
-                        request.setAttribute("matricula", request.getParameter("matricula"));
-                        request.setAttribute("teachingTitle", request.getParameter("teachingTitle"));
+                        request.setAttribute("teaching", teachingMng.readTeaching(request.getParameter("matricula")));
                         request.setAttribute("modules", modMng.getModulesByTeaching(request.getParameter("matricula")));
                         request.setAttribute("classes", classMng.getClassesByTeaching(request.getParameter("matricula")));
+                        //request.setAttribute("profmoduleclass", pmcMng.);
                         request.getRequestDispatcher(path+"listClassModule.jsp").forward(request, response);
                     }
                 }
-                if(page.equalsIgnoreCase("modify")){
-                    if(request.getParameterMap().containsKey("matricula") && request.getParameterMap().containsKey("curriculumMatricula")){
-                        
+                if(page.equalsIgnoreCase("modifyClass")){
+                    if(request.getParameterMap().containsKey("matricula") && request.getParameterMap().containsKey("classTitle")){
+                        String matricula = request.getParameter("matricula");
+                        request.setAttribute("matricula", matricula);
+                        request.setAttribute("title", request.getParameter("classTitle"));
+                        request.setAttribute("teaching",teachingMng.readTeaching(matricula));
+                        request.getRequestDispatcher(path+"modifyClass.jsp").forward(request, response);
+                    }
+                }
+                if(page.equalsIgnoreCase("modifyModule")){
+                    if(request.getParameterMap().containsKey("matricula") && request.getParameterMap().containsKey("moduleTitle")){
+                        String matricula = request.getParameter("matricula");
+                        request.setAttribute("matricula", matricula);
+                        request.setAttribute("title", request.getParameter("moduleTitle"));
+                        request.setAttribute("teaching",teachingMng.readTeaching(matricula));
+                        request.getRequestDispatcher(path+"modifyModule.jsp").forward(request, response);
                     }
                 }
             }
