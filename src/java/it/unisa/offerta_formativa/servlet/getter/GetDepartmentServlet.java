@@ -1,4 +1,4 @@
-package it.unisa.offerta_formativa.servlet;
+package it.unisa.offerta_formativa.servlet.getter;
 
 import java.io.IOException;
 
@@ -12,25 +12,27 @@ import javax.servlet.http.HttpServletResponse;
 
 import it.unisa.offerta_formativa.beans.Curriculum;
 import it.unisa.offerta_formativa.beans.Cycle;
+import it.unisa.offerta_formativa.beans.Department;
 import it.unisa.offerta_formativa.manager.CurriculumManager;
 import it.unisa.offerta_formativa.manager.CycleManager;
+import it.unisa.offerta_formativa.manager.DepartmentManager;
 
 /**
  * Servlet implementation class GetDepartmentServlet
  */
-@WebServlet("/GetCycleServlet")
-public class GetCycleServlet extends HttpServlet {
+@WebServlet("/GetDepartmentServlet")
+public class GetDepartmentServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private CycleManager cycleMng;
+    private DepartmentManager deptMng;
     private ServletContext context;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GetCycleServlet() {
+    public GetDepartmentServlet() {
         super();
-        cycleMng = CycleManager.getInstance();
+        deptMng = DepartmentManager.getInstance();
         // TODO Auto-generated constructor stub
     }
 
@@ -47,12 +49,12 @@ public class GetCycleServlet extends HttpServlet {
         // TODO Auto-generated method stub
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
-        String toRet = "<option value=0>Seleziona il ciclo</option>";
-        if (request.getParameterMap().containsKey("cycleNumber")) {
-            Cycle c = cycleMng.readCycle(Integer.parseInt(request.getParameter("cycleNumber")));
+        String toRet = "<option value=0>Seleziona il dipartimento</option>";
+        if (request.getParameterMap().containsKey("departmentAbbreviation")) {
+            Department d = deptMng.readDepartment(request.getParameter("departmentAbbreviation"));
         }else{ //get all cycles
-            for (Cycle c : cycleMng.getAllCycles()) {
-                toRet+="<option value="+c.getNumber()+">"+c.getTitle()+"</option>";
+            for (Department d : deptMng.getAllDepartments()) {
+                toRet+="<option value="+d.getAbbreviation()+">"+d.getTitle()+"</option>";
             }
         }
         response.getWriter().write(toRet);

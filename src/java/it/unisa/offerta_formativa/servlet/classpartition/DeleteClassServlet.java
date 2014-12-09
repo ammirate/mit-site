@@ -3,9 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unisa.offerta_formativa.servlet;
+package it.unisa.offerta_formativa.servlet.classpartition;
 
-import it.unisa.offerta_formativa.beans.Teaching;
+import it.unisa.offerta_formativa.manager.ClassManager;
+import it.unisa.offerta_formativa.manager.CycleManager;
+import it.unisa.offerta_formativa.manager.DepartmentManager;
+import it.unisa.offerta_formativa.manager.ModuleManager;
 import it.unisa.offerta_formativa.manager.TeachingManager;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,11 +22,17 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Alessandro
  */
-@WebServlet(name = "GetTeachingServlet", urlPatterns = {"/GetTeachingServlet"})
-public class GetTeachingServlet extends HttpServlet {
-    private TeachingManager teachingMng;
+@WebServlet(name = "DeleteClassServlet", urlPatterns = {"/DeleteClassServlet"})
+public class DeleteClassServlet extends HttpServlet {
 
-    public GetTeachingServlet() {
+    
+    private ModuleManager moduleMng;
+    private ClassManager classMng;
+    TeachingManager teachingMng;
+    public DeleteClassServlet() {
+        super();
+        moduleMng = ModuleManager.getInstance();
+        classMng = ClassManager.getInstance();
         teachingMng = TeachingManager.getInstance();
     }
 
@@ -42,27 +51,6 @@ public class GetTeachingServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
             doPost(request,response);
-            if(request.getParameterMap().containsKey("curriculum")){
-                        String curriculum= request.getParameter("curriculum");
-			response.setContentType("text/plain");  
-			response.setCharacterEncoding("UTF-8"); 
-			String toRet="";
-			for(Teaching t : teachingMng.getTeachingsByCurriculum(curriculum)){
-				toRet+="<tr>" +
-"                                      <td>"+t.getMatricula()+"</td>" +
-"                                      <td>"+t.getTitle()+"</td>" +
-"                                      <td>"+t.getAbbreviation()+"</td>" +
-"                                      <td>"+t.getLink()+"</td>" +
-"                                      <td>"+t.getYear()+"</td>" +
-"                                      <td>"+t.getSemester()+"</td>" +
-"                                      <td>"+((t.isActive())?"Attivo":"Disattivo")+"</td>"+
-                                       "<td><a href=ShowTeachingPagesServlet?page=modify&matricula="+t.getMatricula()+
-                                        "&curriculumMatricula="+curriculum+">Modifica</a></td>"+
-                                        "<td><a href=ShowPagesServlet?page=listModuleClass&matricula="+t.getMatricula()+
-"                                            >Dettagli</a></td></tr>>"; 
-			}
-			response.getWriter().write(toRet);
-            }
     }
 
     /**
@@ -76,6 +64,14 @@ public class GetTeachingServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+            String path="/offertaFormativaJSP/amministratore/";
+            if(request.getParameterMap().containsKey("matricula")){
+                classMng.deleteClass(request.getParameter("title"), request.getParameter("matricula"));
+            }
+            request.setAttribute("teaching", teachingMng.readTeaching(request.getParameter("matricula")));
+            request.setAttribute("modules", moduleMng.getModulesByTeaching(request.getParameter("matricula")));
+            request.setAttribute("classes", classMng.getClassesByTeaching(request.getParameter("matricula")));
+            request.getRequestDispatcher("/offertaFormativaJSP/amministratore/listClassModule.jsp").forward(request, response);
     }
 
     /**

@@ -3,10 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unisa.offerta_formativa.servlet;
+package it.unisa.offerta_formativa.servlet.getter;
 
-import it.unisa.offerta_formativa.beans.ClassPartition;
-import it.unisa.offerta_formativa.beans.Module;
 import it.unisa.offerta_formativa.manager.ClassManager;
 import it.unisa.offerta_formativa.manager.ModuleManager;
 import java.io.IOException;
@@ -21,12 +19,13 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Alessandro
  */
-@WebServlet(name = "ModifyClassServlet", urlPatterns = {"/ModifyClassServlet"})
-public class ModifyClassServlet extends HttpServlet {
-    private final ClassManager classMng;
+@WebServlet(name = "GetModuleServlet", urlPatterns = {"/GetModuleServlet"})
+public class GetModuleServlet extends HttpServlet {
 
-    public ModifyClassServlet() {
-        classMng = ClassManager.getInstance();
+   
+    
+    public GetModuleServlet() {
+        
     }
 
     
@@ -43,7 +42,7 @@ public class ModifyClassServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            doPost(request, response);
+            doPost(request,response);
     }
 
     /**
@@ -57,9 +56,7 @@ public class ModifyClassServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            if(request.getParameterMap().containsKey("matricula") && (request.getParameterMap().containsKey("oldClassTitle"))){
-                classMng.updateClass(new ClassPartition(request.getParameter("matricula"),request.getParameter("oldClassTitle")), new ClassPartition(request.getParameter("matricula"),request.getParameter("classTitle")));
-            }
+            
     }
 
     /**

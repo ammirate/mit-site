@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unisa.offerta_formativa.servlet;
+package it.unisa.offerta_formativa.servlet.classpartition;
 
-import it.unisa.offerta_formativa.beans.Module;
-import it.unisa.offerta_formativa.manager.ModuleManager;
+import it.unisa.offerta_formativa.servlet.module.*;
+import it.unisa.offerta_formativa.manager.TeachingManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -19,16 +19,14 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Alessandro
  */
-@WebServlet(name = "InsertModuleServlet", urlPatterns = {"/InsertModuleServlet"})
-public class InsertModuleServlet extends HttpServlet {
-    private final ModuleManager moduleMng;
+@WebServlet(name = "ShowModifyClassServlet", urlPatterns = {"/ShowModifyClassServlet"})
+public class ShowModifyClassServlet extends HttpServlet {
+    private final TeachingManager teachingMng;
 
-    public InsertModuleServlet() {
-        moduleMng = ModuleManager.getInstance();
+    public ShowModifyClassServlet() {
+        teachingMng = TeachingManager.getInstance();
     }
-    
-    
-    
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -55,8 +53,13 @@ public class InsertModuleServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if(request.getParameterMap().containsKey("matricula") && request.getParameterMap().containsKey("title")){
-            moduleMng.createModule(new Module(request.getParameter("title"),request.getParameter("matricula")));
+        String path="/offertaFormativaJSP/amministratore/";
+        if(request.getParameterMap().containsKey("matricula") && request.getParameterMap().containsKey("classTitle")){
+                        String matricula = request.getParameter("matricula");
+                        request.setAttribute("matricula", matricula);
+                        request.setAttribute("title", request.getParameter("classTitle"));
+                        request.setAttribute("teaching",teachingMng.readTeaching(matricula));
+                        request.getRequestDispatcher(path+"modifyClass.jsp").forward(request, response);
         }
     }
 

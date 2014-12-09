@@ -1,4 +1,4 @@
-package it.unisa.offerta_formativa.servlet;
+package it.unisa.offerta_formativa.servlet.getter;
 
 import java.io.IOException;
 
@@ -11,24 +11,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import it.unisa.offerta_formativa.beans.Curriculum;
+import it.unisa.offerta_formativa.beans.Cycle;
 import it.unisa.offerta_formativa.manager.CurriculumManager;
+import it.unisa.offerta_formativa.manager.CycleManager;
 
 /**
  * Servlet implementation class GetDepartmentServlet
  */
-@WebServlet("/GetCurriculumServlet")
-public class GetCurriculumServlet extends HttpServlet {
+@WebServlet("/GetCycleServlet")
+public class GetCycleServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private CurriculumManager currMng;
+    private CycleManager cycleMng;
     private ServletContext context;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GetCurriculumServlet() {
+    public GetCycleServlet() {
         super();
-        currMng = CurriculumManager.getInstance();
+        cycleMng = CycleManager.getInstance();
         // TODO Auto-generated constructor stub
     }
 
@@ -43,17 +45,17 @@ public class GetCurriculumServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        if (request.getParameterMap().containsKey("degreeMatricula")) {
-            response.setContentType("text/plain");
-            response.setCharacterEncoding("UTF-8");
-            int i = 1;
-            String toRet = "<option value=0></option>";
-            for (Curriculum c : currMng.getCurriculumByDegree(request.getParameter("degreeMatricula"))) {
-                toRet += "<option value=" + c.getMatricula() + ">" + c.getTitle() + "</option>";
-                i++;
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        String toRet = "<option value=0>Seleziona il ciclo</option>";
+        if (request.getParameterMap().containsKey("cycleNumber")) {
+            Cycle c = cycleMng.readCycle(Integer.parseInt(request.getParameter("cycleNumber")));
+        }else{ //get all cycles
+            for (Cycle c : cycleMng.getAllCycles()) {
+                toRet+="<option value="+c.getNumber()+">"+c.getTitle()+"</option>";
             }
-            response.getWriter().write(toRet);
         }
+        response.getWriter().write(toRet);
     }
 
     /**

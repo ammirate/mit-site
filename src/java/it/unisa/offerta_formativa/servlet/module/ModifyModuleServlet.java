@@ -3,13 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unisa.offerta_formativa.servlet;
+package it.unisa.offerta_formativa.servlet.module;
 
-import it.unisa.offerta_formativa.manager.ClassManager;
-import it.unisa.offerta_formativa.manager.CycleManager;
-import it.unisa.offerta_formativa.manager.DepartmentManager;
+import it.unisa.offerta_formativa.beans.Module;
 import it.unisa.offerta_formativa.manager.ModuleManager;
-import it.unisa.offerta_formativa.manager.TeachingManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -22,18 +19,12 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Alessandro
  */
-@WebServlet(name = "DeleteModuleServlet", urlPatterns = {"/DeleteModuleServlet"})
-public class DeleteModuleServlet extends HttpServlet {
+@WebServlet(name = "ModifyModuleServlet", urlPatterns = {"/ModifyModuleServlet"})
+public class ModifyModuleServlet extends HttpServlet {
+    private final ModuleManager moduleMng;
 
-    
-    private ModuleManager moduleMng;
-    private ClassManager classMng;
-    TeachingManager teachingMng;
-    public DeleteModuleServlet() {
-        super();
+    public ModifyModuleServlet() {
         moduleMng = ModuleManager.getInstance();
-        classMng = ClassManager.getInstance();
-        teachingMng = TeachingManager.getInstance();
     }
 
     
@@ -50,7 +41,7 @@ public class DeleteModuleServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            doPost(request,response);
+            doPost(request, response);
     }
 
     /**
@@ -64,14 +55,9 @@ public class DeleteModuleServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            String path="/offertaFormativaJSP/amministratore/";
-            if(request.getParameterMap().containsKey("matricula")){
-                moduleMng.deleteModule(request.getParameter("title"), request.getParameter("matricula"));
+            if(request.getParameterMap().containsKey("matricula") && (request.getParameterMap().containsKey("oldModuleTitle"))){
+                moduleMng.updateModule(new Module(request.getParameter("oldModuleTitle"),request.getParameter("matricula")), request.getParameter("moduleTitle"));
             }
-            request.setAttribute("teaching", teachingMng.readTeaching(request.getParameter("matricula")));
-            request.setAttribute("modules", moduleMng.getModulesByTeaching(request.getParameter("matricula")));
-            request.setAttribute("classes", classMng.getClassesByTeaching(request.getParameter("matricula")));
-            request.getRequestDispatcher("/offertaFormativaJSP/amministratore/listClassModule.jsp").forward(request, response);
     }
 
     /**

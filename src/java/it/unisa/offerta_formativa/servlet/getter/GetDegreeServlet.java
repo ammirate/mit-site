@@ -1,4 +1,4 @@
-package it.unisa.offerta_formativa.servlet;
+package it.unisa.offerta_formativa.servlet.getter;
 
 import java.io.IOException;
 

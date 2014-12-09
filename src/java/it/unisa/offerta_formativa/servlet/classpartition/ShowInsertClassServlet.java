@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unisa.offerta_formativa.servlet;
+package it.unisa.offerta_formativa.servlet.classpartition;
 
-import it.unisa.offerta_formativa.beans.ClassPartition;
-import it.unisa.offerta_formativa.manager.ClassManager;
+import it.unisa.offerta_formativa.servlet.module.*;
+import it.unisa.offerta_formativa.manager.CycleManager;
+import it.unisa.offerta_formativa.manager.DepartmentManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -19,15 +20,18 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Alessandro
  */
-@WebServlet(name = "InsertClassServlet", urlPatterns = {"/InsertClassServlet"})
-public class InsertClassServlet extends HttpServlet {
-    private final ClassManager classMng;
+@WebServlet(name = "ShowInsertClassServlet", urlPatterns = {"/ShowInsertClassServlet"})
+public class ShowInsertClassServlet extends HttpServlet {
+    private final DepartmentManager deptMng;
+    private final CycleManager cycleMng;
 
-    public InsertClassServlet() {
-        classMng = ClassManager.getInstance();
+    public ShowInsertClassServlet() {
+        deptMng = DepartmentManager.getInstance();
+        cycleMng = CycleManager.getInstance();
     }
-    
-    
+
+       
+  
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -41,7 +45,7 @@ public class InsertClassServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doPost(request,response);
+        doPost(request, response);
     }
 
     /**
@@ -55,9 +59,10 @@ public class InsertClassServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if(request.getParameterMap().containsKey("matricula") && request.getParameterMap().containsKey("title")){
-            classMng.createClass(new ClassPartition(request.getParameter("matricula"),request.getParameter("title")));
-        }
+        String path="/offertaFormativaJSP/amministratore/";
+        request.setAttribute("departments",deptMng.getAllDepartments());
+        request.setAttribute("cycles", cycleMng.getAllCycles());
+        request.getRequestDispatcher(path+"insertClass.jsp").forward(request, response);
     }
 
     /**

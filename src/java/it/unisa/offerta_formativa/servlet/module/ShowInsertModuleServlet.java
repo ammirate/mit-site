@@ -3,13 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unisa.offerta_formativa.servlet;
+package it.unisa.offerta_formativa.servlet.module;
 
-import it.unisa.offerta_formativa.manager.ClassManager;
 import it.unisa.offerta_formativa.manager.CycleManager;
 import it.unisa.offerta_formativa.manager.DepartmentManager;
-import it.unisa.offerta_formativa.manager.ModuleManager;
-import it.unisa.offerta_formativa.manager.TeachingManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -22,22 +19,19 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Alessandro
  */
-@WebServlet(name = "DeleteClassServlet", urlPatterns = {"/DeleteClassServlet"})
-public class DeleteClassServlet extends HttpServlet {
+@WebServlet(name = "ShowInsertModuleServlet", urlPatterns = {"/ShowInsertModuleServlet"})
+public class ShowInsertModuleServlet extends HttpServlet {
+    private final DepartmentManager deptMng;
+    private final CycleManager cycleMng;
 
-    
-    private ModuleManager moduleMng;
-    private ClassManager classMng;
-    TeachingManager teachingMng;
-    public DeleteClassServlet() {
-        super();
-        moduleMng = ModuleManager.getInstance();
-        classMng = ClassManager.getInstance();
-        teachingMng = TeachingManager.getInstance();
+    public ShowInsertModuleServlet() {
+        deptMng = DepartmentManager.getInstance();
+        cycleMng = CycleManager.getInstance();
     }
 
+       
+  
     
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -50,7 +44,7 @@ public class DeleteClassServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            doPost(request,response);
+        doPost(request, response);
     }
 
     /**
@@ -64,14 +58,10 @@ public class DeleteClassServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            String path="/offertaFormativaJSP/amministratore/";
-            if(request.getParameterMap().containsKey("matricula")){
-                classMng.deleteClass(request.getParameter("title"), request.getParameter("matricula"));
-            }
-            request.setAttribute("teaching", teachingMng.readTeaching(request.getParameter("matricula")));
-            request.setAttribute("modules", moduleMng.getModulesByTeaching(request.getParameter("matricula")));
-            request.setAttribute("classes", classMng.getClassesByTeaching(request.getParameter("matricula")));
-            request.getRequestDispatcher("/offertaFormativaJSP/amministratore/listClassModule.jsp").forward(request, response);
+        String path="/offertaFormativaJSP/amministratore/";
+        request.setAttribute("departments",deptMng.getAllDepartments());
+        request.setAttribute("cycles", cycleMng.getAllCycles());
+        request.getRequestDispatcher(path+"insertModule.jsp").forward(request, response);
     }
 
     /**

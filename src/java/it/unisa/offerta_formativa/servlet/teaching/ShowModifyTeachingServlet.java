@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unisa.offerta_formativa.servlet;
+package it.unisa.offerta_formativa.servlet.teaching;
 
 import it.unisa.offerta_formativa.beans.Curriculum;
 import it.unisa.offerta_formativa.beans.Degree;
@@ -24,25 +24,23 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Alessandro
  */
-@WebServlet(name = "ShowTeachingPagesServlet", urlPatterns = {"/ShowTeachingPagesServlet"})
-public class ShowTeachingPagesServlet extends HttpServlet {
-    
-    private DepartmentManager deptMng;
-    private CycleManager cycleMng;
-    private DegreeManager degreeMng;
-    private TeachingManager teachingMng;
-    private CurriculumManager currMng;
-    
-    public ShowTeachingPagesServlet() {
-        super();
-        deptMng = DepartmentManager.getInstance();
-        cycleMng = CycleManager.getInstance();
+@WebServlet(name = "ShowModifyTeachingServlet", urlPatterns = {"/ShowModifyTeachingServlet"})
+public class ShowModifyTeachingServlet extends HttpServlet {
+    private final DegreeManager degreeMng;
+    private final CycleManager cycleMng;
+    private final TeachingManager teachingMng;
+    private final CurriculumManager currMng;
+    private final DepartmentManager deptMng;
+
+    public ShowModifyTeachingServlet() {
         degreeMng = DegreeManager.getInstance();
+        cycleMng = CycleManager.getInstance();
         teachingMng = TeachingManager.getInstance();
         currMng = CurriculumManager.getInstance();
+        deptMng = DepartmentManager.getInstance();
     }
 
-   
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -56,7 +54,7 @@ public class ShowTeachingPagesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            doPost(request,response);
+        doPost(request,response);
     }
 
     /**
@@ -70,20 +68,8 @@ public class ShowTeachingPagesServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            String path="/offertaFormativaJSP/amministratore/";
-            String page="";
-            if(request.getParameterMap().containsKey("page")){
-                page =request.getParameter("page");
-                request.setAttribute("departments",deptMng.getAllDepartments());
-                request.setAttribute("cycles", cycleMng.getAllCycles());
-                if(page.equalsIgnoreCase("insert")){
-                    request.getRequestDispatcher(path+"insertTeaching.jsp").forward(request, response);
-                }
-                if(page.equalsIgnoreCase("list")){
-                    request.getRequestDispatcher(path+"listTeaching.jsp").forward(request, response);
-                }
-                if(page.equalsIgnoreCase("modify")){
-                    if(request.getParameterMap().containsKey("matricula") && request.getParameterMap().containsKey("curriculumMatricula")){
+        String path="/offertaFormativaJSP/amministratore/";
+        if(request.getParameterMap().containsKey("matricula") && request.getParameterMap().containsKey("curriculumMatricula")){
                         String matricula = request.getParameter("matricula");
                         String curriculumMatricula = request.getParameter("curriculumMatricula");
                         Curriculum c = currMng.readCurriculum(curriculumMatricula);
@@ -94,9 +80,7 @@ public class ShowTeachingPagesServlet extends HttpServlet {
                         request.setAttribute("cycle", cycleMng.readCycle(d.getCycle()));
                         request.setAttribute("department", deptMng.readDepartment(d.getDepartmentAbbreviation()));
                         request.getRequestDispatcher(path+"modifyTeaching.jsp").forward(request, response);
-                    }
-                }
-            }
+        }
     }
 
     /**
