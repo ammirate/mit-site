@@ -2,6 +2,9 @@
     Document   : ShowTeachingOfferList
     Author     : Davide
 --%>
+<%@page import="java.util.Collections"%>
+<%@page import="java.util.Arrays"%>
+<%@page import="java.util.List"%>
 <%@page import="it.unisa.offerta_formativa.beans.Cycle"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="it.unisa.offerta_formativa.beans.Curriculum"%>
@@ -199,50 +202,16 @@
 
         </nav>
         <div class="page-container">
-            <!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
 
-            <!-- Add "fixed" class to make the sidebar fixed always to the browser viewport. -->
-            <!-- Adding class "toggle-others" will keep only one menu item open at a time. -->
-            <!-- Adding class "collapsed" collapse sidebar root elements and show only icons. -->
-            <div class="sidebar-menu toggle-others">
-                <div class="sidebar-menu-inner">
-                    <ul id="main-menu" class="main-menu">
-                        <!-- add class "multiple-expanded" to allow multiple submenus to open -->
-                        <!-- class "auto-inherit-active-class" will automatically add "active" class for parent elements who are marked already with class "active" -->
-                        <li class="opened active"><a href="#"> <i
-                                    class="linecons-cog"></i> <span class="title">Home</span>
-                            </a></li>
-                        <li id="funzionalita1Permission_0"><a href="#"> <i
-                                    class="linecons-cog"></i> <span class="title">Funzionalit&agrave;
-                                    01</span>
-                            </a></li>
-                        <li><a href="#"> <i class="linecons-note"></i> <span
-                                    class="title">Funzionalit&agrave; 02</span>
-                            </a></li>
-                        <li id="funzionalita3Permission_0"><a href="#"> <i
-                                    class="linecons-mail"></i> <span class="title">Funzionalit&agrave;
-                                    03</span>
-                            </a>
-                            <ul>
-                                <li><a href="#"> <span class="title">INSERT</span>
-                                    </a></li>
-                                <li><a href="#"> <span class="title">DELETE</span>
-                                    </a></li>
-                                <li><a href="#"> <span class="title">VIEW</span>
-                                    </a></li>
-                            </ul></li>
-                    </ul>
-                </div>
-            </div>
+            <%@include file="/offertaFormativaJSP/amministratore/lateralMenuAdmin.jsp" %>
 
             <div class="main-content">
                 <div class="row">
                     <div class="col-sm-1"></div>
                     <div class="col-sm-10">
                         <div class="panel panel-default">
-                            <div class="panel-heading">
-
-                                <p style=" alignment-baseline: central;"> Offerta Formativa </p>
+                            <div class="panel-heading" style="text-align: center; ">
+                                Offerta Formativa
                             </div>
                             <div class="panel-body">
 
@@ -272,39 +241,58 @@
 
                                 <%
                                     if (!map.isEmpty()) { %> <ul id="list" class="col-sm-12" name="list_all"> <%
-                                    for (Department d : map.keySet()) {
-                                    %><li class="list-group-item" style="cursor: pointer; font-size: large;"><span><%out.print("+ " + d.getTitle());%></span><ul>
+                                    // for (Department d : map.keySet()) {
+                                    List<Department> deps = new ArrayList<Department>(map.keySet());
+                                    Collections.sort(deps);
+                                    for (int i = 0; i < deps.size(); i++) {
+                                    Department d = deps.get(i);
+                                    %><li class="list-group-item" style="font-size: large; color: black;"><span style="cursor: pointer;"><%out.print(d.getTitle());%></span><ul>
                                             <% if (map.get(d).keySet().size() != 0) {
-                                                    for (Degree de : map.get(d).keySet()) {
-                                                        if(de.isActive()){
-                                                        for (Cycle cy : cycle) {
-                                                            if (cy.getNumber() == de.getCycle()) {
-                                                                cycleTitle= cy.getTitle();
+//                                                    for (Degree de : map.get(d).keySet()) {
+                                                    List<Degree> degs = new ArrayList<Degree>(map.get(d).keySet());
+                                                    Collections.sort(degs);
+                                                    for (int j=0;j<degs.size();j++) {
+                                                        Degree de= degs.get(j);
+                                                        if (de.isActive()) {
+                                                            for (Cycle cy : cycle) {
+                                                                if (cy.getNumber() == de.getCycle()) {
+                                                                    cycleTitle = cy.getTitle();
+                                                                }
                                                             }
-                                                        }
                                             %>
-                                            <li style="cursor: pointer; font-size: medium;"><span><%out.print(cycleTitle + " - " + de.getTitle());%></span><ul>
+                                            <li style="font-size: medium; color: black"><span style="cursor: pointer;"><%out.print(cycleTitle + " - " + de.getTitle());%></span><ul>
                                                     <%  if (map.get(d).get(de).keySet().size() != 0) {
-                                                            for (Curriculum cu : map.get(d).get(de).keySet()) {
-                                                                if(cu.isActive()){
+                                                            List<Curriculum> currs = new ArrayList<Curriculum>(map.get(d).get(de).keySet());
+                                                            Collections.sort(currs);
+                                                            //for (Curriculum cu : map.get(d).get(de).keySet()) {
+                                                            for (int k=0;k<currs.size();k++) {
+                                                                Curriculum cu=currs.get(k);
+                                                                if (cu.isActive()) {
                                                     %>
-                                                    <li style="cursor: pointer; font-size: medium;"><span><%out.print("Curriculum - " + cu.getTitle());%></span><ul>
+                                                    <li style="font-size: medium; color: black"><span style="cursor: pointer;"><%out.print("Curriculum - " + cu.getTitle());%></span><ul>
                                                             <%
                                                                 if (map.get(d).get(de).get(cu).size() != 0) {
-                                                                    for (Teaching te : map.get(d).get(de).get(cu)) {
-                                                                        if(te.isActive()){
+                                                                    List<Teaching> teachs = new ArrayList<Teaching>(map.get(d).get(de).get(cu));
+                                                                    Collections.sort(teachs);
+                                                                    //for (Teaching te : map.get(d).get(de).get(cu)) {
+                                                                        for (int y=0;y<teachs.size();y++) {
+                                                                                Teaching te=teachs.get(y);
+                                                                        if (te.isActive()) {
                                                             %>
-                                                            <li style="cursor: pointer; font-size: medium;"><span><a href="${pageContext.request.contextPath}/GetSyllabusServlet?teaching_matricula=<%out.print(te.getMatricula());%>"><%out.print("Corso di " + te.getTitle());%></a></span></li>
-                                                                        <%} }
+                                                            <li style="font-size: medium; color: black"><span style="cursor: pointer;"><a href="${pageContext.request.contextPath}/GetSyllabusServlet?teaching_matricula=<%out.print(te.getMatricula());%>"><%out.print("Corso di " + te.getTitle());%></a></span></li>
+                                                                    <%}
                                                                             }
+                                                                        }
 
-                                                                        %>
+                                                                    %>
                                                         </ul></li>  
-                                                        <%                                                       }     }
+                                                        <%                                                       }
+                                                                }
                                                             }  %>      
                                                 </ul></li>
                                                 <%
-                                                        } }
+                                                            }
+                                                        }
                                                     }
                                                 %>
 

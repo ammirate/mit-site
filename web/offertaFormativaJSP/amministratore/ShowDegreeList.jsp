@@ -317,7 +317,7 @@
                                 <div> <br> </div><div> <br> </div>    
 
                                 <div class="row col-sm-12">
-                                    <div class="table table-striped"> 
+                                    <div class="table table-responsive"> 
                                         <table  name="degree" class="table table-striped" id="table_degree"></table>
                                     </div>
                                 </div>

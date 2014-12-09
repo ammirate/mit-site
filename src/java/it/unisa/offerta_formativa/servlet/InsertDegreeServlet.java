@@ -63,11 +63,14 @@ public class InsertDegreeServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        createDegree(request.getParameter("matricula"),
-        request.getParameter("title"),
-        request.getParameter("link"),
-        Integer.parseInt(request.getParameter("idCycle")),
-        request.getParameter("idDepartment"));
+//        createDegree(request.getParameter("matricula"),
+//        request.getParameter("title"),
+//        request.getParameter("link"),
+//        Integer.parseInt(request.getParameter("idCycle")),
+//        request.getParameter("idDepartment"));
+          request.getRequestDispatcher("/InsertDegree.jsp").forward(request, response);
+ 
+        
     }
 
 }

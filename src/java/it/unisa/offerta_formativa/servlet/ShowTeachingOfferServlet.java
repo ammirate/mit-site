@@ -64,20 +64,24 @@ public class ShowTeachingOfferServlet extends HttpServlet {
         HashMap< Department, HashMap<Degree, HashMap<Curriculum, ArrayList<Teaching>>>> map;
         map = new HashMap< Department, HashMap< Degree, HashMap<Curriculum, ArrayList<Teaching>>>>();
 
-        for (Department d : dm.getAllDepartments()) {
-
+//        for (Department d : dm.getAllDepartments()) {
+        for (int i = 0; i < dm.getAllDepartments().size(); i++) {
+            Department d = dm.getAllDepartments().get(i);
             map.put(d, new HashMap< Degree, HashMap<Curriculum, ArrayList<Teaching>>>());
 
-            for (Degree deg : degreeMng.getDegreesByDepartment(d.getAbbreviation())) {
-
+//            for (Degree deg : degreeMng.getDegreesByDepartment(d.getAbbreviation())) {
+            for (int j = 0; j < degreeMng.getDegreesByDepartment(d.getAbbreviation()).size(); j++) {
+                Degree deg = degreeMng.getDegreesByDepartment(d.getAbbreviation()).get(j);
                 map.get(d).put(deg, new HashMap<Curriculum, ArrayList<Teaching>>());
 
-                for (Curriculum c : cm.getCurriculumByDegree(deg.getMatricula())) {
-
+//                for (Curriculum c : cm.getCurriculumByDegree(deg.getMatricula())) {
+                for (int k = 0; k < cm.getCurriculumByDegree(deg.getMatricula()).size(); k++) {
+                    Curriculum c = cm.getCurriculumByDegree(deg.getMatricula()).get(k);
                     map.get(d).get(deg).put(c, new ArrayList<Teaching>());
 
-                    for (Teaching t : tm.getTeachingsByCurriculum(c.getMatricula())) {
-                      
+//                    for (Teaching t : tm.getTeachingsByCurriculum(c.getMatricula())) {
+                    for (int y = 0; y < tm.getTeachingsByCurriculum(c.getMatricula()).size(); y++) {
+                        Teaching t = tm.getTeachingsByCurriculum(c.getMatricula()).get(y);
                         map.get(d).get(deg).get(c).add(t);
                     }
                 }

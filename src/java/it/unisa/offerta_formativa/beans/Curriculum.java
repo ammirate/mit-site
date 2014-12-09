@@ -4,7 +4,7 @@ package it.unisa.offerta_formativa.beans;
  *
  * @author Antonio
  */
-public class Curriculum {
+public class Curriculum implements Comparable<Curriculum> {
 
     /**
      * title of the curriculum
@@ -105,5 +105,9 @@ public class Curriculum {
         }
         return false;
     }
+
+    @Override
+    public int compareTo(Curriculum o) {
+            return this.getTitle().compareTo(o.getTitle());    }
 
 }

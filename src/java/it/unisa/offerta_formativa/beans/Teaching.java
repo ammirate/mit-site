@@ -5,13 +5,12 @@
  */
 package it.unisa.offerta_formativa.beans;
 
-import java.util.ArrayList;
 
 /**
  *
  * @author Alessandro, Antonio
  */
-public class Teaching {
+public class Teaching implements Comparable<Teaching>{
 
     /**
      * title of the course
@@ -204,6 +203,11 @@ public class Teaching {
 
     public void setEsse3Content(String esse3Content) {
         this.esse3Content = esse3Content;
+    }
+
+    @Override
+    public int compareTo(Teaching o) {
+         return this.getTitle().compareTo(o.getTitle());
     }
 
 }
