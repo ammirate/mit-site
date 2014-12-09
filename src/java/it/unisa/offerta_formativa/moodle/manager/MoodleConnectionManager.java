@@ -6,7 +6,6 @@
 package it.unisa.offerta_formativa.moodle.manager;
 
 import it.unisa.offerta_formativa.manager.DBConnector;
-import it.unisa.tp.model.interfaces.Department;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;

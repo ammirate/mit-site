@@ -5,7 +5,7 @@ package it.unisa.offerta_formativa.beans;
  * 
  * @author Antonio
  */
-public class Department {
+public class Department implements Comparable<Department>{
 
 	private String title;
 	private String urlMoodle;
@@ -78,6 +78,12 @@ public class Department {
 		this.getUrlMoodle().equalsIgnoreCase(obj.getUrlMoodle())){return true;}
             return false;
 	}
+
+    @Override
+    public int compareTo(Department dep) {
+         return this.getTitle().compareTo(dep.getTitle());
+
+    }
 	
 	
 	
