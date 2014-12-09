@@ -1,27 +1,20 @@
 <%-- 
-    Document   : listClassModule
+    Document   : modifyClass
     Author     : Alessandro
 --%>
-<%@page import="it.unisa.offerta_formativa.beans.ProfModuleClass"%>
-<%@page import="it.unisa.offerta_formativa.beans.Person"%>
-<%@page import="it.unisa.offerta_formativa.beans.Module"%>
-<%@page import="it.unisa.offerta_formativa.beans.ClassPartition"%>
 <%@page import="it.unisa.offerta_formativa.beans.Teaching"%>
 <%@page import="it.unisa.offerta_formativa.beans.Curriculum"%>
 <%@page import="it.unisa.offerta_formativa.beans.Degree"%>
 <%@page import="it.unisa.offerta_formativa.beans.Department"%>
 <%@page import="it.unisa.offerta_formativa.beans.Cycle"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="it.unisa.offerta_formativa.beans.Department"%>
-<%@page import="it.unisa.offerta_formativa.beans.Cycle"%>
-<%@page import="java.util.ArrayList"%>
-<%! ArrayList<ClassPartition> classes;%>
-<%! ArrayList<Module> modules;%>
-<%! ArrayList<Person> professors;%>
-<%! ArrayList<ProfModuleClass> profmoduleclass;
-Teaching teaching;
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<%! 
+public String title;
+public Teaching teaching;
 %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,12 +50,10 @@ Teaching teaching;
 
 </head>
 <body class="page-body">
-    <% 	classes = (ArrayList<ClassPartition>) request.getAttribute("classes");
-        modules = (ArrayList<Module>) request.getAttribute("modules");
-        profmoduleclass= (ArrayList<ProfModuleClass>) request.getAttribute("profmoduleclass");
-        teaching =(Teaching) request.getAttribute("teaching");
-    %>
-	
+        <%
+                title = (String)request.getAttribute("title");
+                teaching = (Teaching) request.getAttribute("teaching");
+	%>
 	<nav class="navbar horizontal-menu navbar-fixed-top">
 		<!-- set fixed position by adding class "navbar-fixed-top" -->
 
@@ -202,107 +193,33 @@ Teaching teaching;
 					});
 				});
 			</script>
-
-                            
-                        <h3><% out.print(teaching.getMatricula()+" - "+teaching.getTitle()+"");%></h3>
-                        <h1></h1>
-                                <div class="row ">
-                                    <div class="col-sm-1"></div>
-                                    <div class=" col-sm-10">
-                                    <div class="panel panel-default clearfix">
-                                        <!-- Default panel contents -->
-                                        <div class="panel-heading">Classi associate all'insegnamento</div>
-                                        <div class="panel-body ">
-                                        <!-- Table -->
-                                        <table class="table-responsive col-sm-12" id="tableClasses">
-                                            <thead>
-                                                <tr>
-                                                    <th>Titolo</th>
-                                                    <th></th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="tablebodyClasses">
-                                                <%
-                                                    for(int i=0;i<classes.size();i++){
-                                                        out.print("<tr><td>"+classes.get(i).getTitle()+"</td><td>");
-                                                        out.print("<a href='ShowPagesServlet?page=modifyClass&matricula="+classes.get(i).getTeachingMatricula()+"&classTitle="+classes.get(i).getTitle()+"'>Modifica</a>");
-                                                        if(classes.size()==1)out.print("</td><td>Elimina</td></tr>");
-                                                        else out.print("</td><td><a href='DeleteClassServlet?matricula="+teaching.getMatricula()+"&title="+classes.get(i).getTitle()+"Elimina</td></tr>");
-                                                    }
-
-                                                %>
-                                            </tbody>
-                                        </table>
-                                        </div>
-                                        
-                                    </div>
-                                    </div>
-                                    <div class="col-sm-1"></div>
-                                </div>
-                                <div class="row clearfix">
-                                    <div class="col-sm-1"></div>
-                                    <div class="col-sm-10">
-                                        <div class="panel panel-default">
-                                            <!-- Default panel contents -->
-                                            <div class="panel-heading">Moduli associati all'insegnamento</div>
-                                                <!-- Table -->
-                                                <div class="panel-body">
-                                                <table class="table-responsive col-sm-12" id="tableModules">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Titolo</th>
-                                                            <th></th>
-                                                            <th></th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="tablebodyModules">
-                                                        <%
-                                                            for(int i=0;i<modules.size();i++){
-                                                                out.println("<tr><td>"+modules.get(i).getTitle()+"</td><td><a href='ShowPagesServlet?page=modifyModule&matricula="+modules.get(i).getTeachingMatricula()+"&moduleTitle="+modules.get(i).getTitle()+"'>Modifica</a></td><td>");
-                                                                if(modules.size()==1)out.print("Elimina</td></tr>");
-                                                                else out.print("<a href='DeleteModuleServlet?matricula="+teaching.getMatricula()+"&title="+modules.get(i).getTitle()+"'>Elimina</a></td></tr>");
-                                                            }
-                                                        %>
-                                                    </tbody>
-                                                </table>
+                        <div class="row">
+                            <form class="form" action="ModifyModuleServlet" method="post">
+                                <div class="col-sm-1"></div>
+                                <div class="panel panel-default col-sm-10 clearfix">
+                                    <!-- Default panel contents -->
+                                    <div class="panel-heading"><%out.print(teaching.getMatricula() + " - " + teaching.getTitle());%></div>
+                                    <div class="panel-body ">
+                                        <form action="InsertTeachingServlet" method="post" role="form" >
+                                            <div class="row">
+                                                <div class="form-group col-sm-9">
+                                                    <label for="title">Nome Module:</label>
+                                                    <input type="text" class="form-control" name="moduleTitle" value="<%out.print(title);%>">
                                                 </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-1"></div>
-                                </div>
-                                <div class="row clearfix">
-                                    <div class="col-sm-1"></div>
-                                    <div class="col-sm-10">
-                                        <div class="panel panel-default">
-                                            <!-- Default panel contents -->
-                                            <div class="panel-heading">Associazione dei Docenti</div>
-                                                <!-- Table -->
-                                                <div class="panel-body">
-                                                <table class="table-responsive col-sm-12" id="tableModules">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Classe</th>
-                                                            <th>Modulo</th>
-                                                            <th>Professore</th>
-                                                            <th></th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="tablebodyAssociation">
-                                                        <%
-                                                            //for(int i=0;i<profmoduleclass.size();i++){
-                                                              //  out.println("<tr><td>"+profmoduleclass.get(i).getClassTitle()+"</td><td>"+profmoduleclass.get(i).getModuleTitle()+"</td><td>"+profmoduleclass.get(i).getProfEmail()+"</td></tr>");
-                                                            //}
-                                                        %>
-                                                        
-                                                    </tbody>
-                                                </table>
+                                                <input type="text" hidden="true" name="oldModuleTitle" value=" <%out.print(title);%> ">
+                                                <input type="text" hidden="true" name="matricula" value=" <%out.print(teaching.getMatricula());%> ">
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-sm-2">
+                                                    <input type="submit" class="form-control" value="Modifica">
                                                 </div>
-                                        </div>
+                                            </div>
+                                        </form>
                                     </div>
-                                    <div class="col-sm-1"></div>
-                                </div>                    
-			
+                                </div>
+                                <div class="col-sm-1"></div>
+                            </form>
+                        </div>
 			<!-- Main Footer -->
 			<!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->
 			<!-- Add class "sticky" to  always stick the footer to the end of page (if page contents is small) -->
@@ -362,6 +279,63 @@ Teaching teaching;
 	    }});
         }
 	</script>
+        <script type="text/javascript">
+        function loadModules(i){
+            var stringa="<h3>Inserisci Moduli</h3>";
+            for(j=1;j<=i;j++){
+                stringa+="<div class='row'><div class='form-group col-sm-4'><input type='text' name='moduleName"+j+"' id='moduleName"+j+"' placeholder='Inserisci il modulo "+j+"' class='form-control' onkeyup='loadAssociation();'></div></div>";
+            }
+            $("#modules").html(stringa);
+            loadAssociation();
+        }
+        function loadClasses(i){
+            var stringa="<h3>Inserisci Classi</h3>";
+            for(j=1;j<=i;j++){
+                stringa+="<div class='row'><div class='form-group col-sm-4'><input type='text' name='className"+j+"' id='className"+j+"' placeholder='Inserisci la classe "+j+"' class='form-control' onkeyup='loadAssociation();'></div></div>";
+            }
+            $("#classes").html(stringa);
+            loadAssociation();
+        }
+        function loadAssociation(){
+            var stringa ="<h2>Associa Docente</h2>";
+            
+            //alert($("#moduleName1").val());
+            //$("#lastDiv").html($("#moduleName1").val());
+            var moduleNum=$("#moduleNumber option:selected").val();
+            var classNum = $("#classNumber option:selected").val();
+                for(j=1;j<=classNum;j++){
+                    stringa+="<h3>Associa Docenti a Classe "+j+" - "+ $("#className"+j).val() +"</h3>";
+                    for(i=1;i<=moduleNum;i++){
+                        stringa+="<div class='row'>";
+                        stringa+="<div class='form-group col-sm-2'><label for='module'>"+$("#moduleName"+i).val()+"</label><select class='form-control' name='docente"+j+"-"+i+"' id='docente"+j+"-"+i+"'></select></div>";
+                        stringa+="</div>";
+                    }
+                }
+            $("#lastDiv").html(stringa);
+            //$.ajax({url:"GetProfessorServlet?abbreviation="+$("#idDepartment").val(),success:function(result){
+            $.ajax({url:"GetProfessorServlet?abbreviation=1",success:function(result){
+                for(j=1;j<=classNum;j++){
+                    for(i=1;i<=moduleNum;i++){
+                        $("#docente"+j+"-"+i).html(result);
+                    }
+                }
+            }});
+        }
+        function loadProfessor(){
+            var string="";
+            $.ajax({url:"GetProfessorServlet?abbreviation="+$("#idDepartment").val(),success:function(result){
+                string=result;
+            }});
+            var moduleNum=$("#moduleNumber option:selected").val();
+            var classNum = $("#classNumber option:selected").val();
+            for(j=1;j<=classNum;j++){
+                for(i=1;i<=moduleNum;i++){
+                    //$("#docente"+i+"-"+j+).html(string);
+                }
+            }
+        }
+        
+        </script>
 	<script src="assets/js/bootstrap.min.js"></script>
 	<script src="assets/js/TweenMax.min.js"></script>
 	<script src="assets/js/resizeable.js"></script>

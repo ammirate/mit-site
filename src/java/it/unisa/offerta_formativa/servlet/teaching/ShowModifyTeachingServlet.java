@@ -3,16 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unisa.offerta_formativa.servlet;
+package it.unisa.offerta_formativa.servlet.teaching;
 
 import it.unisa.offerta_formativa.beans.Curriculum;
 import it.unisa.offerta_formativa.beans.Degree;
-import it.unisa.offerta_formativa.manager.ClassManager;
 import it.unisa.offerta_formativa.manager.CurriculumManager;
 import it.unisa.offerta_formativa.manager.CycleManager;
 import it.unisa.offerta_formativa.manager.DegreeManager;
 import it.unisa.offerta_formativa.manager.DepartmentManager;
-import it.unisa.offerta_formativa.manager.ModuleManager;
 import it.unisa.offerta_formativa.manager.TeachingManager;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,29 +24,23 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Alessandro
  */
-@WebServlet(name = "ShowPagesServlet", urlPatterns = {"/ShowPagesServlet"})
-public class ShowPagesServlet extends HttpServlet {
-    
-    private DepartmentManager deptMng;
-    private CycleManager cycleMng;
-    private DegreeManager degreeMng;
-    private TeachingManager teachingMng;
-    private CurriculumManager currMng;
-    private final ModuleManager modMng;
-    private final ClassManager classMng;
-    
-    public ShowPagesServlet() {
-        super();
-        deptMng = DepartmentManager.getInstance();
-        cycleMng = CycleManager.getInstance();
+@WebServlet(name = "ShowModifyTeachingServlet", urlPatterns = {"/ShowModifyTeachingServlet"})
+public class ShowModifyTeachingServlet extends HttpServlet {
+    private final DegreeManager degreeMng;
+    private final CycleManager cycleMng;
+    private final TeachingManager teachingMng;
+    private final CurriculumManager currMng;
+    private final DepartmentManager deptMng;
+
+    public ShowModifyTeachingServlet() {
         degreeMng = DegreeManager.getInstance();
+        cycleMng = CycleManager.getInstance();
         teachingMng = TeachingManager.getInstance();
         currMng = CurriculumManager.getInstance();
-        classMng = ClassManager.getInstance();
-        modMng = ModuleManager.getInstance();
+        deptMng = DepartmentManager.getInstance();
     }
 
-   
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -62,7 +54,7 @@ public class ShowPagesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            doPost(request,response);
+        doPost(request,response);
     }
 
     /**
@@ -76,28 +68,19 @@ public class ShowPagesServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            String path="/offertaFormativaJSP/amministratore/";
-            String page="";
-            if(request.getParameterMap().containsKey("page")){
-                page =request.getParameter("page");
-                if(page.equalsIgnoreCase("insert")){
-                    //request.getRequestDispatcher(path+"insertTeaching.jsp").forward(request, response);
-                }
-                if(page.equalsIgnoreCase("list")){
-                    if(request.getParameterMap().containsKey("matricula")){
-                        request.setAttribute("matricula", request.getParameter("matricula"));
-                        request.setAttribute("teachingTitle", request.getParameter("teachingTitle"));
-                        request.setAttribute("modules", modMng.getModulesByTeaching(request.getParameter("matricula")));
-                        request.setAttribute("classes", classMng.getClassesByTeaching(request.getParameter("matricula")));
-                        request.getRequestDispatcher(path+"listClassModule.jsp").forward(request, response);
-                    }
-                }
-                if(page.equalsIgnoreCase("modify")){
-                    if(request.getParameterMap().containsKey("matricula") && request.getParameterMap().containsKey("curriculumMatricula")){
-                        
-                    }
-                }
-            }
+        String path="/offertaFormativaJSP/amministratore/";
+        if(request.getParameterMap().containsKey("matricula") && request.getParameterMap().containsKey("curriculumMatricula")){
+                        String matricula = request.getParameter("matricula");
+                        String curriculumMatricula = request.getParameter("curriculumMatricula");
+                        Curriculum c = currMng.readCurriculum(curriculumMatricula);
+                        request.setAttribute("curriculum", c);
+                        request.setAttribute("teaching", teachingMng.readTeaching(matricula));
+                        Degree d = degreeMng.readDegree(c.getDegreeMatricula());
+                        request.setAttribute("degree",d);
+                        request.setAttribute("cycle", cycleMng.readCycle(d.getCycle()));
+                        request.setAttribute("department", deptMng.readDepartment(d.getDepartmentAbbreviation()));
+                        request.getRequestDispatcher(path+"modifyTeaching.jsp").forward(request, response);
+        }
     }
 
     /**

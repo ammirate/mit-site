@@ -4,11 +4,13 @@
     Author     : Alessandro
 --%>
 
+<%@page import="it.unisa.offerta_formativa.beans.Teaching"%>
 <%@page import="it.unisa.offerta_formativa.beans.Department"%>
 <%@page import="it.unisa.offerta_formativa.beans.Cycle"%>
 <%@page import="java.util.ArrayList"%>
 <%! ArrayList<Cycle> cycles;%>
 <%! ArrayList<Department> departments;%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -103,6 +105,7 @@
 <body class="page-body">
     <% 	cycles = (ArrayList<Cycle>) request.getAttribute("cycles");
         departments = (ArrayList<Department>) request.getAttribute("departments");
+        
     %>
 	
 	<nav class="navbar horizontal-menu navbar-fixed-top">
@@ -245,85 +248,90 @@
 				});
 			</script>
 
-			<div class="jumbotron">
-                            <form action="" method="post" role="form" class="form-horizontal">
-                            <div class="row">
-                                <div class="col-sm-1"></div>
-                                <div class="form-group col-sm-4">
-                                    <label for="department">Dipartimento:</label> 
-                                    <select name="department" id="idDepartment" class="form-control">
-                                        <%
-                                            if (departments.size() != 0)
-                                                for (Department d : departments) {
-                                        %><option value=<%out.print(d.getAbbreviation());%>>
-                                            <%
-                                                out.print(d.getTitle());
-                                            %>
-                                        </option>
-                                        <%
-                                            }
-                                        %>
-                                    </select>
-                                </div>
-                                <div class="col-sm-1"></div>
-                                <div class="form-group col-sm-4">
-                                    <label for="cycle">Ciclo:</label> 
-                                    <select name="cycle" class="form-control" onchange="loadDegree(this.value);">
-                                        <%
-                                            if (cycles.size() != 0)
-                                                for (Cycle c : cycles) {
-                                        %><option value=<%out.print(c.getNumber());%>>
-                                            <%
-                                                out.print(c.getTitle());
-                                            %>
-                                        </option>
-                                        <%
-                                            }
-                                        %>
-                                    </select>
+                        <div class="row">
+                            <div class="col-sm-1"></div>
+                            <div class="panel panel-default col-sm-10 clearfix">
+                                <!-- Default panel contents -->
+                                <div class="panel-heading">Visualizza Insegnamenti</div>
+                                <div class="panel-body ">
+                                    <form action="" method="post" role="form" class="form-horizontal">
+                                        <div class="row">
+                                            <div class="col-sm-1"></div>
+                                            <div class="form-group col-sm-4">
+                                                <label for="department">Dipartimento:</label> 
+                                                <select name="department" id="idDepartment" class="form-control">
+                                                    <%
+                                                        if (departments.size() != 0)
+                                                            for (Department d : departments) {
+                                                    %><option value=<%out.print(d.getAbbreviation());%>>
+                                                        <%
+                                                            out.print(d.getTitle());
+                                                        %>
+                                                    </option>
+                                                    <%
+                                                        }
+                                                    %>
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-1"></div>
+                                            <div class="form-group col-sm-4">
+                                                <label for="cycle">Ciclo:</label> 
+                                                <select name="cycle" class="form-control" onchange="loadDegree(this.value);">
+                                                    <option value=0>Seleziona il ciclo</option>
+                                                    <%
+                                                        if (cycles.size() != 0)
+                                                            for (Cycle c : cycles) {
+                                                    %><option value=<%out.print(c.getNumber());%>>
+                                                        <%
+                                                            out.print(c.getTitle());
+                                                        %>
+                                                    </option>
+                                                    <%
+                                                        }
+                                                    %>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-1"></div>
+                                            <div class="form-group col-sm-4">
+                                                <label for="degree">Corso di Laurea:</label> 
+                                                <select name="degree" class="form-control" id="degree" onchange="loadCurriculum(this.value);">
+
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-1"></div>
+
+                                            <div class="form-group col-sm-4">
+                                                <label for="curriculum">Curriculum:</label> 
+                                                <select name="curriculum" class="form-control" id="curriculum" onchange="loadTeaching(this.value);">
+
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                                <table class="table-responsive col-sm-12" id="table" style="display: none;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Matricola</th>
+                                                            <th>Nome</th>
+                                                            <th>Abbreviazione</th>
+                                                            <th>Link</th>
+                                                            <th>Anno</th>
+                                                            <th>Semestre</th>
+                                                            <th></th><th></th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tablebody">
+                                                    </tbody>
+                                                </table>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-1"></div>
-                                <div class="form-group col-sm-4">
-                                    <label for="degree">Corso di Laurea:</label> 
-                                    <select name="degree" class="form-control" id="degree" onchange="loadCurriculum(this.value);">
-
-                                    </select>
-                                </div>
-                                <div class="col-sm-1"></div>
-
-                                <div class="form-group col-sm-4">
-                                    <label for="curriculum">Curriculum:</label> 
-                                    <select name="curriculum" class="form-control" id="curriculum" onchange="loadTeaching(this.value);">
-
-                                    </select>
-                                </div>
-
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-1"></div>
-                                <div class="col-sm-10">
-                                    <table class="table-responsive col-sm-12" id="table" style="display: none;">
-                                        <thead>
-                                            <tr>
-                                                <th>Matricola</th>
-                                                <th>Nome</th>
-                                                <th>Abbreviazione</th>
-                                                <th>Link</th>
-                                                <th>Anno</th>
-                                                <th>Semestre</th>
-                                                <th></th><th></th><th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tablebody">
-                                        </tbody>
-                                    </table>
-
-                                </div>    
-                                <div class="col-sm-1"></div>
-                            </div>
-                            </form>
+                            <div class="col-sm-1"></div>
 			</div>
 			<!-- Main Footer -->
 			<!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->

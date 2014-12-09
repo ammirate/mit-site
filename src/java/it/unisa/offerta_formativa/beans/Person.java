@@ -10,7 +10,7 @@ package it.unisa.offerta_formativa.beans;
  * @author Antonio
  */
 public class Person {
-    
+
     private String SSN;
     private String name;
     private String surname;
@@ -19,15 +19,22 @@ public class Person {
     private String address;
     private String zipCode;
     private String cityzenship;
-    private char gender;
+    private String gender;
     private String accountEmail;
     private String departmentAbbreviation;
     private String webPage;
     private String university;
     private String matricula;
-    
-    
-    public Person(){
+    private String position;
+    private int cyle;
+
+    public Person(String ssn) {
+        this.SSN = ssn;
+    }
+
+    public Person(String ssn, String accountEmail) {
+        this.SSN = ssn;
+        this.accountEmail = accountEmail;
     }
 
     public String getSSN() {
@@ -94,13 +101,68 @@ public class Person {
         this.cityzenship = cityzenship;
     }
 
-    public char getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(char gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
-    
-    
+
+    public String getAccountEmail() {
+        return accountEmail;
+    }
+
+    public void setAccountEmail(String accountEmail) {
+        this.accountEmail = accountEmail;
+    }
+
+    public String getDepartmentAbbreviation() {
+        return departmentAbbreviation;
+    }
+
+    public void setDepartmentAbbreviation(String departmentAbbreviation) {
+        this.departmentAbbreviation = departmentAbbreviation;
+    }
+
+    public String getWebPage() {
+        return webPage;
+    }
+
+    public void setWebPage(String webPage) {
+        this.webPage = webPage;
+    }
+
+    public String getUniversity() {
+        return university;
+    }
+
+    public void setUniversity(String university) {
+        this.university = university;
+    }
+
+    public String getMatricula() {
+        return matricula;
+    }
+
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public int getCyle() {
+        return cyle;
+    }
+
+    public void setCyle(int cyle) {
+        this.cyle = cyle;
+    }
+
 }

@@ -1,4 +1,4 @@
-package it.unisa.offerta_formativa.servlet;
+package it.unisa.offerta_formativa.servlet.teaching;
 
 import it.unisa.offerta_formativa.beans.ClassPartition;
 import java.io.IOException;

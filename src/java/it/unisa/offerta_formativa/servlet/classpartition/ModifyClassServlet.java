@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unisa.offerta_formativa.servlet;
+package it.unisa.offerta_formativa.servlet.classpartition;
 
-import it.unisa.offerta_formativa.manager.CycleManager;
-import it.unisa.offerta_formativa.manager.DepartmentManager;
+import it.unisa.offerta_formativa.beans.ClassPartition;
+import it.unisa.offerta_formativa.beans.Module;
+import it.unisa.offerta_formativa.manager.ClassManager;
+import it.unisa.offerta_formativa.manager.ModuleManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -19,17 +21,12 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Alessandro
  */
-@WebServlet(name = "DeleteTeachingServlet", urlPatterns = {"/DeleteTeachingServlet"})
-public class DeleteTeachingServlet extends HttpServlet {
+@WebServlet(name = "ModifyClassServlet", urlPatterns = {"/ModifyClassServlet"})
+public class ModifyClassServlet extends HttpServlet {
+    private final ClassManager classMng;
 
-    
-    private DepartmentManager deptMng;
-    private CycleManager cycleMng;
-    public DeleteTeachingServlet() {
-        super();
-        deptMng = DepartmentManager.getInstance();
-        cycleMng = CycleManager.getInstance();
-        
+    public ModifyClassServlet() {
+        classMng = ClassManager.getInstance();
     }
 
     
@@ -46,7 +43,7 @@ public class DeleteTeachingServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            doPost(request,response);
+            doPost(request, response);
     }
 
     /**
@@ -60,13 +57,9 @@ public class DeleteTeachingServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            String path="/offertaFormativaJSP/amministratore/";
-            if(request.getParameterMap().containsKey("matricula") && request.getParameterMap().containsKey("curriculumMatricula")){
-                
+            if(request.getParameterMap().containsKey("matricula") && (request.getParameterMap().containsKey("oldClassTitle"))){
+                classMng.updateClass(new ClassPartition(request.getParameter("matricula"),request.getParameter("oldClassTitle")), new ClassPartition(request.getParameter("matricula"),request.getParameter("classTitle")));
             }
-            request.setAttribute("departments",deptMng.getAllDepartments());
-            request.setAttribute("cycles", cycleMng.getAllCycles());
-            request.getRequestDispatcher(path+"listTeaching.jsp").forward(request, response);
     }
 
     /**
