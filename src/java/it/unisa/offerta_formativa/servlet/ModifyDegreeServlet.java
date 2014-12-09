@@ -59,7 +59,7 @@ public class ModifyDegreeServlet extends HttpServlet {
         request.setAttribute("degree",GetDegree(request.getParameter("degree_matricula")));
         request.setAttribute("cycles", cym.getAllCycles());
         request.setAttribute("departments", dm.getAllDepartments());
-        request.getRequestDispatcher("/ModifyDegree.jsp").forward(request, response);
+        request.getRequestDispatcher("/offertaFormativaJSP/amministratore/ModifyDegree.jsp").forward(request, response);
     }
 
 }

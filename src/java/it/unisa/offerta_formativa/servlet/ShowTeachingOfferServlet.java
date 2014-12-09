@@ -94,6 +94,6 @@ public class ShowTeachingOfferServlet extends HttpServlet {
         // TODO Auto-generated method stub
         request.setAttribute("cycles", cym.getAllCycles());
         request.setAttribute("map", CreateMap());
-        request.getRequestDispatcher("/ShowTeachingOfferList.jsp").forward(request, response);
+        request.getRequestDispatcher("/offertaFormativaJSP/ShowTeachingOfferList.jsp").forward(request, response);
     }
 }

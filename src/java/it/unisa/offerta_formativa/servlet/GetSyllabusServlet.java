@@ -57,6 +57,6 @@ public class GetSyllabusServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
                 request.setAttribute("htmlSyllabus",getHtml(request.getParameter("teaching_matricula")));
-		request.getRequestDispatcher("/showSyllabus.jsp").forward(request, response);
+		request.getRequestDispatcher("/offertaFormativaJSP/showSyllabus.jsp").forward(request, response);
 	}
 }

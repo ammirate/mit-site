@@ -79,6 +79,6 @@ public class ShowDegreeServlet extends HttpServlet {
         // TODO Auto-generated method stub
         request.setAttribute("cycles", cym.getAllCycles());
         request.setAttribute("map", CreateMap());
-        request.getRequestDispatcher("/ShowDegreeList.jsp").forward(request, response);
+        request.getRequestDispatcher("/offertaFormativaJSP/amministratore/ShowDegreeList.jsp").forward(request, response);
     }
 }
