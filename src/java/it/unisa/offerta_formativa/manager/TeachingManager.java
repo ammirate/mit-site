@@ -313,13 +313,14 @@ public class TeachingManager {
         String htmlToReturn = null;
         String esc = "\"";
         try {
-
+            stmt = DBConnector.openConnection();
             rs = stmt.executeQuery("SELECT esse3_content FROM " + TABLE + " WHERE matricula=" + esc + teaching_matricula + esc);
 
             while (rs.next()) {
                 htmlToReturn = rs.getString("esse3_content");
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         }
         return htmlToReturn;
     }

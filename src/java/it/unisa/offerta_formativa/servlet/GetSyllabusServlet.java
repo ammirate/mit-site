@@ -48,7 +48,7 @@ public class GetSyllabusServlet extends HttpServlet {
             String title = rep3.substring(rep3.indexOf("<h1>") + 4, rep3.indexOf("</h1>"));
             String toReplace=rep3.substring(rep3.indexOf("<h1>") , rep3.indexOf("</h1>"));
             toReturn.add(title);
-            toReturn.add( rep3.replace(toReplace, "").toLowerCase());
+            toReturn.add( rep3.replace(toReplace, ""));
             return toReturn;
         }
 	/**
@@ -57,6 +57,6 @@ public class GetSyllabusServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
                 request.setAttribute("htmlSyllabus",getHtml(request.getParameter("teaching_matricula")));
-		request.getRequestDispatcher("/showSyllabus.jsp").forward(request, response);
+		request.getRequestDispatcher("/offertaFormativaJSP/showSyllabus.jsp").forward(request, response);
 	}
 }
