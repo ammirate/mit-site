@@ -48,7 +48,7 @@ public class GetSyllabusServlet extends HttpServlet {
             String title = rep3.substring(rep3.indexOf("<h1>") + 4, rep3.indexOf("</h1>"));
             String toReplace=rep3.substring(rep3.indexOf("<h1>") , rep3.indexOf("</h1>"));
             toReturn.add(title);
-            toReturn.add( rep3.replace(toReplace, "").toLowerCase());
+            toReturn.add( rep3.replace(toReplace, ""));
             return toReturn;
         }
 	/**

@@ -1,21 +1,15 @@
-<%@page import="java.util.HashMap"%>
-<%@page import="it.unisa.offerta_formativa.beans.Curriculum"%>
-<%@page import="it.unisa.offerta_formativa.beans.Degree"%>
-<%@page import="it.unisa.offerta_formativa.beans.Teaching"%>
-
-<%@page import="it.unisa.offerta_formativa.beans.Department"%>
+<%-- 
+    Document   : ShowSyllabus
+    Author     : Davide
+--%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1"%>
-
-<%! public HashMap<Department, HashMap<Degree, HashMap<Curriculum, ArrayList<Teaching>>>> map;
-%>
+<%! public ArrayList<String> htmlSyllabus;%>
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
-
-        
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
@@ -109,7 +103,7 @@
 
     </head>
     <body class="page-body">
-        <% map = (HashMap< Department, HashMap<Degree, HashMap<Curriculum, ArrayList<Teaching>>>>) request.getAttribute("map");
+        <% 	htmlSyllabus = (ArrayList<String>) request.getAttribute("htmlSyllabus");
         %>
         <nav class="navbar horizontal-menu navbar-fixed-top">
             <!-- set fixed position by adding class "navbar-fixed-top" -->
@@ -232,14 +226,16 @@
                     <div class="col-sm-1"></div>
                     <div class="col-sm-10">
                         <div class="panel panel-default">
-                            <div class="panel-heading">
+                            <h6>
+                            <div class="panel-heading" style="text-align: center; ">
+                                <% 
+                                out.print(htmlSyllabus.get(0));
+                                %>
 
-                                <p style=" alignment-baseline: central;"> Offerta Formativa </p>
                             </div>
-                            <div class="panel-body">
-                               
-
-
+                                </h6>
+                            <div>
+                                <div class="row"> <br> </div>
                                 <script>
                                     jQuery(document).ready(function ($) {
                                         $('a[href="#layout-variants"]').on('click', function (ev) {
@@ -262,62 +258,17 @@
                                     });
                                 </script>
 
+                                <div class="text-justify">
 
 
-                           
-
-                                    <%
-                                        if (!map.isEmpty()) {
-                                            for (Department d : map.keySet()) {
-                                    %><dl ><dt class="list-group-item col-xs-12 col-sm-6 col-md-8" style="background-color:#38548F; color:#A5C2FF; cursor: pointer; display:block;"><%out.print(d.getTitle());%></dt><dd><dl>
-                                                <% if (map.get(d).keySet().size() != 0) {
-                                                        for (Degree de : map.get(d).keySet()) {
-                                                %>
-                                                <dt class="list-group-item col-xs-12 col-sm-6 col-md-8" style="background-color:#546EA4; color:#A5C2FF; cursor: pointer; display:block;"><%out.print(de.getTitle());%></dt> 
-
-                                                <%  if (map.get(d).get(de).keySet().size() != 0) {
-                                                        for (Curriculum cu : map.get(d).get(de).keySet()) {
-                                                             %>
-                                                <dd><dl><dt class="list-group-item col-xs-12 col-sm-6 col-md-8" style="cursor: pointer; color:#FFFFFF; background-color:#8297C4"><%out.print("Curriculum - " + cu.getTitle());%></dt>
-                                                        <% 
-                                                            if (map.get(d).get(de).get(cu).size() != 0) {
-                                                                for (Teaching te : map.get(d).get(de).get(cu)) {
-                                                        %>
-                                                        <dd class="list-group-item col-xs-12 col-sm-6 col-md-8" style="position:relative;" ><a href="${pageContext.request.contextPath}/GetSyllabusServlet?teaching_matricula=<%out.print(te.getMatricula());%>"><%out.print("Corso di " +te.getTitle());%></a></dd> 
-                                                            <%}
-                                                                }
-
-                                                                  %>
-                                                    </dl></dd>  
-                                                    <%  
-                                                            }
-                                                        }  %>      
-                                                    <%
-                                                            }
-                                                        }
-                                                    %>
-                                            </dl></dd></dl>
-                                            <%
-                                                    }
-                                                }
-                                            %>
-
-
-
-
-
+                                    <%  out.print(htmlSyllabus.get(1));%>
                                     <!-- Main Footer -->
                                     <!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->
                                     <!-- Add class "sticky" to  always stick the footer to the end of page (if page contents is small) -->
                                     <!-- Or class "fixed" to  always fix the footer to the end of page -->
+                                </div>
 
-                           
-
-
-
-                            </div>
-
-
+                            </div>           
 
 
                         </div>
@@ -327,14 +278,7 @@
 
                     <div class="col-sm-1"></div>
 
-                </div>                                            
-
-
-
-
-
-
-
+                </div>  
 
 
                 <footer class="main-footer sticky footer-type-1">
@@ -359,15 +303,25 @@
                     </div>
 
                 </footer>
+
+
+
+
+
                 <div class="page-loading-overlay">
                     <div class="loader-2"></div>
                 </div>
 
 
 
-            </div>
+            </div>  
             <!-- Bottom Scripts -->
             <script type="text/javascript">
+                function loadDegree(i) {
+                    $.ajax({url: "GetDegreeServlet?idCycle=" + i, success: function (result) {
+                            $("#degree").html(result);
+                        }});
+                }
             </script>
             <script src="assets/js/bootstrap.min.js"></script>
             <script src="assets/js/TweenMax.min.js"></script>
@@ -375,13 +329,7 @@
             <script src="assets/js/joinable.js"></script>
             <script src="assets/js/xenon-api.js"></script>
             <script src="assets/js/xenon-toggles.js"></script>
-            <script>
-                $('dt').click(function (e) {
-                    $(this).nextUntil('dt').toggle();
-                });
 
-                $('dd').hide();
-            </script>
 
             <!-- JavaScripts initializations and stuff -->
             <script src="assets/js/xenon-custom.js"></script>

@@ -1,3 +1,7 @@
+<%-- 
+    Document   : ShowTeachingOfferList
+    Author     : Davide
+--%>
 <%@page import="it.unisa.offerta_formativa.beans.Cycle"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="it.unisa.offerta_formativa.beans.Curriculum"%>
@@ -9,7 +13,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1"%>
 
-<%! public HashMap<Department, HashMap<Degree, HashMap<Curriculum, ArrayList<Teaching>>>> map;
+<%! public HashMap< Department, HashMap<Degree, HashMap<Curriculum, ArrayList<Teaching>>>> map;
     public ArrayList<Cycle> cycle;
     public String cycleTitle;
 %>
@@ -267,11 +271,12 @@
                                 </script>
 
                                 <%
-                                    if (!map.isEmpty()) { %> <ul id="list" class="col-sm-12"> <%
+                                    if (!map.isEmpty()) { %> <ul id="list" class="col-sm-12" name="list_all"> <%
                                     for (Department d : map.keySet()) {
                                     %><li class="list-group-item" style="cursor: pointer; font-size: large;"><span><%out.print("+ " + d.getTitle());%></span><ul>
                                             <% if (map.get(d).keySet().size() != 0) {
                                                     for (Degree de : map.get(d).keySet()) {
+                                                        if(de.isActive()){
                                                         for (Cycle cy : cycle) {
                                                             if (cy.getNumber() == de.getCycle()) {
                                                                 cycleTitle= cy.getTitle();
@@ -281,23 +286,25 @@
                                             <li style="cursor: pointer; font-size: medium;"><span><%out.print(cycleTitle + " - " + de.getTitle());%></span><ul>
                                                     <%  if (map.get(d).get(de).keySet().size() != 0) {
                                                             for (Curriculum cu : map.get(d).get(de).keySet()) {
+                                                                if(cu.isActive()){
                                                     %>
                                                     <li style="cursor: pointer; font-size: medium;"><span><%out.print("Curriculum - " + cu.getTitle());%></span><ul>
                                                             <%
                                                                 if (map.get(d).get(de).get(cu).size() != 0) {
                                                                     for (Teaching te : map.get(d).get(de).get(cu)) {
+                                                                        if(te.isActive()){
                                                             %>
                                                             <li style="cursor: pointer; font-size: medium;"><span><a href="${pageContext.request.contextPath}/GetSyllabusServlet?teaching_matricula=<%out.print(te.getMatricula());%>"><%out.print("Corso di " + te.getTitle());%></a></span></li>
-                                                                        <%}
+                                                                        <%} }
                                                                             }
 
                                                                         %>
                                                         </ul></li>  
-                                                        <%                                                            }
+                                                        <%                                                       }     }
                                                             }  %>      
                                                 </ul></li>
                                                 <%
-                                                        }
+                                                        } }
                                                     }
                                                 %>
 
