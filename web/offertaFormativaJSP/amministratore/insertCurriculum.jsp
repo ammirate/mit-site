@@ -15,9 +15,7 @@
          pageEncoding="ISO-8859-1"%>
 
 <%!
-    public ArrayList<Cycle> cycles;
     public ArrayList<Degree> degrees;
-    public ArrayList<Department> departments;
 %>
 
 <!DOCTYPE html>
@@ -119,10 +117,6 @@
     </head>
     <body class="page-body">
         <%
-            cycles = (ArrayList<Cycle>) request.getAttribute("cycles");
-            Collections.sort(cycles);
-            departments = (ArrayList<Department>) request.getAttribute("departments");
-            Collections.sort(departments);
             degrees = (ArrayList<Degree>) request.getAttribute("degrees");
             Collections.sort(degrees);
         %>
@@ -248,7 +242,7 @@
                     <div class="col-sm-10">
                         <div class="panel panel-default">
                             <div class="panel-heading" style="text-align: center; ">
-                                Inserisci Corso di Laurea 
+                                Inserisci Nuovo Curriculum
                             </div>
                             <div class="panel-body">
                                 <div class="row"> <br> </div>
@@ -309,34 +303,17 @@
 
 
                                 <div class="row">
-                                    <div class="form-group col-sm-8">
-                                        <label style="color: black; font-weight: bold">Dipartimento:</label><select name="department" class="form-control" id="Select_dep">
+                                    <div class="form-group col-sm-7">
+                                        <label style="color: black; font-weight: bold">Corso di Studi:</label><select name="degree" class="form-control" id="Select_dep">
 
-                                            <%if (departments.size() != 0) {
-                                                    for (Department d : departments) {
+                                            <%if (degrees.size() != 0) {
+                                                    for (Degree d : degrees) {
 
-                                            %><option value=<% out.print(d.getAbbreviation());%>><% out.print(d.getTitle());%></option>
+                                            %><option value=<% out.print(d.getMatricula());%>><% out.print(d.getTitle());%></option>
 
                                             <% }
                                                 } %>
 
-                                        </select> 
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <label style="color: black; font-weight: bold">Ciclo:</label><select name="cycle" class="form-control" id="Select_cycle">
-
-                                            <%
-                                                if (cycles.size() != 0)
-                                                    for (Cycle c : cycles) {
-
-                                            %>
-
-                                            <option value=<%out.print(c.getNumber());%>><%out.print(c.getTitle());%></option>       
-
-                                            <%
-                                                    }
-                                            %>
                                         </select> 
                                     </div>
                                     <div> <br> </div>

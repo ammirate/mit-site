@@ -1,6 +1,6 @@
 package it.unisa.offerta_formativa.beans;
 
-public class Cycle {
+public class Cycle implements Comparable<Cycle>{
 
     private int number;
     private String title;
@@ -48,6 +48,17 @@ public class Cycle {
         String esc = "\'";
 
         return "cycle_number=" + number + ", title=" + esc + title + esc;
+    }
+
+    @Override
+    public int compareTo(Cycle o) {
+        int result;
+        if(this.getNumber()>o.getNumber())
+            result = 1;
+        else if (this.getNumber()==o.getNumber())
+            result =0;
+        else result=-1;    
+        return result;
     }
 
 }

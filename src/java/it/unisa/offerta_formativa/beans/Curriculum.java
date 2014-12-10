@@ -38,6 +38,20 @@ public class Curriculum implements Comparable<Curriculum> {
         this.degree_matricula = degreeMatricula;
         this.active = true;
     }
+    
+    /**
+     * Constructor
+     *
+     * @param title
+     * @param degreeId
+     */
+    public Curriculum(String matricula, String title, String degreeMatricula, Boolean active) {
+        super();
+        this.matricula = matricula;
+        this.title = title;
+        this.degree_matricula = degreeMatricula;
+        this.active = active;
+    }
 
     public String getDegreeMatricula() {
         return degree_matricula;

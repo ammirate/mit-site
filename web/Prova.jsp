@@ -1,28 +1,62 @@
 <%-- 
-    Document   : ModifyDegree
+    Document   : ShowSyllabus
     Author     : Davide
 --%>
-<%@page import="java.util.Collections"%>
-<%@page import="it.unisa.offerta_formativa.beans.Cycle"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="it.unisa.offerta_formativa.beans.Curriculum"%>
-<%@page import="it.unisa.offerta_formativa.beans.Degree"%>
-<%@page import="it.unisa.offerta_formativa.beans.Teaching"%>
-
-<%@page import="it.unisa.offerta_formativa.beans.Department"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1"%>
 
-<%! public Degree degree;
-    public ArrayList<Cycle> cycles;
-    public ArrayList<Department> departments;
-%>
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <style>
+            .record {
+                background-color: #fff;
+                margin: 0; margin-top: 15px;
+                padding: 0;
+                border-color: #286d9d #929292 #929292;
+                border-style: solid;
+                border-width: 5px 1px 1px;
+                float: left;
+                width: 100%;
+            }
 
+            .record-h2 {
+                background-color: #FFFFFF;
+                color: #44494A;
+                display: inline;
+                font-weight: bold;
+                margin-left: 10px;
+                padding: 0 5px;
+                position: relative;
+                top: -1em;
+            }
+
+            dl.record-riga {
+                color: #2d2d2d;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            dl.record-riga dt {
+                font-weight: bold;
+                width: 49%;
+                float: left;
+                margin: 0 0 0 1%;
+                padding: 3px 1% 3px 0;
+                border-top: 1px solid #b9b9b9;
+            }
+
+            dl.record-riga dd {
+                width: 48%;
+                float: left;
+                margin: 0 0 0;
+                padding: 3px 1% 3px 0;
+                border-top: 1px solid #b9b9b9;
+            }
+
+        </style>
 
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -117,12 +151,7 @@
 
     </head>
     <body class="page-body">
-        <%  degree = (Degree) request.getAttribute("degree");
-            cycles = (ArrayList<Cycle>) request.getAttribute("cycles");
-            Collections.sort(cycles);
-            departments = (ArrayList<Department>) request.getAttribute("departments");
-            Collections.sort(departments);
-        %>
+
         <nav class="navbar horizontal-menu navbar-fixed-top">
             <!-- set fixed position by adding class "navbar-fixed-top" -->
 
@@ -244,13 +273,14 @@
                     <div class="col-sm-1"></div>
                     <div class="col-sm-10">
                         <div class="panel panel-default">
-                            <div class="panel-heading" style="text-align: center; ">
-                                Modifica Corso di Laurea - <% out.print(degree.getTitle()); %>
-                            </div>
+                            <h6>
+                                <div class="panel-heading" style="text-align: center; ">
+
+
+                                </div>
+                            </h6>
                             <div class="panel-body">
                                 <div class="row"> <br> </div>
-
-
                                 <script>
                                     jQuery(document).ready(function ($) {
                                         $('a[href="#layout-variants"]').on('click', function (ev) {
@@ -275,132 +305,76 @@
 
 
 
-                                <div class="row">
-                                    <div class="form-group col-sm-2">
-                                        <label for="title" style="color: black; font-weight: bold">Matricola:</label>
-                                        <input type="text" class="form-control" name="matricula" value="<% out.print(degree.getMatricula()); %>" readonly>
-                                    </div>
-
-                                    <div class="col-sm-5">
-                                        <label for="title" style="color: black; font-weight: bold" >Titolo:</label>
-                                        <input type="text" id="title_text" name="titolo" class="form-control" onblur="Control(this)" onclick="Clean(this)" value="<% out.print(degree.getTitle()); %>" > 
-                                    </div>
-
-                                    <div class="form col-sm-1"></div>
-
-                                    <label for="title" style="color: black; font-weight: bold">Stato:</label>
-                                    <form role="form col-sm-5">
-                                        <div class="form col-sm-1"></div>
-                                        <label class="radio-inline">
-                                            <input type="radio" name="optradio" id="status_active" checked><p style="color: black">Attivo</p>
-                                        </label>
-                                        <label class="radio-inline">
-                                            <% if (!degree.isActive()) { %>
-                                            <input type="radio" name="optradio" id="status_disable" checked ><p style="color: black">Disattivo</p>
-                                            <% } else if(degree.isActive()){ %>
-                                            <input type="radio" name="optradio"  id="status_disable"><p style="color: black">Disattivo</p>
-                                            <% } %>
-                                        </label>
-                                    </form>
-
+                                <div id="infobox" class="record">
+                                    <dl class="record-riga">
+                                        <dt>Ordinamento</dt>
+                                        <dd>
+                                        <description>
+                                            <ordinamento>FISICA</ordinamento>
+                                        </description>&nbsp;<br>
+                                        </dd>
+                                        <dt>Durata</dt>
+                                        <dd>
+                                        <description>
+                                            <durata>2</durata>
+                                        </description>&nbsp;<br>
+                                        </dd>
+                                        <dt>Crediti</dt>
+                                        <dd>
+                                        <description>
+                                            <ncrediti>120</ncrediti>
+                                        </description>&nbsp;<br>
+                                        </dd>
+                                        <dt>Tipo di Corso</dt>
+                                        <dd>
+                                        <description>
+                                            <tipocorso_des>CORSO DI LAUREA MAGISTRALE</tipocorso_des>
+                                        </description>&nbsp;<br>
+                                        </dd>
+                                        <dt>Normativa</dt>
+                                        <dd>
+                                        <description>
+                                            <normativa>D.M. 270/2004</normativa>
+                                        </description>&nbsp;<br>
+                                        </dd>
+                                        <dt>Classe di Laurea</dt>
+                                        <dd>
+                                            <a id="box-item-anchorinfobox-6-1" href="Guide/PaginaClasse.do;jsessionid=4B88B3B3AF31F3D39FB3AFDD54EC41A7.jvm6?classe_id=LM-17" title="Accedi alla pagina della&nbsp;Classe delle lauree magistrali in Fisica">LM-17 - Classe delle lauree magistrali in Fisica</a>
+                                            <br>
+                                        </dd>
+                                        <dt>Tipo di Accesso</dt>
+                                        <dd>
+                                        <description>Accesso Libero</description>&nbsp;<br>
+                                        </dd>
+                                        <dt>Sedi Didattiche</dt>
+                                        <dd>
+                                        <description>UNIVERSITA' DEGLI STUDI DI SALERNO - FISCIANO</description>&nbsp;<br>
+                                        </dd>
+                                        <dt>Elenco Insegnamenti per Percorso/Curriculum</dt>
+                                        <dd>
+                                            <a id="box-item-anchorinfobox-9-1" href="Guide/PaginaPercorso.do;jsessionid=4B88B3B3AF31F3D39FB3AFDD54EC41A7.jvm6?corso_id=500259&amp;percorso_id=500259*2014*9999&amp;ANNO_ACCADEMICO=2014" title="Accedi alla pagina del percorso:&nbsp;COMUNE">COMUNE - PDS0-2014</a>
+                                            <br>
+                                        </dd>
+                                    </dl>
+                                    <br>
                                 </div>
-                                <div> <br> </div>  
-
-
-                                <div class="row">
-                                    <div class="form-group col-sm-8">
-                                        <label style="color: black; font-weight: bold">Dipartimento:</label><select name="department" class="form-control" id="Select_dep">
-                                            <%if (departments.size() != 0) {
-                                                for (Department d : departments) {
-                                                    if (d.getAbbreviation().equalsIgnoreCase(degree.getDepartmentAbbreviation())) {
-                                            %><option selected value=<% out.print(d.getAbbreviation());%>><% out.print(d.getTitle());%></option>
-                                            <%} else { %>
-                                            <option value=<% out.print(d.getAbbreviation());%>><% out.print(d.getTitle());%></option>        
-                                            <% } %>
-                                            <% }
-                                                } %>
-
-                                        </select> 
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <label style="color: black; font-weight: bold">Ciclo:</label><select name="cycle" class="form-control" id="Select_cycle">
-                                           
-                                            <%
-                                                if (cycles.size() != 0)
-                                                    for (Cycle c : cycles) {
-                                                        if (degree.getCycle() == c.getNumber()) { %>
-                                            %><option selected value=<%out.print(c.getNumber());%>><%out.print(c.getTitle());%></option>
-                                            <%} else { %>
-                                            <option value=<%out.print(c.getNumber());%>><%out.print(c.getTitle());%></option>       
-                                            <% } %>
-                                            <%
-                                                }
-                                            %>
-                                        </select> 
-                                    </div>
-                                    <div> <br> </div>
-
-                                </div>
-
-                                <div> <br> </div>
-
-
-
-                                <div class="row">
-                                    <div class="form-group col-sm-6">
-                                        <label for="title" style="color: black; font-weight: bold" >Link:</label>
-                                        <input type="text" id="link_text" class="form-control" name="link" value="<% out.print(degree.getLink());%>" >
-                                    </div>
-
-                                </div>
-
-                                <div> <br> </div>
-                                <div> <br> </div>
-                                <div> <br> </div>
-
-                                <div class="row">
-
-                                    <div class="form-group col-sm-10">
-                                        <button type="button" style=" height: 32px; width: 90px; color: black" onclick="RevertModify()">Annulla</button>
-                                    </div>
-
-                                    <div class="form-group col-sm-1">
-                                        <button type="button" style=" height: 32px; width: 90px; color: black" onclick="UpdateDegree()" id="button_confirm">Conferma</button>
-                                    </div>
-                                </div>
-
-
-
-
-
-
-
-
                                 <!-- Main Footer -->
                                 <!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->
                                 <!-- Add class "sticky" to  always stick the footer to the end of page (if page contents is small) -->
                                 <!-- Or class "fixed" to  always fix the footer to the end of page -->
-
-
-
-
-
-
-
                             </div>
 
+                        </div>           
 
 
-
-                        </div>
 
 
                     </div>
 
                     <div class="col-sm-1"></div>
 
-                </div>     
+                </div>  
+
 
                 <footer class="main-footer sticky footer-type-1">
 
@@ -424,60 +398,23 @@
                     </div>
 
                 </footer>
+
+
+
+
+
                 <div class="page-loading-overlay">
                     <div class="loader-2"></div>
                 </div>
 
 
-            </div>
 
+            </div>  
             <!-- Bottom Scripts -->
             <script type="text/javascript">
-                function Control(obj)
-                {
-                    if ((obj.value == '') || (obj.value == 'Inserisci Titolo') || (obj.value == 'Inserisci Titolo maggiore di 4 caratteri'))
-                    {
-                        obj.style.borderColor = "red";
-                        obj.value = 'Inserisci Titolo';
-                        document.getElementById("button_confirm").disabled = true;
-                    } else if (obj.value.length < 4) {
-                        obj.style.borderColor = "red"
-                        obj.value = 'Inserisci Titolo maggiore di 4 caratteri';
-                        document.getElementById("button_confirm").disabled = true;
-                    } else
-                    {
-                        obj.style.borderColor = "green";
-                        document.getElementById("button_confirm").disabled = false;
-                    }
-                }
-                function Clean(obj)
-                {
-                    if ((obj.value == 'Inserisci Titolo') || (obj.value == 'Inserisci Titolo maggiore di 4 caratteri'))
-                    {
-                        obj.value = '';
-                    }
-                }
-                function RevertModify() {
-                    document.location.href = '${pageContext.request.contextPath}/ShowDegreeServlet';
-                }
-                function UpdateDegree() {
-                    var cycle = $("#Select_cycle option:selected").val();
-                    var departmentAbb = $("#Select_dep option:selected").val();
-                    var degree_matricula = '<%= degree.getMatricula() %>';
-                    var link = $("#link_text").val();
-                    var title = $("#title_text").val();
-
-                    if(document.getElementById('status_active').checked) {
-                        var status = "true";
-                    }else if(document.getElementById('status_disable').checked) {
-                        var status = "false";
-                    }       
-
-                    var r = confirm("Sei sicuro di voler modificare il corso di Laurea: "+title);
-                    if (r == true) {
-                        document.location.href = '${pageContext.request.contextPath}/UpdateDegreeServlet?degree_matricula='+degree_matricula+'&cycle='+cycle+'&departmentAbb='+departmentAbb+'&link='+link+'&title='+title+'&status='+status;
-                    }
-                }
+                $("#infobox").click(function (e) {
+                    e.preventDefault();
+                });
             </script>
             <script src="assets/js/bootstrap.min.js"></script>
             <script src="assets/js/TweenMax.min.js"></script>
@@ -485,6 +422,8 @@
             <script src="assets/js/joinable.js"></script>
             <script src="assets/js/xenon-api.js"></script>
             <script src="assets/js/xenon-toggles.js"></script>
+
+
             <!-- JavaScripts initializations and stuff -->
             <script src="assets/js/xenon-custom.js"></script>
 

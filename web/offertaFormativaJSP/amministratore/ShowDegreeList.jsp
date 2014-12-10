@@ -2,6 +2,8 @@
     Document   : ShowDegreeList
     Author     : Davide
 --%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.Collections"%>
 <%@page import="it.unisa.offerta_formativa.beans.Cycle"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="it.unisa.offerta_formativa.beans.Curriculum"%>
@@ -118,6 +120,7 @@
     <body class="page-body">
         <% map = (HashMap< Department, ArrayList<Degree>>) request.getAttribute("map");
             cycles = (ArrayList<Cycle>) request.getAttribute("cycles");
+            Collections.sort(cycles);
         %>
         <nav class="navbar horizontal-menu navbar-fixed-top">
             <!-- set fixed position by adding class "navbar-fixed-top" -->
@@ -271,21 +274,24 @@
 
 
 
-                                    <div class="row">
+                                <div class="row">
                                     <div class="form-group col-sm-6">
                                         <select name="department" class="form-control" id="Select_dep">
                                             <option selected value="NoDep">Seleziona il Dipartimento</option>
                                             <%
                                                 if (map.size() != 0) {
-                                                    for (Department d : map.keySet()) {
+                                                    List<Department> deps = new ArrayList<Department>(map.keySet());
+                                                    Collections.sort(deps);
+                                                    for (int i = 0; i < deps.size(); i++) {
+                                                        Department d = deps.get(i);
                                             %><option value=<% out.print(d.getAbbreviation());%>><% out.print(d.getTitle());%></option>
                                             <%}
                                                 }%>
 
                                         </select> 
-                                        </div>
+                                    </div>
 
-                                        <div class="col-sm-3">
+                                    <div class="col-sm-3">
                                         <select name="cycle" class="form-control" id="Select_cycle">
                                             <option selected value="NoCycle">Seleziona il Ciclo</option>
                                             <%
@@ -300,20 +306,20 @@
                                                 }
                                             %>
                                         </select> 
-                                        </div>
-                                        
-                                        <div class="col-sm-3">
-                                        <button type="button" style=" height: 32px; width: 90px;" onclick="loadDegree()">Cerca</button>
-                                        </div>
-
-                                        <div> <br> </div>
-                                        <div> <br> </div>
-                                        <div> <br> </div>
-                                        
-
                                     </div>
-                                        <div class="row col-sm-12" > <p id="warning" style="alignment-adjust: central; font-size: large; color: red;"> </p></div>
-                                    
+
+                                    <div class="col-sm-3">
+                                        <button type="button" style=" height: 32px; width: 90px;" onclick="loadDegree()">Cerca</button>
+                                    </div>
+
+                                    <div> <br> </div>
+                                    <div> <br> </div>
+                                    <div> <br> </div>
+
+
+                                </div>
+                                <div class="row col-sm-12" > <p id="warning" style="alignment-adjust: central; font-size: large; color: red;"> </p></div>
+
                                 <div> <br> </div><div> <br> </div>    
 
                                 <div class="row col-sm-12">
@@ -322,22 +328,22 @@
                                     </div>
                                 </div>
 
-                                   
-
-                                        
-
-                                  
 
 
 
 
 
-                                    <!-- Main Footer -->
-                                    <!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->
-                                    <!-- Add class "sticky" to  always stick the footer to the end of page (if page contents is small) -->
-                                    <!-- Or class "fixed" to  always fix the footer to the end of page -->
 
-                                
+
+
+
+
+                                <!-- Main Footer -->
+                                <!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->
+                                <!-- Add class "sticky" to  always stick the footer to the end of page (if page contents is small) -->
+                                <!-- Or class "fixed" to  always fix the footer to the end of page -->
+
+
 
 
 
@@ -389,39 +395,47 @@
             <!-- Bottom Scripts -->
             <script type="text/javascript">
                 function loadDegree() {
-                    var stringa="<thead><tr><td style='font-weight: bold'>Matricola</td><td style='font-weight: bold'>Nome</td><td style='font-weight: bold'>Dipartimento</td><td style='font-weight: bold'>Stato</td><td></td> </tr></thead><tbody>";
+                    var stringa = "<thead><tr><td style='font-weight: bold'>Matricola</td><td style='font-weight: bold'>Nome</td><td style='font-weight: bold'>Dipartimento</td><td style='font-weight: bold'>Stato</td><td></td> </tr></thead><tbody>";
                     var department = $("#Select_dep option:selected").val();
                     var cycle = $("#Select_cycle option:selected").val();
 
-                    if(department == "NoDep"){
+                    if (department == "NoDep") {
                         $("#table_degree").html("");
                         $("#warning").html("Selezionare un Dipartimento");
-                    } else if(cycle == "NoCycle"){
+                    } else if (cycle == "NoCycle") {
                         $("#table_degree").html("");
                         $("#warning").html("Selezionare un Ciclo");
-                    } else { $("#warning").html("");
+                    } else {
+                        $("#warning").html("");
                 <%
-                if (map.size() != 0) {
-                    for (Department d : map.keySet()) {%>
-                        var dep= '<%=d.getAbbreviation()%>';
-                        if(dep === department){
-                      <%  if (map.get(d).size() != 0) {
-                               for (Degree de : map.get(d)) { %>
-                                   var cyc = '<%= de.getCycle()%>';
-                                   if(cyc === cycle){
-                                       
-                                            stringa += "<tr><td style=' color: black'><%=de.getMatricula()%></td><td style=' color: black'><%=de.getTitle()%></td><td style=' color: black'><%=de.getDepartmentAbbreviation() %></td><td style=' color: black'><% if(de.isActive()){ out.print("Attivo");} else out.print("Disattivo"); %></td><td style=' color: black; font-weight: bold'><a href='${pageContext.request.contextPath}/ModifyDegreeServlet?degree_matricula=<%out.print(de.getMatricula());%>'>Modifica</a></td></tr>";
-                                       
-                                       
-                                    }
-                               <% }
+                    if (map.size() != 0) {
+                        for (Department d : map.keySet()) {%>
+                        var dep = '<%=d.getAbbreviation()%>';
+                        if (dep === department) {
+                <%  if (map.get(d).size() != 0) {
+                        for (Degree de : map.get(d)) {%>
+                            var cyc = '<%= de.getCycle()%>';
+                            if (cyc === cycle) {
+
+                                stringa += "<tr><td style=' color: black'><%=de.getMatricula()%></td><td style=' color: black'><%=de.getTitle()%></td><td style=' color: black'><%=de.getDepartmentAbbreviation()%></td><td style=' color: black'><% if (de.isActive()) {
+                                        out.print("Attivo");
+                                    } else {
+                                        out.print("Disattivo");
+                                    } %></td><td style=' color: black; font-weight: bold'><a href='${pageContext.request.contextPath}/ModifyDegreeServlet?degree_matricula=<%out.print(de.getMatricula());%>'>Modifica</a></td></tr>";
+
+
+                            }
+                <% }
                     } %>
+                        }
+                <% }
+                    }%>
+
+                        stringa += "</tbody>";
+                        $("#table_degree").html(stringa);
                     }
-                    <% }           }%>
-                    
-                    stringa+= "</tbody>";
-                    $("#table_degree").html(stringa); }
                 }
+                
             </script>
             <script src="assets/js/bootstrap.min.js"></script>
             <script src="assets/js/TweenMax.min.js"></script>

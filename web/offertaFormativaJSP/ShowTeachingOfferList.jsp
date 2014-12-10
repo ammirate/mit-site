@@ -308,7 +308,7 @@
                 function setIcon(obj) {
                     if(obj.className == "glyphicon glyphicon-plus"){
                     obj.className = "glyphicon glyphicon-minus";}
-                    else obj.className = "glyphicon glyphicon-plus";
+                    else if(obj.className == "glyphicon glyphicon-minus") obj.className = "glyphicon glyphicon-plus";
                 }
             </script>
             <script src="assets/js/bootstrap.min.js"></script>

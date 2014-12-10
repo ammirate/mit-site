@@ -1,6 +1,6 @@
 package it.unisa.offerta_formativa.servlet;
 
-import it.unisa.offerta_formativa.beans.Degree;
+import it.unisa.offerta_formativa.beans.Curriculum;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -9,34 +9,29 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import it.unisa.offerta_formativa.manager.CycleManager;
+import it.unisa.offerta_formativa.manager.CurriculumManager;
 import it.unisa.offerta_formativa.manager.DegreeManager;
-import it.unisa.offerta_formativa.manager.DepartmentManager;
-import java.util.ArrayList;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
+
 
 
 /**
  * Servlet implementation class Servlet
  */
-@WebServlet("/InsertDegreeServlet")
-public class InsertDegreeServlet extends HttpServlet {
+@WebServlet("/ModifyCurriculumServlet")
+public class ModifyCurriculumServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private DegreeManager degreeMng;
-    private DepartmentManager dm;
-    private CycleManager cym;
+    private CurriculumManager cuMng;
+    private DegreeManager deMng;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public InsertDegreeServlet() {
+    public ModifyCurriculumServlet() {
         super();
         // TODO Auto-generated constructor stub   
-        dm = DepartmentManager.getInstance();
-        degreeMng = DegreeManager.getInstance();
-        cym = CycleManager.getInstance();
+        cuMng = CurriculumManager.getInstance();
+        deMng = DegreeManager.getInstance();
     }
 
     /**
@@ -48,20 +43,20 @@ public class InsertDegreeServlet extends HttpServlet {
         doPost(request, response);
     }
 
-    private void InsertDegree(Degree degree) {
+    private Curriculum GetCurriculum(String matricula) {
         // TODO Auto-generated method stub
-            degreeMng.createDegree(degree);
+            return cuMng.readCurriculum(matricula);
     }
+
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
      * response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        InsertDegree(new Degree(request.getParameter("degree_matricula"), request.getParameter("link"), request.getParameter("title"), Integer.parseInt(request.getParameter("cycle")), request.getParameter("departmentAbb"),Boolean.parseBoolean(request.getParameter("status"))));
-        ServletContext sc = getServletContext();  
-        RequestDispatcher rd = sc.getRequestDispatcher("/ShowDegreeServlet");  
-        rd.forward(request, response); 
+        request.setAttribute("curriculum",GetCurriculum(request.getParameter("curriculum_matricula")));
+        request.setAttribute("degrees",deMng.getAllDegrees());
+        request.getRequestDispatcher("/offertaFormativaJSP/amministratore/ModifyCurriculum.jsp").forward(request, response);
     }
 
 }

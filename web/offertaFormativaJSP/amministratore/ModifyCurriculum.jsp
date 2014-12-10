@@ -1,5 +1,5 @@
 <%-- 
-    Document   : ModifyDegree
+    Document   : ModifyCurriculum
     Author     : Davide
 --%>
 <%@page import="java.util.Collections"%>
@@ -14,9 +14,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1"%>
 
-<%! public Degree degree;
-    public ArrayList<Cycle> cycles;
-    public ArrayList<Department> departments;
+<%! public Curriculum curriculum;
+    public ArrayList<Degree> degrees;
 %>
 
 <!DOCTYPE html>
@@ -117,11 +116,9 @@
 
     </head>
     <body class="page-body">
-        <%  degree = (Degree) request.getAttribute("degree");
-            cycles = (ArrayList<Cycle>) request.getAttribute("cycles");
-            Collections.sort(cycles);
-            departments = (ArrayList<Department>) request.getAttribute("departments");
-            Collections.sort(departments);
+        <%  curriculum = (Curriculum) request.getAttribute("curriculum");
+            degrees = (ArrayList<Degree>) request.getAttribute("degrees");
+            Collections.sort(degrees);
         %>
         <nav class="navbar horizontal-menu navbar-fixed-top">
             <!-- set fixed position by adding class "navbar-fixed-top" -->
@@ -245,7 +242,7 @@
                     <div class="col-sm-10">
                         <div class="panel panel-default">
                             <div class="panel-heading" style="text-align: center; ">
-                                Modifica Corso di Laurea - <% out.print(degree.getTitle()); %>
+                                Modifica Curriculum - <% out.print(curriculum.getTitle()); %>
                             </div>
                             <div class="panel-body">
                                 <div class="row"> <br> </div>
@@ -278,12 +275,12 @@
                                 <div class="row">
                                     <div class="form-group col-sm-2">
                                         <label for="title" style="color: black; font-weight: bold">Matricola:</label>
-                                        <input type="text" class="form-control" name="matricula" value="<% out.print(degree.getMatricula()); %>" readonly>
+                                        <input type="text" class="form-control" name="matricula" value="<% out.print(curriculum.getMatricula()); %>" readonly>
                                     </div>
 
                                     <div class="col-sm-5">
                                         <label for="title" style="color: black; font-weight: bold" >Titolo:</label>
-                                        <input type="text" id="title_text" name="titolo" class="form-control" onblur="Control(this)" onclick="Clean(this)" value="<% out.print(degree.getTitle()); %>" > 
+                                        <input type="text" id="title_text" name="titolo" class="form-control" onblur="Control(this)" onclick="Clean(this)" value="<% out.print(curriculum.getTitle()); %>" > 
                                     </div>
 
                                     <div class="form col-sm-1"></div>
@@ -295,9 +292,9 @@
                                             <input type="radio" name="optradio" id="status_active" checked><p style="color: black">Attivo</p>
                                         </label>
                                         <label class="radio-inline">
-                                            <% if (!degree.isActive()) { %>
+                                            <% if (!curriculum.isActive()) { %>
                                             <input type="radio" name="optradio" id="status_disable" checked ><p style="color: black">Disattivo</p>
-                                            <% } else if(degree.isActive()){ %>
+                                            <% } else if (curriculum.isActive()) { %>
                                             <input type="radio" name="optradio"  id="status_disable"><p style="color: black">Disattivo</p>
                                             <% } %>
                                         </label>
@@ -306,33 +303,17 @@
                                 </div>
                                 <div> <br> </div>  
 
-
                                 <div class="row">
-                                    <div class="form-group col-sm-8">
-                                        <label style="color: black; font-weight: bold">Dipartimento:</label><select name="department" class="form-control" id="Select_dep">
-                                            <%if (departments.size() != 0) {
-                                                for (Department d : departments) {
-                                                    if (d.getAbbreviation().equalsIgnoreCase(degree.getDepartmentAbbreviation())) {
-                                            %><option selected value=<% out.print(d.getAbbreviation());%>><% out.print(d.getTitle());%></option>
-                                            <%} else { %>
-                                            <option value=<% out.print(d.getAbbreviation());%>><% out.print(d.getTitle());%></option>        
-                                            <% } %>
-                                            <% }
-                                                } %>
+                                    <div class="col-sm-7">
+                                        <label style="color: black; font-weight: bold">Corso di Laurea:</label><select name="degree" class="form-control" id="Select_degree">
 
-                                        </select> 
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <label style="color: black; font-weight: bold">Ciclo:</label><select name="cycle" class="form-control" id="Select_cycle">
-                                           
                                             <%
-                                                if (cycles.size() != 0)
-                                                    for (Cycle c : cycles) {
-                                                        if (degree.getCycle() == c.getNumber()) { %>
-                                            %><option selected value=<%out.print(c.getNumber());%>><%out.print(c.getTitle());%></option>
+                                                if (degrees.size() != 0)
+                                                    for (Degree d : degrees) {
+                                                        if (curriculum.getDegreeMatricula().equalsIgnoreCase(d.getMatricula())) { %>
+                                            %><option selected value=<%out.print(d.getMatricula());%>><%out.print(d.getTitle());%></option>
                                             <%} else { %>
-                                            <option value=<%out.print(c.getNumber());%>><%out.print(c.getTitle());%></option>       
+                                            <option value=<%out.print(d.getMatricula());%>><%out.print(d.getTitle());%></option>       
                                             <% } %>
                                             <%
                                                 }
@@ -345,16 +326,6 @@
 
                                 <div> <br> </div>
 
-
-
-                                <div class="row">
-                                    <div class="form-group col-sm-6">
-                                        <label for="title" style="color: black; font-weight: bold" >Link:</label>
-                                        <input type="text" id="link_text" class="form-control" name="link" value="<% out.print(degree.getLink());%>" >
-                                    </div>
-
-                                </div>
-
                                 <div> <br> </div>
                                 <div> <br> </div>
                                 <div> <br> </div>
@@ -366,32 +337,16 @@
                                     </div>
 
                                     <div class="form-group col-sm-1">
-                                        <button type="button" style=" height: 32px; width: 90px; color: black" onclick="UpdateDegree()" id="button_confirm">Conferma</button>
+                                        <button type="button" style=" height: 32px; width: 90px; color: black" onclick="UpdateCurriculum()" id="button_confirm">Conferma</button>
                                     </div>
                                 </div>
-
-
-
-
-
-
-
 
                                 <!-- Main Footer -->
                                 <!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->
                                 <!-- Add class "sticky" to  always stick the footer to the end of page (if page contents is small) -->
                                 <!-- Or class "fixed" to  always fix the footer to the end of page -->
 
-
-
-
-
-
-
                             </div>
-
-
-
 
                         </div>
 
@@ -458,24 +413,22 @@
                     }
                 }
                 function RevertModify() {
-                    document.location.href = '${pageContext.request.contextPath}/ShowDegreeServlet';
+                    document.location.href = '${pageContext.request.contextPath}/ShowCurriculumServlet';
                 }
-                function UpdateDegree() {
-                    var cycle = $("#Select_cycle option:selected").val();
-                    var departmentAbb = $("#Select_dep option:selected").val();
-                    var degree_matricula = '<%= degree.getMatricula() %>';
-                    var link = $("#link_text").val();
+                function UpdateCurriculum() {
+                    var degree = $("#Select_degree option:selected").val();
+                    var curriculum_matricula = '<%= curriculum.getMatricula()%>';
                     var title = $("#title_text").val();
 
-                    if(document.getElementById('status_active').checked) {
+                    if (document.getElementById('status_active').checked) {
                         var status = "true";
-                    }else if(document.getElementById('status_disable').checked) {
+                    } else if (document.getElementById('status_disable').checked) {
                         var status = "false";
-                    }       
+                    }
 
-                    var r = confirm("Sei sicuro di voler modificare il corso di Laurea: "+title);
+                    var r = confirm("Sei sicuro di voler modificare il corso di Laurea: " + title);
                     if (r == true) {
-                        document.location.href = '${pageContext.request.contextPath}/UpdateDegreeServlet?degree_matricula='+degree_matricula+'&cycle='+cycle+'&departmentAbb='+departmentAbb+'&link='+link+'&title='+title+'&status='+status;
+                        document.location.href = '${pageContext.request.contextPath}/UpdateCurriculumServlet?curriculum_matricula=' + curriculum_matricula + '&title=' + title + '&degree_matricula=' + degree + '&status=' + status;
                     }
                 }
             </script>

@@ -1,23 +1,19 @@
 <%-- 
-    Document   : InsertDegree
+    Document   : ShowCurriculumList
     Author     : Davide
 --%>
+<%@page import="it.unisa.offerta_formativa.beans.Department"%>
+<%@page import="java.util.List"%>
 <%@page import="java.util.Collections"%>
 <%@page import="it.unisa.offerta_formativa.beans.Cycle"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="it.unisa.offerta_formativa.beans.Curriculum"%>
 <%@page import="it.unisa.offerta_formativa.beans.Degree"%>
-<%@page import="it.unisa.offerta_formativa.beans.Teaching"%>
-
-<%@page import="it.unisa.offerta_formativa.beans.Department"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1"%>
 
-<%!
-    public ArrayList<Cycle> cycles;
-    public ArrayList<Degree> degrees;
-    public ArrayList<Department> departments;
+<%! public ArrayList<Department> deps;
 %>
 
 <!DOCTYPE html>
@@ -118,13 +114,7 @@
 
     </head>
     <body class="page-body">
-        <%
-            cycles = (ArrayList<Cycle>) request.getAttribute("cycles");
-            Collections.sort(cycles);
-            departments = (ArrayList<Department>) request.getAttribute("departments");
-            Collections.sort(departments);
-            degrees = (ArrayList<Degree>) request.getAttribute("degrees");
-            Collections.sort(degrees);
+        <% deps = (ArrayList<Department>) request.getAttribute("deps");
         %>
         <nav class="navbar horizontal-menu navbar-fixed-top">
             <!-- set fixed position by adding class "navbar-fixed-top" -->
@@ -248,7 +238,7 @@
                     <div class="col-sm-10">
                         <div class="panel panel-default">
                             <div class="panel-heading" style="text-align: center; ">
-                                Inserisci Corso di Laurea 
+                                Gestione Corsi di Laurea
                             </div>
                             <div class="panel-body">
                                 <div class="row"> <br> </div>
@@ -277,115 +267,47 @@
                                 </script>
 
 
-
-                                <div class="row">
-                                    <div class="form-group col-sm-3">
-                                        <label for="title" style="color: black; font-weight: bold">Matricola:</label>
-                                        <input type="text" id="matricula_text" class="form-control" name="matricula" placeholder="Inserisci" onblur="Control(this)" >
-                                    </div>
-
-                                    <div class="col-sm-5">
-                                        <label for="title" style="color: black; font-weight: bold" >Titolo:</label>
-                                        <input type="text" id="title_text" name="titolo" class="form-control" onblur="Control(this)"  placeholder="Inserisci" > 
-                                    </div>
-
-                                    <div class="form col-sm-1"></div>
-
-                                    <label for="title" style="color: black; font-weight: bold">Stato:</label>
-                                    <form role="form col-sm-5">
-                                        <div class="form col-sm-1"></div>
-                                        <label class="radio-inline">
-                                            <input type="radio" name="optradio" id="status_active" checked><p style="color: black">Attivo</p>
-                                        </label>
-                                        <label class="radio-inline">
-
-                                            <input type="radio" name="optradio" id="status_disable" ><p style="color: black">Disattivo</p>
-
-                                        </label>
-                                    </form>
-
-                                </div>
-                                <div> <br> </div>  
-
-
-                                <div class="row">
-                                    <div class="form-group col-sm-8">
-                                        <label style="color: black; font-weight: bold">Dipartimento:</label><select name="department" class="form-control" id="Select_dep">
-
-                                            <%if (departments.size() != 0) {
-                                                    for (Department d : departments) {
-
-                                            %><option value=<% out.print(d.getAbbreviation());%>><% out.print(d.getTitle());%></option>
-
-                                            <% }
-                                                } %>
-
-                                        </select> 
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <label style="color: black; font-weight: bold">Ciclo:</label><select name="cycle" class="form-control" id="Select_cycle">
-
-                                            <%
-                                                if (cycles.size() != 0)
-                                                    for (Cycle c : cycles) {
-
-                                            %>
-
-                                            <option value=<%out.print(c.getNumber());%>><%out.print(c.getTitle());%></option>       
-
-                                            <%
-                                                    }
-                                            %>
-                                        </select> 
-                                    </div>
-                                    <div> <br> </div>
-
-                                </div>
-
-                                <div> <br> </div>
-
-
-
                                 <div class="row">
                                     <div class="form-group col-sm-6">
-                                        <label for="title" style="color: black; font-weight: bold" >Link:</label>
-                                        <input type="text" id="link_text" class="form-control" name="link" placeholder="Inserisci" onblur="Control(this)">
+                                        <select name="department" class="form-control" id="Select_dep" onchange="loadDegree(this.value);">
+                                            <option selected value="NoDep">Seleziona il Dipartimento</option>
+                                            <%
+                                                if (deps.size() != 0) {
+                                                    Collections.sort(deps);
+                                                    for (int i = 0; i < deps.size(); i++) {
+                                                        Department d = deps.get(i);
+                                            %><option value=<% out.print(d.getAbbreviation());%>><% out.print(d.getTitle());%></option>
+                                            <%}
+                                                }%>
+
+                                        </select> 
                                     </div>
+                                    <div class="form-group col-sm-5">
+                                        <select name="degree" class="form-control" id="Select_deg" onchange="loadCurr()">
+                                            <option selected value="NoDeg">Prima devi selezionare il Dipartimento</option>
+                                        </select> 
+                                    </div>
+
+                                    <div> <br> </div>
+                                    <div> <br> </div>
+                                    <div> <br> </div>
+
+
                                 </div>
 
-                                <div> <br> </div>
-                                <div> <br> </div>
-                                <div> <br> </div>
+                                <div> <br> </div><div> <br> </div>    
 
-                                <div class="row">
-
-                                    <div class="form-group col-sm-10">
-                                        <button type="button" style=" height: 32px; width: 90px; color: black" onclick="RevertModify()">Annulla</button>
-                                    </div>
-
-                                    <div class="form-group col-sm-1">
-                                        <button type="button" style=" height: 32px; width: 90px; color: black" onclick="UpdateDegree()" id="button_confirm" disabled>Conferma</button>
+                                <div class="row col-sm-12">
+                                    <div class="table table-responsive"> 
+                                        <table  name="degree" class="table table-striped" id="table_curr"></table>
                                     </div>
                                 </div>
-
-
-
-
-
-
 
 
                                 <!-- Main Footer -->
                                 <!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->
                                 <!-- Add class "sticky" to  always stick the footer to the end of page (if page contents is small) -->
                                 <!-- Or class "fixed" to  always fix the footer to the end of page -->
-
-
-
-
-
-
 
                             </div>
 
@@ -432,52 +354,19 @@
 
             <!-- Bottom Scripts -->
             <script type="text/javascript">
-                function Control(obj)
-                {
-                    if ((obj.value !== '') && (obj.value.length > 5)) {
-                        obj.style.borderColor = "green";
-                    }
-                    if ((obj.value == '') || (obj.value.length < 5))
-                    {
-                        obj.style.borderColor = "red";
-                        document.getElementById("button_confirm").disabled = true;
-                    } else if (($("#matricula_text").val() !== '') && ($("#link_text").val() !== '') && ($("#title_text").val() !== '')) {
-                        var degmatricula = $("#matricula_text").val();
-                        document.getElementById("button_confirm").disabled = false;
-                <%for (Degree d : degrees) {%>
-                        var dm = '<%=d.getMatricula()%>';
+                function loadCurr() {
+                    var deg = $("#Select_deg option:selected").val();
+                    $.ajax({url: "GetTableCurriculumServlet?degMatricula=" + deg, success: function (result) {
+                            $("#table_curr").html(result);
 
-                        if (dm === degmatricula) {
-                            document.getElementById("button_confirm").disabled = true;
-                            var r = alert("Matricola già esistente, inserirne un'altra");
-
-
-                        }<%}%>
-
-
-                    }
+                        }});
                 }
+                function loadDegree() {
+                    var dep = $("#Select_dep option:selected").val();
+                    $.ajax({url: "GetSelectDegreeByDepartmentServlet?depAbb=" + dep, success: function (result) {
+                            $("#Select_deg").html(result);
 
-                function RevertModify() {
-                    document.location.href = '${pageContext.request.contextPath}/ShowDegreeServlet';
-                }
-                function UpdateDegree() {
-                    var cycle = $("#Select_cycle option:selected").val();
-                    var departmentAbb = $("#Select_dep option:selected").val();
-                    var degree_matricula = $("#matricula_text").val();
-                    var link = $("#link_text").val();
-                    var title = $("#title_text").val();
-
-                    if (document.getElementById('status_active').checked) {
-                        var status = "true";
-                    } else if (document.getElementById('status_disable').checked) {
-                        var status = "false";
-                    }
-
-                    var r = confirm("Sei sicuro di voler modificare il corso di Laurea: " + title);
-                    if (r == true) {
-                        document.location.href = '${pageContext.request.contextPath}/InsertDegreeServlet?degree_matricula=' + degree_matricula + '&cycle=' + cycle + '&departmentAbb=' + departmentAbb + '&link=' + link + '&title=' + title + '&status=' + status;
-                    }
+                        }});
                 }
             </script>
             <script src="assets/js/bootstrap.min.js"></script>
