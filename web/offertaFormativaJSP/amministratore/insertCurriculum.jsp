@@ -1,5 +1,5 @@
 <%-- 
-    Document   : InsertDegree
+    Document   : InsertCurriculum
     Author     : Davide
 --%>
 <%@page import="java.util.Collections"%>
