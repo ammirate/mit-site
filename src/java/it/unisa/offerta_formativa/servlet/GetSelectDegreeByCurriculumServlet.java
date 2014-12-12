@@ -1,41 +1,51 @@
 package it.unisa.offerta_formativa.servlet;
 
 import it.unisa.offerta_formativa.beans.Curriculum;
-import it.unisa.offerta_formativa.beans.Degree;
+import it.unisa.offerta_formativa.beans.Cycle;
 import java.io.IOException;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import it.unisa.offerta_formativa.beans.Degree;
 import it.unisa.offerta_formativa.manager.CurriculumManager;
 import it.unisa.offerta_formativa.manager.CycleManager;
 import it.unisa.offerta_formativa.manager.DegreeManager;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 
 /**
- * Servlet implementation class Servlet
+ * Servlet implementation class GetDepartmentServlet
  */
-@WebServlet("/ModifyCurriculumServlet")
-public class ModifyCurriculumServlet extends HttpServlet {
+@WebServlet("/GetSelectDegreeByCurriculumServlet")
+public class GetSelectDegreeByCurriculumServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private CurriculumManager cuMng;
+    private DegreeManager degreeMng;
     private CycleManager cyMng;
-    private DegreeManager deMng;
+    private CurriculumManager cuMng;
+    private ServletContext context;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ModifyCurriculumServlet() {
+    public GetSelectDegreeByCurriculumServlet() {
         super();
-        // TODO Auto-generated constructor stub   
-        cuMng = CurriculumManager.getInstance();
-        deMng = DegreeManager.getInstance();
+        degreeMng = DegreeManager.getInstance();
         cyMng = CycleManager.getInstance();
+        cuMng = CurriculumManager.getInstance();
+
+        // TODO Auto-generated constructor stub
+    }
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        this.context = config.getServletContext();
     }
 
     /**
@@ -44,7 +54,19 @@ public class ModifyCurriculumServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        doPost(request, response);
+        String toRet = "<option value='NoDeg'>Seleziona corso di laurea</option>";
+        if (request.getParameterMap().containsKey("curriculum_matricula")) {
+            response.setContentType("text/plain");
+            response.setCharacterEncoding("UTF-8");
+            Curriculum cu = GetCurriculum(request.getParameter("curriculum_matricula"));
+            ArrayList<Degree> degs = GetDegrees(cu);
+            for (int i = 0; i < degs.size(); i++) {
+                Degree d = degs.get(i);
+                Cycle cy = cyMng.readCycle(d.getCycle());
+                toRet += "<option value=" + d.getMatricula() + ">" + cy.getTitle() + " " + d.getTitle() + "</option>";
+            }
+        }
+        response.getWriter().write(toRet);
     }
 
     private Curriculum GetCurriculum(String matricula) {
@@ -54,7 +76,7 @@ public class ModifyCurriculumServlet extends HttpServlet {
 
     private ArrayList<Degree> GetDegrees(Curriculum cu) {
         ArrayList<Degree> toRet = new ArrayList<Degree>();
-        ArrayList<Degree> degs = deMng.getAllDegrees();
+        ArrayList<Degree> degs = degreeMng.getAllDegrees();
         for (int i = 0; i < degs.size(); i++) {
             if (cu.getDegreeMatricula().equalsIgnoreCase(degs.get(i).getMatricula())) {
                 toRet.add(degs.get(i));
@@ -70,10 +92,6 @@ public class ModifyCurriculumServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        request.setAttribute("curriculum", GetCurriculum(request.getParameter("curriculum_matricula")));
-        request.setAttribute("cycles", cyMng.getAllCycles());
-        request.setAttribute("degrees", GetDegrees(GetCurriculum(request.getParameter("curriculum_matricula"))));
-        request.getRequestDispatcher("/offertaFormativaJSP/amministratore/ModifyCurriculum.jsp").forward(request, response);
     }
 
 }

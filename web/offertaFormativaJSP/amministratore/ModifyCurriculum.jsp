@@ -118,7 +118,6 @@
     <body class="page-body">
         <%  curriculum = (Curriculum) request.getAttribute("curriculum");
             degrees = (ArrayList<Degree>) request.getAttribute("degrees");
-            Collections.sort(degrees);
         %>
         <nav class="navbar horizontal-menu navbar-fixed-top">
             <!-- set fixed position by adding class "navbar-fixed-top" -->
@@ -307,17 +306,6 @@
                                     <div class="col-sm-7">
                                         <label style="color: black; font-weight: bold">Corso di Laurea:</label><select name="degree" class="form-control" id="Select_degree">
 
-                                            <%
-                                                if (degrees.size() != 0)
-                                                    for (Degree d : degrees) {
-                                                        if (curriculum.getDegreeMatricula().equalsIgnoreCase(d.getMatricula())) { %>
-                                            %><option selected value=<%out.print(d.getMatricula());%>><%out.print(d.getTitle());%></option>
-                                            <%} else { %>
-                                            <option value=<%out.print(d.getMatricula());%>><%out.print(d.getTitle());%></option>       
-                                            <% } %>
-                                            <%
-                                                }
-                                            %>
                                         </select> 
                                     </div>
                                     <div> <br> </div>
@@ -388,6 +376,14 @@
 
             <!-- Bottom Scripts -->
             <script type="text/javascript">
+                function loadDegree() {
+                    var cur = '<%= curriculum.getMatricula()%>';
+                    $.ajax({url: "GetSelectDegreeByCurriculumServlet?curriculum_matricula=" + cur, success: function (result) {
+                            $("#Select_degree").html(result);
+
+                        }});
+                }
+                window.onload = loadDegree;
                 function Control(obj)
                 {
                     if ((obj.value == '') || (obj.value == 'Inserisci Titolo') || (obj.value == 'Inserisci Titolo maggiore di 4 caratteri'))
