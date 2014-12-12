@@ -1,5 +1,6 @@
 package it.unisa.offerta_formativa.servlet.getter;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 
 import javax.servlet.ServletConfig;
@@ -14,6 +15,9 @@ import it.unisa.offerta_formativa.beans.Degree;
 import it.unisa.offerta_formativa.beans.Department;
 import it.unisa.offerta_formativa.manager.DegreeManager;
 import it.unisa.offerta_formativa.manager.DepartmentManager;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Servlet implementation class GetDepartmentServlet
@@ -44,16 +48,29 @@ public class GetDegreeServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		String toRet="<option value=0>Seleziona corso di laurea</option>";
-                if(request.getParameterMap().containsKey("idCycle")){
-			response.setContentType("text/plain");  
-			response.setCharacterEncoding("UTF-8"); 
-			for(Degree d : degreeMng.getDegreesByCycle(Integer.parseInt(request.getParameter("idCycle")))){
-				toRet+="<option value="+d.getMatricula()+">"+d.getTitle()+"</option>"; 
-			}
-		}
-                response.getWriter().write(toRet);
+            // TODO Auto-generated method stub
+            ArrayList<HashMap<String,String>> arrlist = new ArrayList<HashMap<String,String>>();
+            HashMap<String,String> map;
+            ArrayList<Degree> degrees = new ArrayList<Degree>();
+            if(request.getParameterMap().containsKey("cycle") && request.getParameterMap().containsKey("department")){
+                degrees = (ArrayList<Degree>)degreeMng.getDegreesByDepartmentAndCycle(request.getParameter("department"),Integer.parseInt(request.getParameter("cycle")));
+            }else if(request.getParameterMap().containsKey("cycle")){
+                degrees = degreeMng.getDegreesByCycle(Integer.parseInt(request.getParameter("cycle")));  
+            }else if(request.getParameterMap().containsKey("department")){
+                degrees = degreeMng.getDegreesByDepartment(request.getParameter("department"));
+            }
+            for(Degree d : degrees){
+                    map = new HashMap<String,String>();
+                    map.put("departmentAbbreviation", d.getDepartmentAbbreviation());
+                    map.put("title", d.getTitle());
+                    map.put("matricula", d.getMatricula());
+                    map.put("link", d.getLink());
+                    arrlist.add(map);
+                }
+            String finalJSON = new Gson().toJson(arrlist);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(finalJSON);
 	}
 
 	/**
@@ -61,6 +78,7 @@ public class GetDegreeServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+            doGet(request, response);
 	}
 
 }
