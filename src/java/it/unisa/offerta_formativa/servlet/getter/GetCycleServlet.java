@@ -1,5 +1,6 @@
 package it.unisa.offerta_formativa.servlet.getter;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 
 import javax.servlet.ServletConfig;
@@ -10,10 +11,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import it.unisa.offerta_formativa.beans.Curriculum;
 import it.unisa.offerta_formativa.beans.Cycle;
-import it.unisa.offerta_formativa.manager.CurriculumManager;
+import it.unisa.offerta_formativa.beans.Degree;
 import it.unisa.offerta_formativa.manager.CycleManager;
+import it.unisa.offerta_formativa.manager.DegreeManager;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
 /**
  * Servlet implementation class GetDepartmentServlet
@@ -23,6 +27,7 @@ public class GetCycleServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private CycleManager cycleMng;
+    private DegreeManager degreeMng;
     private ServletContext context;
 
     /**
@@ -31,6 +36,7 @@ public class GetCycleServlet extends HttpServlet {
     public GetCycleServlet() {
         super();
         cycleMng = CycleManager.getInstance();
+        degreeMng = DegreeManager.getInstance();
         // TODO Auto-generated constructor stub
     }
 
@@ -45,17 +51,36 @@ public class GetCycleServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        response.setContentType("text/plain");
-        response.setCharacterEncoding("UTF-8");
-        String toRet = "<option value=0>Seleziona il ciclo</option>";
-        if (request.getParameterMap().containsKey("cycleNumber")) {
-            Cycle c = cycleMng.readCycle(Integer.parseInt(request.getParameter("cycleNumber")));
-        }else{ //get all cycles
-            for (Cycle c : cycleMng.getAllCycles()) {
-                toRet+="<option value="+c.getNumber()+">"+c.getTitle()+"</option>";
-            }
-        }
-        response.getWriter().write(toRet);
+        ArrayList<HashMap<String,String>> arrlist = new ArrayList<HashMap<String,String>>();
+            HashMap<String,String> map;
+            ArrayList<Cycle> cycles = new ArrayList<Cycle>();
+            if(request.getParameterMap().containsKey("department")){
+                ArrayList<Degree> degrees = degreeMng.getDegreesByDepartment(request.getParameter("department"));
+                ArrayList<Cycle> allCycles= cycleMng.getAllCycles();
+                ArrayList<Integer> checkCycle = new ArrayList<Integer>();
+                for(Degree d: degrees){
+                   for(Cycle c: allCycles){
+                       if(d.getCycle()==c.getNumber()){
+                           if(!checkCycle.contains(c.getNumber())){
+                               cycles.add(c);
+                               checkCycle.add(c.getNumber());
+                           }
+                       }
+                   }
+                  
+                }
+            } else cycles = cycleMng.getAllCycles();
+            Collections.sort(cycles);
+            for(Cycle c : cycles){
+                    map = new HashMap<String,String>();
+                    map.put("cycle_number", ""+c.getNumber());
+                    map.put("title", c.getTitle());
+                    arrlist.add(map);
+                }
+            String finalJSON = new Gson().toJson(arrlist);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(finalJSON);
     }
 
     /**
@@ -64,6 +89,7 @@ public class GetCycleServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
+        doGet(request, response);
     }
 
 }

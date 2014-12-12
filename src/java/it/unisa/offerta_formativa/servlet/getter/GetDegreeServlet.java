@@ -12,12 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import it.unisa.offerta_formativa.beans.Degree;
-import it.unisa.offerta_formativa.beans.Department;
 import it.unisa.offerta_formativa.manager.DegreeManager;
-import it.unisa.offerta_formativa.manager.DepartmentManager;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Servlet implementation class GetDepartmentServlet
@@ -37,8 +35,6 @@ public class GetDegreeServlet extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
     
-    
-
     @Override
     public void init(ServletConfig config) throws ServletException {
         this.context = config.getServletContext();
@@ -59,12 +55,16 @@ public class GetDegreeServlet extends HttpServlet {
             }else if(request.getParameterMap().containsKey("department")){
                 degrees = degreeMng.getDegreesByDepartment(request.getParameter("department"));
             }
+            Collections.sort(degrees);
             for(Degree d : degrees){
                     map = new HashMap<String,String>();
                     map.put("departmentAbbreviation", d.getDepartmentAbbreviation());
                     map.put("title", d.getTitle());
                     map.put("matricula", d.getMatricula());
                     map.put("link", d.getLink());
+                    if(d.isActive()){
+                        map.put("status", "Attivo");
+                    } else map.put("status", "Disattivo");
                     arrlist.add(map);
                 }
             String finalJSON = new Gson().toJson(arrlist);
