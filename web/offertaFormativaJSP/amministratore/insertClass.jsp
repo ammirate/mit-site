@@ -306,10 +306,13 @@
 	<!-- Bottom Scripts -->
 	<script type="text/javascript">
 	function loadDegree(i){
-	    $.ajax({url:"GetDegreeServlet?idCycle="+i,success:function(result){
-	    	$("#degree").html(result);
-                
-	    }});
+            $.get('GetDegreeServlet?cycle='+i,function(responseJson) {   
+            var $select = $('#degree');                           
+               $select.find('option').remove(); 
+               $.each(responseJson, function(key, value) {               
+                   $('<option>').val(value.departmentAbbreviation).text(value.title).appendTo($select);      
+                });
+            });
 	}
         function loadCurriculum(i){
 	    $.ajax({url:"GetCurriculumServlet?degreeMatricula="+i,success:function(result){

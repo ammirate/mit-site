@@ -37,7 +37,19 @@
 <link rel="stylesheet" href="assets/css/custom.css">
 
 <script src="assets/js/jquery-1.11.1.min.js"></script>
-
+<style>
+    html .select2-drop .select2-results li.select2-highlighted{ //per la selection di select2
+        background-color:#3875d7;
+    }
+    form .error{ //per validation
+        border-color: #cc3f44;
+    }
+    form .error{ //per validation
+        color:#cc3f44;
+    }
+    form
+    
+</style>
 
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
@@ -191,140 +203,144 @@
 				});
 			</script>
 
-			<div class="jumbotron">
-				<h2>Inserimento Insegnamento</h2>
-				<form action="InsertTeachingServlet" method="post" role="form" class="form-horizontal">
-					<div class="row">
-					<div class="form-group col-sm-4">
-						<label for="department">Dipartimento:</label> 
-						<select name="department" id="idDepartment" class="form-control">
-							<%
-								if (departments.size() != 0)
-									for (Department d : departments) {
-							%><option value='<%out.print(d.getAbbreviation());%> '>
-								<%
-									out.print(d.getTitle());
-								%>
-							</option>
-							<%
-								}
-							%>
-						</select>
-					</div>
-					<div class="col-sm-2"></div>
-					<div class="form-group col-sm-4">
-						<label for="cycle">Ciclo:</label> 
-						<select name="cycle" class="form-control" onchange="loadDegree(this.value);">
-							<%
-                                                            if (cycles.size() != 0)
-									for (Cycle c : cycles) {
-							%><option value='<%out.print(c.getNumber());%>' >
-								<%
-									out.print(c.getTitle());
-								%>
-							</option>
-							<%
-								}
-							%>
-						</select>
-					</div>
-					</div>
-					<div class="row">
-					<div class="form-group col-sm-4">
-						<label for="degree">Corso di Laurea:</label> 
-                                                <select name="degree" class="form-control" id="degree" onchange="loadCurriculum(this.value);">
-							
-						</select>
-					</div>
-					<div class="col-sm-2"></div>
-					
-					<div class="form-group col-sm-4">
-						<label for="curriculum">Curriculum:</label> 
-						<select name="curriculum" class="form-control" id="curriculum">
-							
-						</select>
-					</div>
-					
-					</div>
-					<div class="row">
-					<div class="form-group col-sm-4">
-                		<label for="matricula">Matricola:</label>
-                		<input type="text" class="form-control" name="matricula" placeholder="Matricola">
-                	</div>
-                	<div class="col-sm-2"></div>
-                	<div class="form-group col-sm-4">
-                		<label for="title">Nome:</label>
-                		<input type="text" class="form-control" name="title" placeholder="Nome dell'insegnamento">
-                	</div>
-                	
-					</div>
-					
-					<div class="row">
-					<div class="form-group col-sm-4">
-                		<label for="abbreviazione">Abbreviazione:</label>
-                		<input type="text" class="form-control" name="abbreviation" placeholder="Abbreviazione">
-                	</div>
-                	<div class="col-sm-2"></div>
-                	<div class="form-group col-sm-2">
-						<label for="year">Anno:</label> 
-						<select name="year" class="form-control">
-							<option value=1>1</option>
-							<option value=2>2</option>
-							<option value=3>3</option>
-							<option value=4>4</option>
-							<option value=5>5</option>
-						</select>
-                	</div>
-                	
-                	<div class="col-sm-1"></div>
-                	<div class="form-group col-sm-2">
-						<label for="semester">Semestre:</label> 
-						<select name="semester" class="form-control">
-							<option value=1>1</option>
-							<option value=2>2</option>
-						</select>
-                	</div>
-                	
-					</div>
-					
-                                        <div class="row">
-                                            <div class="form-group col-sm-12">
-                                                <label for="link">Link al sillabus:</label>
-                                                <input type="text" name="link" class="form-control" placeholder="link">
-                                            </div>
+                        <div class="row">
+                            <div class="col-sm-1"></div>
+                            <div class="panel panel-default col-sm-10">
+                                <div class="panel-heading">Inserimento Insegnamento</div>
+                                <form action="InsertTeachingServlet" method="post" role="form" id="form" class="form-horizontal">
+                                    <div class="row">
+                                        <div class="form-group col-sm-4">
+                                            <label for="department">Dipartimento:</label> 
+                                            <select name="department" id="idDepartment" class="form-control">
+                                                <%
+                                                    if (departments.size() != 0)
+                                                        for (Department d : departments) {
+                                                %><option value='<%out.print(d.getAbbreviation());%> '>
+                                                    <%
+                                                        out.print(d.getTitle());
+                                                    %>
+                                                </option>
+                                                <%
+                                                    }
+                                                %>
+                                            </select>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-sm-1"></div>
-                                            <div class="form-group col-sm-2">
-                                                <label for="classNumber">Classi:</label> 
-                                                <select id="classNumber" name="classNumber" class="form-control" onchange="loadClasses(this.value);">
-                                                    <option value=1>1</option>
-                                                    <option value=2>2</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group col-sm-2"></div>
-                                            <div class="form-group col-sm-2">
-                                                    <label for="moduleNumber">Moduli:</label> 
-                                                    <select id="moduleNumber" name="moduleNumber" class="form-control" onchange="loadModules(this.value);" >
-                                                        <option value=1>1</option>
-                                                        <option value=2>2</option>
-                                                    </select>
-                                            </div>
+                                        <div class="col-sm-2"></div>
+                                        <div class="form-group col-sm-4">
+                                            <label for="cycle">Ciclo:</label> 
+                                            <select name="cycle" class="form-control" id="cycle"  onchange="loadDegree(this.value);">
+                                                <%
+                                                    if (cycles.size() != 0)
+                                                        for (Cycle c : cycles) {
+                                                %><option value='<%out.print(c.getNumber());%>' >
+                                                    <%
+                                                        out.print(c.getTitle());
+                                                    %>
+                                                </option>
+                                                <%
+                                                    }
+                                                %>
+                                            </select>
                                         </div>
-                                        <div id="modules">
-                                        </div>   
-					<div id="classes">
-                                        </div> 
-                                        <div id="lastDiv">
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-sm-4">
+                                            <label for="degree">Corso di Laurea:</label> 
+                                            <select name="degree" class="form-control" id="degree" onchange="loadCurriculum(this.value);">
 
+                                            </select>
                                         </div>
-					<div class="row">
-					<div class="form-group col-sm-1">
-						<input type="submit" id="submit" class="btn btn-default">
-					</div>
-					</div>
-				</form>
-			</div>
+                                        <div class="col-sm-2"></div>
+
+                                        <div class="form-group col-sm-4">
+                                            <label for="curriculum">Curriculum:</label> 
+                                            <select name="curriculum" class="form-control" id="curriculum">
+
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-sm-4">
+                                            <label for="matricula">Matricola:</label>
+                                            <input minlength="10" maxlength="10" type="text" class="form-control" name="matricula" placeholder="Matricola"  required />
+                                        </div>
+                                        <div class="col-sm-2"></div>
+                                        <div class="form-group col-sm-4">
+                                            <label for="title">Nome:</label>
+                                            <input minlength="5" type="text" class="form-control" name="title" placeholder="Nome dell'insegnamento" required />
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-group col-sm-4">
+                                            <label for="abbreviazione">Abbreviazione:</label>
+                                            <input minlength="2" type="text" class="form-control" name="abbreviation" placeholder="Abbreviazione" required />
+                                        </div>
+                                        <div class="col-sm-2"></div>
+                                        <div class="form-group col-sm-2">
+                                            <label for="year">Anno:</label> 
+                                            <select name="year" class="form-control">
+                                                <option value=1>1</option>
+                                                <option value=2>2</option>
+                                                <option value=3>3</option>
+                                                <option value=4>4</option>
+                                                <option value=5>5</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-sm-1"></div>
+                                        <div class="form-group col-sm-2">
+                                            <label for="semester">Semestre:</label> 
+                                            <select name="semester" class="form-control">
+                                                <option value=1>1</option>
+                                                <option value=2>2</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-group col-sm-12">
+                                            <label for="link">Link al sillabus:</label>
+                                            <input  type="text" name="link"  url class="form-control" placeholder="link" required />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-1"></div>
+                                        <div class="form-group col-sm-2">
+                                            <label for="classNumber">Classi:</label> 
+                                            <select id="classNumber" name="classNumber" class="form-control" onchange="loadClasses(this.value);">
+                                                <option value=1>1</option>
+                                                <option value=2>2</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-sm-2"></div>
+                                        <div class="form-group col-sm-2">
+                                            <label for="moduleNumber">Moduli:</label> 
+                                            <select id="moduleNumber" name="moduleNumber" class="form-control" onchange="loadModules(this.value);" >
+                                                <option value=1>1</option>
+                                                <option value=2>2</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div id="modules">
+                                    </div>   
+                                    <div id="classes">
+                                    </div> 
+                                    <div id="lastDiv">
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-sm-1">
+                                            <input type="submit" id="submit" class="btn btn-default" onclick="$('#form').validate();">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-sm-1"></div>
+                        </div>
 			<!-- Main Footer -->
 			<!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->
 			<!-- Add class "sticky" to  always stick the footer to the end of page (if page contents is small) -->
@@ -356,9 +372,7 @@
 	</div>
 	
 
-	<div class="page-loading-overlay">
-		<div class="loader-2"></div>
-	</div>
+	
 
 
 
@@ -366,10 +380,13 @@
 	<!-- Bottom Scripts -->
 	<script type="text/javascript">
 	function loadDegree(i){
-	    $.ajax({url:"GetDegreeServlet?idCycle="+i,success:function(result){
-	    	$("#degree").html(result);
-                
-	    }});
+            $.get('GetDegreeServlet?cycle='+i,function(responseJson) {   
+            var $select = $('#degree');                           
+               $select.find('option').remove(); 
+               $.each(responseJson, function(key, value) {               
+                   $('<option>').val(value.departmentAbbreviation).text(value.title).appendTo($select);      
+                });
+            });
 	}
         function loadCurriculum(i){
 	    $.ajax({url:"GetCurriculumServlet?degreeMatricula="+i,success:function(result){
@@ -435,16 +452,32 @@
         }
         
         </script>
+        <script type="text/javascript">
+            jQuery(document).ready(function($)
+            {
+            $("#idDepartment").select2({allowClear: true}).on('select2-open', function(){
+            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();});    
+            $("#cycle").select2({allowClear: true}).on('select2-open', function(){
+            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();});
+            $("#degree").select2({allowClear: true}).on('select2-open', function(){
+            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();});    
+            $("#curriculum").select2({allowClear: true}).on('select2-open', function(){
+            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();});
+            });
+        </script> 
 	<script src="assets/js/bootstrap.min.js"></script>
 	<script src="assets/js/TweenMax.min.js"></script>
 	<script src="assets/js/resizeable.js"></script>
 	<script src="assets/js/joinable.js"></script>
 	<script src="assets/js/xenon-api.js"></script>
 	<script src="assets/js/xenon-toggles.js"></script>
-
-
+        <link rel="stylesheet" href="assets/js/select2/select2.css">
+        <link href="assets/js/select2/select2-bootstrap.css" rel="stylesheet" type="text/css"/>
+        <script src="assets/js/select2/select2.min.js"></script>
+        <script src="assets/js/jquery-validate/jquery.validate.min.js" id="script-resource-7"></script>
+        <script src="assets/js/jquery-validate/localization/messages_it.min.js" type="text/javascript"></script>
 	<!-- JavaScripts initializations and stuff -->
 	<script src="assets/js/xenon-custom.js"></script>
-
+        
 </body>
 </html>

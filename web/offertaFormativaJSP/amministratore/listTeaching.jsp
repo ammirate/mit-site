@@ -263,7 +263,7 @@
                                                     <%
                                                         if (departments.size() != 0)
                                                             for (Department d : departments) {
-                                                    %><option value=<%out.print(d.getAbbreviation());%>>
+                                                    %><option value="<%out.print(d.getAbbreviation());%>">
                                                         <%
                                                             out.print(d.getTitle());
                                                         %>
@@ -281,7 +281,7 @@
                                                     <%
                                                         if (cycles.size() != 0)
                                                             for (Cycle c : cycles) {
-                                                    %><option value=<%out.print(c.getNumber());%>>
+                                                    %><option value="<%out.print(c.getNumber());%>">
                                                         <%
                                                             out.print(c.getTitle());
                                                         %>
@@ -310,8 +310,9 @@
                                             </div>
 
                                         </div>
-                                        <div class="row">
-                                                <table class="table-responsive col-sm-12" id="table" style="display: none;">
+                                        <div class="row table-responsive">
+                                            
+                                                <table class="table table-striped" id="table" style="display: none;">
                                                     <thead>
                                                         <tr>
                                                             <th>Matricola</th>
@@ -324,9 +325,10 @@
                                                             <th></th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody id="tablebody">
+                                                    <tbody id="tablebody" class="">
                                                     </tbody>
                                                 </table>
+                                            
                                         </div>
                                     </form>
                                 </div>

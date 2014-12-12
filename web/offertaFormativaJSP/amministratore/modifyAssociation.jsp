@@ -1,7 +1,8 @@
 <%-- 
-    Document   : insertTeaching
+    Document   : modifyAssociation
     Author     : Alessandro
 --%>
+<%@page import="it.unisa.offerta_formativa.beans.ProfModuleClass"%>
 <%@page import="it.unisa.offerta_formativa.beans.Teaching"%>
 <%@page import="it.unisa.offerta_formativa.beans.Curriculum"%>
 <%@page import="it.unisa.offerta_formativa.beans.Degree"%>
@@ -11,13 +12,12 @@
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%! public ArrayList<Cycle> cycles; %>
-<%! public ArrayList<Department> departments;
-    public Department dept;
-    public Degree degree;
-    public Curriculum curr;
-    public Teaching teaching;
-    public Cycle cycle;
+<%! 
+    public String moduleTitle;
+    public String classTitle;
+    public String mail;
+    public String matricula;
+    public String profname;
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,13 +55,11 @@
 
 </head>
 <body class="page-body">
-	<% 	cycles = (ArrayList<Cycle>)request.getAttribute("cycles");
-		departments = (ArrayList<Department>)request.getAttribute("departments");
-		teaching = (Teaching)request.getAttribute("teaching");
-                curr = (Curriculum) request.getAttribute("curriculum");
-                degree = (Degree) request.getAttribute("degree");
-                dept = (Department) request.getAttribute("department");
-                cycle = (Cycle)request.getAttribute("cycle");
+	<% 	moduleTitle = (String)request.getAttribute("moduleTitle");
+		classTitle = (String) request.getAttribute("classTitle");
+                matricula = (String) request.getAttribute("matricula");
+                mail = (String) request.getAttribute("mail");
+                profname = (String) request.getAttribute("profname");
 	%>
 	<nav class="navbar horizontal-menu navbar-fixed-top">
 		<!-- set fixed position by adding class "navbar-fixed-top" -->
@@ -203,105 +201,31 @@
 				});
 			</script>
 
-			<div class="jumbotron">
-				<h2>Modifica Insegnamento</h2>
-                                <form action="ModifyTeachingServlet" method="post" role="form" class="form-horizontal">
+			<div class="row">
+                                <div class="col-sm-1"></div>
+				<h2>Modifica Associazione</h2>
+                                <div class="panel panel-default col-sm-10 clearfix">
+                                <!-- Default panel contents -->
+                                <div class="panel-heading"></div>
+                                <div class="panel-body ">
+                                <form action="ModifyAssociationServlet" method="post" role="form" class="form-horizontal">
                                     <div class="row">
                                         <div class="form-group col-sm-4">
-                                            <label for="department">Dipartimento:</label> 
-                                            <select name="department" id="department" class="form-control" readonly onclick="enablePlacingFields()">
-                                                <% out.print("<option value="+dept.getAbbreviation()+">"+dept.getTitle()
-                                                        +"</option>");
-                                                %>
-                                            </select>
+                                            <label for="link">Classe:</label>
+                                            <input type="text" name="class" id="class" class="form-control"  value="<%out.println(classTitle);%>" readonly>
                                         </div>
-                                        <div class="col-sm-2"></div>
+                                        <div class="form-group col-sm-2"></div>
                                         <div class="form-group col-sm-4">
-                                            <label for="cycle">Ciclo:</label> 
-                                            <select name="cycle" id="cycle" class="form-control" onchange="loadDegree(this.value);" readonly onclick="enablePlacingFields()">
-                                                <% out.print("<option value="+cycle.getNumber()+">"+cycle.getTitle()
-                                                        +"</option>");
-                                                %>
-                                            </select>
+                                            <label for="link">Modulo:</label>
+                                            <input type="text" name="module" id="module" class="form-control" value="<%out.println(moduleTitle);%>" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-sm-4">
-                                            <label for="degree">Corso di Laurea:</label> 
-                                            <select name="degree" class="form-control" id="degree" onchange="loadCurriculum(this.value);" readonly onclick="enablePlacingFields()">
-                                                <% out.print("<option value="+degree.getMatricula()+">"+degree.getTitle()
-                                                        +"</option>");
-                                                %>
+                                            <label for="link">Docente:</label>
+                                            <select id="prof" class="form-control">
+                                                <option value="<%out.print(mail);%>"><%out.print(profname);%></option>
                                             </select>
-                                        </div>
-                                        <div class="col-sm-2"></div>
-
-                                        <div class="form-group col-sm-4">
-                                            <label for="curriculum">Curriculum:</label> 
-                                            <select name="curriculum" class="form-control" id="curriculum" readonly onclick="enablePlacingFields()">
-                                                <% out.print("<option value="+curr.getMatricula()+">"+curr.getTitle()
-                                                        +"</option>");
-                                                %>
-                                            </select>
-                                            <input hidden="true" type="text" value="<%out.print(curr.getMatricula());%>" name="oldCurriculumMatricula">
-                                        </div>
-
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-sm-4">
-                                            <label for="matricula">Vecchia Matricola:</label>
-                                            <input type="text" class="form-control" name="oldMatricula" id="oldMatricula" placeholder="Matricola" value="<%out.println(teaching.getMatricula());%>" readonly>
-                                        </div>
-                                        <div class="col-sm-2"></div>
-                                        <div class="form-group col-sm-4">
-                                            <label for="matricula">Nuova Matricola:</label>
-                                            <input type="text" class="form-control" name="newMatricula" id="newMatricula" placeholder="Matricola" value="<%out.println(teaching.getMatricula());%>" readonly onclick="check(this);">
-                                        </div>
-                                        <div class="col-sm-2"></div>
-
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="form-group col-sm-4">
-                                            <label for="title">Nome:</label>
-                                            <input type="text" class="form-control" name="title" id="title" placeholder="Nome dell'insegnamento" value="<% out.println(teaching.getTitle()); %>" readonly onclick="check(this)">
-                                        </div>
-                                        
-                                        <div class="col-sm-2"></div>
-                                        <div class="form-group col-sm-4">
-                                            <label for="abbreviazione">Abbreviazione:</label>
-                                            <input type="text" class="form-control" name="abbreviation" id="abbreviation" placeholder="Abbreviazione" value="<%out.println(teaching.getAbbreviation());%>" readonly onclick="check(this)">
-                                        </div>
-                                        <div class="col-sm-2"></div>
-                                    </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-2">
-                                                <label for="year">Anno:</label> 
-                                                <select name="year" id="year" class="form-control" readonly onclick="check(this)">
-                                                    <%out.println("<option value="+teaching.getYear()+">"+teaching.getYear()+"</option>");%>
-                                                </select>
-                                            </div>
-
-                                            <div class="col-sm-2"></div>
-                                            <div class="form-group col-sm-2">
-                                                <label for="semester">Semestre:</label> 
-                                                <select name="semester" id="semester" class="form-control" readonly onclick="check(this)">
-                                                    <%out.println("<option value="+teaching.getSemester()+">"+teaching.getSemester()+"</option>");%>
-                                                </select>
-                                            </div>
-                                            <div class="col-sm-2"></div>
-                                            <div class="form-group col-sm-2">
-                                                <label for="active">Attivo:</label> 
-                                                <select name="active" id="active" class="form-control" readonly onclick="check(this)">
-                                                    <%out.println("<option value="+((teaching.isActive())?1:0)+">"+((teaching.isActive())?"SI":"NO")+"</option>");%>
-                                                </select>
-                                            </div>
-                                        </div>
-                                   
-                                    <div class="row">
-                                        <div class="form-group col-sm-12">
-                                            <label for="link">Link al sillabus:</label>
-                                            <input type="text" name="link" id="link" class="form-control" placeholder="link" value="<%out.println(teaching.getLink());%>" readonly onclick="check(this)">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -310,6 +234,8 @@
                                         </div>
                                     </div>
                                 </form>
+                                </div>
+                                </div>
 			</div>
 			<!-- Main Footer -->
 			<!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->
@@ -381,13 +307,10 @@
             }});
         }
 	function loadDegree(i){
-            $.get('GetDegreeServlet?cycle='+i,function(responseJson) {   
-            var $select = $('#degree');                           
-               $select.find('option').remove(); 
-               $.each(responseJson, function(key, value) {               
-                   $('<option>').val(value.departmentAbbreviation).text(value.title).appendTo($select);      
-                });
-            });
+	    $.ajax({url:"GetDegreeServlet?idCycle="+i,success:function(result){
+	    	$("#degree").html(result);
+                
+	    }});
 	}
         function loadCurriculum(i){
 	    $.ajax({url:"GetCurriculumServlet?degreeMatricula="+i,success:function(result){
