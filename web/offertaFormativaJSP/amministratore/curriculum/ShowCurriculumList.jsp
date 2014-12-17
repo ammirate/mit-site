@@ -2,25 +2,13 @@
     Document   : ShowCurriculumList
     Author     : Davide
 --%>
-<%@page import="it.unisa.offerta_formativa.beans.Department"%>
-<%@page import="java.util.List"%>
-<%@page import="java.util.Collections"%>
-<%@page import="it.unisa.offerta_formativa.beans.Cycle"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="it.unisa.offerta_formativa.beans.Curriculum"%>
-<%@page import="it.unisa.offerta_formativa.beans.Degree"%>
-<%@page import="java.util.ArrayList"%>
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1"%>
-
-<%! public ArrayList<Department> deps;
-%>
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
-
-
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
@@ -43,67 +31,7 @@
         <link rel="stylesheet" href="assets/css/custom.css">
 
         <script src="assets/js/jquery-1.11.1.min.js"></script>
-        <script>
-            jQuery(document).ready(
-                    function () {
-                        $.ajax({url: "GetDegreeServlet?idCycle=1", success: function (result) {
-                                $("#degree").html(result);
-                            }});
-                    },
-                    function ($) {
-                        /*bisogna metterla in ogni pagina*/
-                        $(window).on('beforeunload', function (e) {
-                            if (localStorage.getItem("rememberMeForLogin") == "no") {
-                                localStorage.removeItem("username");
-                                localStorage.removeItem("typology");
-                                localStorage.removeItem("primaryKey");
-
-                                localStorage.removeItem("offertaFormativa");
-                                localStorage.removeItem("gestioneTesi");
-                                localStorage.removeItem("gestioneTirocinio");
-                                localStorage.removeItem("dottorato");
-                                localStorage.removeItem("superAmministratore");
-                                window.location.href = "index.html";
-                            }
-                        });
-
-                        //quì ci vanno gli ID delle funzionalità che verranno messe all interno del menù laterale...basta copiare una riga e incollarla,
-                        //facendo attenzione a cambiare l'ID
-                        //Es: $("pippopaperino_"+localStorage.getItem("offertaFormativa")).empty();
-                        //ovviamente la localStorage cambia a seconda se si sta nella pagina di offerta formativa, gestione tesi, ecc...
-                        $(
-                                "#funzionalita1Permission_"
-                                + localStorage.getItem("offertaFormativa"))
-                                .empty();
-                        $(
-                                "#funzionalita3Permission_"
-                                + localStorage.getItem("offertaFormativa"))
-                                .empty();
-
-                        //if(localStorage.getItem("username")==null){
-                        //	window.location.replace("pageError.html");
-                        //}
-
-                        $("#spaceForUsername").html(
-                                localStorage.getItem("username") + ", "
-                                + localStorage.getItem("primaryKey")
-                                + ' <i class="fa-angle-down"></i>');
-
-                        $("#logout").click(function () {
-                            localStorage.removeItem("username");
-                            localStorage.removeItem("typology");
-                            localStorage.removeItem("primaryKey");
-                            window.location.href = "index.html";
-
-                            localStorage.removeItem("offertaFormativa");
-                            localStorage.removeItem("gestioneTesi");
-                            localStorage.removeItem("gestioneTirocinio");
-                            localStorage.removeItem("dottorato");
-                            localStorage.removeItem("superAmministratore");
-
-                        });
-                    });
-        </script>
+        
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -113,9 +41,8 @@
 
 
     </head>
-    <body class="page-body">
-        <% deps = (ArrayList<Department>) request.getAttribute("deps");
-        %>
+    <body class="page-body" onload="loadDep()">
+        
         <nav class="navbar horizontal-menu navbar-fixed-top">
             <!-- set fixed position by adding class "navbar-fixed-top" -->
 
@@ -269,25 +196,20 @@
 
                                 <div class="row">
                                     <div class="form-group col-sm-6">
-                                        <select name="department" class="form-control" id="Select_dep" onchange="loadDegree(this.value);">
-                                            <option selected value="NoDep">Seleziona il Dipartimento</option>
-                                            <%
-                                                if (deps.size() != 0) {
-                                                    Collections.sort(deps);
-                                                    for (int i = 0; i < deps.size(); i++) {
-                                                        Department d = deps.get(i);
-                                            %><option value=<% out.print(d.getAbbreviation());%>><% out.print(d.getTitle());%></option>
-                                            <%}
-                                                }%>
-
+                                        <label style="color: black; font-weight: bold">Dipartimento:</label><select name="department" class="form-control" id="department" onchange="loadCycle(this.value);">
+                                            <option> Seleziona il Dipartimento </option>
                                         </select> 
                                     </div>
                                     <div class="form-group col-sm-5">
-                                        <select name="degree" class="form-control" id="Select_deg" onchange="loadCurr()">
-                                            <option selected value="NoDeg">Prima devi selezionare il Dipartimento</option>
+                                        <label style="color: black; font-weight: bold">Ciclo:</label><select name="cycle" class="form-control" id="cycles" onchange="loadDegree(this.value);" >
                                         </select> 
                                     </div>
 
+                                    <div class="form-group col-sm-6">
+                                        <label style="color: black; font-weight: bold">Corso di laurea:</label><select name="degree" class="form-control" id="degrees" onchange="loadCurr()">
+                                        </select> 
+                                    </div>
+                                    
                                     <div> <br> </div>
                                     <div> <br> </div>
                                     <div> <br> </div>
@@ -298,9 +220,11 @@
                                 <div> <br> </div><div> <br> </div>    
 
                                 <div class="row col-sm-12">
-                                    <div class="table table-responsive"> 
-                                        <table  name="degree" class="table table-striped" id="table_curr"></table>
-                                    </div>
+
+                                    <table class="table table-hover responsive" id="curriculum">
+
+                                    </table>
+
                                 </div>
 
 
@@ -354,19 +278,65 @@
 
             <!-- Bottom Scripts -->
             <script type="text/javascript">
-                function loadCurr() {
-                    var deg = $("#Select_deg option:selected").val();
-                    $.ajax({url: "GetTableCurriculumServlet?degMatricula=" + deg, success: function (result) {
-                            $("#table_curr").html(result);
-
-                        }});
+                jQuery(document).ready(function ($)
+                {
+                    $("#department").select2({allowClear: true}).on('select2-open', function () {
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
+                    $("#cycles").select2({allowClear: true}).on('select2-open', function () {
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
+                    $("#degrees").select2({allowClear: true}).on('select2-open', function () {
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
+                });
+                function loadCycle(i) {
+                    $.get('GetCycleServlet?department=' + i, function (responseJson) {
+                        var $select = $('#cycles');
+                        $select.find('option').remove();
+                        $('<option>').val("NoCycle").text("Seleziona il Ciclo").appendTo($select);
+                        $.each(responseJson, function (key, value) {
+                            $('<option>').val(value.cycle_number).text(value.title).appendTo($select);
+                        });
+                    });
                 }
-                function loadDegree() {
-                    var dep = $("#Select_dep option:selected").val();
-                    $.ajax({url: "GetSelectDegreeByDepartmentServlet?depAbb=" + dep, success: function (result) {
-                            $("#Select_deg").html(result);
+                function loadDep() {
+                    $.get('GetDepartmentServlet', function (responseJson) {
+                        var $select = $('#department');
+                        $.each(responseJson, function (key, value) {
+                            $('<option>').val(value.departmentAbbreviation).text(value.title).appendTo($select);
+                        });
+                    });
+                }
+                function loadDegree(i) {
+                    var departmentAbb = $("#department option:selected").val();
+                    $.get('GetDegreeServlet?cycle=' + i +"&department=" + departmentAbb, function (responseJson) {
+                        var $select = $('#degrees');
+                        $select.find('option').remove();
+                        $('<option>').val("NoDeg").text("Seleziona Corso di laurea").appendTo($select);
+                        $.each(responseJson, function (key, value) {
+                            $('<option>').val(value.matricula).text(value.title).appendTo($select);
+                        });
+                    });
+                }
+                function loadCurr() {
+                    var degree = $("#degrees option:selected").val();
+                    var table = document.getElementById("curriculum");
+                    $.get('GetCurriculumServlet?degree=' + degree, function (responseJson) {
 
-                        }});
+                        var stringa = "<thead><tr><td style='font-weight: bold'>Matricola</td>";
+                        stringa += "<td style='font-weight: bold'>Nome</td>";
+                        stringa += "<td style='font-weight: bold'>Stato</td>";
+                        stringa += "<td></td> </tr></thead><tbody>";
+                        $.each(responseJson, function (key, value) {
+                            stringa += "<tr><td style='color: black'>" + value.matricula + "</td>";
+                            stringa += "<td style=' color: black'>" + value.title + "</td>";
+                            stringa += "<td style=' color: black'>" + value.status + "</td>";
+                            stringa += "<td style=' color: black; font-weight: bold'><a href='${pageContext.request.contextPath}/ModifyCurriculumServlet?curriculum_matricula=" + value.matricula + "'>Modifica</a></td></tr>";
+                        });
+                        stringa += "</tbody>";
+                        table.innerHTML = stringa;
+                    });
                 }
             </script>
             <script src="assets/js/bootstrap.min.js"></script>
@@ -375,6 +345,11 @@
             <script src="assets/js/joinable.js"></script>
             <script src="assets/js/xenon-api.js"></script>
             <script src="assets/js/xenon-toggles.js"></script>
+            <link rel="stylesheet" href="assets/js/select2/select2.css">
+            <link href="assets/js/select2/select2-bootstrap.css" rel="stylesheet" type="text/css"/>
+            <script src="assets/js/select2/select2.min.js"></script>
+            <script src="assets/js/jquery-validate/jquery.validate.min.js" id="script-resource-7"></script>
+            <script src="assets/js/jquery-validate/localization/messages_it.min.js" type="text/javascript"></script>
             <!-- JavaScripts initializations and stuff -->
             <script src="assets/js/xenon-custom.js"></script>
 

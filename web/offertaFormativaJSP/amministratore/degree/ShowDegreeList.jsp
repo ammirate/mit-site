@@ -200,14 +200,14 @@
 
                                 <div class="row">
                                     <div class="form-group col-sm-6">
-                                        <select name="department" class="form-control" id="department" onchange="loadCycle(this.value);">
+                                        <label style="color: black; font-weight: bold">Dipartimento:</label><select name="department" class="form-control" id="department" onchange="loadCycle(this.value);">
                                             <option> Seleziona il Dipartimento </option>
                                         </select> 
                                         
                                     </div>
 
                                     <div class="col-sm-4">
-                                        <select name="cycle" class="form-control" id="cycles" onchange="loadDegree();" >
+                                        <label style="color: black; font-weight: bold">Ciclo:</label><select name="cycle" class="form-control" id="cycles" onchange="loadDegree();" >
                                             <option> Seleziona prima il Dipartimento </option>
                                         </select> 
                                     </div>

@@ -5,14 +5,9 @@
  */
 package it.unisa.offerta_formativa.servlet.degree;
 
-import it.unisa.offerta_formativa.beans.Degree;
-import it.unisa.offerta_formativa.beans.Department;
-import it.unisa.offerta_formativa.manager.CycleManager;
-import it.unisa.offerta_formativa.manager.DegreeManager;
-import it.unisa.offerta_formativa.manager.DepartmentManager;
+
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,19 +24,13 @@ import javax.servlet.http.HttpServletResponse;
 public class ShowDegreeServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private DepartmentManager dm;
-    private DegreeManager degreeMng;
-    private CycleManager cym;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
     public ShowDegreeServlet() {
         super();
-        // TODO Auto-generated constructor stub   
-        dm = DepartmentManager.getInstance();
-        degreeMng = DegreeManager.getInstance();
-        cym = CycleManager.getInstance();
+        // TODO Auto-generated constructor stub
     }
 
     /**
@@ -53,32 +42,12 @@ public class ShowDegreeServlet extends HttpServlet {
         doPost(request, response);
     }
 
-    private HashMap CreateMap() {
-        HashMap< Department, ArrayList<Degree>> map;
-        map = new HashMap< Department, ArrayList<Degree>>();
-
-        for (Department d : dm.getAllDepartments()) {
-
-            map.put(d, new ArrayList<Degree>());
-
-            for (Degree deg : degreeMng.getDegreesByDepartment(d.getAbbreviation())) {
-
-                map.get(d).add(deg);
-
-                
-            }
-        }
-        return map;
-    }
-
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
      * response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        request.setAttribute("cycles", cym.getAllCycles());
-        request.setAttribute("map", CreateMap());
         request.getRequestDispatcher("/offertaFormativaJSP/amministratore/degree/ShowDegreeList.jsp").forward(request, response);
     }
 }
