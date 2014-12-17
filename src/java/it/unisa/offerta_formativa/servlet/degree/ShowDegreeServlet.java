@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unisa.offerta_formativa.servlet;
+package it.unisa.offerta_formativa.servlet.degree;
 
 import it.unisa.offerta_formativa.beans.Degree;
 import it.unisa.offerta_formativa.beans.Department;
@@ -79,6 +79,6 @@ public class ShowDegreeServlet extends HttpServlet {
         // TODO Auto-generated method stub
         request.setAttribute("cycles", cym.getAllCycles());
         request.setAttribute("map", CreateMap());
-        request.getRequestDispatcher("/offertaFormativaJSP/amministratore/ShowDegreeList.jsp").forward(request, response);
+        request.getRequestDispatcher("/offertaFormativaJSP/amministratore/degree/ShowDegreeList.jsp").forward(request, response);
     }
 }

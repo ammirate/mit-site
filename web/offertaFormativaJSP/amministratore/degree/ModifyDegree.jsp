@@ -3,20 +3,13 @@
     Author     : Davide
 --%>
 <%@page import="java.util.Collections"%>
-<%@page import="it.unisa.offerta_formativa.beans.Cycle"%>
 <%@page import="java.util.HashMap"%>
-<%@page import="it.unisa.offerta_formativa.beans.Curriculum"%>
 <%@page import="it.unisa.offerta_formativa.beans.Degree"%>
-<%@page import="it.unisa.offerta_formativa.beans.Teaching"%>
-
-<%@page import="it.unisa.offerta_formativa.beans.Department"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1"%>
 
 <%! public Degree degree;
-    public ArrayList<Cycle> cycles;
-    public ArrayList<Department> departments;
 %>
 
 <!DOCTYPE html>
@@ -46,67 +39,7 @@
         <link rel="stylesheet" href="assets/css/custom.css">
 
         <script src="assets/js/jquery-1.11.1.min.js"></script>
-        <script>
-            jQuery(document).ready(
-                    function () {
-                        $.ajax({url: "GetDegreeServlet?idCycle=1", success: function (result) {
-                                $("#degree").html(result);
-                            }});
-                    },
-                    function ($) {
-                        /*bisogna metterla in ogni pagina*/
-                        $(window).on('beforeunload', function (e) {
-                            if (localStorage.getItem("rememberMeForLogin") == "no") {
-                                localStorage.removeItem("username");
-                                localStorage.removeItem("typology");
-                                localStorage.removeItem("primaryKey");
 
-                                localStorage.removeItem("offertaFormativa");
-                                localStorage.removeItem("gestioneTesi");
-                                localStorage.removeItem("gestioneTirocinio");
-                                localStorage.removeItem("dottorato");
-                                localStorage.removeItem("superAmministratore");
-                                window.location.href = "index.html";
-                            }
-                        });
-
-                        //quì ci vanno gli ID delle funzionalità che verranno messe all interno del menù laterale...basta copiare una riga e incollarla,
-                        //facendo attenzione a cambiare l'ID
-                        //Es: $("pippopaperino_"+localStorage.getItem("offertaFormativa")).empty();
-                        //ovviamente la localStorage cambia a seconda se si sta nella pagina di offerta formativa, gestione tesi, ecc...
-                        $(
-                                "#funzionalita1Permission_"
-                                + localStorage.getItem("offertaFormativa"))
-                                .empty();
-                        $(
-                                "#funzionalita3Permission_"
-                                + localStorage.getItem("offertaFormativa"))
-                                .empty();
-
-                        //if(localStorage.getItem("username")==null){
-                        //	window.location.replace("pageError.html");
-                        //}
-
-                        $("#spaceForUsername").html(
-                                localStorage.getItem("username") + ", "
-                                + localStorage.getItem("primaryKey")
-                                + ' <i class="fa-angle-down"></i>');
-
-                        $("#logout").click(function () {
-                            localStorage.removeItem("username");
-                            localStorage.removeItem("typology");
-                            localStorage.removeItem("primaryKey");
-                            window.location.href = "index.html";
-
-                            localStorage.removeItem("offertaFormativa");
-                            localStorage.removeItem("gestioneTesi");
-                            localStorage.removeItem("gestioneTirocinio");
-                            localStorage.removeItem("dottorato");
-                            localStorage.removeItem("superAmministratore");
-
-                        });
-                    });
-        </script>
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -116,12 +49,8 @@
 
 
     </head>
-    <body class="page-body">
+    <body class="page-body" onload="loadDepAndCycles()">
         <%  degree = (Degree) request.getAttribute("degree");
-            cycles = (ArrayList<Cycle>) request.getAttribute("cycles");
-            Collections.sort(cycles);
-            departments = (ArrayList<Department>) request.getAttribute("departments");
-            Collections.sort(departments);
         %>
         <nav class="navbar horizontal-menu navbar-fixed-top">
             <!-- set fixed position by adding class "navbar-fixed-top" -->
@@ -283,7 +212,7 @@
 
                                     <div class="col-sm-5">
                                         <label for="title" style="color: black; font-weight: bold" >Titolo:</label>
-                                        <input type="text" id="title_text" name="titolo" class="form-control" onblur="Control(this)" onclick="Clean(this)" value="<% out.print(degree.getTitle()); %>" > 
+                                        <input type="text" id="title_text" name="titolo" class="form-control" value="<% out.print(degree.getTitle()); %>" > 
                                     </div>
 
                                     <div class="form col-sm-1"></div>
@@ -297,7 +226,7 @@
                                         <label class="radio-inline">
                                             <% if (!degree.isActive()) { %>
                                             <input type="radio" name="optradio" id="status_disable" checked ><p style="color: black">Disattivo</p>
-                                            <% } else if(degree.isActive()){ %>
+                                            <% } else if (degree.isActive()) { %>
                                             <input type="radio" name="optradio"  id="status_disable"><p style="color: black">Disattivo</p>
                                             <% } %>
                                         </label>
@@ -309,34 +238,12 @@
 
                                 <div class="row">
                                     <div class="form-group col-sm-8">
-                                        <label style="color: black; font-weight: bold">Dipartimento:</label><select name="department" class="form-control" id="Select_dep">
-                                            <%if (departments.size() != 0) {
-                                                for (Department d : departments) {
-                                                    if (d.getAbbreviation().equalsIgnoreCase(degree.getDepartmentAbbreviation())) {
-                                            %><option selected value=<% out.print(d.getAbbreviation());%>><% out.print(d.getTitle());%></option>
-                                            <%} else { %>
-                                            <option value=<% out.print(d.getAbbreviation());%>><% out.print(d.getTitle());%></option>        
-                                            <% } %>
-                                            <% }
-                                                } %>
-
-                                        </select> 
+                                        <label style="color: black; font-weight: bold">Dipartimento:</label><select name="department" class="form-control" id="department" >
+                                        </select>
                                     </div>
 
                                     <div class="col-sm-4">
-                                        <label style="color: black; font-weight: bold">Ciclo:</label><select name="cycle" class="form-control" id="Select_cycle">
-                                           
-                                            <%
-                                                if (cycles.size() != 0)
-                                                    for (Cycle c : cycles) {
-                                                        if (degree.getCycle() == c.getNumber()) { %>
-                                            %><option selected value=<%out.print(c.getNumber());%>><%out.print(c.getTitle());%></option>
-                                            <%} else { %>
-                                            <option value=<%out.print(c.getNumber());%>><%out.print(c.getTitle());%></option>       
-                                            <% } %>
-                                            <%
-                                                }
-                                            %>
+                                        <label style="color: black; font-weight: bold">Ciclo:</label><select name="cycle" class="form-control" id="cycles" >
                                         </select> 
                                     </div>
                                     <div> <br> </div>
@@ -344,8 +251,6 @@
                                 </div>
 
                                 <div> <br> </div>
-
-
 
                                 <div class="row">
                                     <div class="form-group col-sm-6">
@@ -370,28 +275,12 @@
                                     </div>
                                 </div>
 
-
-
-
-
-
-
-
                                 <!-- Main Footer -->
                                 <!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->
                                 <!-- Add class "sticky" to  always stick the footer to the end of page (if page contents is small) -->
                                 <!-- Or class "fixed" to  always fix the footer to the end of page -->
 
-
-
-
-
-
-
                             </div>
-
-
-
 
                         </div>
 
@@ -433,49 +322,51 @@
 
             <!-- Bottom Scripts -->
             <script type="text/javascript">
-                function Control(obj)
-                {
-                    if ((obj.value == '') || (obj.value == 'Inserisci Titolo') || (obj.value == 'Inserisci Titolo maggiore di 4 caratteri'))
-                    {
-                        obj.style.borderColor = "red";
-                        obj.value = 'Inserisci Titolo';
-                        document.getElementById("button_confirm").disabled = true;
-                    } else if (obj.value.length < 4) {
-                        obj.style.borderColor = "red"
-                        obj.value = 'Inserisci Titolo maggiore di 4 caratteri';
-                        document.getElementById("button_confirm").disabled = true;
-                    } else
-                    {
-                        obj.style.borderColor = "green";
-                        document.getElementById("button_confirm").disabled = false;
-                    }
+                function loadDepAndCycles() {
+                    $.get('GetCycleServlet', function (responseJson) {
+                        var $select = $('#cycles');
+                        $select.find('option').remove();
+                        $.each(responseJson, function (key, value) {
+                            $('<option>').val(value.cycle_number).text(value.title).appendTo($select);
+                        });
+                        $('#cycles').val('<%= degree.getCycle()%>');
+                        $("#cycles").select2({allowClear: true}).on('select2-open', function () {
+                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                        });
+
+                    });
+                    $.get('GetDepartmentServlet', function (responseJson) {
+                        var $select_dep = $('#department');
+                        $select_dep.find('option').remove();
+                        $.each(responseJson, function (key, value) {
+                            $('<option>').val(value.departmentAbbreviation).text(value.title).appendTo($select_dep);
+                        });
+                        $('#department').val('<%= degree.getDepartmentAbbreviation()%>');
+                        $('#department').select2({allowClear: true}).on('select2-open', function () {
+                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                        });
+                    });
                 }
-                function Clean(obj)
-                {
-                    if ((obj.value == 'Inserisci Titolo') || (obj.value == 'Inserisci Titolo maggiore di 4 caratteri'))
-                    {
-                        obj.value = '';
-                    }
-                }
+
                 function RevertModify() {
                     document.location.href = '${pageContext.request.contextPath}/ShowDegreeServlet';
                 }
                 function UpdateDegree() {
-                    var cycle = $("#Select_cycle option:selected").val();
-                    var departmentAbb = $("#Select_dep option:selected").val();
-                    var degree_matricula = '<%= degree.getMatricula() %>';
+                    var cycle = $("#cycles option:selected").val();
+                    var departmentAbb = $("#department option:selected").val();
+                    var degree_matricula = '<%= degree.getMatricula()%>';
                     var link = $("#link_text").val();
                     var title = $("#title_text").val();
 
-                    if(document.getElementById('status_active').checked) {
+                    if (document.getElementById('status_active').checked) {
                         var status = "true";
-                    }else if(document.getElementById('status_disable').checked) {
+                    } else if (document.getElementById('status_disable').checked) {
                         var status = "false";
-                    }       
+                    }
 
-                    var r = confirm("Sei sicuro di voler modificare il corso di Laurea: "+title);
+                    var r = confirm("Sei sicuro di voler modificare il corso di Laurea: " + title);
                     if (r == true) {
-                        document.location.href = '${pageContext.request.contextPath}/UpdateDegreeServlet?degree_matricula='+degree_matricula+'&cycle='+cycle+'&departmentAbb='+departmentAbb+'&link='+link+'&title='+title+'&status='+status;
+                        document.location.href = '${pageContext.request.contextPath}/UpdateDegreeServlet?degree_matricula=' + degree_matricula + '&cycle=' + cycle + '&departmentAbb=' + departmentAbb + '&link=' + link + '&title=' + title + '&status=' + status;
                     }
                 }
             </script>
@@ -485,6 +376,11 @@
             <script src="assets/js/joinable.js"></script>
             <script src="assets/js/xenon-api.js"></script>
             <script src="assets/js/xenon-toggles.js"></script>
+            <link rel="stylesheet" href="assets/js/select2/select2.css">
+            <link href="assets/js/select2/select2-bootstrap.css" rel="stylesheet" type="text/css"/>
+            <script src="assets/js/select2/select2.min.js"></script>
+            <script src="assets/js/jquery-validate/jquery.validate.min.js" id="script-resource-7"></script>
+            <script src="assets/js/jquery-validate/localization/messages_it.min.js" type="text/javascript"></script>
             <!-- JavaScripts initializations and stuff -->
             <script src="assets/js/xenon-custom.js"></script>
 

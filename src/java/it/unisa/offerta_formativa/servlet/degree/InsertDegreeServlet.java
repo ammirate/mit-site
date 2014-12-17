@@ -1,5 +1,6 @@
-package it.unisa.offerta_formativa.servlet;
+package it.unisa.offerta_formativa.servlet.degree;
 
+import it.unisa.offerta_formativa.beans.Degree;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -8,17 +9,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import it.unisa.offerta_formativa.beans.Degree;
 import it.unisa.offerta_formativa.manager.CycleManager;
 import it.unisa.offerta_formativa.manager.DegreeManager;
 import it.unisa.offerta_formativa.manager.DepartmentManager;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 
 
 /**
  * Servlet implementation class Servlet
  */
-@WebServlet("/ModifyDegreeServlet")
-public class ModifyDegreeServlet extends HttpServlet {
+@WebServlet("/InsertDegreeServlet")
+public class InsertDegreeServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private DegreeManager degreeMng;
@@ -28,7 +30,7 @@ public class ModifyDegreeServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ModifyDegreeServlet() {
+    public InsertDegreeServlet() {
         super();
         // TODO Auto-generated constructor stub   
         dm = DepartmentManager.getInstance();
@@ -45,21 +47,20 @@ public class ModifyDegreeServlet extends HttpServlet {
         doPost(request, response);
     }
 
-    private Degree GetDegree(String matricula) {
+    private void InsertDegree(Degree degree) {
         // TODO Auto-generated method stub
-            return degreeMng.readDegree(matricula);
+            degreeMng.createDegree(degree);
     }
-
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
      * response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        request.setAttribute("degree",GetDegree(request.getParameter("degree_matricula")));
-        request.setAttribute("cycles", cym.getAllCycles());
-        request.setAttribute("departments", dm.getAllDepartments());
-        request.getRequestDispatcher("/offertaFormativaJSP/amministratore/ModifyDegree.jsp").forward(request, response);
+        InsertDegree(new Degree(request.getParameter("degree_matricula"), request.getParameter("link"), request.getParameter("title"), Integer.parseInt(request.getParameter("cycle")), request.getParameter("departmentAbb"),Boolean.parseBoolean(request.getParameter("status"))));
+        ServletContext sc = getServletContext();  
+        RequestDispatcher rd = sc.getRequestDispatcher("/ShowDegreeServlet");  
+        rd.forward(request, response); 
     }
 
 }
