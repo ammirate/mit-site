@@ -114,15 +114,15 @@ public class Degree implements Comparable<Degree> {
         this.cycle = cycle;
     }
 
-    @Override
-    public String toString() {
+   public String toString() {
         String esc = "\'";
         return "matricula=" + esc + matricula + esc + ","
                 + "title=" + esc + title + esc + ","
                 + "link=" + esc + link + esc + ","
                 + "cycle_number=" + cycle + ","
                 + "department_abbreviation=" + esc + departmentAbbreviation + esc + ","
-                + "active=" + (this.active ? 1 : 0);
+                + "active=" + (this.active ? 1 : 0)
+                + "esse3_content=" + esc + esse3Content + esc;
     }
 
     public String toStringQueryInsert() {
@@ -131,7 +131,8 @@ public class Degree implements Comparable<Degree> {
                 + esc + matricula + esc + ","
                 + esc + link + esc + "," + cycle + ","
                 + esc + departmentAbbreviation + esc + ","
-                + (this.active ? 1 : 0);
+                + (this.active ? 1 : 0) 
+                + esc + esse3Content + esc;
 //        return "\"" + serialNumber + "\",\"" + link + "\",\"" + title + "\"," + cycle + "," + serialNumber + ")";
     }
 
