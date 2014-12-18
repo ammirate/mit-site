@@ -208,7 +208,6 @@
 
                                     <div class="col-sm-4">
                                         <label style="color: black; font-weight: bold">Ciclo:</label><select name="cycle" class="form-control" id="cycles" onchange="loadDegree();" >
-                                            <option> Seleziona prima il Dipartimento </option>
                                         </select> 
                                     </div>
 

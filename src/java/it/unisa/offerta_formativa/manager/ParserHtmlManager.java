@@ -33,13 +33,13 @@ public class ParserHtmlManager {
 		return instance;
 	}
 	
-	public String getHtml(String link){
+	public String getHtml(String link, String tag){
 		Document doc;
                 String toReturn = null;
 		Element didattica = null;
 		try {
 			doc = Jsoup.connect(link).get();
-			didattica = doc.getElementById("column1of2");
+			didattica = doc.getElementById(tag);
                         
                         String rep1= didattica.toString().replace("“", "\"");
                         String rep2= rep1.replace("”", "\"");

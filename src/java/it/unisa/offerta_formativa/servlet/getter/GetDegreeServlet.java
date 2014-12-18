@@ -54,7 +54,7 @@ public class GetDegreeServlet extends HttpServlet {
                 degrees = degreeMng.getDegreesByCycle(Integer.parseInt(request.getParameter("cycle")));  
             }else if(request.getParameterMap().containsKey("department")){
                 degrees = degreeMng.getDegreesByDepartment(request.getParameter("department"));
-            }
+            } else degrees = degreeMng.getAllDegrees();
             Collections.sort(degrees);
             for(Degree d : degrees){
                     map = new HashMap<String,String>();
