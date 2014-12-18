@@ -2,20 +2,11 @@
     Document   : ModifyCurriculum
     Author     : Davide
 --%>
-<%@page import="java.util.Collections"%>
-<%@page import="it.unisa.offerta_formativa.beans.Cycle"%>
-<%@page import="java.util.HashMap"%>
 <%@page import="it.unisa.offerta_formativa.beans.Curriculum"%>
-<%@page import="it.unisa.offerta_formativa.beans.Degree"%>
-<%@page import="it.unisa.offerta_formativa.beans.Teaching"%>
-
-<%@page import="it.unisa.offerta_formativa.beans.Department"%>
-<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1"%>
 
 <%! public Curriculum curriculum;
-    public ArrayList<Degree> degrees;
 %>
 
 <!DOCTYPE html>
@@ -45,67 +36,7 @@
         <link rel="stylesheet" href="assets/css/custom.css">
 
         <script src="assets/js/jquery-1.11.1.min.js"></script>
-        <script>
-            jQuery(document).ready(
-                    function () {
-                        $.ajax({url: "GetDegreeServlet?idCycle=1", success: function (result) {
-                                $("#degree").html(result);
-                            }});
-                    },
-                    function ($) {
-                        /*bisogna metterla in ogni pagina*/
-                        $(window).on('beforeunload', function (e) {
-                            if (localStorage.getItem("rememberMeForLogin") == "no") {
-                                localStorage.removeItem("username");
-                                localStorage.removeItem("typology");
-                                localStorage.removeItem("primaryKey");
 
-                                localStorage.removeItem("offertaFormativa");
-                                localStorage.removeItem("gestioneTesi");
-                                localStorage.removeItem("gestioneTirocinio");
-                                localStorage.removeItem("dottorato");
-                                localStorage.removeItem("superAmministratore");
-                                window.location.href = "index.html";
-                            }
-                        });
-
-                        //quì ci vanno gli ID delle funzionalità che verranno messe all interno del menù laterale...basta copiare una riga e incollarla,
-                        //facendo attenzione a cambiare l'ID
-                        //Es: $("pippopaperino_"+localStorage.getItem("offertaFormativa")).empty();
-                        //ovviamente la localStorage cambia a seconda se si sta nella pagina di offerta formativa, gestione tesi, ecc...
-                        $(
-                                "#funzionalita1Permission_"
-                                + localStorage.getItem("offertaFormativa"))
-                                .empty();
-                        $(
-                                "#funzionalita3Permission_"
-                                + localStorage.getItem("offertaFormativa"))
-                                .empty();
-
-                        //if(localStorage.getItem("username")==null){
-                        //	window.location.replace("pageError.html");
-                        //}
-
-                        $("#spaceForUsername").html(
-                                localStorage.getItem("username") + ", "
-                                + localStorage.getItem("primaryKey")
-                                + ' <i class="fa-angle-down"></i>');
-
-                        $("#logout").click(function () {
-                            localStorage.removeItem("username");
-                            localStorage.removeItem("typology");
-                            localStorage.removeItem("primaryKey");
-                            window.location.href = "index.html";
-
-                            localStorage.removeItem("offertaFormativa");
-                            localStorage.removeItem("gestioneTesi");
-                            localStorage.removeItem("gestioneTirocinio");
-                            localStorage.removeItem("dottorato");
-                            localStorage.removeItem("superAmministratore");
-
-                        });
-                    });
-        </script>
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -115,9 +46,8 @@
 
 
     </head>
-    <body class="page-body">
+    <body class="page-body" onload="loadDegree()">
         <%  curriculum = (Curriculum) request.getAttribute("curriculum");
-            degrees = (ArrayList<Degree>) request.getAttribute("degrees");
         %>
         <nav class="navbar horizontal-menu navbar-fixed-top">
             <!-- set fixed position by adding class "navbar-fixed-top" -->
@@ -279,7 +209,7 @@
 
                                     <div class="col-sm-5">
                                         <label for="title" style="color: black; font-weight: bold" >Titolo:</label>
-                                        <input type="text" id="title_text" name="titolo" class="form-control" onblur="Control(this)" onclick="Clean(this)" value="<% out.print(curriculum.getTitle()); %>" > 
+                                        <input type="text" id="title_text" name="titolo" class="form-control" value="<% out.print(curriculum.getTitle()); %>" > 
                                     </div>
 
                                     <div class="form col-sm-1"></div>
@@ -295,7 +225,7 @@
                                             <input type="radio" name="optradio" id="status_disable" checked ><p style="color: black">Disattivo</p>
                                             <% } else if (curriculum.isActive()) { %>
                                             <input type="radio" name="optradio"  id="status_disable"><p style="color: black">Disattivo</p>
-                                            <% } %>
+                                            <% }%>
                                         </label>
                                     </form>
 
@@ -304,9 +234,8 @@
 
                                 <div class="row">
                                     <div class="col-sm-7">
-                                        <label style="color: black; font-weight: bold">Corso di Laurea:</label><select name="degree" class="form-control" id="Select_degree">
-
-                                        </select> 
+                                        <label style="color: black; font-weight: bold">Corso di laurea:</label><select name="degree" class="form-control" id="degrees" onchange="loadCurr()">
+                                        </select>
                                     </div>
                                     <div> <br> </div>
 
@@ -377,36 +306,18 @@
             <!-- Bottom Scripts -->
             <script type="text/javascript">
                 function loadDegree() {
-                    var cur = '<%= curriculum.getMatricula()%>';
-                    $.ajax({url: "GetSelectDegreeByCurriculumServlet?curriculum_matricula=" + cur, success: function (result) {
-                            $("#Select_degree").html(result);
-
-                        }});
-                }
-                window.onload = loadDegree;
-                function Control(obj)
-                {
-                    if ((obj.value == '') || (obj.value == 'Inserisci Titolo') || (obj.value == 'Inserisci Titolo maggiore di 4 caratteri'))
-                    {
-                        obj.style.borderColor = "red";
-                        obj.value = 'Inserisci Titolo';
-                        document.getElementById("button_confirm").disabled = true;
-                    } else if (obj.value.length < 4) {
-                        obj.style.borderColor = "red"
-                        obj.value = 'Inserisci Titolo maggiore di 4 caratteri';
-                        document.getElementById("button_confirm").disabled = true;
-                    } else
-                    {
-                        obj.style.borderColor = "green";
-                        document.getElementById("button_confirm").disabled = false;
-                    }
-                }
-                function Clean(obj)
-                {
-                    if ((obj.value == 'Inserisci Titolo') || (obj.value == 'Inserisci Titolo maggiore di 4 caratteri'))
-                    {
-                        obj.value = '';
-                    }
+                    $.get('GetDegreeServlet', function (responseJson) {
+                        var $select = $('#degrees');
+                        $select.find('option').remove();
+                        $('<option>').val("NoDeg").text("Seleziona Corso di laurea").appendTo($select);
+                        $.each(responseJson, function (key, value) {
+                            $('<option>').val(value.matricula).text(value.title).appendTo($select);
+                        });
+                        $('#degrees').val('<%= curriculum.getDegreeMatricula()%>');
+                        $("#degrees").select2({allowClear: true}).on('select2-open', function () {
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
+                    });
                 }
                 function RevertModify() {
                     document.location.href = '${pageContext.request.contextPath}/ShowCurriculumServlet';
@@ -434,6 +345,11 @@
             <script src="assets/js/joinable.js"></script>
             <script src="assets/js/xenon-api.js"></script>
             <script src="assets/js/xenon-toggles.js"></script>
+            <link rel="stylesheet" href="assets/js/select2/select2.css">
+            <link href="assets/js/select2/select2-bootstrap.css" rel="stylesheet" type="text/css"/>
+            <script src="assets/js/select2/select2.min.js"></script>
+            <script src="assets/js/jquery-validate/jquery.validate.min.js" id="script-resource-7"></script>
+            <script src="assets/js/jquery-validate/localization/messages_it.min.js" type="text/javascript"></script>
             <!-- JavaScripts initializations and stuff -->
             <script src="assets/js/xenon-custom.js"></script>
 
