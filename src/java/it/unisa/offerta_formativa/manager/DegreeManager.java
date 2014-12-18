@@ -50,9 +50,10 @@ public class DegreeManager {
                     + "link,"
                     + "cycle_number,"
                     + "department_abbreviation, "
-                    + "active) VALUES("
+                    + "active,"
+                    + "esse3_content ) VALUES("
                     + degree.toStringQueryInsert() + ")";
-            System.out.println("Insertion query: " + query);
+//            System.out.println("Insertion query: " + query);
             if (stmt.executeUpdate(query) == 1) {
                 return true;
             }
@@ -257,8 +258,6 @@ public class DegreeManager {
         return instance;
     }
 
-    
-    
     private Degree getDegreeFromResultSet(ResultSet rs) {
         String matricula;
         try {
@@ -275,8 +274,6 @@ public class DegreeManager {
         return null;
     }
 
-    
-    
     public List<Degree> getDegreesByDepartmentAndCycle(String depAbbreviation, int cycle) {
         List<Degree> toReturn = new ArrayList<>();
         String esc = "\'";
@@ -305,7 +302,7 @@ public class DegreeManager {
 
         return toReturn;
     }
-    
+
     /**
      * store the esse3content for a given teaching into the DB
      *
@@ -314,11 +311,17 @@ public class DegreeManager {
      */
     public boolean setEsse3ContentForDegree(String degreeMatricula, String content) {
         try {
+            stmt = DBConnector.openConnection();
+
             String esc = "\'";
-            String query = "UPDATE " + TABLE + " SET " + esc + "esse3_content" + esc
-                    + "=" + esc + content + esc
-                    + " WHERE " + PKEY + "=" + esc + degreeMatricula + esc;
-//UPDATE degree SET `esse3_content`="new content" WHERE `matricula`='02225'
+            String query = "UPDATE " + TABLE + " SET "  + "esse3_content"
+                    + "=" +  "\""  + content +  "\"" 
+                    + " WHERE "  + PKEY  
+                    + "=" + esc + degreeMatricula + esc;
+
+//UPDATE `degree` SET `esse3_content`='content' WHERE `matricula`='02226'           
+            System.out.println("update query: " + query);
+
             if (stmt.executeUpdate(query) == 1) {
                 return true;
             }

@@ -29,17 +29,16 @@ public class Test_DegreeManager extends TestCase {
 
     public static TestSuite suite() {
         TestSuite suite = new TestSuite();
-        suite.addTest(new Test_DegreeManager("TC_2_1_getInstance"));
-        suite.addTest(new Test_DegreeManager("TC_2_2_createDegree"));
-        suite.addTest(new Test_DegreeManager("TC_2_3_updateDegree"));
-        suite.addTest(new Test_DegreeManager("TC_2_4_readDegree"));
-        suite.addTest(new Test_DegreeManager("TC_2_5_deleteDegree"));
-        suite.addTest(new Test_DegreeManager("TC_2_6_getAllDegrees"));
-        suite.addTest(new Test_DegreeManager("TC_2_7_getDegreesByCycle"));
-        suite.addTest(new Test_DegreeManager("TC_2_8_getDegreesByDepartment"));
-        suite.addTest(new Test_DegreeManager("TC_2_9_getDegreesByDepartmentAndCycle"));
-        
-        
+//        suite.addTest(new Test_DegreeManager("TC_2_1_getInstance"));
+//        suite.addTest(new Test_DegreeManager("TC_2_2_createDegree"));
+//        suite.addTest(new Test_DegreeManager("TC_2_3_updateDegree"));
+//        suite.addTest(new Test_DegreeManager("TC_2_4_readDegree"));
+//        suite.addTest(new Test_DegreeManager("TC_2_5_deleteDegree"));
+//        suite.addTest(new Test_DegreeManager("TC_2_6_getAllDegrees"));
+//        suite.addTest(new Test_DegreeManager("TC_2_7_getDegreesByCycle"));
+//        suite.addTest(new Test_DegreeManager("TC_2_8_getDegreesByDepartment"));
+//        suite.addTest(new Test_DegreeManager("TC_2_9_getDegreesByDepartmentAndCycle"));
+        suite.addTest(new Test_DegreeManager("TC_2_10_setEsse3Content"));
 
         return suite;
     }
@@ -202,5 +201,14 @@ public class Test_DegreeManager extends TestCase {
     
     
     
+     public void TC_2_10_setEsse3Content(){
+        System.out.print("Executing Test 2.10...");
+        degreeManager = DegreeManager.getInstance();
+        Degree degree = new Degree("02226", "www.unisa.it", "Tecnologie informatiche e Management", 2, "DISTRA");
+        degreeManager.createDegree(degree);
+        assertTrue(degreeManager.setEsse3ContentForDegree("02226", "esse3content"));
+        degreeManager.deleteDegree("02226");
+        System.out.println("Done");
+     }
 
 }
