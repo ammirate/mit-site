@@ -37,7 +37,10 @@ public class Degree implements Comparable<Degree> {
      */
     private int cycle;
 
+    
     private boolean active;
+    
+    private String esse3Content;
 
     /**
      * Constructor
@@ -173,4 +176,14 @@ public class Degree implements Comparable<Degree> {
         return result;
     }
 
+    public String getEsse3Content() {
+        return esse3Content;
+    }
+
+    public void setEsse3Content(String esse3Content) {
+        this.esse3Content = esse3Content;
+    }
+
+    
+    
 }

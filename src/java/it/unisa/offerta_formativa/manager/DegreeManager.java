@@ -257,6 +257,8 @@ public class DegreeManager {
         return instance;
     }
 
+    
+    
     private Degree getDegreeFromResultSet(ResultSet rs) {
         String matricula;
         try {
@@ -273,6 +275,8 @@ public class DegreeManager {
         return null;
     }
 
+    
+    
     public List<Degree> getDegreesByDepartmentAndCycle(String depAbbreviation, int cycle) {
         List<Degree> toReturn = new ArrayList<>();
         String esc = "\'";
@@ -300,7 +304,31 @@ public class DegreeManager {
         }
 
         return toReturn;
-
+    }
+    
+    /**
+     * store the esse3content for a given teaching into the DB
+     *
+     * @param content
+     * @return true if the update has success, else false
+     */
+    public boolean setEsse3ContentForDegree(String degreeMatricula, String content) {
+        try {
+            String esc = "\'";
+            String query = "UPDATE " + TABLE + " SET " + esc + "esse3_content" + esc
+                    + "=" + esc + content + esc
+                    + " WHERE " + PKEY + "=" + esc + degreeMatricula + esc;
+//UPDATE degree SET `esse3_content`="new content" WHERE `matricula`='02225'
+            if (stmt.executeUpdate(query) == 1) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new RuntimeException("Update Query Failed");
+        } finally {
+            DBConnector.closeConnection();
+        }
+        return false;
     }
 
 }
