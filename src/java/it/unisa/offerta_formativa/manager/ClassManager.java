@@ -39,9 +39,9 @@ public class ClassManager {
      */
     public boolean createClass(ClassPartition classp) {
 
-        stmt = DBConnector.openConnection();
-
         try {
+            stmt = DBConnection.getConnection().createStatement();
+
             String query = "INSERT INTO " + TABLE + "(teaching_matricula,title) VALUES(" + classp.toStringQueryInsert() + ")";
 //            System.out.println("Insert query : " + query);
             if (stmt.executeUpdate(query) == 1) {
@@ -51,7 +51,7 @@ public class ClassManager {
             ex.printStackTrace();
             throw new RuntimeException("Query failed to create a class");
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(conn);
         }
         return false;
     }
@@ -64,9 +64,10 @@ public class ClassManager {
      * @return ClassPartition read. empty instance if not found
      */
     public ClassPartition readClass(String teachingMatricula, String title) {
-        stmt = DBConnector.openConnection();
 
         try {
+            stmt = DBConnection.getConnection().createStatement();
+
             String query = "SELECT * FROM " + TABLE + " WHERE title=" + esc + title + esc + " and "
                     + "teaching_matricula=" + esc + teachingMatricula + esc;
             rs = stmt.executeQuery(query);
@@ -77,7 +78,7 @@ public class ClassManager {
             ex.printStackTrace();
             throw new RuntimeException("Query failed to read a class");
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(conn);
         }
         return new ClassPartition();
     }
@@ -90,12 +91,13 @@ public class ClassManager {
      * @return true if done.
      */
     public boolean updateClass(ClassPartition oldClass, ClassPartition newClass) {
-        stmt = DBConnector.openConnection();
 
         try {
-            String query = "UPDATE " + TABLE + " SET " + newClass.toString() + " WHERE "+ 
-                    "title=" + esc + oldClass.getTitle() + esc + " and " +
-                    "teaching_matricula=" + esc + oldClass.getTeachingMatricula() + esc;
+            stmt = DBConnection.getConnection().createStatement();
+
+            String query = "UPDATE " + TABLE + " SET " + newClass.toString() + " WHERE "
+                    + "title=" + esc + oldClass.getTitle() + esc + " and "
+                    + "teaching_matricula=" + esc + oldClass.getTeachingMatricula() + esc;
             System.out.println(query);
             if (stmt.executeUpdate(query) == 1) {
                 return true;
@@ -104,7 +106,7 @@ public class ClassManager {
             ex.printStackTrace();
             throw new RuntimeException("Query failed to update class");
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(conn);
         }
         return false;
     }
@@ -117,9 +119,10 @@ public class ClassManager {
      * @return true if done.
      */
     public boolean deleteClass(String teachingMatricula, String title) {
-        stmt = DBConnector.openConnection();
 
         try {
+            stmt = DBConnection.getConnection().createStatement();
+
             String query = "DELETE FROM " + TABLE + " WHERE title=" + esc + title + esc + " and "
                     + "teaching_matricula=" + esc + teachingMatricula + esc;
             if (stmt.executeUpdate(query) == 1) {
@@ -129,7 +132,7 @@ public class ClassManager {
             ex.printStackTrace();
             throw new RuntimeException("Query failed to delete class");
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(conn);
         }
         return false;
     }
@@ -153,15 +156,16 @@ public class ClassManager {
      * @return an ArrayList of ClassPartition. Empty if not found any.
      */
     public ArrayList<ClassPartition> getClassesByTeaching(String idTeaching) {
-        stmt = DBConnector.openConnection();
         ArrayList<ClassPartition> toReturn = new ArrayList<ClassPartition>();
         if (idTeaching == null) {
             throw new IllegalArgumentException("Id cannot be null!");
         } else {
             try {
-                String query = "SELECT * FROM " + TABLE 
+                stmt = DBConnection.getConnection().createStatement();
+
+                String query = "SELECT * FROM " + TABLE
                         + " WHERE teaching_matricula=\"" + idTeaching + "\""
-                        + " order by title" ;
+                        + " order by title";
                 rs = stmt.executeQuery(query);
                 while (rs.next()) {
                     toReturn.add(new ClassPartition(idTeaching, rs.getString("title")));
@@ -170,7 +174,7 @@ public class ClassManager {
                 ex.printStackTrace();
                 throw new RuntimeException("Query fail");
             } finally {
-                DBConnector.closeConnection();
+                DBConnection.releaseConnection(conn);
             }
         }
         return toReturn;
@@ -182,10 +186,11 @@ public class ClassManager {
      * @return an ArrayList of ClassPartition. Empty if not found any.
      */
     public ArrayList<ClassPartition> getAllClasses() {
-        stmt = DBConnector.openConnection();
 
         ArrayList<ClassPartition> toReturn = new ArrayList<>();
         try {
+            stmt = DBConnection.getConnection().createStatement();
+
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " order by title");
             while (rs.next()) {
                 toReturn.add(new ClassPartition(rs.getString("teaching_matricula"), rs.getString("title")));
@@ -194,7 +199,7 @@ public class ClassManager {
             ex.printStackTrace();
             throw new RuntimeException("Query fail");
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(conn);
         }
         return toReturn;
     }

@@ -53,9 +53,9 @@ public class PersonManager {
      * @return
      */
     public Person getPersonByEmail(String email) {
-        stmt = DBConnector.openConnection();
-
         try {
+            stmt = DBConnection.getConnection().createStatement();
+
             String esc = "\'";
             String query = "SELECT * FROM " + TABLE + " WHERE "
                     + FKEY + "= " + esc + email + esc;
@@ -67,7 +67,7 @@ public class PersonManager {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(conn);
         }
         return null;
     }
@@ -117,7 +117,6 @@ public class PersonManager {
 //        person.Account_email=account.email 
 //        AND  account.typeOfAccount = 'professor' 
 //        AND person.Department_abbreviation ='DISTRA'
-        stmt = DBConnector.openConnection();
 
         List<Person> toReturn = new ArrayList<>();
         String esc = "\'";
@@ -126,6 +125,7 @@ public class PersonManager {
                 + " AND account.typeOfAccount = " + esc + "professor" + esc
                 + " AND person.Department_abbreviation =" + esc + depAbbreviation + esc;
         try {
+            stmt = DBConnection.getConnection().createStatement();
 
             rs = stmt.executeQuery(query);
             System.out.println(query);
@@ -139,7 +139,7 @@ public class PersonManager {
             Logger.getLogger(PersonManager.class
                     .getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(conn);
         }
 
         return toReturn;
@@ -152,7 +152,7 @@ public class PersonManager {
      */
     /*
      public void create(Person person) {
-     stmt = DBConnector.openConnection();
+     stmt = DBConnection.getConnection().createStatement();
 
      String sql = "INSERT INTO person (SSN, person.name, surname, phone, "
      + "city, address, zip_code, gender, citizenship, Account_email, "
@@ -173,7 +173,7 @@ public class PersonManager {
      } catch (SQLException ex) {
      Logger.getLogger(PersonManager.class.getName()).log(Level.SEVERE, null, ex);
      } finally {
-     DBConnector.closeConnection();
+     DBConnection.releaseConnection(conn);
      }
      }
      */

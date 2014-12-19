@@ -29,9 +29,10 @@ public class ProfModuleClassManager {
     }
 
     public boolean create(ProfModuleClass pmc) {
-        stmt = DBConnector.openConnection();
 
         try {
+            stmt = DBConnection.getConnection().createStatement();
+
             String esc = "\'";
             String query = "INSERT INTO " + TABLE
                     + "(class_title, "
@@ -50,7 +51,7 @@ public class ProfModuleClassManager {
             ex.printStackTrace();
             throw new RuntimeException("Insert Query Failed");
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(conn);
         }
         return false;
     }
@@ -67,10 +68,11 @@ public class ProfModuleClassManager {
      * @return
      */
     public List<ProfModuleClass> getAllRelations() {
-        stmt = DBConnector.openConnection();
         List<ProfModuleClass> toReturn = new ArrayList<>();
 
         try {
+            stmt = DBConnection.getConnection().createStatement();
+
             String esc = "\'";
             String query = "SELECT * FROM " + TABLE;
             rs = stmt.executeQuery(query);
@@ -82,7 +84,7 @@ public class ProfModuleClassManager {
             ex.printStackTrace();
             throw new RuntimeException("Insert Query Failed");
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(conn);
         }
         return toReturn;
     }
@@ -134,14 +136,14 @@ public class ProfModuleClassManager {
                 + "module_title= " + esc + pmc.getModuleTitle() + esc + " and "
                 + "email_account= " + esc + pmc.getProfEmail() + esc;
         try {
-            stmt = DBConnector.openConnection();
+            stmt = DBConnection.getConnection().createStatement();
             if (stmt.executeUpdate(query) == 1) {
                 return true;
             }
         } catch (SQLException ex) {
             Logger.getLogger(ProfModuleClassManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(conn);
         }
         return false;
     }
@@ -159,7 +161,7 @@ public class ProfModuleClassManager {
         System.out.println(query);
 
         try {
-            stmt = DBConnector.openConnection();
+            stmt = DBConnection.getConnection().createStatement();
             rs = stmt.executeQuery(query);
             while (rs.next()) {
                 ProfModuleClass pmc = getProfModuleClassFromRS(rs);
@@ -168,12 +170,11 @@ public class ProfModuleClassManager {
         } catch (SQLException ex) {
             Logger.getLogger(ProfModuleClassManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(conn);
         }
         return toReturn;
     }
-    
-    
+
     /**
      *
      * @param teachingMatricula
@@ -186,7 +187,7 @@ public class ProfModuleClassManager {
                 + " WHERE " + "class_title= " + esc + classTitle + esc;
         System.out.println(query);
         try {
-            stmt = DBConnector.openConnection();
+            stmt = DBConnection.getConnection().createStatement();
             rs = stmt.executeQuery(query);
             while (rs.next()) {
                 ProfModuleClass pmc = getProfModuleClassFromRS(rs);
@@ -195,14 +196,12 @@ public class ProfModuleClassManager {
         } catch (SQLException ex) {
             Logger.getLogger(ProfModuleClassManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(conn);
         }
         return toReturn;
     }
-    
-    
-    
-        /**
+
+    /**
      *
      * @param teachingMatricula
      * @return
@@ -215,7 +214,7 @@ public class ProfModuleClassManager {
         System.out.println(query);
 
         try {
-            stmt = DBConnector.openConnection();
+            stmt = DBConnection.getConnection().createStatement();
             rs = stmt.executeQuery(query);
             while (rs.next()) {
                 ProfModuleClass pmc = getProfModuleClassFromRS(rs);
@@ -224,15 +223,12 @@ public class ProfModuleClassManager {
         } catch (SQLException ex) {
             Logger.getLogger(ProfModuleClassManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(conn);
         }
         return toReturn;
     }
-    
-    
-    
-    
-            /**
+
+    /**
      *
      * @param teachingMatricula
      * @return
@@ -245,7 +241,7 @@ public class ProfModuleClassManager {
         System.out.println(query);
 
         try {
-            stmt = DBConnector.openConnection();
+            stmt = DBConnection.getConnection().createStatement();
             rs = stmt.executeQuery(query);
             while (rs.next()) {
                 ProfModuleClass pmc = getProfModuleClassFromRS(rs);
@@ -254,12 +250,9 @@ public class ProfModuleClassManager {
         } catch (SQLException ex) {
             Logger.getLogger(ProfModuleClassManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(conn);
         }
         return toReturn;
     }
-    
-    
-    
-    
+
 }
