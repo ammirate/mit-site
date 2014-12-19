@@ -37,7 +37,7 @@ public class ModuleManager {
     public boolean createModule(Module m) {
 
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
 
             String query = "INSERT INTO " + TABLE
                     + "(teaching_matricula,title) VALUES("
@@ -50,7 +50,7 @@ public class ModuleManager {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
-            DBConnection.releaseConnection(conn);
+            DBConnector.closeConnection();
         }
         return false;
     }
@@ -65,7 +65,7 @@ public class ModuleManager {
     public Module readModule(String title, String teachinMatricula) {
 
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
 
             String esc = "\'";
             String query = "SELECT * FROM " + TABLE + " WHERE title=" + esc + title + esc
@@ -79,7 +79,7 @@ public class ModuleManager {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
-            DBConnection.releaseConnection(conn);
+            DBConnector.closeConnection();
         }
         return null;
     }
@@ -93,7 +93,7 @@ public class ModuleManager {
     public boolean updateModule(Module oldModule, String newTitle) {
 
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
 
             String esc = "\'";
             String query = "UPDATE " + TABLE + " SET title="
@@ -108,7 +108,7 @@ public class ModuleManager {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
-            DBConnection.releaseConnection(conn);
+            DBConnector.closeConnection();
         }
         return false;
     }
@@ -122,7 +122,7 @@ public class ModuleManager {
     public boolean deleteModule(String title, String teachingMatricula) {
 
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
 
             String esc = "\'";
             String query = "DELETE FROM " + TABLE + " WHERE title=" + esc + title + esc
@@ -134,7 +134,7 @@ public class ModuleManager {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
-            DBConnection.releaseConnection(conn);
+            DBConnector.closeConnection();
         }
         return false;
     }
@@ -164,7 +164,7 @@ public class ModuleManager {
             throw new IllegalArgumentException("id cannot be null!");
         } else {
             try {
-                stmt = DBConnection.getConnection().createStatement();
+                stmt = DBConnector.openConnection();
 
                 String query = "SELECT * FROM " + TABLE
                         + " WHERE teaching_matricula=\""
@@ -179,7 +179,7 @@ public class ModuleManager {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             } finally {
-                DBConnection.releaseConnection(conn);
+                DBConnector.closeConnection();
             }
         }
         return toReturn;
@@ -193,7 +193,7 @@ public class ModuleManager {
     public ArrayList<Module> getAllModules() {
         ArrayList<Module> toReturn = new ArrayList<Module>();
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
 
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " order by title");
             while (rs.next()) {
@@ -203,7 +203,7 @@ public class ModuleManager {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
-            DBConnection.releaseConnection(conn);
+            DBConnector.closeConnection();
         }
         return toReturn;
     }

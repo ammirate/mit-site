@@ -54,7 +54,7 @@ public class PersonManager {
      */
     public Person getPersonByEmail(String email) {
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
 
             String esc = "\'";
             String query = "SELECT * FROM " + TABLE + " WHERE "
@@ -67,7 +67,7 @@ public class PersonManager {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBConnection.releaseConnection(conn);
+            DBConnector.closeConnection();
         }
         return null;
     }
@@ -125,7 +125,7 @@ public class PersonManager {
                 + " AND account.typeOfAccount = " + esc + "professor" + esc
                 + " AND person.Department_abbreviation =" + esc + depAbbreviation + esc;
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
 
             rs = stmt.executeQuery(query);
             System.out.println(query);
@@ -139,7 +139,7 @@ public class PersonManager {
             Logger.getLogger(PersonManager.class
                     .getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DBConnection.releaseConnection(conn);
+            DBConnector.closeConnection();
         }
 
         return toReturn;
@@ -152,7 +152,7 @@ public class PersonManager {
      */
     /*
      public void create(Person person) {
-     stmt = DBConnection.getConnection().createStatement();
+     stmt = DBConnector.openConnection();
 
      String sql = "INSERT INTO person (SSN, person.name, surname, phone, "
      + "city, address, zip_code, gender, citizenship, Account_email, "
@@ -173,7 +173,7 @@ public class PersonManager {
      } catch (SQLException ex) {
      Logger.getLogger(PersonManager.class.getName()).log(Level.SEVERE, null, ex);
      } finally {
-     DBConnection.releaseConnection(conn);
+     DBConnector.closeConnection();
      }
      }
      */

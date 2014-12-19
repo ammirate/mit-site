@@ -43,7 +43,7 @@ public class DegreeManager {
      */
     public boolean createDegree(Degree degree) {
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
             String query = "INSERT INTO " + TABLE
                     + "(title, "
                     + "matricula,"
@@ -61,7 +61,7 @@ public class DegreeManager {
             ex.printStackTrace();
             throw new RuntimeException("Insertion Query failed!");
         } finally {
-            DBConnection.releaseConnection(conn);
+           DBConnector.closeConnection();
         }
         return false;
     }
@@ -75,7 +75,7 @@ public class DegreeManager {
      */
     public boolean updateDegree(String matricula, Degree degree) {
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
             String query = "UPDATE " + TABLE
                     + " SET " + degree.toString() + " WHERE "
                     + PKEY + "=" + esc + matricula + esc;
@@ -88,7 +88,7 @@ public class DegreeManager {
             ex.printStackTrace();
             throw new RuntimeException("Update Query failed!");
         } finally {
-            DBConnection.releaseConnection(conn);
+           DBConnector.closeConnection();
         }
         return false;
     }
@@ -105,7 +105,7 @@ public class DegreeManager {
             throw new IllegalArgumentException("Can't read a degree from the Database using an empty matricula");
         } else {
             try {
-                stmt = DBConnection.getConnection().createStatement();
+                stmt = DBConnector.openConnection();
                 rs = stmt.executeQuery("SELECT * FROM " + TABLE
                         + " WHERE " + PKEY + "=\"" + matricula + "\"");
                 while (rs.next()) {
@@ -115,7 +115,7 @@ public class DegreeManager {
                 ex.printStackTrace();
                 throw new RuntimeException("Read Query failed!");
             } finally {
-                DBConnection.releaseConnection(conn);
+               DBConnector.closeConnection();
             }
         }
         return null;
@@ -129,7 +129,7 @@ public class DegreeManager {
      */
     public boolean deleteDegree(String matricula) {
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
             if (stmt.executeUpdate("DELETE FROM " + TABLE
                     + " WHERE " + PKEY + "=\"" + matricula + "\"") == 1) {
                 return true;
@@ -138,7 +138,7 @@ public class DegreeManager {
             ex.printStackTrace();
             throw new RuntimeException("Delete Query failed!");
         } finally {
-            DBConnection.releaseConnection(conn);
+           DBConnector.closeConnection();
         }
         return false;
     }
@@ -151,7 +151,7 @@ public class DegreeManager {
     public ArrayList<Degree> getAllDegrees() {
         ArrayList<Degree> toReturn = new ArrayList<>();
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " order by title");
 
             while (rs.next()) {
@@ -162,7 +162,7 @@ public class DegreeManager {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBConnection.releaseConnection(conn);
+           DBConnector.closeConnection();
         }
         return toReturn;
     }
@@ -196,7 +196,7 @@ public class DegreeManager {
         String esc = "\"";
         ArrayList<Degree> toReturn = new ArrayList<>();
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE
                     + " WHERE department_abbreviation="
                     + esc + abbreviation + esc
@@ -208,7 +208,7 @@ public class DegreeManager {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBConnection.releaseConnection(conn);
+           DBConnector.closeConnection();
         }
         return toReturn;
     }
@@ -225,7 +225,7 @@ public class DegreeManager {
             throw new IllegalArgumentException("Cycle must be greater than 1");
         } else {
             try {
-                stmt = DBConnection.getConnection().createStatement();
+                stmt = DBConnector.openConnection();
                 String query = "SELECT * FROM " + TABLE
                         + " WHERE cycle_number=" + cycle
                         + " order by title";
@@ -239,7 +239,7 @@ public class DegreeManager {
             } catch (SQLException e) {
                 e.printStackTrace();
             } finally {
-                DBConnection.releaseConnection(conn);
+               DBConnector.closeConnection();
             }
         }
         return toReturn;
@@ -281,7 +281,7 @@ public class DegreeManager {
             throw new IllegalArgumentException("Cycle must be greater than 1");
         } else {
             try {
-                stmt = DBConnection.getConnection().createStatement();
+                stmt = DBConnector.openConnection();
                 String query = "SELECT * FROM " + TABLE
                         + " WHERE cycle_number=" + cycle + " AND "
                         + "department_abbreviation=" + esc + depAbbreviation + esc
@@ -296,7 +296,7 @@ public class DegreeManager {
             } catch (SQLException e) {
                 e.printStackTrace();
             } finally {
-                DBConnection.releaseConnection(conn);
+               DBConnector.closeConnection();
             }
         }
 
@@ -311,7 +311,7 @@ public class DegreeManager {
      */
     public boolean setEsse3ContentForDegree(String degreeMatricula, String content) {
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
 
             String esc = "\'";
             String query = "UPDATE " + TABLE + " SET "  + "esse3_content"
@@ -329,7 +329,7 @@ public class DegreeManager {
             ex.printStackTrace();
             throw new RuntimeException("Update Query Failed");
         } finally {
-            DBConnection.releaseConnection(conn);
+           DBConnector.closeConnection();
         }
         return false;
     }

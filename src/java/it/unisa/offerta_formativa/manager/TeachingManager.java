@@ -47,7 +47,7 @@ public class TeachingManager {
             throw new IllegalArgumentException("The teaching which you're trying to insert is null");
         } else {
             try {
-                stmt = DBConnection.getConnection().createStatement();
+                stmt = DBConnector.openConnection();
 
                 String query = "INSERT INTO " + TABLE
                         + "(matricula,title,abbreviation,link,year,semester,active) VALUES("
@@ -60,7 +60,7 @@ public class TeachingManager {
                 ex.printStackTrace();
                 throw new RuntimeException("Insert Query Failed");
             } finally {
-                DBConnection.releaseConnection(conn);
+                DBConnector.closeConnection();
             }
         }
         return false;
@@ -77,7 +77,7 @@ public class TeachingManager {
             throw new IllegalArgumentException("Matricula format incorrect");
         } else {
             try {
-                stmt = DBConnection.getConnection().createStatement();
+                stmt = DBConnector.openConnection();
 
                 String query = "DELETE FROM " + TABLE
                         + " WHERE " + PKEY + "=\"" + matricula + "\"";
@@ -88,7 +88,7 @@ public class TeachingManager {
                 ex.printStackTrace();
                 throw new RuntimeException("Delete Query failed!");
             } finally {
-                DBConnection.releaseConnection(conn);
+                DBConnector.closeConnection();
             }
         }
         return false;
@@ -105,7 +105,7 @@ public class TeachingManager {
             throw new IllegalArgumentException("The teaching which you're trying to update is null");
         } else {
             try {
-                stmt = DBConnection.getConnection().createStatement();
+                stmt = DBConnector.openConnection();
 
                 String esc = "\'";
                 String query = "UPDATE " + TABLE + " SET " + ins.toString()
@@ -118,7 +118,7 @@ public class TeachingManager {
                 ex.printStackTrace();
                 throw new RuntimeException("Update Query Failed");
             } finally {
-                DBConnection.releaseConnection(conn);
+                DBConnector.closeConnection();
             }
         }
         return false;
@@ -136,7 +136,7 @@ public class TeachingManager {
             throw new IllegalArgumentException("Matricula format incorrect");
         } else {
             try {
-                stmt = DBConnection.getConnection().createStatement();
+                stmt = DBConnector.openConnection();
 
                 String query = "SELECT * FROM " + TABLE
                         + " WHERE " + PKEY + "=" + esc + matricula + esc;
@@ -149,7 +149,7 @@ public class TeachingManager {
             } catch (SQLException ex) {
                 throw new RuntimeException("Read Query failed!");
             } finally {
-                DBConnection.releaseConnection(conn);
+                DBConnector.closeConnection();
             }
         }
         return null;
@@ -175,7 +175,7 @@ public class TeachingManager {
         ArrayList<Teaching> toReturn = new ArrayList<>();
         String esc = "\"";
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " order by title");
             while (rs.next()) {
                 toReturn.add(getTeachingFromResultSet(rs));
@@ -183,7 +183,7 @@ public class TeachingManager {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBConnection.releaseConnection(conn);
+            DBConnector.closeConnection();
         }
         return toReturn;
     }
@@ -199,7 +199,7 @@ public class TeachingManager {
         String esc = "\"";
         ArrayList<Teaching> toReturn = new ArrayList<>();
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " WHERE year=" + year);
             while (rs.next()) {
                 Teaching t = getTeachingFromResultSet(rs);
@@ -208,7 +208,7 @@ public class TeachingManager {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBConnection.releaseConnection(conn);
+            DBConnector.closeConnection();
         }
         return toReturn;
     }
@@ -224,7 +224,7 @@ public class TeachingManager {
         String esc = "\"";
         ArrayList<Teaching> toReturn = new ArrayList<>();
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " WHERE semester=" + semester);
             while (rs.next()) {
                 Teaching t = getTeachingFromResultSet(rs);
@@ -234,7 +234,7 @@ public class TeachingManager {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBConnection.releaseConnection(conn);
+            DBConnector.closeConnection();
         }
         return toReturn;
     }
@@ -255,7 +255,7 @@ public class TeachingManager {
         List<String> matriculas = new ArrayList<>();
 
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
 
             rs = stmt.executeQuery(whichTeachingQUery);
             while (rs.next()) {
@@ -280,7 +280,7 @@ public class TeachingManager {
         } catch (SQLException ex) {
             Logger.getLogger(CurriculumManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DBConnection.releaseConnection(conn);
+            DBConnector.closeConnection();
         }
 
         return toReturn;
@@ -318,7 +318,7 @@ public class TeachingManager {
         String htmlToReturn = null;
         String esc = "\"";
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
             rs = stmt.executeQuery("SELECT esse3_content FROM " + TABLE + " WHERE matricula=" + esc + teaching_matricula + esc);
 
             while (rs.next()) {
@@ -350,7 +350,7 @@ public class TeachingManager {
             ex.printStackTrace();
             throw new RuntimeException("Update Query Failed");
         } finally {
-            DBConnection.releaseConnection(conn);
+            DBConnector.closeConnection();
         }
         return false;
     }

@@ -35,7 +35,7 @@ public class CycleManager {
     public boolean createCycle(Cycle c) {
 
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
 
             String query = "INSERT INTO " + TABLE
                     + "(cycle_number,title) VALUES ("
@@ -47,7 +47,7 @@ public class CycleManager {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
-            DBConnection.releaseConnection(conn);
+           DBConnector.closeConnection();
         }
         return false;
     }
@@ -61,7 +61,7 @@ public class CycleManager {
     public Cycle readCycle(int idCycle) {
 
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
 
             String query = "SELECT * FROM " + TABLE
                     + " WHERE " + PKEY + "=" + idCycle;
@@ -73,7 +73,7 @@ public class CycleManager {
         } catch (SQLException ex) {
             Logger.getLogger(CurriculumManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DBConnection.releaseConnection(conn);
+           DBConnector.closeConnection();
         }
         return null;
     }
@@ -88,7 +88,7 @@ public class CycleManager {
     public boolean updateCycle(int idOldCycle, Cycle newCycle) {
 
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
 
             String query = "UPDATE " + TABLE + " SET " + newCycle.toString() + " WHERE "
                     + PKEY + "=" + idOldCycle;
@@ -101,7 +101,7 @@ public class CycleManager {
             ex.printStackTrace();
             throw new RuntimeException("Update Query failed!");
         } finally {
-            DBConnection.releaseConnection(conn);
+           DBConnector.closeConnection();
         }
         return false;
     }
@@ -119,7 +119,7 @@ public class CycleManager {
         ArrayList<Cycle> toReturn = new ArrayList<Cycle>();
 
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
 
 //            System.out.println("SELECT * FROM " + TABLE);
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " order by title");
@@ -130,7 +130,7 @@ public class CycleManager {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
-            DBConnection.releaseConnection(conn);
+           DBConnector.closeConnection();
         }
         return toReturn;
     }

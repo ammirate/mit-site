@@ -40,7 +40,7 @@ public class ClassManager {
     public boolean createClass(ClassPartition classp) {
 
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
 
             String query = "INSERT INTO " + TABLE + "(teaching_matricula,title) VALUES(" + classp.toStringQueryInsert() + ")";
 //            System.out.println("Insert query : " + query);
@@ -51,7 +51,7 @@ public class ClassManager {
             ex.printStackTrace();
             throw new RuntimeException("Query failed to create a class");
         } finally {
-            DBConnection.releaseConnection(conn);
+             DBConnector.closeConnection();
         }
         return false;
     }
@@ -66,7 +66,7 @@ public class ClassManager {
     public ClassPartition readClass(String teachingMatricula, String title) {
 
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
 
             String query = "SELECT * FROM " + TABLE + " WHERE title=" + esc + title + esc + " and "
                     + "teaching_matricula=" + esc + teachingMatricula + esc;
@@ -78,7 +78,7 @@ public class ClassManager {
             ex.printStackTrace();
             throw new RuntimeException("Query failed to read a class");
         } finally {
-            DBConnection.releaseConnection(conn);
+             DBConnector.closeConnection();
         }
         return new ClassPartition();
     }
@@ -93,7 +93,7 @@ public class ClassManager {
     public boolean updateClass(ClassPartition oldClass, ClassPartition newClass) {
 
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
 
             String query = "UPDATE " + TABLE + " SET " + newClass.toString() + " WHERE "
                     + "title=" + esc + oldClass.getTitle() + esc + " and "
@@ -106,7 +106,7 @@ public class ClassManager {
             ex.printStackTrace();
             throw new RuntimeException("Query failed to update class");
         } finally {
-            DBConnection.releaseConnection(conn);
+             DBConnector.closeConnection();
         }
         return false;
     }
@@ -121,7 +121,7 @@ public class ClassManager {
     public boolean deleteClass(String teachingMatricula, String title) {
 
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
 
             String query = "DELETE FROM " + TABLE + " WHERE title=" + esc + title + esc + " and "
                     + "teaching_matricula=" + esc + teachingMatricula + esc;
@@ -132,7 +132,7 @@ public class ClassManager {
             ex.printStackTrace();
             throw new RuntimeException("Query failed to delete class");
         } finally {
-            DBConnection.releaseConnection(conn);
+             DBConnector.closeConnection();
         }
         return false;
     }
@@ -161,7 +161,7 @@ public class ClassManager {
             throw new IllegalArgumentException("Id cannot be null!");
         } else {
             try {
-                stmt = DBConnection.getConnection().createStatement();
+                stmt = DBConnector.openConnection();
 
                 String query = "SELECT * FROM " + TABLE
                         + " WHERE teaching_matricula=\"" + idTeaching + "\""
@@ -174,7 +174,7 @@ public class ClassManager {
                 ex.printStackTrace();
                 throw new RuntimeException("Query fail");
             } finally {
-                DBConnection.releaseConnection(conn);
+                 DBConnector.closeConnection();
             }
         }
         return toReturn;
@@ -189,7 +189,7 @@ public class ClassManager {
 
         ArrayList<ClassPartition> toReturn = new ArrayList<>();
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
 
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " order by title");
             while (rs.next()) {
@@ -199,7 +199,7 @@ public class ClassManager {
             ex.printStackTrace();
             throw new RuntimeException("Query fail");
         } finally {
-            DBConnection.releaseConnection(conn);
+             DBConnector.closeConnection();
         }
         return toReturn;
     }

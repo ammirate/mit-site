@@ -40,8 +40,8 @@ public class DepartmentManager {
      */
     public boolean createDepartment(Department dept) {
         try {
-            stmt = DBConnection.getConnection().createStatement();
-            //            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
+            //            stmt = DBConnector.openConnection();
 
             String query = "INSERT INTO " + TABLE + "(abbreviation,title,url_moodle,token) VALUES(" + dept.toStringQueryInsert() + ")";
             if (stmt.executeUpdate(query) == 1) {
@@ -51,8 +51,8 @@ public class DepartmentManager {
             ex.printStackTrace();
             throw new RuntimeException("Insertion Query failed!");
         } finally {
-            DBConnection.releaseConnection(conn);
-            //            DBConnection.releaseConnection(conn);
+            DBConnector.closeConnection();
+            //            DBConnector.closeConnection();
 
         }
         return false;
@@ -66,7 +66,7 @@ public class DepartmentManager {
     public boolean updateDepartment(String abbrev, Department dept) {
         try {
             String esc = "\'";
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
             String query = "UPDATE " + TABLE + " SET " + dept.toString() + " WHERE "
                     + PKEY + "=" + esc + abbrev + esc;
             if (stmt.executeUpdate(query) == 1) {
@@ -76,7 +76,7 @@ public class DepartmentManager {
             ex.printStackTrace();
             throw new RuntimeException("Update Query failed!");
         } finally {
-            DBConnection.releaseConnection(conn);
+            DBConnector.closeConnection();
         }
         return false;
     }
@@ -93,7 +93,7 @@ public class DepartmentManager {
             throw new IllegalArgumentException("Can't read a degree from the Database using id less than one");
         } else {
             try {
-                stmt = DBConnection.getConnection().createStatement();
+                stmt = DBConnector.openConnection();
                 String query = "SELECT * FROM " + TABLE
                         + " WHERE " + PKEY + "=\'" + abbreviation + "\' ";
                 rs = stmt.executeQuery(query);
@@ -104,7 +104,7 @@ public class DepartmentManager {
                 ex.printStackTrace();
                 throw new RuntimeException("Read Query failed!");
             } finally {
-                DBConnection.releaseConnection(conn);
+                DBConnector.closeConnection();
             }
         }
         return null;
@@ -118,7 +118,7 @@ public class DepartmentManager {
      */
     public boolean deleteDepartment(String abbreviation) {
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
             if (stmt.executeUpdate("DELETE FROM " + TABLE
                     + " WHERE " + PKEY + "=\"" + abbreviation + "\"") == 1) {
                 return true;
@@ -127,7 +127,7 @@ public class DepartmentManager {
             ex.printStackTrace();
             throw new RuntimeException("Delete Query failed!");
         } finally {
-            DBConnection.releaseConnection(conn);
+            DBConnector.closeConnection();
         }
         return false;
     }
@@ -140,7 +140,7 @@ public class DepartmentManager {
     public ArrayList<Department> getAllDepartments() {
         ArrayList<Department> toReturn = new ArrayList<Department>();
         try {
-            stmt = DBConnection.getConnection().createStatement();
+            stmt = DBConnector.openConnection();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " order by title");
 
             while (rs.next()) {
@@ -151,7 +151,7 @@ public class DepartmentManager {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBConnection.releaseConnection(conn);
+            DBConnector.closeConnection();
         }
         return toReturn;
     }
