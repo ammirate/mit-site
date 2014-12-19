@@ -38,12 +38,12 @@ public class ParserHtmlManager {
                 String toReturn = null;
 		Element didattica = null;
 		try {
-			doc = Jsoup.connect(link).get();
+			doc = Jsoup.connect(link).get(); 
 			didattica = doc.getElementById(tag);
-                        
                         String rep1= didattica.toString().replace("“", "\"");
                         String rep2= rep1.replace("”", "\"");
-                        toReturn= rep2.replace("’", "'");
+                        String rep3= rep2.replace("'", "\"");
+                        toReturn= rep3.replace("’", "'");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

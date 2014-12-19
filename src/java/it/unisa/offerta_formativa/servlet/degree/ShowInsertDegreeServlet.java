@@ -24,7 +24,6 @@ public class ShowInsertDegreeServlet extends HttpServlet {
     public ShowInsertDegreeServlet() {
         super();
         // TODO Auto-generated constructor stub   
-        
     }
 
     /**

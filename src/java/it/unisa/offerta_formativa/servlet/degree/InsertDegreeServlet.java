@@ -9,9 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import it.unisa.offerta_formativa.manager.CycleManager;
 import it.unisa.offerta_formativa.manager.DegreeManager;
-import it.unisa.offerta_formativa.manager.DepartmentManager;
+import it.unisa.offerta_formativa.manager.ParserHtmlManager;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 
@@ -24,18 +23,16 @@ public class InsertDegreeServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private DegreeManager degreeMng;
-    private DepartmentManager dm;
-    private CycleManager cym;
+    private ParserHtmlManager parseMng;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
     public InsertDegreeServlet() {
         super();
-        // TODO Auto-generated constructor stub   
-        dm = DepartmentManager.getInstance();
+        // TODO Auto-generated constructor stub 
+        parseMng = ParserHtmlManager.getInstance();
         degreeMng = DegreeManager.getInstance();
-        cym = CycleManager.getInstance();
     }
 
     /**
@@ -49,6 +46,7 @@ public class InsertDegreeServlet extends HttpServlet {
 
     private void InsertDegree(Degree degree) {
         // TODO Auto-generated method stub
+            degree.setEsse3Content(parseMng.getHtml(degree.getLink(), "infobox"));
             degreeMng.createDegree(degree);
     }
     /**
@@ -57,10 +55,15 @@ public class InsertDegreeServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
+        if(degreeMng.readDegree(request.getParameter("degree_matricula"))==null){
         InsertDegree(new Degree(request.getParameter("degree_matricula"), request.getParameter("link"), request.getParameter("title"), Integer.parseInt(request.getParameter("cycle")), request.getParameter("departmentAbb"),Boolean.parseBoolean(request.getParameter("status"))));
         ServletContext sc = getServletContext();  
         RequestDispatcher rd = sc.getRequestDispatcher("/ShowDegreeServlet");  
         rd.forward(request, response); 
+        } else {
+             request.setAttribute("exist", "true");
+             request.getRequestDispatcher("/offertaFormativaJSP/amministratore/degree/insertDegree.jsp").forward(request, response);
+        }
     }
 
 }

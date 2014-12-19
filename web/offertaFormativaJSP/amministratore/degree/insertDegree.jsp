@@ -8,12 +8,12 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1"%>
 
+<%! public String exist;
+%>
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
-
-
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
@@ -35,7 +35,7 @@
         <link rel="stylesheet" href="assets/css/xenon-skins.css">
         <link rel="stylesheet" href="assets/css/custom.css">
         <script src="assets/js/jquery-1.11.1.min.js"></script>
-        
+
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -46,6 +46,15 @@
 
     </head>
     <body class="page-body" onload="loadDepAndCycles()">
+        <%  
+            exist = (String) request.getAttribute("exist");
+            if(exist.equalsIgnoreCase("true")) {
+        %>
+        <div class="alert alert-success alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert"></button>
+            Sono un box di alert. Puoi chiudermi.
+        </div>
+        <% }%>
 
         <nav class="navbar horizontal-menu navbar-fixed-top">
             <!-- set fixed position by adding class "navbar-fixed-top" -->
@@ -173,13 +182,10 @@
                             </div>
                             <div class="panel-body">
                                 <div class="row"> <br> </div>
-
-
                                 <script>
                                     jQuery(document).ready(function ($) {
                                         $('a[href="#layout-variants"]').on('click', function (ev) {
                                             ev.preventDefault();
-
                                             var win = {
                                                 top: $(window).scrollTop(),
                                                 toTop: $("#layout-variants").offset().top - 15
@@ -197,19 +203,18 @@
                                     });
                                 </script>
 
-
-
                                 <div class="row">
-                                    <div class="form-group col-sm-3">
-                                        <label for="title" style="color: black; font-weight: bold">Matricola:</label>
-                                        <input type="text" id="matricula_text" class="form-control" name="matricula" placeholder="Inserisci matricola">
-                                    </div>
+                                    <form id="form1" role="form">
+                                        <div class="form-group col-sm-3">
+                                            <label for="matricula" style="color: black; font-weight: bold">Matricola:</label>
+                                            <input type="text" id="matricula_text" class="form-control" name="matricula" placeholder="Inserisci matricola">
+                                        </div>
 
-                                    <div class="col-sm-5">
-                                        <label for="title" style="color: black; font-weight: bold" >Titolo:</label>
-                                        <input type="text" id="title_text" name="titolo" class="form-control" placeholder="Inserisci titolo" > 
-                                    </div>
-
+                                        <div class="col-sm-5">
+                                            <label for="title" style="color: black; font-weight: bold" >Titolo:</label>
+                                            <input type="text" id="title_text" name="titolo" class="form-control" placeholder="Inserisci titolo"> 
+                                        </div>
+                                    </form>
                                     <div class="form col-sm-1"></div>
 
                                     <label for="title" style="color: black; font-weight: bold">Stato:</label>
@@ -220,7 +225,7 @@
                                         </label>
                                         <label class="radio-inline">
 
-                                            <input type="radio" name="optradio" id="status_disable" ><p style="color: black">Disattivo</p>
+                                            <input type="radio" name="optradio" id="status_disable" ><p style="color: black" >Disattivo</p>
 
                                         </label>
                                     </form>
@@ -255,6 +260,7 @@
                                 <div> <br> </div>
                                 <div> <br> </div>
                                 <div> <br> </div>
+
 
                                 <div class="row">
 
@@ -350,16 +356,32 @@
                     var link = $("#link_text").val();
                     var title = $("#title_text").val();
 
-                    if (document.getElementById('status_active').checked) {
-                        var status = "true";
-                    } else if (document.getElementById('status_disable').checked) {
-                        var status = "false";
-                    }
+                    if ((validate(degree_matricula)) && (validate(link)) && (validate(title))) {
+                        if (document.getElementById('status_active').checked) {
+                            var status = "true";
+                        } else if (document.getElementById('status_disable').checked) {
+                            var status = "false";
+                        }
 
-                    var r = confirm("Sei sicuro di voler modificare il corso di Laurea: " + title);
-                    if (r == true) {
-                        document.location.href = '${pageContext.request.contextPath}/InsertDegreeServlet?degree_matricula=' + degree_matricula + '&cycle=' + cycle + '&departmentAbb=' + departmentAbb + '&link=' + link + '&title=' + title + '&status=' + status;
+                        var r = confirm("Sei sicuro di voler modificare il corso di Laurea: " + title);
+                        if (r == true) {
+                            document.location.href = '${pageContext.request.contextPath}/InsertDegreeServlet?degree_matricula=' + degree_matricula + '&cycle=' + cycle + '&departmentAbb=' + departmentAbb + '&link=' + link + '&title=' + title + '&status=' + status;
+                        }
+                    } else {
+                        var msg;
+                        if (!validate(degree_matricula)) {
+                            msg = "Inserisci una matricola";
+                        } else if (!validate(link)) {
+                            msg = "Inserisci un link"
+                        } else if (!validate(title)) {
+                            msg = "Inserisci un titolo"
+                        }
+                        var a = alert(msg);
                     }
+                }
+                function validate(toValidate) {
+                    if (toValidate.length > 1)
+                        return true;
                 }
             </script>
             <script src="assets/js/bootstrap.min.js"></script>
@@ -368,6 +390,11 @@
             <script src="assets/js/joinable.js"></script>
             <script src="assets/js/xenon-api.js"></script>
             <script src="assets/js/xenon-toggles.js"></script>
+            <link rel="stylesheet" href="assets/js/select2/select2.css">
+            <link href="assets/js/select2/select2-bootstrap.css" rel="stylesheet" type="text/css"/>
+            <script src="assets/js/select2/select2.min.js"></script>
+            <script src="assets/js/jquery-validate/jquery.validate.min.js" id="script-resource-7"></script>
+            <script src="assets/js/jquery-validate/localization/messages_it.min.js" type="text/javascript"></script>
             <!-- JavaScripts initializations and stuff -->
             <script src="assets/js/xenon-custom.js"></script>
 
