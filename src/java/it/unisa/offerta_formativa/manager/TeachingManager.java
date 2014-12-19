@@ -42,12 +42,13 @@ public class TeachingManager {
      * @return
      */
     public boolean createTeaching(Teaching ins) {
-        stmt = DBConnector.openConnection();
 
         if (ins == null) {
             throw new IllegalArgumentException("The teaching which you're trying to insert is null");
         } else {
             try {
+                stmt = DBConnection.getConnection().createStatement();
+
                 String query = "INSERT INTO " + TABLE
                         + "(matricula,title,abbreviation,link,year,semester,active) VALUES("
                         + ins.toStringQueryInsert() + ")";
@@ -59,7 +60,7 @@ public class TeachingManager {
                 ex.printStackTrace();
                 throw new RuntimeException("Insert Query Failed");
             } finally {
-                DBConnector.closeConnection();
+                DBConnection.releaseConnection(conn);
             }
         }
         return false;
@@ -71,12 +72,13 @@ public class TeachingManager {
      * @return
      */
     public boolean deleteTeaching(String matricula) {
-        stmt = DBConnector.openConnection();
 
         if (matricula == null || matricula.equals("") || matricula.length() > 10) {
             throw new IllegalArgumentException("Matricula format incorrect");
         } else {
             try {
+                stmt = DBConnection.getConnection().createStatement();
+
                 String query = "DELETE FROM " + TABLE
                         + " WHERE " + PKEY + "=\"" + matricula + "\"";
                 if (stmt.executeUpdate(query) == 1) {
@@ -86,7 +88,7 @@ public class TeachingManager {
                 ex.printStackTrace();
                 throw new RuntimeException("Delete Query failed!");
             } finally {
-                DBConnector.closeConnection();
+                DBConnection.releaseConnection(conn);
             }
         }
         return false;
@@ -98,15 +100,16 @@ public class TeachingManager {
      * @return
      */
     public boolean updateTeaching(String teachingMatricula, Teaching ins) {
-        stmt = DBConnector.openConnection();
 
         if (ins == null) {
             throw new IllegalArgumentException("The teaching which you're trying to update is null");
         } else {
             try {
+                stmt = DBConnection.getConnection().createStatement();
+
                 String esc = "\'";
                 String query = "UPDATE " + TABLE + " SET " + ins.toString()
-                        + " WHERE " + PKEY + "=" +esc + teachingMatricula + esc;
+                        + " WHERE " + PKEY + "=" + esc + teachingMatricula + esc;
 
                 if (stmt.executeUpdate(query) == 1) {
                     return true;
@@ -115,7 +118,7 @@ public class TeachingManager {
                 ex.printStackTrace();
                 throw new RuntimeException("Update Query Failed");
             } finally {
-                DBConnector.closeConnection();
+                DBConnection.releaseConnection(conn);
             }
         }
         return false;
@@ -127,13 +130,14 @@ public class TeachingManager {
      * @return
      */
     public Teaching readTeaching(String matricula) {
-        stmt = DBConnector.openConnection();
 
         String esc = "\"";
         if (matricula == null || matricula.equals("") || matricula.length() > 10) {
             throw new IllegalArgumentException("Matricula format incorrect");
         } else {
             try {
+                stmt = DBConnection.getConnection().createStatement();
+
                 String query = "SELECT * FROM " + TABLE
                         + " WHERE " + PKEY + "=" + esc + matricula + esc;
 
@@ -145,7 +149,7 @@ public class TeachingManager {
             } catch (SQLException ex) {
                 throw new RuntimeException("Read Query failed!");
             } finally {
-                DBConnector.closeConnection();
+                DBConnection.releaseConnection(conn);
             }
         }
         return null;
@@ -171,7 +175,7 @@ public class TeachingManager {
         ArrayList<Teaching> toReturn = new ArrayList<>();
         String esc = "\"";
         try {
-            stmt = DBConnector.openConnection();
+            stmt = DBConnection.getConnection().createStatement();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " order by title");
             while (rs.next()) {
                 toReturn.add(getTeachingFromResultSet(rs));
@@ -179,7 +183,7 @@ public class TeachingManager {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(conn);
         }
         return toReturn;
     }
@@ -195,7 +199,7 @@ public class TeachingManager {
         String esc = "\"";
         ArrayList<Teaching> toReturn = new ArrayList<>();
         try {
-            stmt = DBConnector.openConnection();
+            stmt = DBConnection.getConnection().createStatement();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " WHERE year=" + year);
             while (rs.next()) {
                 Teaching t = getTeachingFromResultSet(rs);
@@ -204,7 +208,7 @@ public class TeachingManager {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(conn);
         }
         return toReturn;
     }
@@ -220,7 +224,7 @@ public class TeachingManager {
         String esc = "\"";
         ArrayList<Teaching> toReturn = new ArrayList<>();
         try {
-            stmt = DBConnector.openConnection();
+            stmt = DBConnection.getConnection().createStatement();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " WHERE semester=" + semester);
             while (rs.next()) {
                 Teaching t = getTeachingFromResultSet(rs);
@@ -230,7 +234,7 @@ public class TeachingManager {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(conn);
         }
         return toReturn;
     }
@@ -250,14 +254,15 @@ public class TeachingManager {
         String tmpMatricula = "";
         List<String> matriculas = new ArrayList<>();
 
-        stmt = DBConnector.openConnection();
         try {
+            stmt = DBConnection.getConnection().createStatement();
+
             rs = stmt.executeQuery(whichTeachingQUery);
             while (rs.next()) {
                 matriculas.add(rs.getString("teaching_matricula"));
             }
             rs.close();
-            
+
             for (int i = 0; i < matriculas.size(); i++) {
                 String s = matriculas.get(i);
 
@@ -275,7 +280,7 @@ public class TeachingManager {
         } catch (SQLException ex) {
             Logger.getLogger(CurriculumManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(conn);
         }
 
         return toReturn;
@@ -299,7 +304,7 @@ public class TeachingManager {
             return new Teaching(tit, abb, matr, link, year, sem, active);
         } catch (SQLException e) {
             e.printStackTrace();
-        } 
+        }
         return null;
 
     }
@@ -313,7 +318,7 @@ public class TeachingManager {
         String htmlToReturn = null;
         String esc = "\"";
         try {
-            stmt = DBConnector.openConnection();
+            stmt = DBConnection.getConnection().createStatement();
             rs = stmt.executeQuery("SELECT esse3_content FROM " + TABLE + " WHERE matricula=" + esc + teaching_matricula + esc);
 
             while (rs.next()) {
@@ -345,15 +350,12 @@ public class TeachingManager {
             ex.printStackTrace();
             throw new RuntimeException("Update Query Failed");
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(conn);
         }
         return false;
     }
-    
-    
-    
-    
-    public boolean isActive(String teachingMatricula){
+
+    public boolean isActive(String teachingMatricula) {
         return false;
     }
 

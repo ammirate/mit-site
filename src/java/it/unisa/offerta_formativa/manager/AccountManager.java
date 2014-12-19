@@ -48,10 +48,11 @@ public class AccountManager {
      * @return
      */
     public List<Account> getAllAccounts() {
-        stmt = DBConnector.openConnection();
 
         List<Account> toReturn = new ArrayList<>();
         try {
+            stmt = DBConnection.getConnection().createStatement();
+
             String query = "SELECT * FROM " + TABLE ;
             rs = stmt.executeQuery(query);
 
@@ -63,7 +64,7 @@ public class AccountManager {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(conn);
         }
         return toReturn;
     }

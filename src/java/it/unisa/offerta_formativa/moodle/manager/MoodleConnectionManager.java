@@ -5,7 +5,7 @@
  */
 package it.unisa.offerta_formativa.moodle.manager;
 
-import it.unisa.offerta_formativa.manager.DBConnector;
+import it.unisa.offerta_formativa.manager.DBConnection;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,7 +35,7 @@ public class MoodleConnectionManager {
             throw new IllegalArgumentException("Can't read a degree from the Database using id less than one");
         } else {
             try {
-                stmt = DBConnector.openConnection();
+                stmt = DBConnection.getConnection().createStatement();
                 rs = stmt.executeQuery("SELECT urlMoodle FROM " + TABLE
                         + " WHERE " + PKEY + "=\"" + id + "\"");
                 while (rs.next()) {
@@ -45,7 +45,7 @@ public class MoodleConnectionManager {
                 ex.printStackTrace();
                 throw new RuntimeException("Read Query failed!");
             } finally {
-                DBConnector.closeConnection();
+                DBConnection.releaseConnection(conn);
             }
         }
         return "error";
@@ -56,7 +56,7 @@ public class MoodleConnectionManager {
             throw new IllegalArgumentException("Can't read a degree from the Database using id less than one");
         } else {
             try {
-                stmt = DBConnector.openConnection();
+                stmt = DBConnection.getConnection().createStatement();
                 rs = stmt.executeQuery("SELECT token FROM " + TABLE
                         + " WHERE " + PKEY + "=\"" + id + "\"");
                 while (rs.next()) {
@@ -65,8 +65,8 @@ public class MoodleConnectionManager {
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 throw new RuntimeException("Read Query failed!");
-            }finally {
-                DBConnector.closeConnection();
+            } finally {
+                DBConnection.releaseConnection(conn);
             }
         }
         return "error";
