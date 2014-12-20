@@ -6,6 +6,7 @@
 package it.unisa.offerta_formativa.manager;
 
 import it.unisa.offerta_formativa.beans.Teaching;
+import it.unisa.offerta_formativa.manager.Exceptions.TeachingException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,7 +42,7 @@ public class TeachingManager {
      * @param ins
      * @return
      */
-    public boolean createTeaching(Teaching ins) {
+    public boolean createTeaching(Teaching ins) throws TeachingException {
 
         if (ins == null) {
             throw new IllegalArgumentException("The teaching which you're trying to insert is null");
@@ -58,7 +59,7 @@ public class TeachingManager {
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
-                throw new RuntimeException("Insert Query Failed");
+                throw new TeachingException("Insert Query Failed");
             } finally {
                 DBConnector.closeConnection();
             }
@@ -71,7 +72,7 @@ public class TeachingManager {
      * @param matricula
      * @return
      */
-    public boolean deleteTeaching(String matricula) {
+    public boolean deleteTeaching(String matricula) throws TeachingException {
 
         if (matricula == null || matricula.equals("") || matricula.length() > 10) {
             throw new IllegalArgumentException("Matricula format incorrect");
@@ -86,7 +87,7 @@ public class TeachingManager {
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
-                throw new RuntimeException("Delete Query failed!");
+                throw new TeachingException("Delete Query failed!");
             } finally {
                 DBConnector.closeConnection();
             }
@@ -99,7 +100,7 @@ public class TeachingManager {
      * @param ins
      * @return
      */
-    public boolean updateTeaching(String teachingMatricula, Teaching ins) {
+    public boolean updateTeaching(String teachingMatricula, Teaching ins) throws TeachingException {
 
         if (ins == null) {
             throw new IllegalArgumentException("The teaching which you're trying to update is null");
@@ -116,7 +117,7 @@ public class TeachingManager {
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
-                throw new RuntimeException("Update Query Failed");
+                throw new TeachingException("Update Query Failed");
             } finally {
                 DBConnector.closeConnection();
             }
@@ -129,7 +130,7 @@ public class TeachingManager {
      * @param matricula
      * @return
      */
-    public Teaching readTeaching(String matricula) {
+    public Teaching readTeaching(String matricula) throws TeachingException {
 
         String esc = "\"";
         if (matricula == null || matricula.equals("") || matricula.length() > 10) {
@@ -147,7 +148,7 @@ public class TeachingManager {
                 }
 
             } catch (SQLException ex) {
-                throw new RuntimeException("Read Query failed!");
+                throw new TeachingException("Read Query failed!");
             } finally {
                 DBConnector.closeConnection();
             }
@@ -337,7 +338,7 @@ public class TeachingManager {
      * @param content
      * @return true if the update has success, else false
      */
-    public boolean setEsse3ContentForTeaching(String teachingMatricula, String content) {
+    public boolean setEsse3ContentForTeaching(String teachingMatricula, String content) throws TeachingException {
         try {
             String esc = "\'";
             String query = "UPDATE " + TABLE + " SET " + esc + "esse3_content" + esc
@@ -348,7 +349,7 @@ public class TeachingManager {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new RuntimeException("Update Query Failed");
+            throw new TeachingException("Update esse3Content Query Failed");
         } finally {
             DBConnector.closeConnection();
         }

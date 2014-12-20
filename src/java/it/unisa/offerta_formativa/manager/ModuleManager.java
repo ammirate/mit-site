@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import it.unisa.offerta_formativa.beans.Module;
+import it.unisa.offerta_formativa.manager.Exceptions.ModuleException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,7 +35,7 @@ public class ModuleManager {
      * @param m
      * @return true if done.
      */
-    public boolean createModule(Module m) {
+    public boolean createModule(Module m) throws ModuleException {
 
         try {
             stmt = DBConnector.openConnection();
@@ -47,8 +48,7 @@ public class ModuleManager {
                 return true;
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new ModuleException("Create query failed!");
         } finally {
             DBConnector.closeConnection();
         }
@@ -62,7 +62,7 @@ public class ModuleManager {
      * @param teachinMatricula
      * @return Module bean read. Empty if not found any.
      */
-    public Module readModule(String title, String teachinMatricula) {
+    public Module readModule(String title, String teachinMatricula) throws ModuleException {
 
         try {
             stmt = DBConnector.openConnection();
@@ -76,8 +76,8 @@ public class ModuleManager {
                 return getModuleFromResultSet(rs);
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new ModuleException("update query failed!");
+
         } finally {
             DBConnector.closeConnection();
         }
@@ -90,7 +90,7 @@ public class ModuleManager {
      * @param m
      * @return true if done.
      */
-    public boolean updateModule(Module oldModule, String newTitle) {
+    public boolean updateModule(Module oldModule, String newTitle) throws ModuleException {
 
         try {
             stmt = DBConnector.openConnection();
@@ -105,8 +105,8 @@ public class ModuleManager {
                 return true;
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new ModuleException("update query failed!");
+
         } finally {
             DBConnector.closeConnection();
         }
@@ -119,7 +119,7 @@ public class ModuleManager {
      * @param idModule
      * @return true if deleted.
      */
-    public boolean deleteModule(String title, String teachingMatricula) {
+    public boolean deleteModule(String title, String teachingMatricula) throws ModuleException {
 
         try {
             stmt = DBConnector.openConnection();
@@ -131,8 +131,8 @@ public class ModuleManager {
                 return true;
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new ModuleException("delete query failed!");
+
         } finally {
             DBConnector.closeConnection();
         }
@@ -157,7 +157,7 @@ public class ModuleManager {
      * @param teaching_matricula
      * @return ArrayList<Module>, empty if it has not found any
      */
-    public ArrayList<Module> getModulesByTeaching(String teaching_matricula) {
+    public ArrayList<Module> getModulesByTeaching(String teaching_matricula) throws ModuleException {
 
         ArrayList<Module> toReturn = new ArrayList<Module>();
         if (teaching_matricula == null) {
@@ -176,8 +176,8 @@ public class ModuleManager {
                     toReturn.add(getModuleFromResultSet(rs));
                 }
             } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new ModuleException("read query failed!");
+
             } finally {
                 DBConnector.closeConnection();
             }
@@ -190,7 +190,7 @@ public class ModuleManager {
      *
      * @return ArrayList of Module. Empty if not found any.
      */
-    public ArrayList<Module> getAllModules() {
+    public ArrayList<Module> getAllModules() throws ModuleException {
         ArrayList<Module> toReturn = new ArrayList<Module>();
         try {
             stmt = DBConnector.openConnection();
@@ -200,8 +200,7 @@ public class ModuleManager {
                 toReturn.add(new Module(rs.getString("teaching_matricula"), rs.getString("title")));
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new ModuleException("getAll query failed!");
         } finally {
             DBConnector.closeConnection();
         }

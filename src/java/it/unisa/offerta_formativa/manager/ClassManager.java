@@ -6,6 +6,7 @@
 package it.unisa.offerta_formativa.manager;
 
 import it.unisa.offerta_formativa.beans.ClassPartition;
+import it.unisa.offerta_formativa.manager.Exceptions.ClassPartitionException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -37,7 +38,7 @@ public class ClassManager {
      * @param classp - An instance of the ClassPartition bean
      * @return true if created
      */
-    public boolean createClass(ClassPartition classp) {
+    public boolean createClass(ClassPartition classp) throws ClassPartitionException {
 
         try {
             stmt = DBConnector.openConnection();
@@ -49,7 +50,7 @@ public class ClassManager {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new RuntimeException("Query failed to create a class");
+            throw new ClassPartitionException("Query failed to create a class");
         } finally {
              DBConnector.closeConnection();
         }
@@ -63,7 +64,7 @@ public class ClassManager {
      * @param title
      * @return ClassPartition read. empty instance if not found
      */
-    public ClassPartition readClass(String teachingMatricula, String title) {
+    public ClassPartition readClass(String teachingMatricula, String title) throws ClassPartitionException {
 
         try {
             stmt = DBConnector.openConnection();
@@ -76,7 +77,7 @@ public class ClassManager {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new RuntimeException("Query failed to read a class");
+            throw new ClassPartitionException("Query failed to read a class");
         } finally {
              DBConnector.closeConnection();
         }
@@ -90,7 +91,7 @@ public class ClassManager {
      * @param classp - Instance of ClassPartition bean
      * @return true if done.
      */
-    public boolean updateClass(ClassPartition oldClass, ClassPartition newClass) {
+    public boolean updateClass(ClassPartition oldClass, ClassPartition newClass) throws ClassPartitionException {
 
         try {
             stmt = DBConnector.openConnection();
@@ -104,7 +105,7 @@ public class ClassManager {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new RuntimeException("Query failed to update class");
+            throw new ClassPartitionException("Query failed to update class");
         } finally {
              DBConnector.closeConnection();
         }
@@ -118,7 +119,7 @@ public class ClassManager {
      * @param title
      * @return true if done.
      */
-    public boolean deleteClass(String teachingMatricula, String title) {
+    public boolean deleteClass(String teachingMatricula, String title) throws ClassPartitionException {
 
         try {
             stmt = DBConnector.openConnection();
@@ -130,7 +131,7 @@ public class ClassManager {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new RuntimeException("Query failed to delete class");
+            throw new ClassPartitionException("Query failed to delete class");
         } finally {
              DBConnector.closeConnection();
         }
@@ -155,7 +156,7 @@ public class ClassManager {
      * @param idTeaching of the Teaching entity
      * @return an ArrayList of ClassPartition. Empty if not found any.
      */
-    public ArrayList<ClassPartition> getClassesByTeaching(String idTeaching) {
+    public ArrayList<ClassPartition> getClassesByTeaching(String idTeaching) throws ClassPartitionException {
         ArrayList<ClassPartition> toReturn = new ArrayList<ClassPartition>();
         if (idTeaching == null) {
             throw new IllegalArgumentException("Id cannot be null!");
@@ -172,7 +173,7 @@ public class ClassManager {
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
-                throw new RuntimeException("Query fail");
+                throw new ClassPartitionException("Query getClassByTeaching failed");
             } finally {
                  DBConnector.closeConnection();
             }
@@ -185,7 +186,7 @@ public class ClassManager {
      *
      * @return an ArrayList of ClassPartition. Empty if not found any.
      */
-    public ArrayList<ClassPartition> getAllClasses() {
+    public ArrayList<ClassPartition> getAllClasses() throws ClassPartitionException {
 
         ArrayList<ClassPartition> toReturn = new ArrayList<>();
         try {
@@ -197,7 +198,7 @@ public class ClassManager {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new RuntimeException("Query fail");
+            throw new ClassPartitionException("Query getAll failed");
         } finally {
              DBConnector.closeConnection();
         }
