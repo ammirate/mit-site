@@ -1,20 +1,14 @@
 package it.unisa.offerta_formativa.facade;
-
-import java.io.BufferedReader;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
-
-
 import it.unisa.offerta_formativa.beans.ClassPartition;
-import it.unisa.offerta_formativa.beans.Department;
 import it.unisa.offerta_formativa.beans.Module;
 import it.unisa.offerta_formativa.beans.ProfModuleClass;
 import it.unisa.offerta_formativa.beans.Teaching;
 import it.unisa.offerta_formativa.manager.ClassManager;
 import it.unisa.offerta_formativa.manager.CurriculumManager;
-import it.unisa.offerta_formativa.manager.DegreeManager;
-import it.unisa.offerta_formativa.manager.DepartmentManager;
+import it.unisa.offerta_formativa.manager.Exceptions.ClassPartitionException;
+import it.unisa.offerta_formativa.manager.Exceptions.ModuleException;
+import it.unisa.offerta_formativa.manager.Exceptions.TeachingException;
 import it.unisa.offerta_formativa.manager.ModuleManager;
 import it.unisa.offerta_formativa.manager.ProfModuleClassManager;
 import it.unisa.offerta_formativa.manager.TeachingManager;
@@ -68,7 +62,7 @@ public class InsertTeachingFacade {
         listProf = list;
     }
     
-    public boolean storeInDB(){
+    public boolean storeInDB() throws TeachingException, ClassPartitionException, ModuleException{
         teachingMng.createTeaching(teaching);
         for(int i=0;i<listClass.size();i++){
             classMng.createClass(listClass.get(i)); 

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import it.unisa.offerta_formativa.beans.Curriculum;
 import it.unisa.offerta_formativa.beans.Teaching;
+import it.unisa.offerta_formativa.manager.Exceptions.TeachingException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -254,7 +255,7 @@ public class CurriculumManager {
      * @param teaching_matricula
      * @return true if a teaching belongs to a curriculum, else false
      */
-    public List<Teaching> getTeachingsByCurriculm(String curriculum_matricula) {
+    public List<Teaching> getTeachingsByCurriculm(String curriculum_matricula) throws TeachingException {
 
         try {
             stmt = DBConnector.openConnection();
@@ -311,7 +312,7 @@ public class CurriculumManager {
         }
         return false;
     }
-
+        
     /**
      * Create a Teaching from a ResultSet object
      *
