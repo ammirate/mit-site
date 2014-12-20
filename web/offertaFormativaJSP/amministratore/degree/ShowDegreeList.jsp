@@ -263,13 +263,8 @@
                     </div>
 
                 </footer>
-                <div class="page-loading-overlay">
-                    <div class="loader-2"></div>
-                </div>
-
-
             </div>
-
+        </div>
             <!-- Bottom Scripts -->
             <script type="text/javascript">
                 jQuery(document).ready(function ($)

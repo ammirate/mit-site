@@ -46,6 +46,7 @@ public class InsertDegreeServlet extends HttpServlet {
 
     private void InsertDegree(Degree degree) {
         // TODO Auto-generated method stub
+            
             degree.setEsse3Content(parseMng.getHtml(degree.getLink(), "infobox"));
             degreeMng.createDegree(degree);
     }
@@ -61,6 +62,7 @@ public class InsertDegreeServlet extends HttpServlet {
         RequestDispatcher rd = sc.getRequestDispatcher("/ShowDegreeServlet");  
         rd.forward(request, response); 
         } else {
+             request.setAttribute("degree",new Degree(request.getParameter("degree_matricula"), request.getParameter("link"), request.getParameter("title"), Integer.parseInt(request.getParameter("cycle")), request.getParameter("departmentAbb"),Boolean.parseBoolean(request.getParameter("status"))));
              request.setAttribute("exist", "true");
              request.getRequestDispatcher("/offertaFormativaJSP/amministratore/degree/insertDegree.jsp").forward(request, response);
         }
