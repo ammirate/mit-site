@@ -1,8 +1,11 @@
-package it.unisa.offerta_formativa.servlet;
+package it.unisa.offerta_formativa.servlet.curriculum;
 
 import it.unisa.offerta_formativa.beans.Curriculum;
 import it.unisa.offerta_formativa.manager.CurriculumManager;
+import it.unisa.offerta_formativa.manager.Exceptions.CurriculumException;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -51,11 +54,20 @@ public class InsertCurriculumServlet extends HttpServlet {
      * response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // TODO Auto-generated method stub
-        InsertCurriculum(new Curriculum(request.getParameter("degree_matricula"), request.getParameter("title"), request.getParameter("degree_matricula"),Boolean.parseBoolean(request.getParameter("status"))));
-        ServletContext sc = getServletContext();  
-        RequestDispatcher rd = sc.getRequestDispatcher("/ShowCurriculumServlet");  
-        rd.forward(request, response); 
+        try {
+            // TODO Auto-generated method stub
+            if(cuMng.readCurriculum(request.getParameter("curriculum_matricula"))==null){
+                InsertCurriculum(new Curriculum(request.getParameter("curriculum_matricula"), request.getParameter("title"), request.getParameter("degree_matricula"),Boolean.parseBoolean(request.getParameter("status"))));
+                ServletContext sc = getServletContext();
+                RequestDispatcher rd = sc.getRequestDispatcher("/ShowCurriculumServlet");
+                rd.forward(request, response);
+            }    else {
+             request.setAttribute("curriculum",new Curriculum(request.getParameter("curriculum_matricula"), request.getParameter("title"), request.getParameter("degree_matricula"),Boolean.parseBoolean(request.getParameter("status"))));
+             request.setAttribute("exist", "true");
+             request.getRequestDispatcher("/offertaFormativaJSP/amministratore/curriculum/insertCurriculum.jsp").forward(request, response);
+        }
+        } catch (CurriculumException ex) {
+            Logger.getLogger(InsertCurriculumServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-
 }

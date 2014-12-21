@@ -42,13 +42,10 @@ public class GetSyllabusServlet extends HttpServlet {
         private ArrayList<String> getHtml(String teaching_matricula){
             ArrayList<String> toReturn=new ArrayList<String>();
             String html= tm.getHtmlSyllabus(teaching_matricula);
-            String rep1= html.replace("“", "\"");
-            String rep2= rep1.replace("”", "\"");
-            String rep3= rep2.replace("’", "'");
-            String title = rep3.substring(rep3.indexOf("<h1>") + 4, rep3.indexOf("</h1>"));
-            String toReplace=rep3.substring(rep3.indexOf("<h1>") , rep3.indexOf("</h1>"));
+            String title = html.substring(html.indexOf("<h1>") + 4, html.indexOf("</h1>"));
+            String toReplace=html.substring(html.indexOf("<h1>") , html.indexOf("</h1>"));
             toReturn.add(title);
-            toReturn.add( rep3.replace(toReplace, ""));
+            toReturn.add( html.replace(toReplace, ""));
             return toReturn;
         }
 	/**
