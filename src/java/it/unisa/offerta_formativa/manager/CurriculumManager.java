@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import it.unisa.offerta_formativa.beans.Curriculum;
 import it.unisa.offerta_formativa.beans.Teaching;
+import it.unisa.offerta_formativa.manager.Exceptions.CurriculumException;
 import it.unisa.offerta_formativa.manager.Exceptions.TeachingException;
 import java.util.List;
 import java.util.logging.Level;
@@ -64,7 +65,7 @@ public class CurriculumManager {
      * @param curriculum to update into the DB
      * @return true if the update was successfull
      */
-    public boolean updateCurriculum(String oldCurrMatricula, Curriculum newCurriculum) {
+    public boolean updateCurriculum(String oldCurrMatricula, Curriculum newCurriculum) throws CurriculumException {
 
         try {
             stmt = DBConnector.openConnection();
@@ -78,7 +79,7 @@ public class CurriculumManager {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new RuntimeException("Update Query failed!");
+            throw new CurriculumException("Update Query failed!");
         } finally {
             DBConnector.closeConnection();
         }
@@ -92,7 +93,7 @@ public class CurriculumManager {
      * @return a curriculum object if it is present in the DB, else empty
      * curriculum bean
      */
-    public Curriculum readCurriculum(String matricula) {
+    public Curriculum readCurriculum(String matricula) throws CurriculumException {
 
         try {
             stmt = DBConnector.openConnection();
@@ -104,7 +105,7 @@ public class CurriculumManager {
                 return getCurriculumFromResultSet(rs);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(CurriculumManager.class.getName()).log(Level.SEVERE, null, ex);
+            throw new CurriculumException();
         } finally {
             DBConnector.closeConnection();
         }
@@ -117,12 +118,13 @@ public class CurriculumManager {
      * @param matricula
      * @return true if deleted.
      */
-    public boolean deleteCurriculum(String matricula) {
+    public boolean deleteCurriculum(String matricula) throws CurriculumException {
 
         try {
             stmt = DBConnector.openConnection();
 
-            String query = "DELETE FROM " + TABLE + " WHERE " + PKEY + "= " + esc + matricula + esc;
+            String query = "DELETE FROM " + TABLE + " WHERE "
+                    + PKEY + "= " + esc + matricula + esc;
             //            System.out.println("READ QUERY" + query);
 //
             if (stmt.executeUpdate(query) == 1) {
@@ -130,7 +132,7 @@ public class CurriculumManager {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new RuntimeException("Delete Query failed!");
+            throw new CurriculumException("Delete Query failed!");
         } finally {
             DBConnector.closeConnection();
         }
@@ -230,7 +232,7 @@ public class CurriculumManager {
      * @param teaching_matricula
      * @return true if a teaching belongs to a curriculum, else false
      */
-    public boolean curriculumHasTeaching(String curriculum_matricula, String teaching_matricula) {
+    public boolean curriculumHasTeaching(String curriculum_matricula, String teaching_matricula) throws CurriculumException {
 
         try {
             stmt = DBConnector.openConnection();
@@ -241,11 +243,10 @@ public class CurriculumManager {
             rs.last();
             return (rs.getRow() != 0);
         } catch (SQLException ex) {
-            Logger.getLogger(CurriculumManager.class.getName()).log(Level.SEVERE, null, ex);
+            throw new CurriculumException();
         } finally {
             DBConnector.closeConnection();
         }
-        return false;
     }
 
     /**
@@ -255,7 +256,7 @@ public class CurriculumManager {
      * @param teaching_matricula
      * @return true if a teaching belongs to a curriculum, else false
      */
-    public List<Teaching> getTeachingsByCurriculm(String curriculum_matricula) throws TeachingException {
+    public List<Teaching> getTeachingsByCurriculm(String curriculum_matricula) throws TeachingException, CurriculumException {
 
         try {
             stmt = DBConnector.openConnection();
@@ -280,11 +281,10 @@ public class CurriculumManager {
             return toReturn;
 
         } catch (SQLException ex) {
-            Logger.getLogger(CurriculumManager.class.getName()).log(Level.SEVERE, null, ex);
+            throw new CurriculumException();
         } finally {
             DBConnector.closeConnection();
         }
-        return new ArrayList<>();
     }
 
     /**
@@ -292,7 +292,7 @@ public class CurriculumManager {
      * @param teaching_matricula
      * @param curriculum_matricula
      */
-    public boolean setTeachingInCurriculum(String teaching_matricula, String curriculum_matricula) {
+    public boolean setTeachingInCurriculum(String teaching_matricula, String curriculum_matricula) throws CurriculumException {
 
         try {
             stmt = DBConnector.openConnection();
@@ -301,18 +301,65 @@ public class CurriculumManager {
                     + "(teaching_matricula, curriculum_matricula) VALUES("
                     + esc + teaching_matricula + esc + ","
                     + esc + curriculum_matricula + esc + ")";
+            System.out.println(query);
             if (stmt.executeUpdate(query) == 1) {
                 return true;
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(CurriculumManager.class.getName()).log(Level.SEVERE, null, ex);
+            throw new CurriculumException();
         } finally {
             DBConnector.closeConnection();
         }
         return false;
     }
-        
+
+    
+    /**
+     * update an element fron the table Curriculum_Has_Teaching in the DB
+     * @param oldCurrMatricula the curriculum matricula to update
+     * @param oldTeachMatricula the teaching matricula to update
+     * @param newCurrMatr the new curriculum matricula
+     * @param newTeachMatr the new teaching matricula
+     * @return true if the update has success, else false
+     * @throws TeachingException
+     * @throws CurriculumException 
+     */
+    public boolean updateCurriculumhasTeaching(String oldCurrMatricula, String oldTeachMatricula,
+            String newCurrMatr, String newTeachMatr) throws TeachingException, CurriculumException {
+        deleteCurriculumhasTeaching(oldTeachMatricula, oldCurrMatricula);
+        return setTeachingInCurriculum(newTeachMatr, newCurrMatr);
+    }
+
+    
+    /**
+     * delete a row from the table Curriculum_Has_Teaching in the DB
+     * @param teaching_matricula
+     * @param curriculum_matricula
+     * @return
+     * @throws TeachingException 
+     */
+    public boolean deleteCurriculumhasTeaching(String teaching_matricula, String curriculum_matricula) throws TeachingException {
+        String query = "DELETE FROM " + TABLE_LINK + " WHERE "
+                +  "curriculum_matricula"+ "= "
+                + esc + curriculum_matricula + esc
+                + " AND " + "teaching_matricula" + "="
+                + esc + teaching_matricula + esc;
+        System.out.println(query);
+        try {
+            stmt = DBConnector.openConnection();
+            if (stmt.executeUpdate(query) == 1) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new TeachingException("Delete Query failed!");
+        } finally {
+            DBConnector.closeConnection();
+        }
+        return false;
+    }
+
     /**
      * Create a Teaching from a ResultSet object
      *
@@ -339,7 +386,7 @@ public class CurriculumManager {
         return null;
     }
 
-    public List<Curriculum> getCurriculumsByTeaching(String teachingMatricula) {
+    public List<Curriculum> getCurriculumsByTeaching(String teachingMatricula) throws CurriculumException {
 
         List<Curriculum> toReturn = new ArrayList<>();
         String whichCurriculumQUery = "SELECT * FROM "
@@ -371,11 +418,10 @@ public class CurriculumManager {
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(CurriculumManager.class.getName()).log(Level.SEVERE, null, ex);
+            throw new CurriculumException();
         } finally {
             DBConnector.closeConnection();
         }
-
         return toReturn;
     }
 }

@@ -7,6 +7,8 @@ import java.util.List;
 import static junit.framework.Assert.assertEquals;
 import it.unisa.offerta_formativa.beans.Teaching;
 import it.unisa.offerta_formativa.manager.CurriculumManager;
+import it.unisa.offerta_formativa.manager.Exceptions.CurriculumException;
+import it.unisa.offerta_formativa.manager.Exceptions.TeachingException;
 import org.junit.Test;
 
 /**
@@ -61,7 +63,7 @@ public class Test_TeachingManager extends TestCase {
     /**
      * TestCase 3.2 that test the creation of a new Teaching in the DB
      */
-    public void TC_3_2_createTeaching() {
+    public void TC_3_2_createTeaching() throws TeachingException {
         System.out.print("Executing Test 3.2...");
         teachingManager = TeachingManager.getInstance();
         Teaching teaching = new Teaching("Management & Control System", "MCS", "0222500100", "www.mcsmdistra.unisa.it", 1, 1, true);
@@ -72,7 +74,7 @@ public class Test_TeachingManager extends TestCase {
     /**
      * TestCase 3.3 that test the update of a Teaching in the DB
      */
-    public void TC_3_3_updateTeaching() {
+    public void TC_3_3_updateTeaching() throws TeachingException {
         System.out.print("Executing Test 3.3...");
         teachingManager = TeachingManager.getInstance();
         Teaching teaching = new Teaching("Management & Control System", "MCS", "0222500100", "www.mcsmdistra.unisa.it", 1, 1, true);
@@ -83,7 +85,7 @@ public class Test_TeachingManager extends TestCase {
     /**
      * TestCase 3.4 that test the read operation of a Teaching from the DB
      */
-    public void TC_3_4_readTeaching() {
+    public void TC_3_4_readTeaching() throws TeachingException {
         System.out.print("Executing Test 3.4...");
         teachingManager = TeachingManager.getInstance();
         Teaching teaching = new Teaching("Management & Control System", "MCS", "0222500100", "www.mcsmdistra.unisa.it", 1, 1, true);
@@ -95,7 +97,7 @@ public class Test_TeachingManager extends TestCase {
     /**
      * TestCase 3.5 that test the deletion of a Teaching from the DB
      */
-    public void TC_3_5_deleteTeaching() {
+    public void TC_3_5_deleteTeaching() throws TeachingException {
         System.out.print("Executing Test 3.5...");
         teachingManager = TeachingManager.getInstance();
         assertTrue(teachingManager.deleteTeaching("0222500100"));
@@ -173,7 +175,7 @@ public class Test_TeachingManager extends TestCase {
     /**
      *
      */
-    public void TC_3_10_getTeachingsByCurriculum() {
+    public void TC_3_10_getTeachingsByCurriculum() throws TeachingException, CurriculumException {
         System.out.print("Executing TC_3_10....");
 
         //0222500002 teaching matricula in the DB
