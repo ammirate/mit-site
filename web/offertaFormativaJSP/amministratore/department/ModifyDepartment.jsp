@@ -1,13 +1,12 @@
 <%-- 
-    Document   : ModifyDegree
+    Document   : ModifyDepartment
     Author     : Davide
 --%>
-
-<%@page import="it.unisa.offerta_formativa.beans.Degree"%>
+<%@page import="it.unisa.offerta_formativa.beans.Department"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1"%>
 
-<%! public Degree degree;
+<%! public Department department;
 %>
 
 <!DOCTYPE html>
@@ -47,8 +46,8 @@
 
 
     </head>
-    <body class="page-body" onload="loadDepAndCycles()">
-        <%  degree = (Degree) request.getAttribute("degree");
+    <body class="page-body" >
+        <%  department = (Department) request.getAttribute("department");
         %>
         <nav class="navbar horizontal-menu navbar-fixed-top">
             <!-- set fixed position by adding class "navbar-fixed-top" -->
@@ -172,7 +171,7 @@
                     <div class="col-sm-10">
                         <div class="panel panel-default">
                             <div class="panel-heading" style="text-align: center; ">
-                                Modifica Corso di Laurea - <% out.print(degree.getTitle()); %>
+                                Modifica Dipartimento - <% out.print(department.getTitle()); %>
                             </div>
                             <div class="panel-body">
 
@@ -199,67 +198,42 @@
                                     });
                                 </script>
 
-
-
                                 <div class="row">
 
                                     <%  if (request.getAttribute("exist") != null) {
 
                                     %>
-                                    <p class="bg-danger">Matricola del Corso di laurea già esistente inserirne un'altra</p>
+                                    <p class="bg-danger">Matricola del Dipartimento già esistente inserirne un'altra</p>
                                     <% }%>
                                     <div class="row"> <br> </div>
-                                    <div class="form-group col-sm-2">
-                                        <label for="title" style="color: black; font-weight: bold">Matricola:</label>
-                                        <input type="text" class="form-control" id="matricula_text" name="matricula" maxlength="5" value="<% out.print(degree.getMatricula()); %>" >
+                                    <div class="form-group col-sm-4">
+                                        <label for="title" style="color: black; font-weight: bold">Abbreviazione:</label>
+                                        <input type="text" class="form-control" id="abbreviation_text" name="matricula" maxlength="50" value="<% out.print(department.getAbbreviation()); %>" >
                                     </div>
 
-                                    <div class="col-sm-5">
+                                    <div class="col-sm-7">
                                         <label for="title" style="color: black; font-weight: bold" >Titolo:</label>
-                                        <input type="text" id="title_text" maxlength="50" name="titolo" class="form-control" value="<% out.print(degree.getTitle()); %>" > 
+                                        <input type="text" id="title_text" maxlength="500" name="titolo" class="form-control" value="<% out.print(department.getTitle()); %>" > 
                                     </div>
 
                                     <div class="form col-sm-1"></div>
 
-                                    <label for="title" style="color: black; font-weight: bold">Stato:</label>
-                                    <form role="form col-sm-5">
-                                        <div class="form col-sm-1"></div>
-                                        <label class="radio-inline">
-                                            <input type="radio" name="optradio" id="status_active" checked><p style="color: black">Attivo</p>
-                                        </label>
-                                        <label class="radio-inline">
-                                            <% if (!degree.isActive()) { %>
-                                            <input type="radio" name="optradio" id="status_disable" checked ><p style="color: black">Disattivo</p>
-                                            <% } else if (degree.isActive()) { %>
-                                            <input type="radio" name="optradio"  id="status_disable"><p style="color: black">Disattivo</p>
-                                            <% } %>
-                                        </label>
-                                    </form>
+                                </div>
+                                <div> <br> </div>  
+
+                                <div class="row">
+                                    <div class="form-group col-sm-11">
+                                        <label for="title" style="color: black; font-weight: bold" >Moodle Url:</label>
+                                        <input type="text" id="moodle_url_text" maxlength="1000" class="form-control" name="moodle_url" value="<% out.print(department.getUrlMoodle());%>" >
+                                    </div>
 
                                 </div>
                                 <div> <br> </div>  
 
-
                                 <div class="row">
-                                    <div class="form-group col-sm-8">
-                                        <label style="color: black; font-weight: bold">Dipartimento:</label><select name="department" class="form-control" id="department" >
-                                        </select>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <label style="color: black; font-weight: bold">Ciclo:</label><select name="cycle" class="form-control" id="cycles" >
-                                        </select> 
-                                    </div>
-                                    <div> <br> </div>
-
-                                </div>
-
-                                <div> <br> </div>
-
-                                <div class="row">
-                                    <div class="form-group col-sm-6">
-                                        <label for="title" style="color: black; font-weight: bold" >Link:</label>
-                                        <input type="text" id="link_text" maxlength="500" class="form-control" name="link" value="<% out.print(degree.getLink());%>" >
+                                    <div class="form-group col-sm-11">
+                                        <label for="title" style="color: black; font-weight: bold" >Moodle token:</label>
+                                        <input type="text" id="token_text" maxlength="500" class="form-control" name="link" value="<% out.print(department.getToken());%>" >
                                     </div>
 
                                 </div>
@@ -275,7 +249,7 @@
                                     </div>
 
                                     <div class="form-group col-sm-1">
-                                        <button type="button" style=" height: 32px; width: 90px; color: black" onclick="UpdateDegree()" id="button_confirm">Conferma</button>
+                                        <button type="button" style=" height: 32px; width: 90px; color: black" onclick="UpdateDepartment()" id="button_confirm">Conferma</button>
                                     </div>
                                 </div>
 
@@ -329,65 +303,31 @@
 
             <!-- Bottom Scripts -->
             <script type="text/javascript">
-                function loadDepAndCycles() {
-                    $.get('GetCycleServlet', function (responseJson) {
-                        var $select = $('#cycles');
-                        $select.find('option').remove();
-                        $.each(responseJson, function (key, value) {
-                            $('<option>').val(value.cycle_number).text(value.title).appendTo($select);
-                        });
-                        $('#cycles').val('<%= degree.getCycle()%>');
-                        $("#cycles").select2({allowClear: true}).on('select2-open', function () {
-                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                        });
-
-                    });
-                    $.get('GetDepartmentServlet', function (responseJson) {
-                        var $select_dep = $('#department');
-                        $select_dep.find('option').remove();
-                        $.each(responseJson, function (key, value) {
-                            $('<option>').val(value.departmentAbbreviation).text(value.title).appendTo($select_dep);
-                        });
-                        $('#department').val('<%= degree.getDepartmentAbbreviation()%>');
-                        $('#department').select2({allowClear: true}).on('select2-open', function () {
-                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                        });
-                    });
-                }
-
                 function RevertModify() {
-                    document.location.href = '${pageContext.request.contextPath}/ShowDegreeServlet';
+                    document.location.href = '${pageContext.request.contextPath}/ShowDepartmentServlet';
                 }
-                function UpdateDegree() {
-                    var cycle = $("#cycles option:selected").val();
-                    var departmentAbb = $("#department option:selected").val();
-                    var degree_matricula = $("#matricula_text").val();
-                    var old_matricula = '<%= degree.getMatricula()%>';
-                    var link = $("#link_text").val();
+                function UpdateDepartment() {
                     var title = $("#title_text").val();
-                    if ((validate(degree_matricula)) && (validate(link)) && (validate(title)) && (cycle != "nocyc") && (departmentAbb != "nodep")) {
-                        if (document.getElementById('status_active').checked) {
-                            var status = "true";
-                        } else if (document.getElementById('status_disable').checked) {
-                            var status = "false";
-                        }
-
-                        var r = confirm("Sei sicuro di voler modificare il corso di Laurea: " + title);
+                    var moodle_url = $("#moodle_url_text").val();
+                    var token = $("#token_text").val();
+                    var abbreviation = $("#abbreviation_text").val();
+                    var old_abbreviation = '<%= department.getAbbreviation()%>';
+                    if ((validate(abbreviation)) && (validate(token)) && (validate(title)) && (validate(moodle_url))) {
+                        
+                        var r = confirm("Sei sicuro di voler modificare il Dipartimento: " + title);
                         if (r == true) {
-                            document.location.href = '${pageContext.request.contextPath}/UpdateDegreeServlet?old_matricula=' + old_matricula + '&degree_matricula=' + degree_matricula + '&cycle=' + cycle + '&departmentAbb=' + departmentAbb + '&link=' + link + '&title=' + title + '&status=' + status;
+                            document.location.href = '${pageContext.request.contextPath}/UpdateDepartmentServlet?old_abbreviation=' + old_abbreviation + '&abbreviation=' + abbreviation + '&token=' + token + '&title=' + title + '&url_moodle=' + moodle_url;
                         }
                     } else {
                         var msg;
-                        if (!validate(degree_matricula)) {
-                            msg = "Inserisci una matricola";
+                        if (!validate(abbreviation)) {
+                            msg = "Inserisci un'abbreviazione";
                         } else if (!validate(title)) {
                             msg = "Inserisci un titolo";
-                        } else if (!validate(link)) {
-                            msg = "Inserisci un link";
-                        } else if (cycle === "nocyc") {
-                            msg = "Seleziona un ciclo";
-                        } else if (departmentAbb === "nodep") {
-                            msg = "Seleziona un dipartimento";
+                        } else if (!validate(moodle_url)) {
+                            msg = "Inserisci Url di Moodle";
+                        } else if (!validate(token)) {
+                            msg = "Inserisci il token";
                         }
                         var a = alert(msg);
                     }
@@ -403,11 +343,6 @@
             <script src="assets/js/joinable.js"></script>
             <script src="assets/js/xenon-api.js"></script>
             <script src="assets/js/xenon-toggles.js"></script>
-            <link rel="stylesheet" href="assets/js/select2/select2.css">
-            <link href="assets/js/select2/select2-bootstrap.css" rel="stylesheet" type="text/css"/>
-            <script src="assets/js/select2/select2.min.js"></script>
-            <script src="assets/js/jquery-validate/jquery.validate.min.js" id="script-resource-7"></script>
-            <script src="assets/js/jquery-validate/localization/messages_it.min.js" type="text/javascript"></script>
             <!-- JavaScripts initializations and stuff -->
             <script src="assets/js/xenon-custom.js"></script>
 
