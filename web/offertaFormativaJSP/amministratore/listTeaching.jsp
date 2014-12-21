@@ -37,69 +37,21 @@
 <link rel="stylesheet" href="assets/css/custom.css">
 
 <script src="assets/js/jquery-1.11.1.min.js"></script>
-<script>
-	jQuery(document).ready(		
-			function($) {
-				/*bisogna metterla in ogni pagina*/
-				$(window).on('beforeunload', function(e) {
-					if (localStorage.getItem("rememberMeForLogin") == "no") {
-						localStorage.removeItem("username");
-						localStorage.removeItem("typology");
-						localStorage.removeItem("primaryKey");
-
-						localStorage.removeItem("offertaFormativa");
-						localStorage.removeItem("gestioneTesi");
-						localStorage.removeItem("gestioneTirocinio");
-						localStorage.removeItem("dottorato");
-						localStorage.removeItem("superAmministratore");
-						window.location.href = "index.html";
-					}
-				});
-
-				//quì ci vanno gli ID delle funzionalità che verranno messe all interno del menù laterale...basta copiare una riga e incollarla,
-				//facendo attenzione a cambiare l'ID
-				//Es: $("pippopaperino_"+localStorage.getItem("offertaFormativa")).empty();
-				//ovviamente la localStorage cambia a seconda se si sta nella pagina di offerta formativa, gestione tesi, ecc...
-				$(
-						"#funzionalita1Permission_"
-								+ localStorage.getItem("offertaFormativa"))
-						.empty();
-				$(
-						"#funzionalita3Permission_"
-								+ localStorage.getItem("offertaFormativa"))
-						.empty();
-
-				//if(localStorage.getItem("username")==null){
-				//	window.location.replace("pageError.html");
-				//}
-
-				$("#spaceForUsername").html(
-						localStorage.getItem("username") + ", "
-								+ localStorage.getItem("primaryKey")
-								+ ' <i class="fa-angle-down"></i>');
-
-				$("#logout").click(function() {
-					localStorage.removeItem("username");
-					localStorage.removeItem("typology");
-					localStorage.removeItem("primaryKey");
-					window.location.href = "index.html";
-
-					localStorage.removeItem("offertaFormativa");
-					localStorage.removeItem("gestioneTesi");
-					localStorage.removeItem("gestioneTirocinio");
-					localStorage.removeItem("dottorato");
-					localStorage.removeItem("superAmministratore");
-
-				});
-			});
-</script>
 
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
-
+<script type="text/javascript">
+    $(window).load(function(){
+        loadDepartment();
+        loadCycle();
+        changeSelect();
+    });
+    
+    
+</script>
 
 </head>
 <body class="page-body">
@@ -259,36 +211,15 @@
                                             <div class="col-sm-1"></div>
                                             <div class="form-group col-sm-4">
                                                 <label for="department">Dipartimento:</label> 
-                                                <select name="department" id="idDepartment" class="form-control">
-                                                    <%
-                                                        if (departments.size() != 0)
-                                                            for (Department d : departments) {
-                                                    %><option value="<%out.print(d.getAbbreviation());%>">
-                                                        <%
-                                                            out.print(d.getTitle());
-                                                        %>
-                                                    </option>
-                                                    <%
-                                                        }
-                                                    %>
+                                                <select name="department" id="department" class="form-control">
+                                                    
                                                 </select>
                                             </div>
                                             <div class="col-sm-1"></div>
                                             <div class="form-group col-sm-4">
                                                 <label for="cycle">Ciclo:</label> 
-                                                <select name="cycle" class="form-control" onchange="loadDegree(this.value);">
-                                                    <option value=0>Seleziona il ciclo</option>
-                                                    <%
-                                                        if (cycles.size() != 0)
-                                                            for (Cycle c : cycles) {
-                                                    %><option value="<%out.print(c.getNumber());%>">
-                                                        <%
-                                                            out.print(c.getTitle());
-                                                        %>
-                                                    </option>
-                                                    <%
-                                                        }
-                                                    %>
+                                                <select name="cycle" class="form-control" id="cycle" onchange="loadDegree(this.value);">
+                                                    
                                                 </select>
                                             </div>
                                         </div>
@@ -304,30 +235,16 @@
 
                                             <div class="form-group col-sm-4">
                                                 <label for="curriculum">Curriculum:</label> 
-                                                <select name="curriculum" class="form-control" id="curriculum" onchange="loadTeaching(this.value);">
+                                                <select name="curriculum" class="form-control" id="curriculum" onchange="loadTeachingTable(this.value);">
 
                                                 </select>
                                             </div>
-
                                         </div>
                                         <div class="row table-responsive">
                                             
-                                                <table class="table table-striped" id="table" style="display: none;">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Matricola</th>
-                                                            <th>Nome</th>
-                                                            <th>Abbreviazione</th>
-                                                            <th>Link</th>
-                                                            <th>Anno</th>
-                                                            <th>Semestre</th>
-                                                            <th></th><th></th>
-                                                            <th></th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="tablebody" class="">
-                                                    </tbody>
-                                                </table>
+                                            <table class="table table-striped responsive" id="teaching" >
+
+                                            </table>
                                             
                                         </div>
                                     </form>
@@ -364,45 +281,41 @@
 		</div>
 
 	</div>
-	
-
-	<div class="page-loading-overlay">
+        <div class="page-loading-overlay">
 		<div class="loader-2"></div>
 	</div>
-
-
-
-
+        <link rel="stylesheet" href="assets/js/select2/select2.css">
+        <link href="assets/js/select2/select2-bootstrap.css" rel="stylesheet" type="text/css"/>
+        <script src="assets/js/select2/select2.min.js"></script>
+        <script type="text/javascript">
+            function loadTeachingTable(i){
+                $.get('GetTeachingServlet?curriculum=' + i, function (responseJson) {
+                    var stringa = "<thead><tr><th>Matricola</th><th>Nome</th>";
+                    stringa+="<th>Abbreviazione</th><th>Anno</th>";
+                    stringa+="<th>Semestre</th><th></th><th></th></tr></thead><tbody>";
+                    $.each(responseJson, function (key, value) {
+                        stringa += "<tr><td>" + value.matricula + "</td>";
+                        stringa += "<td>" + value.title + "</td>";
+                        stringa += "<td>" + value.abbreviation + "</td>";
+                        stringa += "<td>" + value.year + "</td>";
+                        stringa += "<td>" + value.semester + "</td>";
+                        stringa += "<td>" + value.active + "</td>";
+                        stringa += "<td><a href='ShowModifyTeachingServlet?matricula=" + value.matricula + "&curriculum="+i+"'>Modifica</a></td></tr>";
+                    });
+                    stringa += "</tbody>";
+                    $("#teaching").html(stringa);
+                });
+            }
+        </script>
 	<!-- Bottom Scripts -->
-	<script type="text/javascript">
-	function loadDegree(i){
-	    $.ajax({url:"GetDegreeServlet?idCycle="+i,success:function(result){
-	    	$("#degree").html(result);
-                
-	    }});
-	}
-        function loadCurriculum(i){
-	    $.ajax({url:"GetCurriculumServlet?degreeMatricula="+i,success:function(result){
-	    	$("#curriculum").html(result);
-                
-	    }});
-	}
-        function loadTeaching(i){
-            $.ajax({url:"GetTeachingServlet?curriculum="+i,success:function(result){
-	    	$("#tablebody").html(result);
-                $("#table").css("display","table");
-	    }});
-        }
-	</script>
+        <script src="assets/js/FunzioniOffertaFormativa.js" type="text/javascript"></script>
 	<script src="assets/js/bootstrap.min.js"></script>
 	<script src="assets/js/TweenMax.min.js"></script>
 	<script src="assets/js/resizeable.js"></script>
 	<script src="assets/js/joinable.js"></script>
 	<script src="assets/js/xenon-api.js"></script>
 	<script src="assets/js/xenon-toggles.js"></script>
-
-
-	<!-- JavaScripts initializations and stuff -->
+        <!-- JavaScripts initializations and stuff -->
 	<script src="assets/js/xenon-custom.js"></script>
 
 </body>

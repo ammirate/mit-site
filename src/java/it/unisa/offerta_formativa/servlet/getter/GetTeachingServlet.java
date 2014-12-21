@@ -5,10 +5,15 @@
  */
 package it.unisa.offerta_formativa.servlet.getter;
 
+import com.google.gson.Gson;
+import it.unisa.offerta_formativa.beans.Degree;
 import it.unisa.offerta_formativa.beans.Teaching;
 import it.unisa.offerta_formativa.manager.TeachingManager;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -43,7 +48,9 @@ public class GetTeachingServlet extends HttpServlet {
             throws ServletException, IOException {
             doPost(request,response);
             if(request.getParameterMap().containsKey("curriculum")){
+                
                         String curriculum= request.getParameter("curriculum");
+                        /**
 			response.setContentType("text/plain");  
 			response.setCharacterEncoding("UTF-8"); 
 			String toRet="";
@@ -62,7 +69,27 @@ public class GetTeachingServlet extends HttpServlet {
 "                                            >Dettagli</a></td></tr>>"; 
 			}
 			response.getWriter().write(toRet);
-            }
+                        */
+                        //****************************************
+                        
+                        
+                ArrayList< HashMap<String,String>> arrlist = new ArrayList<HashMap<String,String>>(); 
+                for(Teaching t : teachingMng.getTeachingsByCurriculum(curriculum)){
+                    HashMap<String,String> map = new HashMap<String,String>();
+                    map.put("matricula", t.getMatricula());
+                    map.put("title", t.getTitle());
+                    map.put("abbreviation", t.getAbbreviation());
+                    map.put("link", t.getLink());
+                    map.put("year", ""+t.getYear());
+                    map.put("semester", ""+t.getSemester());
+                    map.put("active", ((t.isActive())?"Attivo":"Disattivo"));
+                    arrlist.add(map);
+                }
+                String finalJSON = new Gson().toJson(arrlist);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(finalJSON);
+        }
     }
 
     /**
