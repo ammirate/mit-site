@@ -177,7 +177,6 @@
                                 Modifica Corso di Laurea - <% out.print(degree.getTitle()); %>
                             </div>
                             <div class="panel-body">
-                                <div class="row"> <br> </div>
 
 
                                 <script>
@@ -205,14 +204,21 @@
 
 
                                 <div class="row">
+
+                                    <%  if (request.getAttribute("exist") != null) {
+
+                                    %>
+                                    <p class="bg-danger">Matricola del Corso di laurea già esistente inserirne un'altra</p>
+                                    <% }%>
+                                    <div class="row"> <br> </div>
                                     <div class="form-group col-sm-2">
                                         <label for="title" style="color: black; font-weight: bold">Matricola:</label>
-                                        <input type="text" class="form-control" name="matricula" value="<% out.print(degree.getMatricula()); %>" readonly>
+                                        <input type="text" class="form-control" id="matricula_text" name="matricula" maxlength="5" value="<% out.print(degree.getMatricula()); %>" >
                                     </div>
 
                                     <div class="col-sm-5">
                                         <label for="title" style="color: black; font-weight: bold" >Titolo:</label>
-                                        <input type="text" id="title_text" name="titolo" class="form-control" value="<% out.print(degree.getTitle()); %>" > 
+                                        <input type="text" id="title_text" maxlength="50" name="titolo" class="form-control" value="<% out.print(degree.getTitle()); %>" > 
                                     </div>
 
                                     <div class="form col-sm-1"></div>
@@ -255,7 +261,7 @@
                                 <div class="row">
                                     <div class="form-group col-sm-6">
                                         <label for="title" style="color: black; font-weight: bold" >Link:</label>
-                                        <input type="text" id="link_text" class="form-control" name="link" value="<% out.print(degree.getLink());%>" >
+                                        <input type="text" id="link_text" maxlength="500" class="form-control" name="link" value="<% out.print(degree.getLink());%>" >
                                     </div>
 
                                 </div>
@@ -291,6 +297,9 @@
 
                 </div>     
 
+                <div> <br> </div>
+                <div> <br> </div>
+                <div> <br> </div>
                 <footer class="main-footer sticky footer-type-1">
 
                     <div class="footer-inner">
@@ -354,20 +363,40 @@
                 function UpdateDegree() {
                     var cycle = $("#cycles option:selected").val();
                     var departmentAbb = $("#department option:selected").val();
-                    var degree_matricula = '<%= degree.getMatricula()%>';
+                    var degree_matricula = $("#matricula_text").val();
+                    var old_matricula = '<%= degree.getMatricula()%>';
                     var link = $("#link_text").val();
                     var title = $("#title_text").val();
+                    if ((validate(degree_matricula)) && (validate(link)) && (validate(title)) && (cycle != "nocyc") && (departmentAbb != "nodep")) {
+                        if (document.getElementById('status_active').checked) {
+                            var status = "true";
+                        } else if (document.getElementById('status_disable').checked) {
+                            var status = "false";
+                        }
 
-                    if (document.getElementById('status_active').checked) {
-                        var status = "true";
-                    } else if (document.getElementById('status_disable').checked) {
-                        var status = "false";
+                        var r = confirm("Sei sicuro di voler modificare il corso di Laurea: " + title);
+                        if (r == true) {
+                            document.location.href = '${pageContext.request.contextPath}/UpdateDegreeServlet?old_matricula=' + old_matricula + '&degree_matricula=' + degree_matricula + '&cycle=' + cycle + '&departmentAbb=' + departmentAbb + '&link=' + link + '&title=' + title + '&status=' + status;
+                        }
+                    } else {
+                        var msg;
+                        if (!validate(degree_matricula)) {
+                            msg = "Inserisci una matricola";
+                        } else if (!validate(title)) {
+                            msg = "Inserisci un titolo";
+                        } else if (!validate(link)) {
+                            msg = "Inserisci un link";
+                        } else if (cycle === "nocyc") {
+                            msg = "Seleziona un ciclo";
+                        } else if (departmentAbb === "nodep") {
+                            msg = "Seleziona un dipartimento";
+                        }
+                        var a = alert(msg);
                     }
-
-                    var r = confirm("Sei sicuro di voler modificare il corso di Laurea: " + title);
-                    if (r == true) {
-                        document.location.href = '${pageContext.request.contextPath}/UpdateDegreeServlet?degree_matricula=' + degree_matricula + '&cycle=' + cycle + '&departmentAbb=' + departmentAbb + '&link=' + link + '&title=' + title + '&status=' + status;
-                    }
+                }
+                function validate(toValidate) {
+                    if (toValidate.length > 0)
+                        return true;
                 }
             </script>
             <script src="assets/js/bootstrap.min.js"></script>

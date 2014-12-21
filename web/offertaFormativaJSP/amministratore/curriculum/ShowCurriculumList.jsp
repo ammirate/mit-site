@@ -31,7 +31,7 @@
         <link rel="stylesheet" href="assets/css/custom.css">
 
         <script src="assets/js/jquery-1.11.1.min.js"></script>
-        
+
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -42,7 +42,7 @@
 
     </head>
     <body class="page-body" onload="loadDep()">
-        
+
         <nav class="navbar horizontal-menu navbar-fixed-top">
             <!-- set fixed position by adding class "navbar-fixed-top" -->
 
@@ -165,7 +165,7 @@
                     <div class="col-sm-10">
                         <div class="panel panel-default">
                             <div class="panel-heading" style="text-align: center; ">
-                                Gestione Corsi di Laurea
+                                Gestione Curriculum
                             </div>
                             <div class="panel-body">
                                 <div class="row"> <br> </div>
@@ -209,7 +209,7 @@
                                         <label style="color: black; font-weight: bold">Corso di laurea:</label><select name="degree" class="form-control" id="degrees" onchange="loadCurr()">
                                         </select> 
                                     </div>
-                                    
+
                                     <div> <br> </div>
                                     <div> <br> </div>
                                     <div> <br> </div>
@@ -283,20 +283,36 @@
                     $("#department").select2({allowClear: true}).on('select2-open', function () {
                         $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                     });
-                    $("#cycles").select2({allowClear: true}).on('select2-open', function () {
+                    $("#degrees").select2({allowClear: true}).on('select2-open', function () {
                         $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                     });
-                    $("#degrees").select2({allowClear: true}).on('select2-open', function () {
+                    $("#cycles").select2({allowClear: true}).on('select2-open', function () {
                         $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                     });
                 });
                 function loadCycle(i) {
+                    $('#cycles').val('NoCycle');
+                    $("#cycles").select2({allowClear: true}).on('select2-open', function () {
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
+                    $('#degrees').val('NoDeg');
+                    $("#degrees").select2({allowClear: true}).on('select2-open', function () {
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
+                    
+                    var table = document.getElementById("curriculum");
+                    table.innerHTML = "";
+                    
                     $.get('GetCycleServlet?department=' + i, function (responseJson) {
                         var $select = $('#cycles');
                         $select.find('option').remove();
                         $('<option>').val("NoCycle").text("Seleziona il Ciclo").appendTo($select);
                         $.each(responseJson, function (key, value) {
                             $('<option>').val(value.cycle_number).text(value.title).appendTo($select);
+                        });
+                        $('#cycles').val('NoCycle');
+                        $("#cycles").select2({allowClear: true}).on('select2-open', function () {
+                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                         });
                     });
                 }
@@ -310,12 +326,16 @@
                 }
                 function loadDegree(i) {
                     var departmentAbb = $("#department option:selected").val();
-                    $.get('GetDegreeServlet?cycle=' + i +"&department=" + departmentAbb, function (responseJson) {
+                    $.get('GetDegreeServlet?cycle=' + i + "&department=" + departmentAbb, function (responseJson) {
                         var $select = $('#degrees');
                         $select.find('option').remove();
                         $('<option>').val("NoDeg").text("Seleziona Corso di laurea").appendTo($select);
                         $.each(responseJson, function (key, value) {
                             $('<option>').val(value.matricula).text(value.title).appendTo($select);
+                        });
+                        $('#degrees').val('NoDeg');
+                        $("#degrees").select2({allowClear: true}).on('select2-open', function () {
+                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                         });
                     });
                 }
@@ -348,8 +368,6 @@
             <link rel="stylesheet" href="assets/js/select2/select2.css">
             <link href="assets/js/select2/select2-bootstrap.css" rel="stylesheet" type="text/css"/>
             <script src="assets/js/select2/select2.min.js"></script>
-            <script src="assets/js/jquery-validate/jquery.validate.min.js" id="script-resource-7"></script>
-            <script src="assets/js/jquery-validate/localization/messages_it.min.js" type="text/javascript"></script>
             <!-- JavaScripts initializations and stuff -->
             <script src="assets/js/xenon-custom.js"></script>
 

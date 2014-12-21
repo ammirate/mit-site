@@ -46,7 +46,7 @@
 
 
     </head>
-    <body class="page-body" onload="loadDegree()">
+    <body class="page-body">
         <%  curriculum = (Curriculum) request.getAttribute("curriculum");
         %>
         <nav class="navbar horizontal-menu navbar-fixed-top">
@@ -174,8 +174,6 @@
                                 Modifica Curriculum - <% out.print(curriculum.getTitle()); %>
                             </div>
                             <div class="panel-body">
-                                <div class="row"> <br> </div>
-
 
                                 <script>
                                     jQuery(document).ready(function ($) {
@@ -202,14 +200,20 @@
 
 
                                 <div class="row">
+                                    <%  if (request.getAttribute("exist") != null) {
+
+                                    %>
+                                    <p class="bg-danger">Matricola del Curriculum già esistente inserirne un'altra</p>
+                                    <% }%>
+                                    <div class="row"> <br> </div>
                                     <div class="form-group col-sm-2">
                                         <label for="title" style="color: black; font-weight: bold">Matricola:</label>
-                                        <input type="text" class="form-control" name="matricula" value="<% out.print(curriculum.getMatricula()); %>" readonly>
+                                        <input type="text" maxlength="45" id="matricula_text" class="form-control" name="matricula" value="<% out.print(curriculum.getMatricula()); %>">
                                     </div>
 
                                     <div class="col-sm-5">
                                         <label for="title" style="color: black; font-weight: bold" >Titolo:</label>
-                                        <input type="text" id="title_text" name="titolo" class="form-control" value="<% out.print(curriculum.getTitle()); %>" > 
+                                        <input type="text" maxlength="100" id="title_text" name="titolo" class="form-control" value="<% out.print(curriculum.getTitle()); %>" > 
                                     </div>
 
                                     <div class="form col-sm-1"></div>
@@ -231,15 +235,6 @@
 
                                 </div>
                                 <div> <br> </div>  
-
-                                <div class="row">
-                                    <div class="col-sm-7">
-                                        <label style="color: black; font-weight: bold">Corso di laurea:</label><select name="degree" class="form-control" id="degrees" onchange="loadCurr()">
-                                        </select>
-                                    </div>
-                                    <div> <br> </div>
-
-                                </div>
 
                                 <div> <br> </div>
 
@@ -305,38 +300,39 @@
 
             <!-- Bottom Scripts -->
             <script type="text/javascript">
-                function loadDegree() {
-                    $.get('GetDegreeServlet', function (responseJson) {
-                        var $select = $('#degrees');
-                        $select.find('option').remove();
-                        $('<option>').val("NoDeg").text("Seleziona Corso di laurea").appendTo($select);
-                        $.each(responseJson, function (key, value) {
-                            $('<option>').val(value.matricula).text(value.title).appendTo($select);
-                        });
-                        $('#degrees').val('<%= curriculum.getDegreeMatricula()%>');
-                        $("#degrees").select2({allowClear: true}).on('select2-open', function () {
-                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                    });
-                    });
-                }
                 function RevertModify() {
                     document.location.href = '${pageContext.request.contextPath}/ShowCurriculumServlet';
                 }
                 function UpdateCurriculum() {
-                    var degree = $("#Select_degree option:selected").val();
-                    var curriculum_matricula = '<%= curriculum.getMatricula()%>';
+                    var curriculum_matricula = $("#matricula_text").val();
+                    var old_matricula = '<%= curriculum.getMatricula()%>';
+                    var degree_matricula = '<%= curriculum.getDegreeMatricula() %>';
                     var title = $("#title_text").val();
 
-                    if (document.getElementById('status_active').checked) {
-                        var status = "true";
-                    } else if (document.getElementById('status_disable').checked) {
-                        var status = "false";
-                    }
+                    if ((validate(curriculum_matricula)) && (validate(title))) {
+                        if (document.getElementById('status_active').checked) {
+                            var status = "true";
+                        } else if (document.getElementById('status_disable').checked) {
+                            var status = "false";
+                        }
 
-                    var r = confirm("Sei sicuro di voler modificare il corso di Laurea: " + title);
-                    if (r == true) {
-                        document.location.href = '${pageContext.request.contextPath}/UpdateCurriculumServlet?curriculum_matricula=' + curriculum_matricula + '&title=' + title + '&degree_matricula=' + degree + '&status=' + status;
+                        var r = confirm("Sei sicuro di voler modificare il corso di Laurea: " + title);
+                        if (r == true) {
+                            document.location.href = '${pageContext.request.contextPath}/UpdateCurriculumServlet?old_matricula=' + old_matricula + '&curriculum_matricula=' + curriculum_matricula + '&title=' + title + '&degree_matricula=' + degree_matricula + '&status=' + status;
+                        }
+                    } else {
+                        var msg;
+                        if (!validate(curriculum_matricula)) {
+                            msg = "Inserisci una matricola";
+                        } else if (!validate(title)) {
+                            msg = "Inserisci un titolo";
+                        }
+                        var a = alert(msg);
                     }
+                    function validate(toValidate) {
+                        if (toValidate.length > 0)
+                            return true;
+                }
                 }
             </script>
             <script src="assets/js/bootstrap.min.js"></script>
@@ -346,10 +342,6 @@
             <script src="assets/js/xenon-api.js"></script>
             <script src="assets/js/xenon-toggles.js"></script>
             <link rel="stylesheet" href="assets/js/select2/select2.css">
-            <link href="assets/js/select2/select2-bootstrap.css" rel="stylesheet" type="text/css"/>
-            <script src="assets/js/select2/select2.min.js"></script>
-            <script src="assets/js/jquery-validate/jquery.validate.min.js" id="script-resource-7"></script>
-            <script src="assets/js/jquery-validate/localization/messages_it.min.js" type="text/javascript"></script>
             <!-- JavaScripts initializations and stuff -->
             <script src="assets/js/xenon-custom.js"></script>
 

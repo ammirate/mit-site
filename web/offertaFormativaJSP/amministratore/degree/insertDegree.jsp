@@ -268,7 +268,7 @@
                                     </div>
 
                                     <div class="form-group col-sm-1">
-                                        <button type="button" style=" height: 32px; width: 90px; color: black" onclick="UpdateDegree()" id="button_confirm" >Conferma</button>
+                                        <button type="button" style=" height: 32px; width: 90px; color: black" onclick="InsertDegree()" id="button_confirm" >Conferma</button>
                                     </div>
                                 </div>
 
@@ -282,9 +282,6 @@
                     </div>
 
                     <div class="col-sm-1"></div>
-
-
-
                 </div>     
                 <div> <br> </div>
                 <div> <br> </div>
@@ -354,18 +351,19 @@
             function RevertModify() {
                 document.location.href = '${pageContext.request.contextPath}/ShowDegreeServlet';
             }
-            function UpdateDegree() {
+            function InsertDegree() {
                 var cycle = $("#cycles option:selected").val();
                 var departmentAbb = $("#department option:selected").val();
                 var degree_matricula = $("#matricula_text").val();
                 var link = $("#link_text").val();
                 var title = $("#title_text").val();
+                var status = "true";
 
                 if ((validate(degree_matricula)) && (validate(link)) && (validate(title)) && (cycle != "nocyc") && (departmentAbb != "nodep")) {
                     if (document.getElementById('status_active').checked) {
-                        var status = "true";
+                        status = "true";
                     } else if (document.getElementById('status_disable').checked) {
-                        var status = "false";
+                        status = "false";
                     }
 
                     var r = confirm("Sei sicuro di voler Inserire il corso di Laurea: " + title);

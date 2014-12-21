@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import it.unisa.offerta_formativa.beans.Degree;
 import it.unisa.offerta_formativa.manager.DegreeManager;
+import it.unisa.offerta_formativa.manager.ParserHtmlManager;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
-
 
 /**
  * Servlet implementation class Servlet
@@ -22,6 +22,7 @@ public class UpdateDegreeServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private DegreeManager degreeMng;
+    private ParserHtmlManager parseMng;
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -30,6 +31,7 @@ public class UpdateDegreeServlet extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub   
         degreeMng = DegreeManager.getInstance();
+        parseMng = ParserHtmlManager.getInstance();
     }
 
     /**
@@ -41,9 +43,10 @@ public class UpdateDegreeServlet extends HttpServlet {
         doPost(request, response);
     }
 
-    private void UpdateDegree(String matricula,Degree degree) {
+    private void UpdateDegree(String matricula, Degree degree) {
         // TODO Auto-generated method stub
-            degreeMng.updateDegree(matricula, degree);
+        degree.setEsse3Content(parseMng.getHtml(degree.getLink(), "infobox"));
+        degreeMng.updateDegree(matricula, degree);
     }
 
     /**
@@ -52,10 +55,21 @@ public class UpdateDegreeServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        UpdateDegree(request.getParameter("degree_matricula"),new Degree(request.getParameter("degree_matricula"), request.getParameter("link"), request.getParameter("title"), Integer.parseInt(request.getParameter("cycle")), request.getParameter("departmentAbb"),Boolean.parseBoolean(request.getParameter("status"))));
-        ServletContext sc = getServletContext();  
-        RequestDispatcher rd = sc.getRequestDispatcher("/ShowDegreeServlet");  
-        rd.forward(request, response); 
+        if ((degreeMng.readDegree(request.getParameter("degree_matricula")) != null) && (request.getParameter("degree_matricula").equalsIgnoreCase(request.getParameter("old_matricula")))) {
+            UpdateDegree(request.getParameter("old_matricula"), new Degree(request.getParameter("degree_matricula"), request.getParameter("link"), request.getParameter("title"), Integer.parseInt(request.getParameter("cycle")), request.getParameter("departmentAbb"), Boolean.parseBoolean(request.getParameter("status"))));
+            ServletContext sc = getServletContext();
+            RequestDispatcher rd = sc.getRequestDispatcher("/ShowDegreeServlet");
+            rd.forward(request, response);
+        } else if(degreeMng.readDegree(request.getParameter("degree_matricula")) == null){
+            UpdateDegree(request.getParameter("old_matricula"), new Degree(request.getParameter("degree_matricula"), request.getParameter("link"), request.getParameter("title"), Integer.parseInt(request.getParameter("cycle")), request.getParameter("departmentAbb"), Boolean.parseBoolean(request.getParameter("status"))));
+            ServletContext sc = getServletContext();
+            RequestDispatcher rd = sc.getRequestDispatcher("/ShowDegreeServlet");
+            rd.forward(request, response);
+        } else{
+            request.setAttribute("degree", new Degree(request.getParameter("degree_matricula"), request.getParameter("link"), request.getParameter("title"), Integer.parseInt(request.getParameter("cycle")), request.getParameter("departmentAbb"), Boolean.parseBoolean(request.getParameter("status"))));
+            request.setAttribute("exist", "true");
+            request.getRequestDispatcher("/offertaFormativaJSP/amministratore/degree/ModifyDegree.jsp").forward(request, response);
+        }
     }
 
 }

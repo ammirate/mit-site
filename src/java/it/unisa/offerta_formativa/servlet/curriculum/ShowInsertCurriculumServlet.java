@@ -1,4 +1,4 @@
-package it.unisa.offerta_formativa.servlet;
+package it.unisa.offerta_formativa.servlet.curriculum;
 
 import java.io.IOException;
 
@@ -7,7 +7,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import it.unisa.offerta_formativa.manager.DegreeManager;
 
 
 /**
@@ -18,7 +17,6 @@ import it.unisa.offerta_formativa.manager.DegreeManager;
 public class ShowInsertCurriculumServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private DegreeManager degreeMng;
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -26,7 +24,6 @@ public class ShowInsertCurriculumServlet extends HttpServlet {
     public ShowInsertCurriculumServlet() {
         super();
         // TODO Auto-generated constructor stub   
-        degreeMng = DegreeManager.getInstance();
     }
 
     /**
@@ -44,9 +41,7 @@ public class ShowInsertCurriculumServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-       
-        request.setAttribute("degrees", degreeMng.getAllDegrees());
-        request.getRequestDispatcher("/offertaFormativaJSP/amministratore/insertCurriculum.jsp").forward(request, response);
+        request.getRequestDispatcher("/offertaFormativaJSP/amministratore/curriculum/insertCurriculum.jsp").forward(request, response);
     }
 
 }
