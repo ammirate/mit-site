@@ -59,7 +59,7 @@
 
 
     </head>
-    <body class="page-body">
+    <body class="page-body" onload="loadDep()">
         <% map = (HashMap< Department, HashMap<Degree, HashMap<Curriculum, ArrayList<Teaching>>>>) request.getAttribute("map");
             cycle = (ArrayList<Cycle>) request.getAttribute("cycles");
         %>
@@ -144,7 +144,7 @@
         </nav>
         <div class="page-container">
 
-            <%@include file="/offertaFormativaJSP/amministratore/lateralMenuAdmin.jsp" %>
+            <%@include file="/offertaFormativa/amministratore/lateralMenuAdmin.jsp" %>
 
             <div class="main-content">
                 <div class="row">
@@ -180,68 +180,13 @@
                                     });
                                 </script>
 
-                                <%
-                                    if (!map.isEmpty()) { %> <ul class="list-group" id="list" class="col-sm-12" name="list_all" style=" padding:0; "> <%
-                                    // for (Department d : map.keySet()) {
-                                    List<Department> deps = new ArrayList<Department>(map.keySet());
-                                    Collections.sort(deps);
-                                    for (int i = 0; i < deps.size(); i++) {
-                                        Department d = deps.get(i);
-                                    %><li class="list-group-item" style=" color: black; list-style-type: none; "><span style="cursor: pointer; font-weight: bold;"> <i class="glyphicon glyphicon-plus" style=" float: left;" onclick="setIcon(this)" ></i> &nbsp;&nbsp; <%out.print(d.getTitle());%></span><ul style=" padding:0;">
-                                            <% if (map.get(d).keySet().size() != 0) {
-//                                                    for (Degree de : map.get(d).keySet()) {
-                                                    List<Degree> degs = new ArrayList<Degree>(map.get(d).keySet());
-                                                    Collections.sort(degs);
-                                                    for (int j = 0; j < degs.size(); j++) {
-                                                        Degree de = degs.get(j);
-                                                        if (de.isActive()) {
-                                                            for (Cycle cy : cycle) {
-                                                                if (cy.getNumber() == de.getCycle()) {
-                                                                    cycleTitle = cy.getTitle();
-                                                                }
-                                                            }
-                                            %>
-                                            <li style=" color: #212121; margin: 10px; list-style-type: none; "><span style="cursor: pointer;"><i class="glyphicon glyphicon-plus" style=" float: left;" onclick="setIcon(this)" ></i> &nbsp;&nbsp; <%out.print(cycleTitle + " - " + de.getTitle());%> <a href="${pageContext.request.contextPath}/GetSyllabusServlet?teaching_matricula=1"> <i class="glyphicon glyphicon-info-sign" style=" font-size: medium; float: right;"  ></i></a></span><ul style=" padding:0;">
-                                                        <%  if (map.get(d).get(de).keySet().size() != 0) {
-                                                                List<Curriculum> currs = new ArrayList<Curriculum>(map.get(d).get(de).keySet());
-                                                                Collections.sort(currs);
-                                                                //for (Curriculum cu : map.get(d).get(de).keySet()) {
-                                                                for (int k = 0; k < currs.size(); k++) {
-                                                                    Curriculum cu = currs.get(k);
-                                                                    if (cu.isActive()) {
-                                                        %>
-                                                    <li style=" color: #D84315; margin: 10px; list-style-type: none; "><span style="cursor: pointer;"><i class="glyphicon glyphicon-plus" style=" float: left;" onclick="setIcon(this)" ></i> &nbsp;&nbsp; <%out.print("Curriculum - " + cu.getTitle());%></span><ul style=" padding:0;">
-                                                            <%
-                                                                if (map.get(d).get(de).get(cu).size() != 0) {
-                                                                    List<Teaching> teachs = new ArrayList<Teaching>(map.get(d).get(de).get(cu));
-                                                                    Collections.sort(teachs);
-                                                                    //for (Teaching te : map.get(d).get(de).get(cu)) {
-                                                                    for (int y = 0; y < teachs.size(); y++) {
-                                                                        Teaching te = teachs.get(y);
-                                                                        if (te.isActive()) {
-                                                            %>
-                                                            <li style="  margin: 10px; list-style-type: none; "><span style="cursor: pointer; color: #112B62;"> &nbsp;&nbsp; <a style="color: #112B62; font-weight: bold;" href="${pageContext.request.contextPath}/GetSyllabusServlet?teaching_matricula=<%out.print(te.getMatricula());%>"><%out.print("Corso di " + te.getTitle());%></a></span></li>
-                                                                    <%}
-                                                                            }
-                                                                        }
-
-                                                                    %>
-                                                        </ul></li>  
-                                                        <%                                                       }
-                                                                }
-                                                            }  %>      
-                                                </ul></li>
-                                                <%
-                                                            }
-                                                        }
-                                                    }
-                                                %>
-
-                                        </ul></li>
-                                        <%
-                                                }
-                                            }
-                                        %>  </ul>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="panel-group panel-group-joined" id="accordion-teaching-offer">
+                                           
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <!-- Main Footer -->
                                 <!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->
@@ -305,10 +250,24 @@
             </div>
             <!-- Bottom Scripts -->
             <script type="text/javascript">
-                function setIcon(obj) {
-                    if(obj.className == "glyphicon glyphicon-plus"){
-                    obj.className = "glyphicon glyphicon-minus";}
-                    else if(obj.className == "glyphicon glyphicon-minus") obj.className = "glyphicon glyphicon-plus";
+                function loadDep() {
+                    var div = document.getElementById("accordion-teaching-offer");
+                   $.get('GetDepartmentServlet', function (responseJson) {
+                        var stringa= "";
+                        $.each(responseJson, function (key, value) {
+                            stringa += "<div class='panel panel-default'>";
+                            stringa += "<div class='panel-heading'>";
+                            stringa += "<h4 class='panel-title'>";
+                            stringa += "<a data-toggle='collapse' href='#" + value.departmentAbbreviation + "' class='collapsed'>";
+                            stringa += value.title + "</a></h4></div>";
+                            stringa += "<div id='" + value.departmentAbbreviation + "' class='panel-collapse collapse'>";
+                            stringa += "<div class='panel-body'>";
+                            stringa += "blabla";
+                            stringa += "</div></div></div>";
+                        });
+                     
+                        div.innerHTML = stringa;
+                    });
                 }
             </script>
             <script src="assets/js/bootstrap.min.js"></script>
@@ -317,19 +276,6 @@
             <script src="assets/js/joinable.js"></script>
             <script src="assets/js/xenon-api.js"></script>
             <script src="assets/js/xenon-toggles.js"></script>
-            <script>
-                $(function () {
-                    $('#list').find('SPAN').click(function (e) {
-                        $(this).parent().children('UL').toggle();
-                    });
-                });
-                $(function () {
-                    //hide or collapsed initially.
-                    $('#list').find('UL').hide();
-
-                });
-            </script>
-
             <!-- JavaScripts initializations and stuff -->
             <script src="assets/js/xenon-custom.js"></script>
 
