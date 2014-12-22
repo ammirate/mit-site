@@ -2,7 +2,7 @@
     Document   : ModifyDepartment
     Author     : Davide
 --%>
-<%@page import="it.unisa.offerta_formativa.beans.Department"%>
+<%@page import="it.unisa.model.Department"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1"%>
 

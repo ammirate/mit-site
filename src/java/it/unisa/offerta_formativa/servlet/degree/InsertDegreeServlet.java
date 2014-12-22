@@ -1,6 +1,6 @@
 package it.unisa.offerta_formativa.servlet.degree;
 
-import it.unisa.offerta_formativa.beans.Degree;
+import it.unisa.model.Degree;
 import java.io.IOException;
 
 import javax.servlet.ServletException;

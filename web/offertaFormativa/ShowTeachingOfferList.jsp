@@ -2,16 +2,16 @@
     Document   : ShowTeachingOfferList
     Author     : Davide
 --%>
+<%@page import="it.unisa.model.Cycle"%>
+<%@page import="it.unisa.model.Degree"%>
+<%@page import="it.unisa.model.Department"%>
 <%@page import="java.util.Collections"%>
 <%@page import="java.util.Arrays"%>
 <%@page import="java.util.List"%>
-<%@page import="it.unisa.offerta_formativa.beans.Cycle"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="it.unisa.offerta_formativa.beans.Curriculum"%>
-<%@page import="it.unisa.offerta_formativa.beans.Degree"%>
 <%@page import="it.unisa.offerta_formativa.beans.Teaching"%>
 
-<%@page import="it.unisa.offerta_formativa.beans.Department"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1"%>

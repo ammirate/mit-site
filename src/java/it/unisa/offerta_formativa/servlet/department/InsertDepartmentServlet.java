@@ -1,6 +1,6 @@
 package it.unisa.offerta_formativa.servlet.department;
 
-import it.unisa.offerta_formativa.beans.Department;
+import it.unisa.model.Department;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
