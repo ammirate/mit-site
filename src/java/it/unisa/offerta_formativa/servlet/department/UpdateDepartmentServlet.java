@@ -51,12 +51,12 @@ public class UpdateDepartmentServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        if ((departmentMng.readDepartment(request.getParameter("abbreviation")) != null) && (request.getParameter("abbreviation").equalsIgnoreCase(request.getParameter("old_abbreviation")))) {
+        if ((departmentMng.getDepartmentByAbbreviation(request.getParameter("abbreviation")) != null) && (request.getParameter("abbreviation").equalsIgnoreCase(request.getParameter("old_abbreviation")))) {
             UpdateDepartment(request.getParameter("old_abbreviation"), new Department(request.getParameter("abbreviation"), request.getParameter("title"), request.getParameter("url_moodle"), request.getParameter("token")));
             ServletContext sc = getServletContext();
             RequestDispatcher rd = sc.getRequestDispatcher("/ShowDepartmentServlet");
             rd.forward(request, response);
-        } else if(departmentMng.readDepartment(request.getParameter("abbreviation")) == null){
+        } else if(departmentMng.getDepartmentByAbbreviation(request.getParameter("abbreviation")) == null){
             UpdateDepartment(request.getParameter("old_abbreviation"), new Department(request.getParameter("abbreviation"), request.getParameter("title"), request.getParameter("url_moodle"), request.getParameter("token")));
             ServletContext sc = getServletContext();
             RequestDispatcher rd = sc.getRequestDispatcher("/ShowDepartmentServlet");

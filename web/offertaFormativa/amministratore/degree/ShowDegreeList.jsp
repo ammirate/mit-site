@@ -284,6 +284,10 @@
                         $.each(responseJson, function (key, value) {
                             $('<option>').val(value.cycle_number).text(value.title).appendTo($select);
                         });
+                        $('#cycles').val("NoCycle");
+                        $("#cycles").select2({allowClear: true}).on('select2-open', function () {
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
                     });
                 }
                 function loadDep() {

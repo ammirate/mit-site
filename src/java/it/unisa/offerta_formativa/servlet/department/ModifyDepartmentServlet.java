@@ -41,7 +41,7 @@ public class ModifyDepartmentServlet extends HttpServlet {
 
     private Department GetDepartment(String abbreviation) {
         // TODO Auto-generated method stub
-            return departmentMng.readDepartment(abbreviation);
+            return departmentMng.getDepartmentByAbbreviation(abbreviation);
     }
 
     /**

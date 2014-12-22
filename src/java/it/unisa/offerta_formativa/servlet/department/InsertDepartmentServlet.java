@@ -43,7 +43,7 @@ public class InsertDepartmentServlet extends HttpServlet {
 
     private void InsertDepartment(Department department) {
         // TODO Auto-generated method stub
-            departmentMng.createDepartment(department);
+            departmentMng.add(department);
     }
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
@@ -51,7 +51,7 @@ public class InsertDepartmentServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        if(departmentMng.readDepartment(request.getParameter("abbreviation"))==null){
+        if(departmentMng.getDepartmentByAbbreviation(request.getParameter("abbreviation"))==null){
         InsertDepartment(new Department(request.getParameter("abbreviation"), request.getParameter("title"), request.getParameter("url_moodle"), request.getParameter("token")));
         ServletContext sc = getServletContext();  
         RequestDispatcher rd = sc.getRequestDispatcher("/ShowDepartmentServlet");  
