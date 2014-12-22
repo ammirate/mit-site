@@ -33,9 +33,10 @@ public class CycleManager {
      * @return true if the cycle has been inserted, else false
      */
     public boolean createCycle(Cycle c) {
-        stmt = DBConnector.openConnection();
 
         try {
+            stmt = DBConnector.openConnection();
+
             String query = "INSERT INTO " + TABLE
                     + "(cycle_number,title) VALUES ("
                     + c.getInsertQuery() + ")";
@@ -46,7 +47,7 @@ public class CycleManager {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
-            DBConnector.closeConnection();
+           DBConnector.closeConnection();
         }
         return false;
     }
@@ -58,9 +59,9 @@ public class CycleManager {
      * @return the cycle red
      */
     public Cycle readCycle(int idCycle) {
-        stmt = DBConnector.openConnection();
 
         try {
+            stmt = DBConnector.openConnection();
 
             String query = "SELECT * FROM " + TABLE
                     + " WHERE " + PKEY + "=" + idCycle;
@@ -72,21 +73,23 @@ public class CycleManager {
         } catch (SQLException ex) {
             Logger.getLogger(CurriculumManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DBConnector.closeConnection();
+           DBConnector.closeConnection();
         }
         return null;
     }
 
     /**
-     *update an existent cycle into the DB
+     * update an existent cycle into the DB
+     *
      * @param idOldCycle
      * @param newCycle
      * @return
      */
     public boolean updateCycle(int idOldCycle, Cycle newCycle) {
-        stmt = DBConnector.openConnection();
 
         try {
+            stmt = DBConnector.openConnection();
+
             String query = "UPDATE " + TABLE + " SET " + newCycle.toString() + " WHERE "
                     + PKEY + "=" + idOldCycle;
 //            System.out.println("update QUERY " + query);
@@ -98,7 +101,7 @@ public class CycleManager {
             ex.printStackTrace();
             throw new RuntimeException("Update Query failed!");
         } finally {
-            DBConnector.closeConnection();
+           DBConnector.closeConnection();
         }
         return false;
     }
@@ -107,16 +110,17 @@ public class CycleManager {
         return false;
     }
 
-    
     /**
      * return all the cycles in the DB
+     *
      * @return a list of cycles
      */
     public ArrayList<Cycle> getAllCycles() {
         ArrayList<Cycle> toReturn = new ArrayList<Cycle>();
-        stmt = DBConnector.openConnection();
 
         try {
+            stmt = DBConnector.openConnection();
+
 //            System.out.println("SELECT * FROM " + TABLE);
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " order by title");
             while (rs.next()) {
@@ -126,14 +130,15 @@ public class CycleManager {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
-            DBConnector.closeConnection();
+           DBConnector.closeConnection();
         }
         return toReturn;
     }
 
     /**
      * Singleton Pattern
-     * @return 
+     *
+     * @return
      */
     public static CycleManager getInstance() {
         if (instance == null) {
@@ -142,9 +147,9 @@ public class CycleManager {
         return instance;
     }
 
-    
     /**
      * Create a Cycle from a ResultSet object
+     *
      * @param rs the result set which take the cycle from.
      * @return the cycle generated from @param rs
      */

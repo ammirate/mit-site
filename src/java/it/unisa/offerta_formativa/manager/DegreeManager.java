@@ -61,7 +61,7 @@ public class DegreeManager {
             ex.printStackTrace();
             throw new RuntimeException("Insertion Query failed!");
         } finally {
-            DBConnector.closeConnection();
+           DBConnector.closeConnection();
         }
         return false;
     }
@@ -88,7 +88,7 @@ public class DegreeManager {
             ex.printStackTrace();
             throw new RuntimeException("Update Query failed!");
         } finally {
-            DBConnector.closeConnection();
+           DBConnector.closeConnection();
         }
         return false;
     }
@@ -115,7 +115,7 @@ public class DegreeManager {
                 ex.printStackTrace();
                 throw new RuntimeException("Read Query failed!");
             } finally {
-                DBConnector.closeConnection();
+               DBConnector.closeConnection();
             }
         }
         return null;
@@ -138,7 +138,7 @@ public class DegreeManager {
             ex.printStackTrace();
             throw new RuntimeException("Delete Query failed!");
         } finally {
-            DBConnector.closeConnection();
+           DBConnector.closeConnection();
         }
         return false;
     }
@@ -162,7 +162,7 @@ public class DegreeManager {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBConnector.closeConnection();
+           DBConnector.closeConnection();
         }
         return toReturn;
     }
@@ -208,7 +208,7 @@ public class DegreeManager {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBConnector.closeConnection();
+           DBConnector.closeConnection();
         }
         return toReturn;
     }
@@ -239,7 +239,7 @@ public class DegreeManager {
             } catch (SQLException e) {
                 e.printStackTrace();
             } finally {
-                DBConnector.closeConnection();
+               DBConnector.closeConnection();
             }
         }
         return toReturn;
@@ -296,7 +296,7 @@ public class DegreeManager {
             } catch (SQLException e) {
                 e.printStackTrace();
             } finally {
-                DBConnector.closeConnection();
+               DBConnector.closeConnection();
             }
         }
 
@@ -329,7 +329,7 @@ public class DegreeManager {
             ex.printStackTrace();
             throw new RuntimeException("Update Query Failed");
         } finally {
-            DBConnector.closeConnection();
+           DBConnector.closeConnection();
         }
         return false;
     }

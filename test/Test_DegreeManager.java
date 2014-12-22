@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+//import java.util.ArrayList;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -7,6 +7,7 @@ import it.unisa.offerta_formativa.manager.DegreeManager;
 import org.junit.Test;
 
 import it.unisa.offerta_formativa.beans.Degree;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +31,7 @@ public class Test_DegreeManager extends TestCase {
     public static TestSuite suite() {
         TestSuite suite = new TestSuite();
 //        suite.addTest(new Test_DegreeManager("TC_2_1_getInstance"));
-//        suite.addTest(new Test_DegreeManager("TC_2_2_createDegree"));
+        suite.addTest(new Test_DegreeManager("TC_2_2_createDegree"));
 //        suite.addTest(new Test_DegreeManager("TC_2_3_updateDegree"));
 //        suite.addTest(new Test_DegreeManager("TC_2_4_readDegree"));
 //        suite.addTest(new Test_DegreeManager("TC_2_5_deleteDegree"));
@@ -38,7 +39,7 @@ public class Test_DegreeManager extends TestCase {
 //        suite.addTest(new Test_DegreeManager("TC_2_7_getDegreesByCycle"));
 //        suite.addTest(new Test_DegreeManager("TC_2_8_getDegreesByDepartment"));
 //        suite.addTest(new Test_DegreeManager("TC_2_9_getDegreesByDepartmentAndCycle"));
-        suite.addTest(new Test_DegreeManager("TC_2_10_setEsse3Content"));
+//        suite.addTest(new Test_DegreeManager("TC_2_10_setEsse3Content"));
 
         return suite;
     }

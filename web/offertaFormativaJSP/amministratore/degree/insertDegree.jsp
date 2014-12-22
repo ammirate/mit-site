@@ -2,18 +2,17 @@
     Document   : InsertDegree
     Author     : Davide
 --%>
-<%@page import="java.util.Collections"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.ArrayList"%>
+
+<%@page import="it.unisa.offerta_formativa.beans.Degree"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1"%>
 
+<%! public Degree degree = null;
+%>
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
-
-
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
@@ -35,7 +34,7 @@
         <link rel="stylesheet" href="assets/css/xenon-skins.css">
         <link rel="stylesheet" href="assets/css/custom.css">
         <script src="assets/js/jquery-1.11.1.min.js"></script>
-        
+
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -46,6 +45,7 @@
 
     </head>
     <body class="page-body" onload="loadDepAndCycles()">
+
 
         <nav class="navbar horizontal-menu navbar-fixed-top">
             <!-- set fixed position by adding class "navbar-fixed-top" -->
@@ -172,14 +172,10 @@
                                 Inserisci Corso di Laurea 
                             </div>
                             <div class="panel-body">
-                                <div class="row"> <br> </div>
-
-
                                 <script>
                                     jQuery(document).ready(function ($) {
                                         $('a[href="#layout-variants"]').on('click', function (ev) {
                                             ev.preventDefault();
-
                                             var win = {
                                                 top: $(window).scrollTop(),
                                                 toTop: $("#layout-variants").offset().top - 15
@@ -197,19 +193,26 @@
                                     });
                                 </script>
 
-
-
                                 <div class="row">
-                                    <div class="form-group col-sm-3">
-                                        <label for="title" style="color: black; font-weight: bold">Matricola:</label>
-                                        <input type="text" id="matricula_text" class="form-control" name="matricula" placeholder="Inserisci matricola">
-                                    </div>
+                                    <%  if (request.getAttribute("exist") != null) {
+                                            degree = (Degree) request.getAttribute("degree");
+                                    %>
+                                    <p class="bg-danger">Matricola del Corso di laurea già esistente inserirne un'altra</p>
+                                    <% }%>
+                                    <div class="row"> <br> </div>
+                                    <form id="form1" role="form">
+                                        <div class="form-group col-sm-3">
+                                            <label for="matricula" style="color: black; font-weight: bold">Matricola:</label>
+                                            <input type="text" id="matricula_text" maxlength="5" class="form-control" <% if (degree != null) { %> value="<% out.print(degree.getMatricula());
+                                                } %>" name="matricula" placeholder="Inserisci matricola">
+                                        </div>
 
-                                    <div class="col-sm-5">
-                                        <label for="title" style="color: black; font-weight: bold" >Titolo:</label>
-                                        <input type="text" id="title_text" name="titolo" class="form-control" placeholder="Inserisci titolo" > 
-                                    </div>
-
+                                        <div class="col-sm-5">
+                                            <label for="title" style="color: black; font-weight: bold" >Titolo:</label>
+                                            <input type="text" id="title_text" maxlength="50" name="titolo" <% if (degree != null) { %> value="<% out.print(degree.getTitle());
+                                                } %>" class="form-control" placeholder="Inserisci titolo"> 
+                                        </div>
+                                    </form>
                                     <div class="form col-sm-1"></div>
 
                                     <label for="title" style="color: black; font-weight: bold">Stato:</label>
@@ -220,7 +223,7 @@
                                         </label>
                                         <label class="radio-inline">
 
-                                            <input type="radio" name="optradio" id="status_disable" ><p style="color: black">Disattivo</p>
+                                            <input type="radio" name="optradio" id="status_disable" ><p style="color: black" >Disattivo</p>
 
                                         </label>
                                     </form>
@@ -248,13 +251,15 @@
                                 <div class="row">
                                     <div class="form-group col-sm-6">
                                         <label for="title" style="color: black; font-weight: bold" >Link:</label>
-                                        <input type="text" id="link_text" class="form-control" name="link" placeholder="Inserisci link">
+                                        <input type="text" maxlength="500" id="link_text" class="form-control" name="link" <% if (degree != null) { %> value="<% out.print(degree.getLink());
+                                            }%>" placeholder="Inserisci link">
                                     </div>
                                 </div>
 
                                 <div> <br> </div>
                                 <div> <br> </div>
                                 <div> <br> </div>
+
 
                                 <div class="row">
 
@@ -273,15 +278,17 @@
                                 <!-- Or class "fixed" to  always fix the footer to the end of page -->
 
                             </div>
-
                         </div>
-
-
                     </div>
 
                     <div class="col-sm-1"></div>
 
+
+
                 </div>     
+                <div> <br> </div>
+                <div> <br> </div>
+                <div> <br> </div>
 
                 <footer class="main-footer sticky footer-type-1">
 
@@ -305,71 +312,100 @@
                     </div>
 
                 </footer>
-                <div class="page-loading-overlay">
-                    <div class="loader-2"></div>
-                </div>
 
 
             </div>
-
-            <!-- Bottom Scripts -->
-            <script type="text/javascript">
-                function loadDepAndCycles() {
-                    $.get('GetCycleServlet', function (responseJson) {
-                        var $select = $('#cycles');
-                        $select.find('option').remove();
-                        $('<option>').val("nocyc").text("Seleziona Ciclo").appendTo($select);
-                        $.each(responseJson, function (key, value) {
-                            $('<option>').val(value.cycle_number).text(value.title).appendTo($select);
-                        });
-                        $("#cycles").select2({allowClear: true}).on('select2-open', function () {
-                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                        });
-
+        </div>
+        <!-- Bottom Scripts -->
+        <script type="text/javascript">
+            function loadDepAndCycles() {
+                $.get('GetCycleServlet', function (responseJson) {
+                    var $select = $('#cycles');
+                    $select.find('option').remove();
+                    $('<option>').val("nocyc").text("Seleziona Ciclo").appendTo($select);
+                    $.each(responseJson, function (key, value) {
+                        $('<option>').val(value.cycle_number).text(value.title).appendTo($select);
                     });
-                    $.get('GetDepartmentServlet', function (responseJson) {
-                        var $select = $('#department');
-                        $select.find('option').remove();
-                        $('<option>').val("nodep").text("Seleziona Dipartimento").appendTo($select);
-                        $.each(responseJson, function (key, value) {
-                            $('<option>').val(value.departmentAbbreviation).text(value.title).appendTo($select);
-                        });
-                        $("#department").select2({allowClear: true}).on('select2-open', function () {
-                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                        });
+            <% if (request.getAttribute("exist") != null) {%>
+                    $('#cycles').val('<%= degree.getCycle()%>');
+            <% } %>
+                    $("#cycles").select2({allowClear: true}).on('select2-open', function () {
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                     });
-                }
 
-                function RevertModify() {
-                    document.location.href = '${pageContext.request.contextPath}/ShowDegreeServlet';
-                }
-                function UpdateDegree() {
-                    var cycle = $("#cycles option:selected").val();
-                    var departmentAbb = $("#department option:selected").val();
-                    var degree_matricula = $("#matricula_text").val();
-                    var link = $("#link_text").val();
-                    var title = $("#title_text").val();
+                });
+                $.get('GetDepartmentServlet', function (responseJson) {
+                    var $select = $('#department');
+                    $select.find('option').remove();
+                    $('<option>').val("nodep").text("Seleziona Dipartimento").appendTo($select);
+                    $.each(responseJson, function (key, value) {
+                        $('<option>').val(value.departmentAbbreviation).text(value.title).appendTo($select);
+                    });
+            <% if (request.getAttribute("exist") != null) {%>
+                    $('#department').val('<%= degree.getDepartmentAbbreviation()%>');
+            <% }%>
+                    $("#department").select2({allowClear: true}).on('select2-open', function () {
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
+                });
 
+            }
+
+            function RevertModify() {
+                document.location.href = '${pageContext.request.contextPath}/ShowDegreeServlet';
+            }
+            function UpdateDegree() {
+                var cycle = $("#cycles option:selected").val();
+                var departmentAbb = $("#department option:selected").val();
+                var degree_matricula = $("#matricula_text").val();
+                var link = $("#link_text").val();
+                var title = $("#title_text").val();
+
+                if ((validate(degree_matricula)) && (validate(link)) && (validate(title)) && (cycle != "nocyc") && (departmentAbb != "nodep")) {
                     if (document.getElementById('status_active').checked) {
                         var status = "true";
                     } else if (document.getElementById('status_disable').checked) {
                         var status = "false";
                     }
 
-                    var r = confirm("Sei sicuro di voler modificare il corso di Laurea: " + title);
+                    var r = confirm("Sei sicuro di voler Inserire il corso di Laurea: " + title);
                     if (r == true) {
                         document.location.href = '${pageContext.request.contextPath}/InsertDegreeServlet?degree_matricula=' + degree_matricula + '&cycle=' + cycle + '&departmentAbb=' + departmentAbb + '&link=' + link + '&title=' + title + '&status=' + status;
                     }
+                } else {
+                    var msg;
+                    if (!validate(degree_matricula)) {
+                        msg = "Inserisci una matricola";
+                    } else if (!validate(title)) {
+                        msg = "Inserisci un titolo";
+                    } else if (!validate(link)) {
+                        msg = "Inserisci un link";
+                    } else if (cycle === "nocyc") {
+                        msg = "Seleziona un ciclo";
+                    } else if (departmentAbb === "nodep") {
+                        msg = "Seleziona un dipartimento";
+                    }
+                    var a = alert(msg);
                 }
-            </script>
-            <script src="assets/js/bootstrap.min.js"></script>
-            <script src="assets/js/TweenMax.min.js"></script>
-            <script src="assets/js/resizeable.js"></script>
-            <script src="assets/js/joinable.js"></script>
-            <script src="assets/js/xenon-api.js"></script>
-            <script src="assets/js/xenon-toggles.js"></script>
-            <!-- JavaScripts initializations and stuff -->
-            <script src="assets/js/xenon-custom.js"></script>
+            }
+            function validate(toValidate) {
+                if (toValidate.length > 0)
+                    return true;
+            }
+        </script>
+        <script src="assets/js/bootstrap.min.js"></script>
+        <script src="assets/js/TweenMax.min.js"></script>
+        <script src="assets/js/resizeable.js"></script>
+        <script src="assets/js/joinable.js"></script>
+        <script src="assets/js/xenon-api.js"></script>
+        <script src="assets/js/xenon-toggles.js"></script>
+        <link rel="stylesheet" href="assets/js/select2/select2.css">
+        <link href="assets/js/select2/select2-bootstrap.css" rel="stylesheet" type="text/css"/>
+        <script src="assets/js/select2/select2.min.js"></script>
+        <script src="assets/js/jquery-validate/jquery.validate.min.js" id="script-resource-7"></script>
+        <script src="assets/js/jquery-validate/localization/messages_it.min.js" type="text/javascript"></script>
+        <!-- JavaScripts initializations and stuff -->
+        <script src="assets/js/xenon-custom.js"></script>
 
     </body>
 </html>

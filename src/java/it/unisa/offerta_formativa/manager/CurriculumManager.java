@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import it.unisa.offerta_formativa.beans.Curriculum;
 import it.unisa.offerta_formativa.beans.Teaching;
+import it.unisa.offerta_formativa.manager.Exceptions.TeachingException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -65,9 +66,9 @@ public class CurriculumManager {
      */
     public boolean updateCurriculum(String oldCurrMatricula, Curriculum newCurriculum) {
 
-        stmt = DBConnector.openConnection();
-
         try {
+            stmt = DBConnector.openConnection();
+
             String query = "UPDATE " + TABLE + " SET " + newCurriculum.toString() + " WHERE "
                     + "matricula=" + esc + oldCurrMatricula + esc;
             System.out.println("update QUERY " + query);
@@ -92,9 +93,9 @@ public class CurriculumManager {
      * curriculum bean
      */
     public Curriculum readCurriculum(String matricula) {
-        stmt = DBConnector.openConnection();
 
         try {
+            stmt = DBConnector.openConnection();
 
             String query = "SELECT * FROM " + TABLE + " WHERE " + PKEY + "=" + esc + matricula + esc;
 //            System.out.println("READ QUERY" + query);
@@ -117,9 +118,9 @@ public class CurriculumManager {
      * @return true if deleted.
      */
     public boolean deleteCurriculum(String matricula) {
-        stmt = DBConnector.openConnection();
 
         try {
+            stmt = DBConnector.openConnection();
 
             String query = "DELETE FROM " + TABLE + " WHERE " + PKEY + "= " + esc + matricula + esc;
             //            System.out.println("READ QUERY" + query);
@@ -142,10 +143,11 @@ public class CurriculumManager {
      * @return an ArrayList of Curriculum
      */
     public ArrayList<Curriculum> getAllCurriculums() {
-        stmt = DBConnector.openConnection();
 
         ArrayList<Curriculum> toReturn = new ArrayList<Curriculum>();
         try {
+            stmt = DBConnector.openConnection();
+
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " order by title");
 
             while (rs.next()) {
@@ -200,9 +202,9 @@ public class CurriculumManager {
      */
     public ArrayList<Curriculum> getCurriculumByDegree(String degreeMatricula) {
         ArrayList<Curriculum> toReturn = new ArrayList<Curriculum>();
-        stmt = DBConnector.openConnection();
-
         try {
+            stmt = DBConnector.openConnection();
+
             stmt = DBConnector.openConnection();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE
                     + " WHERE degree_matricula=" + esc + degreeMatricula
@@ -229,10 +231,9 @@ public class CurriculumManager {
      * @return true if a teaching belongs to a curriculum, else false
      */
     public boolean curriculumHasTeaching(String curriculum_matricula, String teaching_matricula) {
-        stmt = DBConnector.openConnection();
 
         try {
-
+            stmt = DBConnector.openConnection();
             String query = "SELECT * FROM " + TABLE_LINK
                     + " WHERE teaching_matricula=" + esc + teaching_matricula + esc
                     + " AND curriculum_matricula=" + esc + curriculum_matricula + esc;
@@ -254,10 +255,10 @@ public class CurriculumManager {
      * @param teaching_matricula
      * @return true if a teaching belongs to a curriculum, else false
      */
-    public List<Teaching> getTeachingsByCurriculm(String curriculum_matricula) {
-        stmt = DBConnector.openConnection();
+    public List<Teaching> getTeachingsByCurriculm(String curriculum_matricula) throws TeachingException {
 
         try {
+            stmt = DBConnector.openConnection();
 
             String query = "SELECT * FROM " + TABLE_LINK
                     + " WHERE curriculum_matricula=" + esc
@@ -292,9 +293,9 @@ public class CurriculumManager {
      * @param curriculum_matricula
      */
     public boolean setTeachingInCurriculum(String teaching_matricula, String curriculum_matricula) {
-        stmt = DBConnector.openConnection();
 
         try {
+            stmt = DBConnector.openConnection();
 
             String query = "INSERT INTO " + TABLE_LINK
                     + "(teaching_matricula, curriculum_matricula) VALUES("
@@ -311,7 +312,7 @@ public class CurriculumManager {
         }
         return false;
     }
-
+        
     /**
      * Create a Teaching from a ResultSet object
      *
@@ -348,8 +349,9 @@ public class CurriculumManager {
         String tmpMatricula = "";
         List<String> matriculas = new ArrayList<>();
 
-        stmt = DBConnector.openConnection();
         try {
+            stmt = DBConnector.openConnection();
+
             rs = stmt.executeQuery(whichCurriculumQUery);
             while (rs.next()) {
                 matriculas.add(rs.getString("curriculum_matricula"));

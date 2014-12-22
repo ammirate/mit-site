@@ -53,9 +53,9 @@ public class PersonManager {
      * @return
      */
     public Person getPersonByEmail(String email) {
-        stmt = DBConnector.openConnection();
-
         try {
+            stmt = DBConnector.openConnection();
+
             String esc = "\'";
             String query = "SELECT * FROM " + TABLE + " WHERE "
                     + FKEY + "= " + esc + email + esc;
@@ -117,7 +117,6 @@ public class PersonManager {
 //        person.Account_email=account.email 
 //        AND  account.typeOfAccount = 'professor' 
 //        AND person.Department_abbreviation ='DISTRA'
-        stmt = DBConnector.openConnection();
 
         List<Person> toReturn = new ArrayList<>();
         String esc = "\'";
@@ -126,6 +125,7 @@ public class PersonManager {
                 + " AND account.typeOfAccount = " + esc + "professor" + esc
                 + " AND person.Department_abbreviation =" + esc + depAbbreviation + esc;
         try {
+            stmt = DBConnector.openConnection();
 
             rs = stmt.executeQuery(query);
             System.out.println(query);

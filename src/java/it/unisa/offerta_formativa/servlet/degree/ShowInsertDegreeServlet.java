@@ -24,7 +24,6 @@ public class ShowInsertDegreeServlet extends HttpServlet {
     public ShowInsertDegreeServlet() {
         super();
         // TODO Auto-generated constructor stub   
-        
     }
 
     /**
@@ -42,7 +41,6 @@ public class ShowInsertDegreeServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-       
         request.getRequestDispatcher("/offertaFormativaJSP/amministratore/degree/insertDegree.jsp").forward(request, response);
     }
 

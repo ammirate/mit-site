@@ -65,8 +65,8 @@ public class MoodleConnectionManager {
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 throw new RuntimeException("Read Query failed!");
-            }finally {
-                DBConnector.closeConnection();
+            } finally {
+               DBConnector.closeConnection();
             }
         }
         return "error";

@@ -1,6 +1,4 @@
 package it.unisa.offerta_formativa.facade;
-
-import java.io.BufferedReader;
 import java.util.ArrayList;
 
 import it.unisa.offerta_formativa.beans.ClassPartition;
@@ -9,6 +7,9 @@ import it.unisa.offerta_formativa.beans.ProfModuleClass;
 import it.unisa.offerta_formativa.beans.Teaching;
 import it.unisa.offerta_formativa.manager.ClassManager;
 import it.unisa.offerta_formativa.manager.CurriculumManager;
+import it.unisa.offerta_formativa.manager.Exceptions.ClassPartitionException;
+import it.unisa.offerta_formativa.manager.Exceptions.ModuleException;
+import it.unisa.offerta_formativa.manager.Exceptions.TeachingException;
 import it.unisa.offerta_formativa.manager.ModuleManager;
 import it.unisa.offerta_formativa.manager.ProfModuleClassManager;
 import it.unisa.offerta_formativa.manager.TeachingManager;

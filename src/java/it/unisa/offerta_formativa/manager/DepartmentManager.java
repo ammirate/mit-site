@@ -41,6 +41,8 @@ public class DepartmentManager {
     public boolean createDepartment(Department dept) {
         try {
             stmt = DBConnector.openConnection();
+            //            stmt = DBConnector.openConnection();
+
             String query = "INSERT INTO " + TABLE + "(abbreviation,title,url_moodle,token) VALUES(" + dept.toStringQueryInsert() + ")";
             if (stmt.executeUpdate(query) == 1) {
                 return true;
@@ -50,6 +52,8 @@ public class DepartmentManager {
             throw new RuntimeException("Insertion Query failed!");
         } finally {
             DBConnector.closeConnection();
+            //            DBConnector.closeConnection();
+
         }
         return false;
     }
@@ -151,7 +155,6 @@ public class DepartmentManager {
         }
         return toReturn;
     }
-
 
     /**
      * used to get the unique instance of this class

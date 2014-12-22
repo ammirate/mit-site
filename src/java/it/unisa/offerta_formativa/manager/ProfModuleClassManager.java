@@ -29,9 +29,10 @@ public class ProfModuleClassManager {
     }
 
     public boolean create(ProfModuleClass pmc) {
-        stmt = DBConnector.openConnection();
 
         try {
+            stmt = DBConnector.openConnection();
+
             String esc = "\'";
             String query = "INSERT INTO " + TABLE
                     + "(class_title, "
@@ -67,10 +68,11 @@ public class ProfModuleClassManager {
      * @return
      */
     public List<ProfModuleClass> getAllRelations() {
-        stmt = DBConnector.openConnection();
         List<ProfModuleClass> toReturn = new ArrayList<>();
 
         try {
+            stmt = DBConnector.openConnection();
+
             String esc = "\'";
             String query = "SELECT * FROM " + TABLE;
             rs = stmt.executeQuery(query);
@@ -172,8 +174,7 @@ public class ProfModuleClassManager {
         }
         return toReturn;
     }
-    
-    
+
     /**
      *
      * @param teachingMatricula
@@ -199,10 +200,8 @@ public class ProfModuleClassManager {
         }
         return toReturn;
     }
-    
-    
-    
-        /**
+
+    /**
      *
      * @param teachingMatricula
      * @return
@@ -228,11 +227,8 @@ public class ProfModuleClassManager {
         }
         return toReturn;
     }
-    
-    
-    
-    
-            /**
+
+    /**
      *
      * @param teachingMatricula
      * @return
@@ -258,8 +254,5 @@ public class ProfModuleClassManager {
         }
         return toReturn;
     }
-    
-    
-    
-    
+
 }
