@@ -164,29 +164,46 @@
                                 </script>
 
                                 <div class="row">
-                                    <div class="form-group col-sm-6">
+                                    <div class="col-sm-1"></div>
+
+                                    <div class="form-group col-sm-5">
                                         <label style="color: black; font-weight: bold">Dipartimento:</label><select name="department" class="form-control" id="department" onchange="loadCycle(this.value);">
                                             <option> Seleziona il Dipartimento </option>
                                         </select> 
-
                                     </div>
+                                    <div class="form-group col-sm-5">
+                                        <label style="color: black; font-weight: bold">Ciclo:</label><select name="cycle" class="form-control" id="cycles" onchange="loadDegree(this.value);" >
+                                        </select> 
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-1"></div>
 
-                                    <div class="col-sm-4">
-                                        <label style="color: black; font-weight: bold">Ciclo:</label><select name="cycle" class="form-control" id="cycles" onchange="loadDegree();" >
+                                    <div class="form-group col-sm-5">
+                                        <label style="color: black; font-weight: bold">Corso di laurea:</label><select name="degree" class="form-control" id="degrees" onchange="loadCurr(this.value)">
                                         </select> 
                                     </div>
 
-                                    <div> <br> </div>
-                                    <div> <br> </div>
-                                    <div> <br> </div>
+                                    <div class="form-group col-sm-5">
+                                        <label style="color: black; font-weight: bold">Curriculum:</label><select name="curriculum" class="form-control" id="curriculum" onchange="loadTeach(this.value)">
+                                        </select> 
+                                    </div>
+
+
+
 
                                 </div>
+                                <div> <br> </div>
+                                <div> <br> </div>
+
 
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="panel panel-group" id="accordion-teaching-offer" >
+                                    <div class="col-sm-1"></div>
 
-                                        </div>
+                                    <div class="col-md-10">
+                                        <ul class="list-group list-group-minimal" id="offer_list">
+
+                                        </ul>
                                     </div>
                                 </div>
 
@@ -243,6 +260,12 @@
                     $("#cycles").select2({allowClear: true}).on('select2-open', function () {
                         $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                     });
+                    $("#curriculum").select2({allowClear: true}).on('select2-open', function () {
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
+                    $("#degrees").select2({allowClear: true}).on('select2-open', function () {
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
                 });
                 function loadCycle(i) {
                     $.get('GetCycleServlet?department=' + i, function (responseJson) {
@@ -266,26 +289,52 @@
                         });
                     });
                 }
-                function loadDegree() {
-                    var cycle = $("#cycles option:selected").val();
-                    var div = document.getElementById("accordion-teaching-offer");
-                    $.get('GetDegreeServlet?cycle=' + cycle, function (responseJson) {
-                        var stringa = "";
+                function loadDegree(i) {
+                    var departmentAbb = $("#department option:selected").val();
+                    $.get('GetDegreeServlet?cycle=' + i + "&department=" + departmentAbb, function (responseJson) {
+                        var $select = $('#degrees');
+                        $select.find('option').remove();
+                        $('<option>').val("NoDeg").text("Seleziona Corso di laurea").appendTo($select);
                         $.each(responseJson, function (key, value) {
-                            stringa += "<div class='panel panel-default'>";
-                            stringa += "<div class='panel-heading'>";
-                            stringa += "<h4 class='panel-title'>";
-                            stringa += "<a data-toggle='collapse' href='#" + value.matricula + "' class='collapsed'>";
-                            stringa += value.title + "</a></h4></div>";
-                            stringa += "<div id='" + value.matricula + "' class='panel-collapse collapse'>";
-                            stringa += "<div class='panel-body'>";
-                            stringa += "blabla";
-                            stringa += "</div></div></div>";
+                            if (value.status === "Attivo") {
+                                $('<option>').val(value.matricula).text(value.title).appendTo($select);
+                            }
                         });
-
-                        div.innerHTML = stringa;
+                        $('#degrees').val('NoDeg');
+                        $("#degrees").select2({allowClear: true}).on('select2-open', function () {
+                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                        });
                     });
                 }
+                function loadCurr(i) {
+                    $.get('GetCurriculumServlet?degree=' + i, function (responseJson) {
+                        var $select = $('#curriculum');
+                        $select.find('option').remove();
+                        $('<option>').val("NoCur").text("Seleziona Curriculum").appendTo($select);
+                        $.each(responseJson, function (key, value) {
+                            if (value.status === "Attivo") {
+                                $('<option>').val(value.matricula).text(value.title).appendTo($select);
+                            }
+                        });
+                        $('#curriculum').val("NoCur");
+                        $("#curriculum").select2({allowClear: true}).on('select2-open', function () {
+                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                        });
+                    });
+                }
+                function loadTeach(matricula) {
+                    var list = document.getElementById("offer_list");
+                    $.get('GetTeachingServlet?curriculum=' + matricula, function (responseJson) {
+                        var stringa = "";
+                        $.each(responseJson, function (key, value) {
+                            if (value.active === "Attivo") {
+                                stringa += "<a href='${pageContext.request.contextPath}/GetSyllabusServlet?teaching_matricula=" + value.matricula + "'><li class='list-group-item' style='cursor: pointer; color: #112B62; font-weight: bold;'>" + value.title + "</li></a>";
+                            }
+                        });
+                        list.innerHTML = stringa;
+                    });
+                }
+
             </script>
             <script src="assets/js/bootstrap.min.js"></script>
             <script src="assets/js/TweenMax.min.js"></script>

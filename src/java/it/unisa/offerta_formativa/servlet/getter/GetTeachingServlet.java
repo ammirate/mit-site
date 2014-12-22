@@ -43,7 +43,7 @@ public class GetTeachingServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doPost(request, response);
+
         ArrayList<Teaching> teachings = new ArrayList<Teaching>();
         if (request.getParameterMap().containsKey("curriculum")) {
 
@@ -56,8 +56,7 @@ public class GetTeachingServlet extends HttpServlet {
              * + "                                      <td>"+t.getMatricula()+"</td>" + "                                      <td>"+t.getTitle()+"</td>"
              * + "                                      <td>"+t.getAbbreviation()+"</td>" + "
              * <td>"+t.getLink()+"</td>" + "                                      <td>"+t.getYear()+"</td>" + "
-             *                                      <td>"+t.getSemester()+"</td>"
-             * + "
+             * <td>"+t.getSemester()+"</td>" + "
              * <td>"+((t.isActive())?"Attivo":"Disattivo")+"</td>"+ * "<td><a href=ShowModifyTeachingServlet?matricula="+t.getMatricula()+
              * "&curriculumMatricula="+curriculum+">Modifica</a></td>"+ * "<td><a href=ShowAssociationServlet?matricula="+t.getMatricula()+
              * " >Dettagli</a></td></tr>>"; } response.getWriter().write(toRet);
@@ -67,9 +66,9 @@ public class GetTeachingServlet extends HttpServlet {
         } else {
             teachings = teachingMng.getAllTeachings();
         }
-        ArrayList< HashMap<String, String>> arrlist = new ArrayList<HashMap<String, String>>();
+        ArrayList<HashMap<String, String>> arrlist = new ArrayList<HashMap<String, String>>();
         Collections.sort(teachings);
-        for (Teaching t : teachings) {
+        for (Teaching t : teachings){
             HashMap<String, String> map = new HashMap<String, String>();
             map.put("matricula", t.getMatricula());
             map.put("title", t.getTitle());
@@ -98,6 +97,7 @@ public class GetTeachingServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        doGet(request, response);
     }
 
     /**
