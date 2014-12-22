@@ -57,7 +57,7 @@ public class Test_DepartmentManager extends TestCase {
         System.out.print("Executing Test 1.2...");
         mng = DepartmentManager.getInstance();
         Department degree = new Department("DI", "Dipartimento Informatica", "www.di.unisa.it", "bresvgsss2651vgdtgch");
-        assertTrue(mng.createDepartment(degree));
+        assertTrue(mng.add(degree));
         System.out.println("Done");
     }
 
@@ -79,7 +79,7 @@ public class Test_DepartmentManager extends TestCase {
         System.out.print("Executing Test 1.4...");
         mng = DepartmentManager.getInstance();
         Department degree = new Department("DIA", "Dipartimento di Informatica Applicata", "www.di.unisa.it", "bresvgsss2651vgdtgch");
-        assertTrue(degree.equals(mng.readDepartment("DIA")));
+        assertTrue(degree.equals(mng.getDepartmentByAbbreviation("DIA")));
         System.out.println("Done");
     }
 
@@ -98,7 +98,7 @@ public class Test_DepartmentManager extends TestCase {
         mng = DepartmentManager.getInstance();
 
         Department d1 = new Department("DIA", "Dipartimento di Informatica Applicata", "www.di.unisa.it", "bresvgsss2651vgdtgch");
-        mng.createDepartment(d1);
+        mng.add(d1);
 
         ArrayList<Department> results = mng.getAllDepartments();
         assertEquals(2, results.size());

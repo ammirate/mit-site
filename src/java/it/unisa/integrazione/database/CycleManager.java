@@ -33,7 +33,7 @@ public class CycleManager {
      * @param c the cycle to insert
      * @return true if the cycle has been inserted, else false
      */
-    public boolean createCycle(Cycle c) {
+    public boolean add(Cycle c) {
         Connection connection = null;
         try {
             connection = DBConnection.getConnection();
@@ -60,7 +60,7 @@ public class CycleManager {
      * @param idCycle the cycle to insert
      * @return the cycle red
      */
-    public Cycle readCycle(int idCycle) {
+    public Cycle getCycleByCycleNumber(int idCycle) {
         Connection connection = null;
         try {
             connection = DBConnection.getConnection();
@@ -170,11 +170,11 @@ public class CycleManager {
     }
 
     // ADAPTER METHODS
-    public void add(Cycle pCycle) throws SQLException {
-        this.createCycle(pCycle);
-    }
-
-    public Cycle getCycleByCycleNumber(int pCycleNumber) throws SQLException {
-        return this.readCycle(pCycleNumber);
-    }
+//    public void add(Cycle pCycle) throws SQLException {
+//        this.add(pCycle);
+//    }
+//
+//    public Cycle getCycleByCycleNumber(int pCycleNumber) throws SQLException {
+//        return this.readCycle(pCycleNumber);
+//    }
 }

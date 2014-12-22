@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  *
- * @author Gemma, Antonio
+ * @author Antonio
  */
 public class DegreeManager {
 

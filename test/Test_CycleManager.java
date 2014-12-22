@@ -50,7 +50,7 @@ public class Test_CycleManager extends TestCase {
     public void TC_8_2_createCycle() {
         System.out.print("Executing TC_8_2...");
         CycleManager cycleManager = CycleManager.getInstance();
-        assertTrue(cycleManager.createCycle(new Cycle(10,"decimo ciclo")));
+        assertTrue(cycleManager.add(new Cycle(10,"decimo ciclo")));
         System.out.println("Done");
     }
 
@@ -61,7 +61,7 @@ public class Test_CycleManager extends TestCase {
         System.out.print("Executing TC_8_3....");
         CycleManager cycleManager = CycleManager.getInstance();
         Cycle test = new Cycle(10,"decimo ciclo");
-        Cycle m = cycleManager.readCycle(10);
+        Cycle m = cycleManager.getCycleByCycleNumber(10);
         assertEquals(0,test.compareTo(m));
         System.out.println("Done");
     }

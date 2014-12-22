@@ -38,7 +38,7 @@ public class DepartmentManager {
      * @param dept
      * @return true if the insertion was successfull
      */
-    public boolean createDepartment(Department dept) {
+    public boolean add(Department dept) {
         Connection connection = null;      
         try {
             connection = DBConnection.getConnection();
@@ -93,7 +93,7 @@ public class DepartmentManager {
      * @return a department object if it is present in the DB, else empty
      * department bean
      */
-    public Department readDepartment(String abbreviation) {
+    public Department getDepartmentByAbbreviation(String abbreviation) {
         Connection connect = null;
         if (abbreviation == null || abbreviation.equalsIgnoreCase("")) {
             throw new IllegalArgumentException("Can't read a degree from the Database using id less than one");
@@ -199,11 +199,11 @@ public class DepartmentManager {
     }
 
     // ADAPTER METHODS
-    public void add(Department pDepartment) throws SQLException, ConnectionException {
-        createDepartment(pDepartment);
-    }
+//    public void add(Department pDepartment) throws SQLException, ConnectionException {
+//        add(pDepartment);
+//    }
 
-    public Department getDepartmentByAbbreviation(String pAbbreviation) throws SQLException {
-        return this.readDepartment(pAbbreviation);
-    }
+//    public Department getDepartmentByAbbreviation(String pAbbreviation) throws SQLException {
+//        return this.getDepartmentByAbbreviation(pAbbreviation);
+//    }
 }

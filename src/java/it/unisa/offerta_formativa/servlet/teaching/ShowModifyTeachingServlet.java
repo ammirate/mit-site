@@ -78,7 +78,7 @@ public class ShowModifyTeachingServlet extends HttpServlet {
                         Degree d = degreeMng.readDegree(c.getDegreeMatricula());
                         request.setAttribute("degree",d);
                         request.setAttribute("cycle", cycleMng.readCycle(d.getCycle()));
-                        request.setAttribute("department", deptMng.readDepartment(d.getDepartmentAbbreviation()));
+                        request.setAttribute("department", deptMng.getDepartmentByAbbreviation(d.getDepartmentAbbreviation()));
                         request.getRequestDispatcher(path+"modifyTeaching.jsp").forward(request, response);
         }
     }
