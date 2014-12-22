@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unisa.offerta_formativa.manager;
+package it.unisa.offerta_formativa.manager.old;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import it.unisa.offerta_formativa.beans.Account;
+import it.unisa.model.Account;
 
 /**
  *

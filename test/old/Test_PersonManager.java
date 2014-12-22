@@ -1,8 +1,10 @@
-import it.unisa.offerta_formativa.beans.Person;
+package old;
+
+import it.unisa.model.Person;
 import org.junit.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import it.unisa.offerta_formativa.manager.PersonManager;
+import it.unisa.offerta_formativa.manager.old.PersonManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +40,7 @@ public class Test_PersonManager extends TestCase {
           PersonManager pm = PersonManager.getInstance();
           String email = "m.rossi@unisa.it";
           Person p = pm.getPersonByEmail(email);
-          assertTrue(email.equalsIgnoreCase(p.getAccountEmail()));
+          assertTrue(email.equalsIgnoreCase(p.getAccount().getEmail()));
         System.out.println("Done");
     }
     

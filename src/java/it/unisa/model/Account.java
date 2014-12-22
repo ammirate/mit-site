@@ -3,29 +3,29 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unisa.offerta_formativa.beans;
+package it.unisa.model;
 
 /**
  *
- * @author tony
+ * @author gemmacatolino
  */
 public class Account {
-    
+
     private String email;
-    
     private String password;
-    
     private String typeOfAccount;
-    
     private boolean active;
 
-    public Account(String email, String password, String typeOfAccount) {
+    public Account(String email, String password, String typeAccount) {
         this.email = email;
         this.password = password;
-        this.typeOfAccount = typeOfAccount;
-        this.active = true;
+        this.typeOfAccount = typeAccount;
+        active = true;
     }
-    
+
+    public Account() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     public String getEmail() {
         return email;
@@ -47,8 +47,8 @@ public class Account {
         return typeOfAccount;
     }
 
-    public void setTypeOfAccount(String typeOfAccount) {
-        this.typeOfAccount = typeOfAccount;
+    public void setTypeOfAccount(String typerOfAccount) {
+        this.typeOfAccount = typerOfAccount;
     }
 
     public boolean isActive() {
@@ -58,7 +58,6 @@ public class Account {
     public void setActive(boolean active) {
         this.active = active;
     }
-    
-    
+
     
 }

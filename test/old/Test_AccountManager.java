@@ -1,10 +1,9 @@
-import it.unisa.offerta_formativa.beans.Account;
+package old;
+
 import org.junit.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import it.unisa.offerta_formativa.beans.ProfModuleClass;
-import it.unisa.offerta_formativa.manager.AccountManager;
-import it.unisa.offerta_formativa.manager.ProfModuleClassManager;
+import it.unisa.offerta_formativa.manager.old.AccountManager;
 
 /**
  *

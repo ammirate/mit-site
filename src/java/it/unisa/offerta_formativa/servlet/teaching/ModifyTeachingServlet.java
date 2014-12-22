@@ -9,7 +9,7 @@ import it.unisa.offerta_formativa.beans.Curriculum;
 import it.unisa.offerta_formativa.beans.Teaching;
 import it.unisa.offerta_formativa.manager.ClassManager;
 import it.unisa.offerta_formativa.manager.CurriculumManager;
-import it.unisa.offerta_formativa.manager.DegreeManager;
+import it.unisa.integrazione.database.DegreeManager;
 import it.unisa.offerta_formativa.manager.ModuleManager;
 import it.unisa.offerta_formativa.manager.TeachingManager;
 import java.io.IOException;

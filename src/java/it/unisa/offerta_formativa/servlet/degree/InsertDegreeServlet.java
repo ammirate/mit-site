@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import it.unisa.offerta_formativa.manager.DegreeManager;
+import it.unisa.integrazione.database.DegreeManager;
 import it.unisa.offerta_formativa.manager.ParserHtmlManager;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;

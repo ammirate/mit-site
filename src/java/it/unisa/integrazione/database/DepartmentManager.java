@@ -3,22 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unisa.offerta_formativa.manager;
+package it.unisa.integrazione.database;
 
+import it.unisa.integrazione.database.exception.ConnectionException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import it.unisa.offerta_formativa.beans.Department;
+import it.unisa.model.Department;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
  *
- * @author Alessandro, Antonio
+ * @author Gemma, Antonio
  */
 public class DepartmentManager {
 
-    private Connection conn = null;
     private Statement stmt;
     public static String TABLE = "department";
     public static String PKEY = "abbreviation";
@@ -39,21 +39,23 @@ public class DepartmentManager {
      * @return true if the insertion was successfull
      */
     public boolean createDepartment(Department dept) {
+        Connection connection = null;      
         try {
-            stmt = DBConnector.openConnection();
-            //            stmt = DBConnector.openConnection();
-
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
+//                        stmt = DBConnector.openConnection();
             String query = "INSERT INTO " + TABLE + "(abbreviation,title,url_moodle,token) VALUES(" + dept.toStringQueryInsert() + ")";
             if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
                 return true;
             }
+            
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RuntimeException("Insertion Query failed!");
         } finally {
-            DBConnector.closeConnection();
-            //            DBConnector.closeConnection();
-
+            DBConnection.releaseConnection(connection);
+//          DBConnector.closeConnection();
         }
         return false;
     }
@@ -64,19 +66,22 @@ public class DepartmentManager {
      * @return true if the update was successfull
      */
     public boolean updateDepartment(String abbrev, Department dept) {
+        Connection connect = null;
         try {
+            connect = DBConnection.getConnection();
+            Statement stmt = connect.createStatement();
             String esc = "\'";
-            stmt = DBConnector.openConnection();
             String query = "UPDATE " + TABLE + " SET " + dept.toString() + " WHERE "
                     + PKEY + "=" + esc + abbrev + esc;
             if (stmt.executeUpdate(query) == 1) {
+                connect.commit();
                 return true;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RuntimeException("Update Query failed!");
         } finally {
-            DBConnector.closeConnection();
+             DBConnection.releaseConnection(connect);
         }
         return false;
     }
@@ -89,14 +94,17 @@ public class DepartmentManager {
      * department bean
      */
     public Department readDepartment(String abbreviation) {
+        Connection connect = null;
         if (abbreviation == null || abbreviation.equalsIgnoreCase("")) {
             throw new IllegalArgumentException("Can't read a degree from the Database using id less than one");
         } else {
             try {
-                stmt = DBConnector.openConnection();
+                connect = DBConnection.getConnection();
+                Statement stmt = connect.createStatement();
                 String query = "SELECT * FROM " + TABLE
                         + " WHERE " + PKEY + "=\'" + abbreviation + "\' ";
                 rs = stmt.executeQuery(query);
+                connect.commit();
                 while (rs.next()) {
                     return new Department(rs.getString("abbreviation"), rs.getString("title"), rs.getString("url_moodle"), rs.getString("token"));
                 }
@@ -104,7 +112,7 @@ public class DepartmentManager {
                 ex.printStackTrace();
                 throw new RuntimeException("Read Query failed!");
             } finally {
-                DBConnector.closeConnection();
+                 DBConnection.releaseConnection(connect);
             }
         }
         return null;
@@ -117,17 +125,20 @@ public class DepartmentManager {
      * @return true if deleted.
      */
     public boolean deleteDepartment(String abbreviation) {
+        Connection connect = null;
         try {
-            stmt = DBConnector.openConnection();
+            connect = DBConnection.getConnection();
+            Statement stmt = connect.createStatement();
             if (stmt.executeUpdate("DELETE FROM " + TABLE
                     + " WHERE " + PKEY + "=\"" + abbreviation + "\"") == 1) {
+               connect.commit();
                 return true;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RuntimeException("Delete Query failed!");
         } finally {
-            DBConnector.closeConnection();
+             DBConnection.releaseConnection(connect);
         }
         return false;
     }
@@ -139,10 +150,12 @@ public class DepartmentManager {
      */
     public ArrayList<Department> getAllDepartments() {
         ArrayList<Department> toReturn = new ArrayList<Department>();
+        Connection connect = null;
         try {
-            stmt = DBConnector.openConnection();
+            connect = DBConnection.getConnection();
+            Statement stmt = connect.createStatement();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " order by title");
-
+            connect.commit();
             while (rs.next()) {
                 Department b = getDepartmentFromResultSet(rs);
                 toReturn.add(b);
@@ -151,7 +164,7 @@ public class DepartmentManager {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBConnector.closeConnection();
+             DBConnection.releaseConnection(connect);
         }
         return toReturn;
     }
@@ -185,4 +198,12 @@ public class DepartmentManager {
         return null;
     }
 
+    // ADAPTER METHODS
+    public void add(Department pDepartment) throws SQLException, ConnectionException {
+        createDepartment(pDepartment);
+    }
+
+    public Department getDepartmentByAbbreviation(String pAbbreviation) throws SQLException {
+        return this.readDepartment(pAbbreviation);
+    }
 }

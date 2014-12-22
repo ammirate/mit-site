@@ -1,5 +1,6 @@
 package it.unisa.offerta_formativa.manager;
 
+import it.unisa.offerta_formativa.manager.old.DBConnector;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
