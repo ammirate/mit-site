@@ -89,7 +89,7 @@ public class DepartmentManager {
      * department bean
      */
     public Department readDepartment(String abbreviation) {
-        if (abbreviation.equalsIgnoreCase("")) {
+        if (abbreviation == null || abbreviation.equalsIgnoreCase("")) {
             throw new IllegalArgumentException("Can't read a degree from the Database using id less than one");
         } else {
             try {
