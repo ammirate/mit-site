@@ -6,6 +6,8 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import it.unisa.offerta_formativa.beans.Curriculum;
 import it.unisa.offerta_formativa.beans.Teaching;
+import it.unisa.offerta_formativa.manager.Exceptions.CurriculumException;
+import it.unisa.offerta_formativa.manager.Exceptions.TeachingException;
 import java.util.List;
 
 /**
@@ -21,17 +23,20 @@ public class Test_CurriculumManager extends TestCase {
 
     public static TestSuite suite() {
         TestSuite suite = new TestSuite();
-        suite.addTest(new Test_CurriculumManager("TC_6_1_getInstance"));
-        suite.addTest(new Test_CurriculumManager("TC_6_2_createCurriculum"));
-        suite.addTest(new Test_CurriculumManager("TC_6_3_readCurriculum"));
-        suite.addTest(new Test_CurriculumManager("TC_6_4_UpdateCurriculum"));
-        suite.addTest(new Test_CurriculumManager("TC_6_5_DeleteCurriculum"));
-        suite.addTest(new Test_CurriculumManager("TC_6_6_getTeachingsByCurriculm"));
-        suite.addTest(new Test_CurriculumManager("TC_6_7_getAllCurriculums"));
-        suite.addTest(new Test_CurriculumManager("TC_6_8_curriculumHasTeaching"));
-        suite.addTest(new Test_CurriculumManager("TC_6_9_getCurriculumByDegree"));
-        suite.addTest(new Test_CurriculumManager("TC_6_10_setTeachingInCurriculum"));
-        suite.addTest(new Test_CurriculumManager("TC_6_11_getCurriculumsByTeaching"));
+//        suite.addTest(new Test_CurriculumManager("TC_6_1_getInstance"));
+//        suite.addTest(new Test_CurriculumManager("TC_6_2_createCurriculum"));
+//        suite.addTest(new Test_CurriculumManager("TC_6_3_readCurriculum"));
+//        suite.addTest(new Test_CurriculumManager("TC_6_4_UpdateCurriculum"));
+//        suite.addTest(new Test_CurriculumManager("TC_6_5_DeleteCurriculum"));
+//        suite.addTest(new Test_CurriculumManager("TC_6_6_getTeachingsByCurriculm"));
+//        suite.addTest(new Test_CurriculumManager("TC_6_7_getAllCurriculums"));
+//        suite.addTest(new Test_CurriculumManager("TC_6_8_curriculumHasTeaching"));
+//        suite.addTest(new Test_CurriculumManager("TC_6_9_getCurriculumByDegree"));
+//        suite.addTest(new Test_CurriculumManager("TC_6_10_setTeachingInCurriculum"));
+//        suite.addTest(new Test_CurriculumManager("TC_6_11_getCurriculumsByTeaching"));
+        suite.addTest(new Test_CurriculumManager("TC_6_12_setTeachingInCurriculum"));
+        suite.addTest(new Test_CurriculumManager("TC_6_13_deleteCurriculumHasTeaching"));
+
         return suite;
     }
 
@@ -65,7 +70,7 @@ public class Test_CurriculumManager extends TestCase {
     /**
      * read a curriculum from the DB
      */
-    public void TC_6_3_readCurriculum() {
+    public void TC_6_3_readCurriculum() throws CurriculumException {
         System.out.print("Executing TC_6_3....");
         CurriculumManager currManager = CurriculumManager.getInstance();
         Curriculum test = new Curriculum("02225P0002", "Management - ", "02225");
@@ -77,7 +82,7 @@ public class Test_CurriculumManager extends TestCase {
     /**
      * update a curriculum into the db
      */
-    public void TC_6_4_UpdateCurriculum() {
+    public void TC_6_4_UpdateCurriculum() throws CurriculumException {
         System.out.print("Executing TC_6_4....");
         CurriculumManager currManager = CurriculumManager.getInstance();
         Curriculum newCurr = new Curriculum("02225P0002", "Management - ", "02225");
@@ -88,7 +93,7 @@ public class Test_CurriculumManager extends TestCase {
     /**
      * Delete a curriculum from the DB
      */
-    public void TC_6_5_DeleteCurriculum() {
+    public void TC_6_5_DeleteCurriculum() throws CurriculumException {
         System.out.print("Executing TC_6_5....");
         CurriculumManager currManager = CurriculumManager.getInstance();
         assertTrue(currManager.deleteCurriculum("02225P0002"));
@@ -98,7 +103,7 @@ public class Test_CurriculumManager extends TestCase {
     /**
      * test the reading operation of teachings which belongs to a curriculum
      */
-    public void TC_6_6_getTeachingsByCurriculm() {
+    public void TC_6_6_getTeachingsByCurriculm() throws TeachingException, CurriculumException {
         System.out.print("Executing TC_6_6....");
         CurriculumManager currManager = CurriculumManager.getInstance();
 
@@ -112,7 +117,7 @@ public class Test_CurriculumManager extends TestCase {
     /**
      *
      */
-    public void TC_6_7_getAllCurriculums() {
+    public void TC_6_7_getAllCurriculums() throws CurriculumException {
         System.out.print("Executing TC_6_7....");
         CurriculumManager currManager = CurriculumManager.getInstance();
         currManager.createCurriculum(new Curriculum("02225P0010", "Curriculum prova1 - ", "02225"));
@@ -129,7 +134,7 @@ public class Test_CurriculumManager extends TestCase {
     /**
      *
      */
-    public void TC_6_8_curriculumHasTeaching() {
+    public void TC_6_8_curriculumHasTeaching() throws CurriculumException {
         System.out.print("Executing TC_6_8....");
         CurriculumManager currManager = CurriculumManager.getInstance();
 
@@ -153,7 +158,7 @@ public class Test_CurriculumManager extends TestCase {
     /**
      *
      */
-    public void TC_6_10_setTeachingInCurriculum() {
+    public void TC_6_10_setTeachingInCurriculum() throws CurriculumException {
         System.out.print("Executing TC_6_10....");
         CurriculumManager currManager = CurriculumManager.getInstance();
 
@@ -167,7 +172,7 @@ public class Test_CurriculumManager extends TestCase {
     /**
      *
      */
-    public void TC_6_11_getCurriculumsByTeaching() {
+    public void TC_6_11_getCurriculumsByTeaching() throws CurriculumException {
         System.out.print("Executing TC_6_11....");
 
         //0222500002 teaching matricula in the DB
@@ -176,21 +181,34 @@ public class Test_CurriculumManager extends TestCase {
         CurriculumManager currManager = CurriculumManager.getInstance();
         currManager.createCurriculum(c1);
         currManager.createCurriculum(c2);
-                 
+
         currManager.setTeachingInCurriculum("0222500002", "02225P0010");
         currManager.setTeachingInCurriculum("0222500002", "02225P0011");
- 
+
         List<Curriculum> currsOfTeaching;
         currsOfTeaching = currManager.getCurriculumsByTeaching("0222500002");
 
         assertEquals((2 + 1), currsOfTeaching.size());
         //int the DB, testing version, there is already a curriculum 
         //for that teaching, so they are 3
-        
+
         currManager.deleteCurriculum(c1.getDegreeMatricula());
         currManager.deleteCurriculum(c2.getDegreeMatricula());
 
         System.out.println("Done");
     }
 
+    public void TC_6_12_setTeachingInCurriculum() throws CurriculumException {
+        System.out.print("Executing TC_6_12....");
+        CurriculumManager currManager = CurriculumManager.getInstance();
+        assertTrue(currManager.setTeachingInCurriculum("0222500002", "02225P0001"));
+        System.out.println("Done");
+    }
+
+    public void TC_6_13_deleteCurriculumHasTeaching() throws TeachingException {
+        System.out.print("Executing TC_6_13....");
+        CurriculumManager currManager = CurriculumManager.getInstance();
+        assertTrue(currManager.deleteCurriculumhasTeaching("0222500002", "02225P0001"));
+        System.out.println("Done");
+    }
 }

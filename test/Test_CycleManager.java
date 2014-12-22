@@ -1,12 +1,10 @@
-import it.unisa.offerta_formativa.manager.CycleManager;
+import it.unisa.integrazione.database.CycleManager;
 
 import org.junit.Test;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import it.unisa.offerta_formativa.beans.Cycle;
-import it.unisa.offerta_formativa.beans.Teaching;
-import java.util.List;
+import it.unisa.model.Cycle;
 
 /**
  *
@@ -22,6 +20,9 @@ public class Test_CycleManager extends TestCase {
     public static TestSuite suite() {
         TestSuite suite = new TestSuite();
         suite.addTest(new Test_CycleManager("TC_8_1_getInstance"));
+        suite.addTest(new Test_CycleManager("TC_8_2_createCycle"));
+        suite.addTest(new Test_CycleManager("TC_8_3_readCycle"));
+        suite.addTest(new Test_CycleManager("TC_8_4_updateCycle"));
         return suite;
     }
 
@@ -49,7 +50,7 @@ public class Test_CycleManager extends TestCase {
     public void TC_8_2_createCycle() {
         System.out.print("Executing TC_8_2...");
         CycleManager cycleManager = CycleManager.getInstance();
-        assertTrue(cycleManager.createCycle(new Cycle(10,"decimo ciclo")));
+        assertTrue(cycleManager.add(new Cycle(10,"decimo ciclo")));
         System.out.println("Done");
     }
 
@@ -60,29 +61,19 @@ public class Test_CycleManager extends TestCase {
         System.out.print("Executing TC_8_3....");
         CycleManager cycleManager = CycleManager.getInstance();
         Cycle test = new Cycle(10,"decimo ciclo");
-        Cycle m = cycleManager.readCycle(10);
-        assertTrue(test.equals(m));
+        Cycle m = cycleManager.getCycleByCycleNumber(10);
+        assertEquals(0,test.compareTo(m));
         System.out.println("Done");
     }
 
     /**
      * update a Cycle into the db
      */
-    public void TC_8_4_UpdateCycle() {
+    public void TC_8_4_updateCycle() {
         System.out.print("Executing TC_8_4....");
         CycleManager cycleManager = CycleManager.getInstance();
         Cycle newCycle = new Cycle(10,"ciclo decimo");
         assertTrue(cycleManager.updateCycle(10, newCycle));
-        System.out.println("Done");
-    }
-
-    /**
-     * Delete a Cycle from the DB
-     */
-    public void TC_8_5_DeleteCycle() {
-        System.out.print("Executing TC_8_5....");
-        CycleManager cycleManager = CycleManager.getInstance();
-        assertTrue(cycleManager.deleteCycle(10));
         System.out.println("Done");
     }
 

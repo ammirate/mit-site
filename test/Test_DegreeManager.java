@@ -2,11 +2,11 @@
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import it.unisa.offerta_formativa.manager.DegreeManager;
+import it.unisa.integrazione.database.DegreeManager;
 
 import org.junit.Test;
 
-import it.unisa.offerta_formativa.beans.Degree;
+import it.unisa.model.Degree;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,16 +30,16 @@ public class Test_DegreeManager extends TestCase {
 
     public static TestSuite suite() {
         TestSuite suite = new TestSuite();
-//        suite.addTest(new Test_DegreeManager("TC_2_1_getInstance"));
+        suite.addTest(new Test_DegreeManager("TC_2_1_getInstance"));
         suite.addTest(new Test_DegreeManager("TC_2_2_createDegree"));
-//        suite.addTest(new Test_DegreeManager("TC_2_3_updateDegree"));
-//        suite.addTest(new Test_DegreeManager("TC_2_4_readDegree"));
-//        suite.addTest(new Test_DegreeManager("TC_2_5_deleteDegree"));
-//        suite.addTest(new Test_DegreeManager("TC_2_6_getAllDegrees"));
-//        suite.addTest(new Test_DegreeManager("TC_2_7_getDegreesByCycle"));
-//        suite.addTest(new Test_DegreeManager("TC_2_8_getDegreesByDepartment"));
-//        suite.addTest(new Test_DegreeManager("TC_2_9_getDegreesByDepartmentAndCycle"));
-//        suite.addTest(new Test_DegreeManager("TC_2_10_setEsse3Content"));
+        suite.addTest(new Test_DegreeManager("TC_2_3_updateDegree"));
+        suite.addTest(new Test_DegreeManager("TC_2_4_readDegree"));
+        suite.addTest(new Test_DegreeManager("TC_2_5_deleteDegree"));
+        suite.addTest(new Test_DegreeManager("TC_2_6_getAllDegrees"));
+        suite.addTest(new Test_DegreeManager("TC_2_7_getDegreesByCycle"));
+        suite.addTest(new Test_DegreeManager("TC_2_8_getDegreesByDepartment"));
+        suite.addTest(new Test_DegreeManager("TC_2_9_getDegreesByDepartmentAndCycle"));
+        suite.addTest(new Test_DegreeManager("TC_2_10_setEsse3Content"));
 
         return suite;
     }
@@ -157,8 +157,8 @@ public class Test_DegreeManager extends TestCase {
         degreeManager = DegreeManager.getInstance();
 
         
-        Degree b1 = new Degree("00000", "www.sito1.it", "ABC", 1, "DISTRA");
-        Degree b2 = new Degree("00001", "www.sito2.it", "DEF", 1, "DISTRA");
+        Degree b1 = new Degree("5555", "www.sito1.it", "ABC", 1, "DISTRA");
+        Degree b2 = new Degree("5556", "www.sito2.it", "DEF", 1, "DISTRA");
         degreeManager.createDegree(b2);
         degreeManager.createDegree(b1);
         
@@ -180,8 +180,8 @@ public class Test_DegreeManager extends TestCase {
         degreeManager = DegreeManager.getInstance();
 
         
-        Degree b1 = new Degree("00000", "www.sito1.it", "ABC", 1, "DISTRA");
-        Degree b2 = new Degree("00001", "www.sito2.it", "DEF", 2, "DISTRA");
+        Degree b1 = new Degree("00022", "www.sito1.it", "ABC", 1, "DISTRA");
+        Degree b2 = new Degree("00021", "www.sito2.it", "DEF", 2, "DISTRA");
         degreeManager.createDegree(b2);
         degreeManager.createDegree(b1);
         //now there are 3 degree into the DB which belong to DISTRA:

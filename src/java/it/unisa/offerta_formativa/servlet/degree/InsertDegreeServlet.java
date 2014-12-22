@@ -1,6 +1,6 @@
 package it.unisa.offerta_formativa.servlet.degree;
 
-import it.unisa.offerta_formativa.beans.Degree;
+import it.unisa.model.Degree;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import it.unisa.offerta_formativa.manager.DegreeManager;
+import it.unisa.integrazione.database.DegreeManager;
 import it.unisa.offerta_formativa.manager.ParserHtmlManager;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -64,7 +64,7 @@ public class InsertDegreeServlet extends HttpServlet {
         } else {
              request.setAttribute("degree",new Degree(request.getParameter("degree_matricula"), request.getParameter("link"), request.getParameter("title"), Integer.parseInt(request.getParameter("cycle")), request.getParameter("departmentAbb"),Boolean.parseBoolean(request.getParameter("status"))));
              request.setAttribute("exist", "true");
-             request.getRequestDispatcher("/offertaFormativaJSP/amministratore/degree/insertDegree.jsp").forward(request, response);
+             request.getRequestDispatcher("/offertaFormativa/amministratore/degree/insertDegree.jsp").forward(request, response);
         }
     }
 

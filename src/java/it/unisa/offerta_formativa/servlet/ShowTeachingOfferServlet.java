@@ -6,13 +6,13 @@
 package it.unisa.offerta_formativa.servlet;
 
 import it.unisa.offerta_formativa.beans.Curriculum;
-import it.unisa.offerta_formativa.beans.Degree;
-import it.unisa.offerta_formativa.beans.Department;
+import it.unisa.model.Degree;
+import it.unisa.model.Department;
 import it.unisa.offerta_formativa.beans.Teaching;
 import it.unisa.offerta_formativa.manager.CurriculumManager;
-import it.unisa.offerta_formativa.manager.CycleManager;
-import it.unisa.offerta_formativa.manager.DegreeManager;
-import it.unisa.offerta_formativa.manager.DepartmentManager;
+import it.unisa.integrazione.database.CycleManager;
+import it.unisa.integrazione.database.DegreeManager;
+import it.unisa.integrazione.database.DepartmentManager;
 import it.unisa.offerta_formativa.manager.TeachingManager;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -91,6 +91,6 @@ public class ShowTeachingOfferServlet extends HttpServlet {
         // TODO Auto-generated method stub
         request.setAttribute("cycles", cym.getAllCycles());
         request.setAttribute("map", CreateMap());
-        request.getRequestDispatcher("/offertaFormativaJSP/ShowTeachingOfferList.jsp").forward(request, response);
+        request.getRequestDispatcher("/offertaFormativa/ShowTeachingOfferList.jsp").forward(request, response);
     }
 }

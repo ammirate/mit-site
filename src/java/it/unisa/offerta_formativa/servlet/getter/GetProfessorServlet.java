@@ -5,8 +5,8 @@
  */
 package it.unisa.offerta_formativa.servlet.getter;
 
-import it.unisa.offerta_formativa.beans.Degree;
-import it.unisa.offerta_formativa.beans.Person;
+import it.unisa.model.Degree;
+import it.unisa.model.Person;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;

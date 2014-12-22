@@ -41,10 +41,14 @@ public class ParserHtmlManager {
         try {
             doc = Jsoup.connect(link).get();
             didattica = doc.getElementById(tag);
+            if(didattica != null){
             String rep1 = didattica.toString().replace("“", "\"");
             String rep2 = rep1.replace("”", "\"");
             String rep3 = rep2.replace("'", "\"");
             toReturn = rep3.replace("’", "'");
+            } else {
+                toReturn = "Link di esse3 errato";
+            }
         } catch(IOException e) {
             toReturn = "Link di esse3 errato";
         } catch(IllegalArgumentException e){

@@ -5,8 +5,8 @@
  */
 package it.unisa.offerta_formativa.servlet.teaching;
 
-import it.unisa.offerta_formativa.manager.CycleManager;
-import it.unisa.offerta_formativa.manager.DepartmentManager;
+import it.unisa.integrazione.database.CycleManager;
+import it.unisa.integrazione.database.DepartmentManager;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import it.unisa.offerta_formativa.beans.Degree;
-import it.unisa.offerta_formativa.manager.DegreeManager;
+import it.unisa.model.Degree;
+import it.unisa.integrazione.database.DegreeManager;
 
 
 /**
@@ -51,7 +51,7 @@ public class ModifyDegreeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
         request.setAttribute("degree",GetDegree(request.getParameter("degree_matricula")));
-        request.getRequestDispatcher("/offertaFormativaJSP/amministratore/degree/ModifyDegree.jsp").forward(request, response);
+        request.getRequestDispatcher("/offertaFormativa/amministratore/degree/ModifyDegree.jsp").forward(request, response);
     }
 
 }

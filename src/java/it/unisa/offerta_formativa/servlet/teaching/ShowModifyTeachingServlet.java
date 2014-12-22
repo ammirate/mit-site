@@ -8,9 +8,9 @@ package it.unisa.offerta_formativa.servlet.teaching;
 import it.unisa.offerta_formativa.beans.Curriculum;
 import it.unisa.offerta_formativa.beans.Degree;
 import it.unisa.offerta_formativa.manager.CurriculumManager;
-import it.unisa.offerta_formativa.manager.CycleManager;
-import it.unisa.offerta_formativa.manager.DegreeManager;
-import it.unisa.offerta_formativa.manager.DepartmentManager;
+import it.unisa.integrazione.database.CycleManager;
+import it.unisa.integrazione.database.DegreeManager;
+import it.unisa.integrazione.database.DepartmentManager;
 import it.unisa.offerta_formativa.manager.TeachingManager;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -69,17 +69,17 @@ public class ShowModifyTeachingServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String path="/offertaFormativaJSP/amministratore/";
-        if(request.getParameterMap().containsKey("matricula") && request.getParameterMap().containsKey("curriculum")){
-            String matricula = request.getParameter("matricula");
-            String curriculumMatricula = request.getParameter("curriculum");
-            Curriculum c = currMng.readCurriculum(curriculumMatricula);
-            request.setAttribute("curriculum", c);
-            request.setAttribute("teaching", teachingMng.readTeaching(matricula));
-            Degree d = degreeMng.readDegree(c.getDegreeMatricula());
-            request.setAttribute("degree",d);
-            request.setAttribute("cycle", cycleMng.readCycle(d.getCycle()));
-            request.setAttribute("department", deptMng.readDepartment(d.getDepartmentAbbreviation()));
-            request.getRequestDispatcher(path+"modifyTeaching.jsp").forward(request, response);
+        if(request.getParameterMap().containsKey("matricula") && request.getParameterMap().containsKey("curriculumMatricula")){
+                        String matricula = request.getParameter("matricula");
+                        String curriculumMatricula = request.getParameter("curriculumMatricula");
+                        Curriculum c = currMng.readCurriculum(curriculumMatricula);
+                        request.setAttribute("curriculum", c);
+                        request.setAttribute("teaching", teachingMng.readTeaching(matricula));
+                        Degree d = degreeMng.readDegree(c.getDegreeMatricula());
+                        request.setAttribute("degree",d);
+                        request.setAttribute("cycle", cycleMng.readCycle(d.getCycle()));
+                        request.setAttribute("department", deptMng.getDepartmentByAbbreviation(d.getDepartmentAbbreviation()));
+                        request.getRequestDispatcher(path+"modifyTeaching.jsp").forward(request, response);
         }
     }
 

@@ -5,6 +5,7 @@
  */
 package it.unisa.offerta_formativa.manager;
 
+import it.unisa.offerta_formativa.manager.old.DBConnector;
 import it.unisa.offerta_formativa.beans.Teaching;
 import it.unisa.offerta_formativa.manager.Exceptions.TeachingException;
 import java.sql.Connection;
