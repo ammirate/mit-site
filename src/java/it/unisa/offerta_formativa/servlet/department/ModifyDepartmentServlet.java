@@ -51,7 +51,7 @@ public class ModifyDepartmentServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
         request.setAttribute("department",GetDepartment(request.getParameter("abbreviation")));
-        request.getRequestDispatcher("/offertaFormativaJSP/amministratore/department/ModifyDepartment.jsp").forward(request, response);
+        request.getRequestDispatcher("/offertaFormativa/amministratore/department/ModifyDepartment.jsp").forward(request, response);
     }
 
 }

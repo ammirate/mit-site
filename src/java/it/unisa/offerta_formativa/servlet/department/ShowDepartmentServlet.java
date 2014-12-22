@@ -46,6 +46,6 @@ public class ShowDepartmentServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        request.getRequestDispatcher("/offertaFormativaJSP/amministratore/department/ShowDepartmentList.jsp").forward(request, response);
+        request.getRequestDispatcher("/offertaFormativa/amministratore/department/ShowDepartmentList.jsp").forward(request, response);
     }
 }

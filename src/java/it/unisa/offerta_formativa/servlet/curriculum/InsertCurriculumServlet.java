@@ -64,7 +64,7 @@ public class InsertCurriculumServlet extends HttpServlet {
             }    else {
              request.setAttribute("curriculum",new Curriculum(request.getParameter("curriculum_matricula"), request.getParameter("title"), request.getParameter("degree_matricula"),Boolean.parseBoolean(request.getParameter("status"))));
              request.setAttribute("exist", "true");
-             request.getRequestDispatcher("/offertaFormativaJSP/amministratore/curriculum/insertCurriculum.jsp").forward(request, response);
+             request.getRequestDispatcher("/offertaFormativa/amministratore/curriculum/insertCurriculum.jsp").forward(request, response);
         }
         } catch (CurriculumException ex) {
             Logger.getLogger(InsertCurriculumServlet.class.getName()).log(Level.SEVERE, null, ex);

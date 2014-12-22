@@ -46,6 +46,6 @@ public class ShowCurriculumServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        request.getRequestDispatcher("/offertaFormativaJSP/amministratore/curriculum/ShowCurriculumList.jsp").forward(request, response);
+        request.getRequestDispatcher("/offertaFormativa/amministratore/curriculum/ShowCurriculumList.jsp").forward(request, response);
     }
 }

@@ -64,7 +64,7 @@ public class InsertDegreeServlet extends HttpServlet {
         } else {
              request.setAttribute("degree",new Degree(request.getParameter("degree_matricula"), request.getParameter("link"), request.getParameter("title"), Integer.parseInt(request.getParameter("cycle")), request.getParameter("departmentAbb"),Boolean.parseBoolean(request.getParameter("status"))));
              request.setAttribute("exist", "true");
-             request.getRequestDispatcher("/offertaFormativaJSP/amministratore/degree/insertDegree.jsp").forward(request, response);
+             request.getRequestDispatcher("/offertaFormativa/amministratore/degree/insertDegree.jsp").forward(request, response);
         }
     }
 
