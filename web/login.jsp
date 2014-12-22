@@ -1,20 +1,26 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%-- 
+    Document   : login
+    Created on : 2-dic-2014, 23.05.03
+    Author     : gemmacatolino
+--%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<c:choose>
+    <c:when test="${sessionScope.person != null}">
+        <c:redirect url="index.jsp" />
+    </c:when>
+</c:choose>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content="Xenon Boostrap Admin Panel" />
-        <meta name="author" content="" />
-
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>DISTRA-MIT</title>
 
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Arimo:400,700,400italic">
         <link rel="stylesheet" href="assets/css/fonts/linecons/css/linecons.css">
-        <link rel="stylesheet" href="assets/css/fonts/fontawesome/css/font-awesome.css">
+        <link rel="stylesheet" href="assets/css/fonts/fontawesome/css/font-awesome.min.css">
         <link rel="stylesheet" href="assets/css/bootstrap.css">
         <link rel="stylesheet" href="assets/css/xenon-core.css">
         <link rel="stylesheet" href="assets/css/xenon-forms.css">
@@ -24,35 +30,36 @@
 
         <script src="assets/js/jquery-1.11.1.min.js"></script>
 
-        <!--<script>
-            jQuery(document).ready(function ($) {
-                if (localStorage.getItem("username") != null) {
-                    if (localStorage.getItem("typology") == "Professore") {
-                        window.location.href = "offertaFormativa/professore/offertaFormativaProfessore.html";
-                    }
-                    if (localStorage.getItem("typology") == "Studente") {
-                        window.location.href = "offertaFormativa/studente/offertaFormativaStudente.html";
-                    }
-                    if (localStorage.getItem("typology") == "Organizzazione") {
-                        window.location.href = "tirocinio/organizzazione/gestioneTirocinio&PlacementOrganizzazione.html";
-                    }
-                    if (localStorage.getItem("typology") == "Amministratore") {
-                        window.location.href = "offertaFormativa/amministratore/offertaFormativaAmministratore.html";
-                    }
-                }
-            });
-        </script>-->
-
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-                <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-                <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]-->
-
-
+        <c:choose>
+            <c:when test="${sessionScope.loginError != null}">
+                <script type="text/javascript">
+                    $(function () {
+                        $("#loginErrorDialog").modal();
+                    });
+                </script>
+            </c:when>
+        </c:choose>
     </head>
-    <body class="page-body">
 
+    <div id="loginErrorDialog" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Errore nell'autenticazione</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Le tue credenziali sono errate.<br>
+                        Controlla email e/o password.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <body>
+    <body class="page-body">
         <nav class="navbar horizontal-menu navbar-fixed-top"><!-- set fixed position by adding class "navbar-fixed-top" -->
 
             <div class="navbar-inner">
@@ -86,7 +93,7 @@
                 <!-- main menu -->
 
                 <ul class="navbar-nav">
-                    <li class="opened active">
+                    <li>
                         <a href="index.jsp">
                             <i class="fa fa-home"></i>
                             <span class="title">Home</span>
@@ -96,7 +103,7 @@
                         <a href="${pageContext.request.contextPath}/ShowTeachingOfferServlet">
                             <i class="linecons-desktop"></i>
                             <span class="title">Offerta Formativa</span>
-                        </a>
+                        </a>		
                     </li>
                     <li>
                         <a href="gestioneTesi.html">
@@ -135,62 +142,83 @@
                         </ul>
                     </li>
                 </ul>
+
+
+
                 <!-- notifications and other links -->
                 <ul class="nav nav-userinfo navbar-right">
-                    <c:choose>
-                        <c:when test="${sessionScope.person == null}">
-                            <li>
-                                <a href="register.jsp">
-                                    <i class="fa-pencil"></i>
-                                    <span class="title">Registrazione</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="login.jsp">
-                                    <i class="fa-user"></i>
-                                    <span class="title">Login</span>
-                                </a>
-                            </li>
-                        </c:when>
-                        <c:when test="${sessionScope.person != null}">
-                            <li>
-                                <i class="fa-user"></i>
-                                <span class="title">Ciao ${sessionScope.person.name}!</span>
-                            </li>
-                            <li>
-                                <a href="logout">
-                                    <i class="fa-off"></i>
-                                    <span class="title">Logout</span>
-                                </a>
-                            </li>
-                        </c:when>
-                    </c:choose>
+                    <li>
+                        <a href="register.html">
+                            <i class="fa-pencil"></i>
+                            <span class="title">Registrazione</span>
+                        </a>
+                    </li>
+                    <li class="opened active">
+                        <a href="login.html">
+                            <i class="fa-user"></i>
+                            <span class="title">Login</span>
+                        </a>
+                    </li>
                 </ul>
 
             </div>
 
         </nav>
-
         <!--BODY-->
 
         <div class="page-container">
             <div class="main-content">
-                <div class="row">
-                    <div class="col-sm-1"></div>
-                    <div class="col-sm-10">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                Titolo del Pannello (può anche essere eliminato)
-                            </div>
-                            <div class="panel-body">
-                                <p>Folly words widow one downs few age every seven. If miss part by fact he park just shew. Discovered had get considered projection who favourable. Necessary up knowledge it tolerably.</p>
-                                <p>Unwilling departure education is be dashwoods or an. Use off agreeable law unwilling sir deficient curiosity instantly. Easy mind life fact with see has bore ten. Parish any chatty can elinor direct for former. Up as meant widow equal an share least.</p>
+                <div class="col-sm-2"></div>
+                <div class="col-sm-8">
+                    <div class="panel panel-default">
 
-                            </div>
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Accedi a MITPlatform</h3>
+                        </div>
+
+                        <div class="panel-body">
+                            <form id="loginForm" method="POST" action="login">
+
+                                <div id="form-group-username" class="form-group">
+                                    <label>Username:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa-user"></i></span>
+                                        <input type="text" id="username" class="form-control" name="username" placeholder="Inserisci lo username" required/>
+                                    </div>
+                                    <span id="validate_username" style="color:#cc3f44"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Password:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa-key"></i></span>
+                                        <input type="password" id="password" class="form-control" name="password" placeholder="Inserisci la password" required/>
+                                    </div>
+                                    <span id="validate_password" style="color:#cc3f44"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>
+                                        <input type="checkbox" class="cbr cbr-done" id="rememberMeForLogin" checked>
+                                        Ricordami la prossima volta
+                                    </label>
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <div id="messageControl" align="center">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="submit" id="signin" class="btn btn-blue" value="Sign in"> 
+                                    <button type="reset"  id="reset"  class="btn btn-white">Reset</button>
+                                </div>
+                            </form>
+
                         </div>
                     </div>
-                    <div class="col-sm-1"></div>
                 </div>
+                <div class="col-sm-2"></div>
             </div>
         </div>
 
@@ -202,10 +230,15 @@
         <script src="assets/js/joinable.js"></script>
         <script src="assets/js/xenon-api.js"></script>
         <script src="assets/js/xenon-toggles.js"></script>
+        <script src="assets/js/jquery-ui/jquery-ui.min.js"></script>
 
+        <!-- Imported scripts on this page -->
+        <script src="assets/js/tocify/jquery.tocify.min.js"></script>
+
+        <!-- Imported scripts on this page -->
+        <script src="assets/js/jquery-validate/jquery.validate.min.js"></script>
 
         <!-- JavaScripts initializations and stuff -->
         <script src="assets/js/xenon-custom.js"></script>
-
     </body>
 </html>

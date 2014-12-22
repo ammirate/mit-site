@@ -320,6 +320,20 @@
                         table.innerHTML = stringa;
                     });
                 }
+                function loadTeaching(i) {
+                    $.get('GetTeachingServlet?department=' + i, function (responseJson) {
+                        var $select = $('#cycles');
+                        $select.find('option').remove();
+                        $('<option>').val("NoCycle").text("Seleziona il Ciclo").appendTo($select);
+                        $.each(responseJson, function (key, value) {
+                            $('<option>').val(value.cycle_number).text(value.title).appendTo($select);
+                        });
+                        $('#cycles').val("NoCycle");
+                        $("#cycles").select2({allowClear: true}).on('select2-open', function () {
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
+                    });
+                }
             </script>
             <script src="assets/js/bootstrap.min.js"></script>
             <script src="assets/js/TweenMax.min.js"></script>
@@ -330,8 +344,6 @@
             <link rel="stylesheet" href="assets/js/select2/select2.css">
             <link href="assets/js/select2/select2-bootstrap.css" rel="stylesheet" type="text/css"/>
             <script src="assets/js/select2/select2.min.js"></script>
-            <script src="assets/js/jquery-validate/jquery.validate.min.js" id="script-resource-7"></script>
-            <script src="assets/js/jquery-validate/localization/messages_it.min.js" type="text/javascript"></script>
             <!-- JavaScripts initializations and stuff -->
             <script src="assets/js/xenon-custom.js"></script>
 

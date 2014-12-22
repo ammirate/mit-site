@@ -2,24 +2,10 @@
     Document   : ShowTeachingOfferList
     Author     : Davide
 --%>
-<%@page import="it.unisa.model.Cycle"%>
-<%@page import="it.unisa.model.Degree"%>
-<%@page import="it.unisa.model.Department"%>
-<%@page import="java.util.Collections"%>
-<%@page import="java.util.Arrays"%>
-<%@page import="java.util.List"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="it.unisa.offerta_formativa.beans.Curriculum"%>
-<%@page import="it.unisa.offerta_formativa.beans.Teaching"%>
 
-<%@page import="java.util.ArrayList"%>
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1"%>
-
-<%! public HashMap< Department, HashMap<Degree, HashMap<Curriculum, ArrayList<Teaching>>>> map;
-    public ArrayList<Cycle> cycle;
-    public String cycleTitle;
-%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -60,9 +46,6 @@
 
     </head>
     <body class="page-body" onload="loadDep()">
-        <% map = (HashMap< Department, HashMap<Degree, HashMap<Curriculum, ArrayList<Teaching>>>>) request.getAttribute("map");
-            cycle = (ArrayList<Cycle>) request.getAttribute("cycles");
-        %>
         <nav class="navbar horizontal-menu navbar-fixed-top">
             <!-- set fixed position by adding class "navbar-fixed-top" -->
 
@@ -181,9 +164,28 @@
                                 </script>
 
                                 <div class="row">
+                                    <div class="form-group col-sm-6">
+                                        <label style="color: black; font-weight: bold">Dipartimento:</label><select name="department" class="form-control" id="department" onchange="loadCycle(this.value);">
+                                            <option> Seleziona il Dipartimento </option>
+                                        </select> 
+
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <label style="color: black; font-weight: bold">Ciclo:</label><select name="cycle" class="form-control" id="cycles" onchange="loadDegree();" >
+                                        </select> 
+                                    </div>
+
+                                    <div> <br> </div>
+                                    <div> <br> </div>
+                                    <div> <br> </div>
+
+                                </div>
+
+                                <div class="row">
                                     <div class="col-md-12">
-                                        <div class="panel-group panel-group-joined" id="accordion-teaching-offer">
-                                           
+                                        <div class="panel panel-group" id="accordion-teaching-offer" >
+
                                         </div>
                                     </div>
                                 </div>
@@ -193,14 +195,7 @@
                                 <!-- Add class "sticky" to  always stick the footer to the end of page (if page contents is small) -->
                                 <!-- Or class "fixed" to  always fix the footer to the end of page -->
 
-
-
-
-
                             </div>
-
-
-
 
                         </div>
 
@@ -210,14 +205,6 @@
                     <div class="col-sm-1"></div>
 
                 </div>                                            
-
-
-
-
-
-
-
-
 
                 <footer class="main-footer sticky footer-type-1">
 
@@ -245,27 +232,57 @@
                     <div class="loader-2"></div>
                 </div>
 
-
-
             </div>
             <!-- Bottom Scripts -->
             <script type="text/javascript">
+                jQuery(document).ready(function ($)
+                {
+                    $("#department").select2({allowClear: true}).on('select2-open', function () {
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
+                    $("#cycles").select2({allowClear: true}).on('select2-open', function () {
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
+                });
+                function loadCycle(i) {
+                    $.get('GetCycleServlet?department=' + i, function (responseJson) {
+                        var $select = $('#cycles');
+                        $select.find('option').remove();
+                        $('<option>').val("NoCycle").text("Seleziona il Ciclo").appendTo($select);
+                        $.each(responseJson, function (key, value) {
+                            $('<option>').val(value.cycle_number).text(value.title).appendTo($select);
+                        });
+                        $('#cycles').val("NoCycle");
+                        $("#cycles").select2({allowClear: true}).on('select2-open', function () {
+                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                        });
+                    });
+                }
                 function loadDep() {
+                    $.get('GetDepartmentServlet', function (responseJson) {
+                        var $select = $('#department');
+                        $.each(responseJson, function (key, value) {
+                            $('<option>').val(value.departmentAbbreviation).text(value.title).appendTo($select);
+                        });
+                    });
+                }
+                function loadDegree() {
+                    var cycle = $("#cycles option:selected").val();
                     var div = document.getElementById("accordion-teaching-offer");
-                   $.get('GetDepartmentServlet', function (responseJson) {
-                        var stringa= "";
+                    $.get('GetDegreeServlet?cycle=' + cycle, function (responseJson) {
+                        var stringa = "";
                         $.each(responseJson, function (key, value) {
                             stringa += "<div class='panel panel-default'>";
                             stringa += "<div class='panel-heading'>";
                             stringa += "<h4 class='panel-title'>";
-                            stringa += "<a data-toggle='collapse' href='#" + value.departmentAbbreviation + "' class='collapsed'>";
+                            stringa += "<a data-toggle='collapse' href='#" + value.matricula + "' class='collapsed'>";
                             stringa += value.title + "</a></h4></div>";
-                            stringa += "<div id='" + value.departmentAbbreviation + "' class='panel-collapse collapse'>";
+                            stringa += "<div id='" + value.matricula + "' class='panel-collapse collapse'>";
                             stringa += "<div class='panel-body'>";
                             stringa += "blabla";
                             stringa += "</div></div></div>";
                         });
-                     
+
                         div.innerHTML = stringa;
                     });
                 }
@@ -276,6 +293,9 @@
             <script src="assets/js/joinable.js"></script>
             <script src="assets/js/xenon-api.js"></script>
             <script src="assets/js/xenon-toggles.js"></script>
+            <link rel="stylesheet" href="assets/js/select2/select2.css">
+            <link href="assets/js/select2/select2-bootstrap.css" rel="stylesheet" type="text/css"/>
+            <script src="assets/js/select2/select2.min.js"></script>
             <!-- JavaScripts initializations and stuff -->
             <script src="assets/js/xenon-custom.js"></script>
 

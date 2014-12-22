@@ -1,5 +1,12 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%-- 
+    Document   : indexLog
+    Created on : 4-dic-2014, 11.19.29
+    Author     : gemmacatolino
+--%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -23,32 +30,6 @@
         <link rel="stylesheet" href="assets/css/custom.css">
 
         <script src="assets/js/jquery-1.11.1.min.js"></script>
-
-        <!--<script>
-            jQuery(document).ready(function ($) {
-                if (localStorage.getItem("username") != null) {
-                    if (localStorage.getItem("typology") == "Professore") {
-                        window.location.href = "offertaFormativa/professore/offertaFormativaProfessore.html";
-                    }
-                    if (localStorage.getItem("typology") == "Studente") {
-                        window.location.href = "offertaFormativa/studente/offertaFormativaStudente.html";
-                    }
-                    if (localStorage.getItem("typology") == "Organizzazione") {
-                        window.location.href = "tirocinio/organizzazione/gestioneTirocinio&PlacementOrganizzazione.html";
-                    }
-                    if (localStorage.getItem("typology") == "Amministratore") {
-                        window.location.href = "offertaFormativa/amministratore/offertaFormativaAmministratore.html";
-                    }
-                }
-            });
-        </script>-->
-
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-                <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-                <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]-->
-
 
     </head>
     <body class="page-body">
@@ -82,7 +63,9 @@
                 </div>
 
                 <div class="navbar-mobile-clear"></div>
-
+                
+                
+                     
                 <!-- main menu -->
 
                 <ul class="navbar-nav">
@@ -140,7 +123,7 @@
                     <c:choose>
                         <c:when test="${sessionScope.person == null}">
                             <li>
-                                <a href="register.jsp">
+                                <a href="register.html">
                                     <i class="fa-pencil"></i>
                                     <span class="title">Registrazione</span>
                                 </a>
@@ -174,6 +157,22 @@
         <!--BODY-->
 
         <div class="page-container">
+            
+               <div class="sidebar-menu toggle-others">
+                <div class="sidebar-menu-inner">	
+                    <ul id="main-menu" class="main-menu">
+                        <!-- add class "multiple-expanded" to allow multiple submenus to open -->
+                        <!-- class "auto-inherit-active-class" will automatically add "active" class for parent elements who are marked already with class "active" -->
+                        <li id="offertaTirocini" class="opened active">
+                            <a href="../../tirocinio/organizzazione/gestioneTirocinio&PlacementOrganizzazione.html">
+                                <i class="linecons-cog"></i>
+                                <span class="title">Offerta Tirocinio</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
             <div class="main-content">
                 <div class="row">
                     <div class="col-sm-1"></div>
