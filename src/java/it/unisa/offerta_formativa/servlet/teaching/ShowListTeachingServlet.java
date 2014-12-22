@@ -20,12 +20,10 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ShowListTeachingServlet", urlPatterns = {"/ShowListTeachingServlet"})
 public class ShowListTeachingServlet extends HttpServlet {
-    private final DepartmentManager deptMng;
-    private final CycleManager cycleMng;
+    
 
     public ShowListTeachingServlet() {
-        deptMng = DepartmentManager.getInstance();
-        cycleMng = CycleManager.getInstance();
+        
     }
 
     
@@ -57,8 +55,6 @@ public class ShowListTeachingServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
             String path="/offertaFormativaJSP/amministratore/";
-            request.setAttribute("departments",deptMng.getAllDepartments());
-            request.setAttribute("cycles", cycleMng.getAllCycles());
             request.getRequestDispatcher(path+"listTeaching.jsp").forward(request, response);
     }
 

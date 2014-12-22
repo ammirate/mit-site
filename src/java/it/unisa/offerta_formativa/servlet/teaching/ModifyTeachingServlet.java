@@ -29,8 +29,8 @@ import javax.servlet.http.HttpServletResponse;
 public class ModifyTeachingServlet extends HttpServlet {
 
     private DegreeManager degreeMng = null;
-    private ClassManager classMng =null;
-    private ModuleManager moduleMng=null;
+    private ClassManager classMng = null;
+    private ModuleManager moduleMng = null;
     private TeachingManager teachingMng = null;
     private CurriculumManager currMng;
 
@@ -41,9 +41,7 @@ public class ModifyTeachingServlet extends HttpServlet {
         teachingMng = TeachingManager.getInstance();
         currMng = CurriculumManager.getInstance();
     }
-    
-    
-    
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -56,7 +54,7 @@ public class ModifyTeachingServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
     }
 
     /**
@@ -69,33 +67,46 @@ public class ModifyTeachingServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if(request.getParameterMap().containsKey("oldMatricula")){
-            //FACCIO PRIMA L'UPDATE DEL TEACHING
-            String oldMatricula = request.getParameter("oldMatricula");
-            String newMatricula = request.getParameter("newMatricula");
-            Teaching t = new Teaching(
-                        request.getParameter("title"),
-                        request.getParameter("abbreviation"),
-                        request.getParameter("oldMatricula"),
-                        request.getParameter("link"),
-                        Integer.parseInt(request.getParameter("year")),
-                        Integer.parseInt(request.getParameter("semester")),
-                        (Integer.parseInt(request.getParameter("active"))==1)?true:false);
-            
-            if(!request.getParameter("newMatricula").equalsIgnoreCase(oldMatricula)){ //se diversa da oldMatricula
-                t.setMatricula(newMatricula);
-                teachingMng.updateTeaching(oldMatricula,t);
-                
-            }else{
-                teachingMng.updateTeaching(oldMatricula,t);
-            }
-            //POI QUELLA DEL CURRICULUM ASSOCIATO SE NECESSARIO
-            if(request.getParameterMap().containsKey("newCurriculumMatricula")){
+        if (request.getParameterMap().containsKey("oldMatricula")) {
+            try {
+                if (checkFields(request).equalsIgnoreCase("")) {
+                    //FACCIO PRIMA L'UPDATE DEL TEACHING
+                    String oldMatricula = request.getParameter("oldMatricula");
+                    String newMatricula = request.getParameter("newMatricula");
+                    Teaching t = new Teaching(
+                            request.getParameter("title"),
+                            request.getParameter("abbreviation"),
+                            request.getParameter("oldMatricula"),
+                            request.getParameter("link"),
+                            Integer.parseInt(request.getParameter("year")),
+                            Integer.parseInt(request.getParameter("semester")),
+                            (Integer.parseInt(request.getParameter("active")) == 1) ? true : false);
+
+                    if (!request.getParameter("newMatricula").equalsIgnoreCase(oldMatricula)) { //se diversa da oldMatricula
+                        t.setMatricula(newMatricula);
+                    }
+                    try {
+                        teachingMng.updateTeaching(oldMatricula, t);
+                    } catch (Exception e) {
+                        request.setAttribute("error", true);
+                        request.setAttribute("errorMessage", e.getMessage());
+                        request.getRequestDispatcher("/offertaFormativaJSP/amministratore/modifyTeaching.jsp").forward(request, response);
+                    }
+                    //POI QUELLA DEL CURRICULUM ASSOCIATO SE NECESSARIO
+                    if (request.getParameterMap().containsKey("newCurriculumMatricula")) {
                 //DA IMPLEMETARE!!
-                //currMng.updateCurriculumRelatedWithTeaching(oldCurrMatricula, newCurrMatricula,newMatricula);
-            
+                        //currMng.updateCurriculumRelatedWithTeaching(oldCurrMatricula, newCurrMatricula,newMatricula);
+
+                    }
+                } else {
+                    throw new Exception(checkFields(request));
+                }
+            } catch (Exception e) {
+                request.setAttribute("error", true);
+                request.setAttribute("errorMessage", checkFields(request));
+                request.getRequestDispatcher("/offertaFormativaJSP/amministratore/modifyTeaching.jsp");
             }
-            
+
         }
     }
 
@@ -109,4 +120,22 @@ public class ModifyTeachingServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    public String checkFields(HttpServletRequest request) {
+        if (request.getParameter("matricula").length() < 10 || request.getParameter("matricula").length() > 10) {
+            return "Matricola errata. Non può essere diversa da 10 caratteri.";
+        }
+        if (request.getParameter("abbreviation").length() < 2) {
+            return "Abbreviazione errata. Deve essere composta da almeno 2 caratteri.";
+        }
+        if (request.getParameter("title").length() < 3) {
+            return "Nome errato. Deve essere composto da almeno 4 caratteri.";
+        }
+        if (Integer.parseInt(request.getParameter("year")) < 1) {
+            return "Anno selezionato errato. Deve essere diverso da zero.";
+        }
+        if (Integer.parseInt(request.getParameter("semester")) < 1) {
+            return "Semestre errato. Deve essere diverso da zero.";
+        }
+        return "";
+    }
 }
