@@ -3,6 +3,8 @@
     Author     : Davide
 --%>
 
+<%@page import="it.unisa.offerta_formativa.manager.DepartmentManager"%>
+<%@page import="it.unisa.offerta_formativa.beans.Department"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1"%>
 
@@ -221,11 +223,9 @@
                                 <div> <br> </div><div> <br> </div>    
 
                                 <div class="row col-sm-12">
-
-                                    <table class="table table-hover responsive" id="degree">
+                                    <table class="table table-hover table-striped responsive" id="degree">
 
                                     </table>
-
                                 </div>
 
                                 <!-- Main Footer -->
@@ -284,6 +284,10 @@
                         $.each(responseJson, function (key, value) {
                             $('<option>').val(value.cycle_number).text(value.title).appendTo($select);
                         });
+                        $('#cycles').val('NoCycle');
+                        $("#cycles").select2({allowClear: true}).on('select2-open', function () {
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
                     });
                 }
                 function loadDep() {
