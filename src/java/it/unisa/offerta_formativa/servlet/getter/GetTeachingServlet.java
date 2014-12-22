@@ -6,11 +6,9 @@
 package it.unisa.offerta_formativa.servlet.getter;
 
 import com.google.gson.Gson;
-import it.unisa.offerta_formativa.beans.Degree;
 import it.unisa.offerta_formativa.beans.Teaching;
 import it.unisa.offerta_formativa.manager.TeachingManager;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -26,13 +24,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "GetTeachingServlet", urlPatterns = {"/GetTeachingServlet"})
 public class GetTeachingServlet extends HttpServlet {
+
     private TeachingManager teachingMng;
 
     public GetTeachingServlet() {
         teachingMng = TeachingManager.getInstance();
     }
-
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -46,50 +43,48 @@ public class GetTeachingServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            doPost(request,response);
-            if(request.getParameterMap().containsKey("curriculum")){
-                
-                        String curriculum= request.getParameter("curriculum");
-                        /**
-			response.setContentType("text/plain");  
-			response.setCharacterEncoding("UTF-8"); 
-			String toRet="";
-			for(Teaching t : teachingMng.getTeachingsByCurriculum(curriculum)){
-				toRet+="<tr>" +
-"                                      <td>"+t.getMatricula()+"</td>" +
-"                                      <td>"+t.getTitle()+"</td>" +
-"                                      <td>"+t.getAbbreviation()+"</td>" +
-"                                      <td>"+t.getLink()+"</td>" +
-"                                      <td>"+t.getYear()+"</td>" +
-"                                      <td>"+t.getSemester()+"</td>" +
-"                                      <td>"+((t.isActive())?"Attivo":"Disattivo")+"</td>"+
-                                       "<td><a href=ShowModifyTeachingServlet?matricula="+t.getMatricula()+
-                                        "&curriculumMatricula="+curriculum+">Modifica</a></td>"+
-                                        "<td><a href=ShowAssociationServlet?matricula="+t.getMatricula()+
-"                                            >Dettagli</a></td></tr>>"; 
-			}
-			response.getWriter().write(toRet);
-                        */
-                        //****************************************
-                        
-                        
-                ArrayList< HashMap<String,String>> arrlist = new ArrayList<HashMap<String,String>>(); 
-                for(Teaching t : teachingMng.getTeachingsByCurriculum(curriculum)){
-                    HashMap<String,String> map = new HashMap<String,String>();
-                    map.put("matricula", t.getMatricula());
-                    map.put("title", t.getTitle());
-                    map.put("abbreviation", t.getAbbreviation());
-                    map.put("link", t.getLink());
-                    map.put("year", ""+t.getYear());
-                    map.put("semester", ""+t.getSemester());
-                    map.put("active", ((t.isActive())?"Attivo":"Disattivo"));
-                    arrlist.add(map);
-                }
-                String finalJSON = new Gson().toJson(arrlist);
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-                response.getWriter().write(finalJSON);
+        doPost(request, response);
+        ArrayList<Teaching> teachings = new ArrayList<Teaching>();
+        if (request.getParameterMap().containsKey("curriculum")) {
+
+            teachings = (ArrayList<Teaching>) teachingMng.getTeachingsByCurriculum(request.getParameter("curriculum"));
+            /**
+             * response.setContentType("text/plain");
+             * response.setCharacterEncoding("UTF-8"); String toRet="";
+             * for(Teaching t :
+             * teachingMng.getTeachingsByCurriculum(curriculum)){ toRet+="<tr>"
+             * + "                                      <td>"+t.getMatricula()+"</td>" + "                                      <td>"+t.getTitle()+"</td>"
+             * + "                                      <td>"+t.getAbbreviation()+"</td>" + "
+             * <td>"+t.getLink()+"</td>" + "                                      <td>"+t.getYear()+"</td>" + "
+             *                                      <td>"+t.getSemester()+"</td>"
+             * + "
+             * <td>"+((t.isActive())?"Attivo":"Disattivo")+"</td>"+ * "<td><a href=ShowModifyTeachingServlet?matricula="+t.getMatricula()+
+             * "&curriculumMatricula="+curriculum+">Modifica</a></td>"+ * "<td><a href=ShowAssociationServlet?matricula="+t.getMatricula()+
+             * " >Dettagli</a></td></tr>>"; } response.getWriter().write(toRet);
+             */
+            //****************************************
+
+        } else {
+            teachings = teachingMng.getAllTeachings();
         }
+        ArrayList< HashMap<String, String>> arrlist = new ArrayList<HashMap<String, String>>();
+        Collections.sort(teachings);
+        for (Teaching t : teachings) {
+            HashMap<String, String> map = new HashMap<String, String>();
+            map.put("matricula", t.getMatricula());
+            map.put("title", t.getTitle());
+            map.put("abbreviation", t.getAbbreviation());
+            map.put("link", t.getLink());
+            map.put("year", "" + t.getYear());
+            map.put("semester", "" + t.getSemester());
+            map.put("active", ((t.isActive()) ? "Attivo" : "Disattivo"));
+            arrlist.add(map);
+        }
+        String finalJSON = new Gson().toJson(arrlist);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(finalJSON);
+
     }
 
     /**
