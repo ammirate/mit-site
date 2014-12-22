@@ -7,6 +7,7 @@ import it.unisa.offerta_formativa.beans.Teaching;
 import it.unisa.offerta_formativa.manager.ClassManager;
 import it.unisa.offerta_formativa.manager.CurriculumManager;
 import it.unisa.offerta_formativa.manager.Exceptions.ClassPartitionException;
+import it.unisa.offerta_formativa.manager.Exceptions.CurriculumException;
 import it.unisa.offerta_formativa.manager.Exceptions.ModuleException;
 import it.unisa.offerta_formativa.manager.Exceptions.TeachingException;
 import it.unisa.offerta_formativa.manager.ModuleManager;
@@ -62,7 +63,7 @@ public class InsertTeachingFacade {
         listProf = list;
     }
     
-    public boolean storeInDB() throws TeachingException, ClassPartitionException, ModuleException{
+    public boolean storeInDB() throws TeachingException, ClassPartitionException, ModuleException, CurriculumException{
         teachingMng.createTeaching(teaching);
         for(int i=0;i<listClass.size();i++){
             classMng.createClass(listClass.get(i)); 
