@@ -3,50 +3,72 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unisa.offerta_formativa.beans;
+package it.unisa.model;
 
 /**
  *
- * @author Antonio
+ * @author gemmacatolino
  */
 public class Person {
-
-    private String SSN;
+    
+    private String ssn;
     private String name;
     private String surname;
     private String phone;
     private String city;
-    private String address;
+    private String address; 
     private String zipCode;
-    private String cityzenship;
     private String gender;
-    private String accountEmail;
-    private String departmentAbbreviation;
+    private String citizenship;
     private String webPage;
     private String university;
     private String matricula;
     private String position;
-    private int cyle;
+    private Cycle cycle;
+    private Department department;
+    private Account account;
+    private Degree degree;
 
-    public Person(String ssn) {
-        this.SSN = ssn;
+    public Degree getDegree() {
+        return degree;
     }
 
-    public Person(String ssn, String accountEmail,String name, String surname) {
-        this.SSN = ssn;
-        this.accountEmail = accountEmail;
-        this.name=name;
-        this.surname=surname;
+    public void setDegree(Degree degree) {
+        this.degree = degree;
+    }
+    
+    public Account getAccount() {
+        return account;
     }
 
-    public String getSSN() {
-        return SSN;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
-    public void setSSN(String SSN) {
-        this.SSN = SSN;
+    public Department getDepartment() {
+        return department;
     }
 
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    public Cycle getCycle() {
+        return cycle;
+    }
+
+    public void setCycle(Cycle cycle) {
+        this.cycle = cycle;
+    }
+
+    public String getSsn() {
+        return ssn;
+    }
+
+    public void setSsn(String ssn) {
+        this.ssn = ssn;
+    }
+    
     public String getName() {
         return name;
     }
@@ -95,14 +117,6 @@ public class Person {
         this.zipCode = zipCode;
     }
 
-    public String getCityzenship() {
-        return cityzenship;
-    }
-
-    public void setCityzenship(String cityzenship) {
-        this.cityzenship = cityzenship;
-    }
-
     public String getGender() {
         return gender;
     }
@@ -111,20 +125,12 @@ public class Person {
         this.gender = gender;
     }
 
-    public String getAccountEmail() {
-        return accountEmail;
+    public String getCitizenship() {
+        return citizenship;
     }
 
-    public void setAccountEmail(String accountEmail) {
-        this.accountEmail = accountEmail;
-    }
-
-    public String getDepartmentAbbreviation() {
-        return departmentAbbreviation;
-    }
-
-    public void setDepartmentAbbreviation(String departmentAbbreviation) {
-        this.departmentAbbreviation = departmentAbbreviation;
+    public void setCitizenship(String citizenship) {
+        this.citizenship = citizenship;
     }
 
     public String getWebPage() {
@@ -157,14 +163,6 @@ public class Person {
 
     public void setPosition(String position) {
         this.position = position;
-    }
-
-    public int getCyle() {
-        return cyle;
-    }
-
-    public void setCyle(int cyle) {
-        this.cyle = cyle;
     }
 
 }

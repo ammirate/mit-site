@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import it.unisa.offerta_formativa.beans.Cycle;
 import it.unisa.offerta_formativa.beans.Degree;
-import it.unisa.offerta_formativa.manager.CycleManager;
-import it.unisa.offerta_formativa.manager.DegreeManager;
+import it.unisa.integrazione.database.CycleManager;
+import it.unisa.integrazione.database.DegreeManager;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

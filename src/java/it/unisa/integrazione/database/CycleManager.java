@@ -1,4 +1,4 @@
-package it.unisa.offerta_formativa.manager;
+package it.unisa.integrazione.database;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -6,18 +6,19 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import it.unisa.offerta_formativa.beans.Cycle;
+import it.unisa.model.Cycle;
+import it.unisa.offerta_formativa.manager.CurriculumManager;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  *
- * @author Alessandro, Antonio
+ * @author Gemma, Alessandro, Antonio
  */
 public class CycleManager {
 
     private static CycleManager instance = null;
-    private final Connection conn = null;
+
     private Statement stmt;
     private ResultSet rs;
     private static final String TABLE = "cycle";
@@ -33,21 +34,22 @@ public class CycleManager {
      * @return true if the cycle has been inserted, else false
      */
     public boolean createCycle(Cycle c) {
-
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
-
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
             String query = "INSERT INTO " + TABLE
                     + "(cycle_number,title) VALUES ("
                     + c.getInsertQuery() + ")";
             if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
                 return true;
             }
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
-           DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return false;
     }
@@ -59,21 +61,22 @@ public class CycleManager {
      * @return the cycle red
      */
     public Cycle readCycle(int idCycle) {
-
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
-
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
             String query = "SELECT * FROM " + TABLE
                     + " WHERE " + PKEY + "=" + idCycle;
 //            System.out.println("READ QUERY" + query);
             rs = stmt.executeQuery(query);
+            connection.commit();
             while (rs.next()) {
                 return getCycleFromResultSet(rs);
             }
         } catch (SQLException ex) {
             Logger.getLogger(CurriculumManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-           DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return null;
     }
@@ -86,29 +89,27 @@ public class CycleManager {
      * @return
      */
     public boolean updateCycle(int idOldCycle, Cycle newCycle) {
-
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
-
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
             String query = "UPDATE " + TABLE + " SET " + newCycle.toString() + " WHERE "
                     + PKEY + "=" + idOldCycle;
 //            System.out.println("update QUERY " + query);
 
             if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
                 return true;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RuntimeException("Update Query failed!");
         } finally {
-           DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return false;
     }
 
-    public boolean deleteCycle(int c) {
-        return false;
-    }
 
     /**
      * return all the cycles in the DB
@@ -117,12 +118,14 @@ public class CycleManager {
      */
     public ArrayList<Cycle> getAllCycles() {
         ArrayList<Cycle> toReturn = new ArrayList<Cycle>();
-
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
-
-//            System.out.println("SELECT * FROM " + TABLE);
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
+//          System.out.println("SELECT * FROM " + TABLE);
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " order by title");
+            connection.commit();
+
             while (rs.next()) {
                 toReturn.add(new Cycle(rs.getInt("cycle_number"), rs.getString("title")));
             }
@@ -130,7 +133,7 @@ public class CycleManager {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
-           DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return toReturn;
     }
@@ -166,4 +169,12 @@ public class CycleManager {
         return null;
     }
 
+    // ADAPTER METHODS
+    public void add(Cycle pCycle) throws SQLException {
+        this.createCycle(pCycle);
+    }
+
+    public Cycle getCycleByCycleNumber(int pCycleNumber) throws SQLException {
+        return this.readCycle(pCycleNumber);
+    }
 }

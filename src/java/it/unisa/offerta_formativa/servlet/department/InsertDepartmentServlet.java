@@ -7,7 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import it.unisa.offerta_formativa.manager.DepartmentManager;
+import it.unisa.integrazione.database.DepartmentManager;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 

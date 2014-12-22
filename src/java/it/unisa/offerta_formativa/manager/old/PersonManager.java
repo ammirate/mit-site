@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unisa.offerta_formativa.manager;
+package it.unisa.offerta_formativa.manager.old;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import it.unisa.offerta_formativa.beans.Person;
+import it.unisa.model.Person;
 
 /**
  *
@@ -97,7 +97,11 @@ public class PersonManager {
             String position = rs.getString("position");
             int cyle = rs.getInt("cycle");
 
-            Person p = new Person(ssn, accountEmail, name, surname);
+            Person p = new Person();
+            p.setSsn(ssn);
+           // p.setAccount(AccountManager.getInstance().read(accountEmail));
+            p.setName(name);
+            p.setSurname(surname);
             return p;
 
         } catch (SQLException ex) {

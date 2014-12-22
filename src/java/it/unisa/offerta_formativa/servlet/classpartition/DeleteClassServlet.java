@@ -6,8 +6,8 @@
 package it.unisa.offerta_formativa.servlet.classpartition;
 
 import it.unisa.offerta_formativa.manager.ClassManager;
-import it.unisa.offerta_formativa.manager.CycleManager;
-import it.unisa.offerta_formativa.manager.DepartmentManager;
+import it.unisa.integrazione.database.CycleManager;
+import it.unisa.integrazione.database.DepartmentManager;
 import it.unisa.offerta_formativa.manager.ModuleManager;
 import it.unisa.offerta_formativa.manager.TeachingManager;
 import java.io.IOException;

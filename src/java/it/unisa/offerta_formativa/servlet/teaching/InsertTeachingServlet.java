@@ -16,7 +16,7 @@ import it.unisa.offerta_formativa.beans.ProfModuleClass;
 import it.unisa.offerta_formativa.beans.Teaching;
 import it.unisa.offerta_formativa.facade.InsertTeachingFacade;
 import it.unisa.offerta_formativa.manager.ClassManager;
-import it.unisa.offerta_formativa.manager.DegreeManager;
+import it.unisa.integrazione.database.DegreeManager;
 import it.unisa.offerta_formativa.manager.ModuleManager;
 import it.unisa.offerta_formativa.manager.TeachingManager;
 import it.unisa.offerta_formativa.moodle.manager.MoodleConnectionManager;

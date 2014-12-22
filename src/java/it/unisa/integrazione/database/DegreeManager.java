@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unisa.offerta_formativa.manager;
+package it.unisa.integrazione.database;
 
+import it.unisa.integrazione.database.exception.ConnectionException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import it.unisa.offerta_formativa.beans.Degree;
+import it.unisa.model.Degree;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -15,11 +16,10 @@ import java.util.List;
 
 /**
  *
- * @author Alessandro, Antonio
+ * @author Gemma, Antonio
  */
 public class DegreeManager {
 
-    private final Connection conn = null;
     private Statement stmt;
     public static String TABLE = "degree";
     public static String PKEY = "matricula";
@@ -42,8 +42,10 @@ public class DegreeManager {
      * @return true if the insertion was successfull
      */
     public boolean createDegree(Degree degree) {
+        Connection connection = null;      
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
             String query = "INSERT INTO " + TABLE
                     + "(title, "
                     + "matricula,"
@@ -55,13 +57,14 @@ public class DegreeManager {
                     + degree.toStringQueryInsert() + ")";
 //            System.out.println("Insertion query: " + query);
             if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
                 return true;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RuntimeException("Insertion Query failed!");
         } finally {
-           DBConnector.closeConnection();
+           DBConnection.releaseConnection(connection);
         }
         return false;
     }
@@ -74,21 +77,24 @@ public class DegreeManager {
      * @return true if the update was successfull
      */
     public boolean updateDegree(String matricula, Degree degree) {
+       Connection connection = null;      
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
             String query = "UPDATE " + TABLE
                     + " SET " + degree.toString() + " WHERE "
                     + PKEY + "=" + esc + matricula + esc;
             System.out.println(query);
 
             if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
                 return true;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RuntimeException("Update Query failed!");
         } finally {
-           DBConnector.closeConnection();
+           DBConnection.releaseConnection(connection);
         }
         return false;
     }
@@ -100,14 +106,17 @@ public class DegreeManager {
      * @return a Degree object if it is present in the DB, else empty Degree
      * bean
      */
-    public Degree readDegree(String matricula) {
+    public Degree readDegree(String matricula) {      
+        Connection connection = null;
         if (matricula == null || matricula.equals("")) {
             throw new IllegalArgumentException("Can't read a degree from the Database using an empty matricula");
         } else {
             try {
-                stmt = DBConnector.openConnection();
+                connection = DBConnection.getConnection();
+                stmt = connection.createStatement();
                 rs = stmt.executeQuery("SELECT * FROM " + TABLE
                         + " WHERE " + PKEY + "=\"" + matricula + "\"");
+                connection.commit();
                 while (rs.next()) {
                     return getDegreeFromResultSet(rs);
                 }
@@ -115,7 +124,7 @@ public class DegreeManager {
                 ex.printStackTrace();
                 throw new RuntimeException("Read Query failed!");
             } finally {
-               DBConnector.closeConnection();
+               DBConnection.releaseConnection(connection);
             }
         }
         return null;
@@ -128,17 +137,20 @@ public class DegreeManager {
      * @return true if deleted.
      */
     public boolean deleteDegree(String matricula) {
+        Connection connection = null;      
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
             if (stmt.executeUpdate("DELETE FROM " + TABLE
                     + " WHERE " + PKEY + "=\"" + matricula + "\"") == 1) {
+                connection.commit();
                 return true;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RuntimeException("Delete Query failed!");
         } finally {
-           DBConnector.closeConnection();
+           DBConnection.releaseConnection(connection);
         }
         return false;
     }
@@ -150,10 +162,12 @@ public class DegreeManager {
      */
     public ArrayList<Degree> getAllDegrees() {
         ArrayList<Degree> toReturn = new ArrayList<>();
+        Connection connection = null;      
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " order by title");
-
+            connection.commit();
             while (rs.next()) {
                 Degree b = getDegreeFromResultSet(rs);
                 toReturn.add(b);
@@ -162,7 +176,7 @@ public class DegreeManager {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-           DBConnector.closeConnection();
+           DBConnection.releaseConnection(connection);
         }
         return toReturn;
     }
@@ -195,12 +209,15 @@ public class DegreeManager {
     public ArrayList<Degree> getDegreesByDepartment(String abbreviation) {
         String esc = "\"";
         ArrayList<Degree> toReturn = new ArrayList<>();
+        Connection connection = null;      
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE
                     + " WHERE department_abbreviation="
                     + esc + abbreviation + esc
                     + " order by title");
+            connection.commit();
             while (rs.next()) {
                 Degree b = getDegreeFromResultSet(rs);
                 toReturn.add(b);
@@ -208,7 +225,7 @@ public class DegreeManager {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-           DBConnector.closeConnection();
+           DBConnection.releaseConnection(connection);
         }
         return toReturn;
     }
@@ -221,16 +238,18 @@ public class DegreeManager {
      */
     public ArrayList<Degree> getDegreesByCycle(int cycle) {
         ArrayList<Degree> toReturn = new ArrayList<>();
+        Connection connection = null;
         if (cycle < 1) {
             throw new IllegalArgumentException("Cycle must be greater than 1");
         } else {
-            try {
-                stmt = DBConnector.openConnection();
+        try {
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
                 String query = "SELECT * FROM " + TABLE
                         + " WHERE cycle_number=" + cycle
                         + " order by title";
                 rs = stmt.executeQuery(query);
-
+                connection.commit();
                 while (rs.next()) {
                     Degree b = getDegreeFromResultSet(rs);
                     toReturn.add(b);
@@ -239,7 +258,7 @@ public class DegreeManager {
             } catch (SQLException e) {
                 e.printStackTrace();
             } finally {
-               DBConnector.closeConnection();
+               DBConnection.releaseConnection(connection);
             }
         }
         return toReturn;
@@ -276,13 +295,14 @@ public class DegreeManager {
 
     public List<Degree> getDegreesByDepartmentAndCycle(String depAbbreviation, int cycle) {
         List<Degree> toReturn = new ArrayList<>();
+        Connection connection = null;
         String esc = "\'";
         if (cycle < 1) {
             throw new IllegalArgumentException("Cycle must be greater than 1");
         } else {
-            try {
-                stmt = DBConnector.openConnection();
-                String query = "SELECT * FROM " + TABLE
+        try {
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement(); String query = "SELECT * FROM " + TABLE
                         + " WHERE cycle_number=" + cycle + " AND "
                         + "department_abbreviation=" + esc + depAbbreviation + esc
                         + " order by title";
@@ -296,7 +316,7 @@ public class DegreeManager {
             } catch (SQLException e) {
                 e.printStackTrace();
             } finally {
-               DBConnector.closeConnection();
+               DBConnection.releaseConnection(connection);
             }
         }
 
@@ -310,9 +330,10 @@ public class DegreeManager {
      * @return true if the update has success, else false
      */
     public boolean setEsse3ContentForDegree(String degreeMatricula, String content) {
+        Connection connection = null;      
         try {
-            stmt = DBConnector.openConnection();
-
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
             String esc = "\'";
             String query = "UPDATE " + TABLE + " SET "  + "esse3_content"
                     + "=" +  "\""  + content +  "\"" 
@@ -323,15 +344,45 @@ public class DegreeManager {
             System.out.println("update query: " + query);
 
             if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
                 return true;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RuntimeException("Update Query Failed");
         } finally {
-           DBConnector.closeConnection();
+           DBConnection.releaseConnection(connection);
         }
         return false;
+    }
+
+    
+    
+    public Degree getDegreeByTitle(String pTitle) throws ConnectionException, SQLException {
+        Statement stmt = null;
+        ResultSet rs = null;
+        Connection connection = null;
+        Degree degree = null;
+
+        String query = "select * from degree where title = '" + pTitle + "'";
+
+        try {
+            connection = DBConnection.getConnection();
+
+            if (connection == null) {
+                throw new ConnectionException();
+            }
+
+            stmt = connection.createStatement();
+            rs = stmt.executeQuery(query);
+
+            if (rs.next()) {
+                degree = this.getDegreeFromResultSet(rs);
+            }
+        } finally {
+            DBConnection.releaseConnection(connection);  
+        }
+        return degree;
     }
 
 }
