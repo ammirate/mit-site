@@ -61,7 +61,7 @@ public class ModifyCurriculumServlet extends HttpServlet {
         } catch (CurriculumException ex) {
             Logger.getLogger(ModifyCurriculumServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        request.getRequestDispatcher("/offertaFormativaJSP/amministratore/curriculum/ModifyCurriculum.jsp").forward(request, response);
+        request.getRequestDispatcher("/offertaFormativa/amministratore/curriculum/ModifyCurriculum.jsp").forward(request, response);
     }
 
 }

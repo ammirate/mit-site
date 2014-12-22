@@ -64,7 +64,7 @@ public class UpdateDepartmentServlet extends HttpServlet {
         } else{
             request.setAttribute("department", new Department(request.getParameter("abbreviation"), request.getParameter("title"), request.getParameter("url_moodle"), request.getParameter("token")));
             request.setAttribute("exist", "true");
-            request.getRequestDispatcher("/offertaFormativaJSP/amministratore/department/ModifyDepartment.jsp").forward(request, response);
+            request.getRequestDispatcher("/offertaFormativa/amministratore/department/ModifyDepartment.jsp").forward(request, response);
         }
     }
 
