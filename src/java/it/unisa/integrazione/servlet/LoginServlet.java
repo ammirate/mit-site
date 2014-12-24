@@ -47,11 +47,15 @@ public class LoginServlet extends HttpServlet {
             Person person = accountManager.login(username, password);
 
             if (person != null) {
-                if (! person.getAccount().isActive()) {
+                if (!person.getAccount().isActive()) {
                     out.println("<script type=\"text/javascript\">");
                     out.println("alert('Account non attivo');");
                     out.println("location='login.jsp';");
                     out.println("</script>");
+                } else if (person.getAccount().getTypeOfAccount().equals("admin")) {
+                    session.removeAttribute("loginError");
+                    session.setAttribute("person", person);
+                    response.sendRedirect("indexLog.jsp");
                 } else if (person.getAccount().getTypeOfAccount().equals("Bstudent")) {
                     session.removeAttribute("loginError");
                     session.setAttribute("person", person);

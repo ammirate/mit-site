@@ -3,21 +3,15 @@ package it.unisa.offerta_formativa.servlet.degree;
 import it.unisa.integrazione.database.CycleManager;
 import it.unisa.model.Degree;
 import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import it.unisa.integrazione.database.DegreeManager;
 import it.unisa.integrazione.database.DepartmentManager;
 import it.unisa.offerta_formativa.manager.ParserHtmlManager;
 import it.unisa.offerta_formativa.moodle.manager.MoodleCategoryManager;
-import it.unisa.offerta_formativa.moodle.moodle_rest.MoodleRestException;
-import static java.lang.System.out;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 
@@ -55,17 +49,12 @@ public class InsertDegreeServlet extends HttpServlet {
         doPost(request, response);
     }
 
-    private void InsertDegree(Degree degree) throws MoodleRestException {
+    private void InsertDegree(Degree degree) {
         // TODO Auto-generated method stub
         mDeMng = MoodleCategoryManager.getInstance(depMng.getDepartmentByAbbreviation(degree.getDepartmentAbbreviation()).getUrlMoodle(), depMng.getDepartmentByAbbreviation(degree.getDepartmentAbbreviation()).getToken());
         String cycleName = cyMng.getCycleByCycleNumber(degree.getCycle()).getTitle();
         int idCat = mDeMng.getIdCategory(cycleName);
         mDeMng.createCategory(degree.getTitle(), idCat);
-        //////////////
-        int idDeg = mDeMng.getIdCategoryByParent(cycleName,"IT and Management");
-        mDeMng.createCategory("prova", idDeg);
-        
-        /////////////
         degree.setEsse3Content(parseMng.getHtml(degree.getLink(), "infobox"));
         degreeMng.createDegree(degree);
     }
@@ -77,11 +66,7 @@ public class InsertDegreeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
         if (degreeMng.readDegree(request.getParameter("degree_matricula")) == null) {
-            try {
-                InsertDegree(new Degree(request.getParameter("degree_matricula"), request.getParameter("link"), request.getParameter("title"), Integer.parseInt(request.getParameter("cycle")), request.getParameter("departmentAbb"), Boolean.parseBoolean(request.getParameter("status"))));
-            } catch (MoodleRestException ex) {
-                out.print("<h1>Moodle Exception: </h1>" + ex.getMessage());
-            }
+            InsertDegree(new Degree(request.getParameter("degree_matricula"), request.getParameter("link"), request.getParameter("title"), Integer.parseInt(request.getParameter("cycle")), request.getParameter("departmentAbb"), Boolean.parseBoolean(request.getParameter("status"))));
             ServletContext sc = getServletContext();
             RequestDispatcher rd = sc.getRequestDispatcher("/ShowDegreeServlet");
             rd.forward(request, response);
