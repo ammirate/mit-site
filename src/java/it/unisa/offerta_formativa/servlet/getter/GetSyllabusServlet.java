@@ -42,10 +42,15 @@ public class GetSyllabusServlet extends HttpServlet {
         private ArrayList<String> getHtml(String teaching_matricula){
             ArrayList<String> toReturn=new ArrayList<String>();
             String html= tm.getHtmlSyllabus(teaching_matricula);
+            if(html.equalsIgnoreCase("Link di esse3 errato")){
+                 toReturn.add("Errore nel DataBase");
+                 toReturn.add("Link di esse3 errato");
+            } else {
             String title = html.substring(html.indexOf("<h1>") + 4, html.indexOf("</h1>"));
             String toReplace=html.substring(html.indexOf("<h1>") , html.indexOf("</h1>"));
             toReturn.add(title);
             toReturn.add( html.replace(toReplace, ""));
+            }
             return toReturn;
         }
 	/**
