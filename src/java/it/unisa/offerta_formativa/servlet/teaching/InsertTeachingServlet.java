@@ -18,7 +18,7 @@ import it.unisa.integrazione.database.DegreeManager;
 import it.unisa.offerta_formativa.manager.ModuleManager;
 import it.unisa.offerta_formativa.manager.TeachingManager;
 import it.unisa.offerta_formativa.moodle.manager.MoodleConnectionManager;
-import it.unisa.offerta_formativa.moodle.manager.MoodleDegreeManager;
+import it.unisa.offerta_formativa.moodle.manager.MoodleCategoryManager;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 public class InsertTeachingServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    //private MoodleDegreeManager moodleDegreeMng = null;
+    //private MoodleCategoryManager moodleDegreeMng = null;
     //private MoodleConnectionManager moodleConnector = null;
 
     /**
@@ -39,7 +39,7 @@ public class InsertTeachingServlet extends HttpServlet {
     public InsertTeachingServlet() {
         super();
         //moodleConnector = MoodleConnectionManager.getInstance();
-        //moodleDegreeMng = MoodleDegreeManager.getInstance(moodleConnector.getUrlMoodle(id), moodleConnector.getToken(id));
+        //moodleDegreeMng = MoodleCategoryManager.getInstance(moodleConnector.getUrlMoodle(id), moodleConnector.getToken(id));
 
         // TODO Auto-generated constructor stub
     }

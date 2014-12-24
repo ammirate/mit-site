@@ -1,6 +1,6 @@
 package moodle_manager;
 
-import it.unisa.offerta_formativa.moodle.manager.MoodleDegreeManager;
+import it.unisa.offerta_formativa.moodle.manager.MoodleCategoryManager;
 import it.unisa.offerta_formativa.moodle.moodle_rest.MoodleCategory;
 import it.unisa.offerta_formativa.moodle.moodle_rest.MoodleCourse;
 import it.unisa.offerta_formativa.moodle.moodle_rest.MoodleRestCourse;
@@ -41,11 +41,11 @@ public class Test_MoodleDegreeManager extends TestCase{
 	public void TC_1_1_getInstance() {
 		System.out.print("Executing Test 1.1...");
 		//check if instantiation is correct
-		MoodleDegreeManager b_dm = MoodleDegreeManager.getInstance("http://localhost/moodle/webservice/rest/server.php","2c6f2faa8aac80fc912cff9f6f8bad66");
+		MoodleCategoryManager b_dm = MoodleCategoryManager.getInstance("http://localhost/moodle/webservice/rest/server.php","2c6f2faa8aac80fc912cff9f6f8bad66");
 		assertNotNull(b_dm);
 		
 		//check if singleton pattern works properly
-		MoodleDegreeManager b2_dm = MoodleDegreeManager.getInstance("http://localhost/moodle/webservice/rest/server.php","2c6f2faa8aac80fc912cff9f6f8bad66");
+		MoodleCategoryManager b2_dm = MoodleCategoryManager.getInstance("http://localhost/moodle/webservice/rest/server.php","2c6f2faa8aac80fc912cff9f6f8bad66");
 		assertEquals("", b_dm, b2_dm);
 		System.out.println("Done");
 	}
@@ -54,7 +54,7 @@ public class Test_MoodleDegreeManager extends TestCase{
 	 */
 	public void TC_1_2_createDegree() {
 		System.out.print("Executing Test 1.2...");
-		MoodleDegreeManager d_db = MoodleDegreeManager.getInstance("http://localhost/moodle/webservice/rest/server.php","2c6f2faa8aac80fc912cff9f6f8bad66");
+		MoodleCategoryManager d_db = MoodleCategoryManager.getInstance("http://localhost/moodle/webservice/rest/server.php","2c6f2faa8aac80fc912cff9f6f8bad66");
 		MoodleCategory cat= new MoodleCategory("Prova", Long.parseLong(String.valueOf(2)));
                 d_db.createDegree("Prova",2);
                 
@@ -66,7 +66,7 @@ public class Test_MoodleDegreeManager extends TestCase{
 	 */
 	public void TC_1_3_updateDegree() {
 		System.out.print("Executing Test 1.3...");
-		MoodleDegreeManager d_db = MoodleDegreeManager.getInstance("http://localhost/moodle/webservice/rest/server.php","2c6f2faa8aac80fc912cff9f6f8bad66");
+		MoodleCategoryManager d_db = MoodleCategoryManager.getInstance("http://localhost/moodle/webservice/rest/server.php","2c6f2faa8aac80fc912cff9f6f8bad66");
 		assertTrue(d_db.updateDegree("Prova2",2));
 		System.out.println("Done");
 	}
@@ -76,7 +76,7 @@ public class Test_MoodleDegreeManager extends TestCase{
 	 */
 	public void TC_1_4_deleteDegree() {
 		System.out.print("Executing Test 1.4...");
-		MoodleDegreeManager d_db = MoodleDegreeManager.getInstance("http://localhost/moodle/webservice/rest/server.php","2c6f2faa8aac80fc912cff9f6f8bad66");
+		MoodleCategoryManager d_db = MoodleCategoryManager.getInstance("http://localhost/moodle/webservice/rest/server.php","2c6f2faa8aac80fc912cff9f6f8bad66");
                 assertTrue(d_db.deleteDegree("Prova2",d_db.getIdDegree("Prova2")));
 		System.out.println("Done");
 	}
@@ -86,7 +86,7 @@ public class Test_MoodleDegreeManager extends TestCase{
 	 */
         public void TC_1_5_getIdDegree(){
 		System.out.print("Executing Test 1.6...");
-		MoodleDegreeManager d_db = MoodleDegreeManager.getInstance("http://localhost/moodle/webservice/rest/server.php","2c6f2faa8aac80fc912cff9f6f8bad66");
+		MoodleCategoryManager d_db = MoodleCategoryManager.getInstance("http://localhost/moodle/webservice/rest/server.php","2c6f2faa8aac80fc912cff9f6f8bad66");
 		
 		
 	}
