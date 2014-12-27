@@ -54,7 +54,7 @@ public class ShowListTeachingServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            String path="/offertaFormativaJSP/amministratore/";
+            String path="/offertaFormativa/amministratore/teaching/";
             request.getRequestDispatcher(path+"listTeaching.jsp").forward(request, response);
     }
 

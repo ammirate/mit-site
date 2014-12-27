@@ -5,10 +5,13 @@
  */
 package it.unisa.offerta_formativa.servlet.classpartition;
 
+import it.unisa.offerta_formativa.manager.Exceptions.TeachingException;
 import it.unisa.offerta_formativa.servlet.module.*;
 import it.unisa.offerta_formativa.manager.TeachingManager;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -53,13 +56,17 @@ public class ShowModifyClassServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String path="/offertaFormativaJSP/amministratore/";
+        String path="/offertaFormativa/amministratore/classmodule/";
         if(request.getParameterMap().containsKey("matricula") && request.getParameterMap().containsKey("classTitle")){
-                        String matricula = request.getParameter("matricula");
-                        request.setAttribute("matricula", matricula);
-                        request.setAttribute("title", request.getParameter("classTitle"));
-                        request.setAttribute("teaching",teachingMng.readTeaching(matricula));
-                        request.getRequestDispatcher(path+"modifyClass.jsp").forward(request, response);
+            try {
+                String matricula = request.getParameter("matricula");
+                request.setAttribute("matricula", matricula);
+                request.setAttribute("title", request.getParameter("classTitle"));
+                request.setAttribute("teaching",teachingMng.readTeaching(matricula));
+                request.getRequestDispatcher(path+"modifyClass.jsp").forward(request, response);
+            } catch (TeachingException ex) {
+                Logger.getLogger(ShowModifyClassServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 

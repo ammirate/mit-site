@@ -4,9 +4,7 @@
 --%>
 <%@page import="it.unisa.offerta_formativa.beans.Teaching"%>
 <%@page import="it.unisa.offerta_formativa.beans.Curriculum"%>
-<%@page import="it.unisa.offerta_formativa.beans.Degree"%>
-<%@page import="it.unisa.offerta_formativa.beans.Department"%>
-<%@page import="it.unisa.offerta_formativa.beans.Cycle"%>
+<%@page import="it.unisa.model.*"%>
 <%@page import="java.util.ArrayList"%>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -192,7 +190,23 @@ public Teaching teaching;
 						});
 					});
 				});
+                                jQuery(document).ready(function ($) {
+                                    if(<% out.print(request.getAttribute("error"));%>){
+                                        $("#error").show();
+                                        //$("#error").fadeOut(3500);
+                                    }
+                                    if(<% out.print(request.getAttribute("success"));%>){
+                                        $("#success").show();
+                                        //$("#error").fadeOut(3500);
+                                    }
+                                });
 			</script>
+                        <div class="row">
+                            <p class="bg-danger" id="error" style="display:none;"><% out.print(request.getAttribute("errorMessage"));%></p>
+                        </div>
+                        <div class="row">
+                            <p class="bg-success" id="success" style="display:none;"><% out.print(request.getAttribute("successMessage"));%></p>
+                        </div>
                         <div class="row">
                             <form class="form" action="ModifyClassServlet" method="post">
                             <div class="col-sm-1"></div>
@@ -259,83 +273,8 @@ public Teaching teaching;
 
 
 	<!-- Bottom Scripts -->
-	<script type="text/javascript">
-	function loadDegree(i){
-	    $.ajax({url:"GetDegreeServlet?idCycle="+i,success:function(result){
-	    	$("#degree").html(result);
-                
-	    }});
-	}
-        function loadCurriculum(i){
-	    $.ajax({url:"GetCurriculumServlet?degreeMatricula="+i,success:function(result){
-	    	$("#curriculum").html(result);
-                
-	    }});
-	}
-        function loadTeaching(i){
-            $.ajax({url:"GetTeachingServlet?curriculum="+i,success:function(result){
-	    	$("#tablebody").html(result);
-                $("#table").css("display","table");
-	    }});
-        }
-	</script>
-        <script type="text/javascript">
-        function loadModules(i){
-            var stringa="<h3>Inserisci Moduli</h3>";
-            for(j=1;j<=i;j++){
-                stringa+="<div class='row'><div class='form-group col-sm-4'><input type='text' name='moduleName"+j+"' id='moduleName"+j+"' placeholder='Inserisci il modulo "+j+"' class='form-control' onkeyup='loadAssociation();'></div></div>";
-            }
-            $("#modules").html(stringa);
-            loadAssociation();
-        }
-        function loadClasses(i){
-            var stringa="<h3>Inserisci Classi</h3>";
-            for(j=1;j<=i;j++){
-                stringa+="<div class='row'><div class='form-group col-sm-4'><input type='text' name='className"+j+"' id='className"+j+"' placeholder='Inserisci la classe "+j+"' class='form-control' onkeyup='loadAssociation();'></div></div>";
-            }
-            $("#classes").html(stringa);
-            loadAssociation();
-        }
-        function loadAssociation(){
-            var stringa ="<h2>Associa Docente</h2>";
-            
-            //alert($("#moduleName1").val());
-            //$("#lastDiv").html($("#moduleName1").val());
-            var moduleNum=$("#moduleNumber option:selected").val();
-            var classNum = $("#classNumber option:selected").val();
-                for(j=1;j<=classNum;j++){
-                    stringa+="<h3>Associa Docenti a Classe "+j+" - "+ $("#className"+j).val() +"</h3>";
-                    for(i=1;i<=moduleNum;i++){
-                        stringa+="<div class='row'>";
-                        stringa+="<div class='form-group col-sm-2'><label for='module'>"+$("#moduleName"+i).val()+"</label><select class='form-control' name='docente"+j+"-"+i+"' id='docente"+j+"-"+i+"'></select></div>";
-                        stringa+="</div>";
-                    }
-                }
-            $("#lastDiv").html(stringa);
-            //$.ajax({url:"GetProfessorServlet?abbreviation="+$("#idDepartment").val(),success:function(result){
-            $.ajax({url:"GetProfessorServlet?abbreviation=1",success:function(result){
-                for(j=1;j<=classNum;j++){
-                    for(i=1;i<=moduleNum;i++){
-                        $("#docente"+j+"-"+i).html(result);
-                    }
-                }
-            }});
-        }
-        function loadProfessor(){
-            var string="";
-            $.ajax({url:"GetProfessorServlet?abbreviation="+$("#idDepartment").val(),success:function(result){
-                string=result;
-            }});
-            var moduleNum=$("#moduleNumber option:selected").val();
-            var classNum = $("#classNumber option:selected").val();
-            for(j=1;j<=classNum;j++){
-                for(i=1;i<=moduleNum;i++){
-                    //$("#docente"+i+"-"+j+).html(string);
-                }
-            }
-        }
+	
         
-        </script>
 	<script src="assets/js/bootstrap.min.js"></script>
 	<script src="assets/js/TweenMax.min.js"></script>
 	<script src="assets/js/resizeable.js"></script>

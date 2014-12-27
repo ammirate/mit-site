@@ -5,9 +5,9 @@
 <%@page import="it.unisa.offerta_formativa.beans.ProfModuleClass"%>
 <%@page import="it.unisa.offerta_formativa.beans.Teaching"%>
 <%@page import="it.unisa.offerta_formativa.beans.Curriculum"%>
-<%@page import="it.unisa.offerta_formativa.beans.Degree"%>
-<%@page import="it.unisa.offerta_formativa.beans.Department"%>
-<%@page import="it.unisa.offerta_formativa.beans.Cycle"%>
+<%@page import="it.unisa.model.Degree"%>
+<%@page import="it.unisa.model.Department"%>
+<%@page import="it.unisa.model.Cycle"%>
 <%@page import="java.util.ArrayList"%>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -18,6 +18,7 @@
     public String mail;
     public String matricula;
     public String profname;
+    public String department_abbreviation;
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -60,6 +61,7 @@
                 matricula = (String) request.getAttribute("matricula");
                 mail = (String) request.getAttribute("mail");
                 profname = (String) request.getAttribute("profname");
+                department_abbreviation = (String) request.getAttribute("department_abbreviation");
 	%>
 	<nav class="navbar horizontal-menu navbar-fixed-top">
 		<!-- set fixed position by adding class "navbar-fixed-top" -->
@@ -198,17 +200,18 @@
 							}
 						});
 					});
+                                        loadProfessor();
 				});
 			</script>
 
 			<div class="row">
                                 <div class="col-sm-1"></div>
-				<h2>Modifica Associazione</h2>
-                                <div class="panel panel-default col-sm-10 clearfix">
+                                <div class="panel panel-default col-sm-10">
                                 <!-- Default panel contents -->
-                                <div class="panel-heading"></div>
+                                <div class="panel-heading">Modifica Professore</div>
+                                <form action="ModifyProfAssociationServlet" method="post" role="form" id="form" class="form-horizontal">
                                 <div class="panel-body ">
-                                <form action="ModifyAssociationServlet" method="post" role="form" class="form-horizontal">
+                                
                                     <div class="row">
                                         <div class="form-group col-sm-4">
                                             <label for="link">Classe:</label>
@@ -222,19 +225,27 @@
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-sm-4">
-                                            <label for="link">Docente:</label>
-                                            <select id="prof" class="form-control">
-                                                <option value="<%out.print(mail);%>"><%out.print(profname);%></option>
+                                            <label for="prof">Docente:</label>
+                                            <select id="prof" name="prof" class="form-control">
+                                                
                                             </select>
                                         </div>
+                                        <div class="form-group col-sm-2"></div>
+                                        <div class="form-group col-sm-4">
+                                            <label for="prof">Docente attuale:</label>
+                                            <input type="text" name="oldprofname" id="oldprofname" class="form-control" value="<%out.print(profname);%>" readonly >
+                                            <input type="hidden" name="oldprofmail" id="oldprofmail" class="form-control" value="<%out.print(mail);%>"  >
+                                            <input type="hidden" name="matricula" id="matricula" class="form-control" value="<%out.print(matricula);%>"  >
+                                        </div>   
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-sm-1">
                                             <input type="submit" id="submit" class="btn btn-default">
                                         </div>
                                     </div>
-                                </form>
+                                
                                 </div>
+                                </form>
                                 </div>
 			</div>
 			<!-- Main Footer -->
@@ -276,49 +287,19 @@
 
 
 	<!-- Bottom Scripts -->
-	<script type="text/javascript">
-        function enablePlacingFields(){ //makes modificable the fields related to where a teaching is placed
-            $("#department").removeAttr('readonly');
-            $("#department").removeAttr('onclick');
-            $("#cycle").removeAttr('readonly');
-            $("#cycle").removeAttr('onclick');
-            $("#degree").removeAttr('readonly');
-            $("#degree").removeAttr('onclick');
-            $("#curriculum").removeAttr('readonly');
-            $("#curriculum").removeAttr('onclick');
-            getCycle();
-            getDepartment();
-            $.ajax({url:"GetDegreeServlet",success:function(result){
-	    	$("#degree").html(result);
-	    }});
-            loadCurriculum(0);
-        } 
-        function check(i){ //makes modificable the single field clicked
-            $("#"+i.attributes["id"].value).removeAttr('readonly');
-        }
-        function getCycle(){
-            $.ajax({url:"GetCycleServlet",success:function(result){
-                    $("#cycle").html(result);
-            }});
-        }
-        function getDepartment(){
-            $.ajax({url:"GetDepartmentServlet",success:function(result){
-                    $("#department").html(result);
-            }});
-        }
-	function loadDegree(i){
-	    $.ajax({url:"GetDegreeServlet?idCycle="+i,success:function(result){
-	    	$("#degree").html(result);
-                
-	    }});
-	}
-        function loadCurriculum(i){
-	    $.ajax({url:"GetCurriculumServlet?degreeMatricula="+i,success:function(result){
-	    	$("#curriculum").html(result);
-                
-	    }});
-	}
-	</script>
+        <script type="text/javascript">
+            function loadProfessor() {
+                $.get('GetProfessorServlet?department=<%out.print(department_abbreviation);%>', function (responseJson) {
+                    var $select = $('#prof');
+                    $select.find('option').remove();
+                    $('<option>').text("").appendTo($select);
+                    $.each(responseJson, function (key, person) {
+                        $('<option>').val(person.account.email).text(person.name+" "+person.surname).appendTo($select);
+                    });
+                    $select.removeAttr('onclick');
+                });
+            }
+        </script>
 	<script src="assets/js/bootstrap.min.js"></script>
 	<script src="assets/js/TweenMax.min.js"></script>
 	<script src="assets/js/resizeable.js"></script>

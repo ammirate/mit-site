@@ -1,17 +1,15 @@
 <%-- 
-    Document   : insertTeaching
+    Document   : insertClass
     Author     : Alessandro
 --%>
-<%@page import="it.unisa.offerta_formativa.beans.Degree"%>
-<%@page import="it.unisa.offerta_formativa.beans.Department"%>
-<%@page import="it.unisa.offerta_formativa.beans.Cycle"%>
+<%@page import="it.unisa.model.Degree"%>
+<%@page import="it.unisa.model.Department"%>
+<%@page import="it.unisa.model.Cycle"%>
 <%@page import="java.util.ArrayList"%>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%! public ArrayList<Cycle> cycles; %>
-<%! public ArrayList<Department> departments; 
-	%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,12 +43,16 @@
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
 
-
+<script type="text/javascript">
+            $(window).load(function () {
+                loadDepartment();
+                loadCycle();
+                changeSelect();
+            });
+</script>
 </head>
 <body class="page-body">
-	<% 	cycles = (ArrayList<Cycle>)request.getAttribute("cycles");
-		departments = (ArrayList<Department>)request.getAttribute("departments");
-	%>
+	
 	<nav class="navbar horizontal-menu navbar-fixed-top">
 		<!-- set fixed position by adding class "navbar-fixed-top" -->
 
@@ -189,50 +191,49 @@
 						});
 					});
 				});
-			</script>
+                                jQuery(document).ready(function ($) {
+                                    if(<% out.print(request.getAttribute("error"));%>){
+                                        $("#error").show();
+                                        //$("#error").fadeOut(3500);
+                                    }
+                                    if(<% out.print(request.getAttribute("success"));%>){
+                                        $("#success").show();
+                                        //$("#error").fadeOut(3500);
+                                    }
+                    });
+                    
+                </script>
+                    <div class="row">
+                        <p class="bg-danger" id="error" style="display:none;"><% out.print(request.getAttribute("errorMessage"));%></p>
+                    </div>
+                    <div class="row">
+                        <p class="bg-success" id="success" style="display:none;"><% out.print(request.getAttribute("successMessage"));%></p>
+                    </div>
                         <div class="row">
                             <div class="col-sm-1"></div>
                             <div class="panel panel-default col-sm-10 clearfix">
                                 <!-- Default panel contents -->
                                 <div class="panel-heading">Inserimento Classe</div>
                                 <div class="panel-body ">
-                                    <form action="InsertTeachingServlet" method="post" role="form" class="form-horizontal">
+                                    <form action="InsertClassServlet" method="post" role="form" class="form-horizontal">
                                         <div class="row">
+                                            <div class="col-sm-1"></div>
                                             <div class="form-group col-sm-4">
                                                 <label for="department">Dipartimento:</label> 
-                                                <select name="department" id="idDepartment" class="form-control">
-                                                    <%
-                                                        if (departments.size() != 0)
-                                                            for (Department d : departments) {
-                                                    %><option value='<%out.print(d.getAbbreviation());%> '>
-                                                        <%
-                                                            out.print(d.getTitle());
-                                                        %>
-                                                    </option>
-                                                    <%
-                                                        }
-                                                    %>
+                                                <select name="department" id="department" class="form-control">
+                                                    
                                                 </select>
                                             </div>
                                             <div class="col-sm-2"></div>
                                             <div class="form-group col-sm-4">
                                                 <label for="cycle">Ciclo:</label> 
-                                                <select name="cycle" class="form-control" onchange="loadDegree(this.value);">
-                                                    <%
-                                                        if (cycles.size() != 0)
-                                                            for (Cycle c : cycles) {
-                                                    %><option value='<%out.print(c.getNumber());%>' >
-                                                        <%
-                                                            out.print(c.getTitle());
-                                                        %>
-                                                    </option>
-                                                    <%
-                                                        }
-                                                    %>
+                                                <select name="cycle" id="cycle" class="form-control" onchange="loadDegree(this.value);">
+                                                    
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="row">
+                                            <div class="col-sm-1"></div>
                                             <div class="form-group col-sm-4">
                                                 <label for="degree">Corso di Laurea:</label> 
                                                 <select name="degree" class="form-control" id="degree" onchange="loadCurriculum(this.value);">
@@ -248,13 +249,21 @@
                                             </div>
                                         </div>
                                         <div class="row">
+                                            <div class="col-sm-1"></div>
                                             <div class="form-group col-sm-4">
                                                 <label for="teaching">Insegnamento:</label> 
-                                                <select name="teaching" class="form-control" id="teaching">
+                                                <select name="teaching" class="form-control" id="teaching" onchange="$('#classdiv').show();">
                                                 </select>
                                             </div>
+                                            <div class="col-sm-2"></div>
+                                            <div class="form-group col-sm-4" id="classdiv" style="display:none;">
+                                                <label for="classname">Classe:</label> 
+                                                <input type="text" id="classname" name="classname" class="form-control" onkeyup="loadAssociation(this.value);" >
+                                            </div>
                                         </div>
-
+                                        <div class="row" id="modules">
+                                            
+                                        </div>
                                         <div class="row">
                                             <div class="form-group col-sm-1">
                                                 <input type="submit" id="submit" class="btn btn-default">
@@ -304,79 +313,38 @@
 
 
 	<!-- Bottom Scripts -->
-	<script type="text/javascript">
-	function loadDegree(i){
-            $.get('GetDegreeServlet?cycle='+i,function(responseJson) {   
-            var $select = $('#degree');                           
-               $select.find('option').remove(); 
-               $.each(responseJson, function(key, value) {               
-                   $('<option>').val(value.departmentAbbreviation).text(value.title).appendTo($select);      
-                });
-            });
-	}
-        function loadCurriculum(i){
-	    $.ajax({url:"GetCurriculumServlet?degreeMatricula="+i,success:function(result){
-	    	$("#curriculum").html(result);
-                
-	    }});
-	}
-	</script>
         <script type="text/javascript">
-        function loadModules(i){
-            var stringa="<h3>Inserisci Moduli</h3>";
-            for(j=1;j<=i;j++){
-                stringa+="<div class='row'><div class='form-group col-sm-4'><input type='text' name='moduleName"+j+"' id='moduleName"+j+"' placeholder='Inserisci il modulo "+j+"' class='form-control' onkeyup='loadAssociation();'></div></div>";
-            }
-            $("#modules").html(stringa);
-            loadAssociation();
-        }
-        function loadClasses(i){
-            var stringa="<h3>Inserisci Classi</h3>";
-            for(j=1;j<=i;j++){
-                stringa+="<div class='row'><div class='form-group col-sm-4'><input type='text' name='className"+j+"' id='className"+j+"' placeholder='Inserisci la classe "+j+"' class='form-control' onkeyup='loadAssociation();'></div></div>";
-            }
-            $("#classes").html(stringa);
-            loadAssociation();
-        }
-        function loadAssociation(){
-            var stringa ="<h2>Associa Docente</h2>";
-            
-            //alert($("#moduleName1").val());
-            //$("#lastDiv").html($("#moduleName1").val());
-            var moduleNum=$("#moduleNumber option:selected").val();
-            var classNum = $("#classNumber option:selected").val();
-                for(j=1;j<=classNum;j++){
-                    stringa+="<h3>Associa Docenti a Classe "+j+" - "+ $("#className"+j).val() +"</h3>";
-                    for(i=1;i<=moduleNum;i++){
-                        stringa+="<div class='row'>";
-                        stringa+="<div class='form-group col-sm-2'><label for='module'>"+$("#moduleName"+i).val()+"</label><select class='form-control' name='docente"+j+"-"+i+"' id='docente"+j+"-"+i+"'></select></div>";
-                        stringa+="</div>";
-                    }
-                }
-            $("#lastDiv").html(stringa);
-            //$.ajax({url:"GetProfessorServlet?abbreviation="+$("#idDepartment").val(),success:function(result){
-            $.ajax({url:"GetProfessorServlet?abbreviation=1",success:function(result){
-                for(j=1;j<=classNum;j++){
-                    for(i=1;i<=moduleNum;i++){
-                        $("#docente"+j+"-"+i).html(result);
-                    }
-                }
-            }});
-        }
-        function loadProfessor(){
-            var string="";
-            $.ajax({url:"GetProfessorServlet?abbreviation="+$("#idDepartment").val(),success:function(result){
-                string=result;
-            }});
-            var moduleNum=$("#moduleNumber option:selected").val();
-            var classNum = $("#classNumber option:selected").val();
-            for(j=1;j<=classNum;j++){
-                for(i=1;i<=moduleNum;i++){
-                    //$("#docente"+i+"-"+j+).html(string);
+            function loadAssociation(){
+                if($("#classname").val().length===0){
+                    $("#modules").html("");
+                }else{
+                    var options="";
+                    var stringa="<div class='lead'>Associa classe a moduli e professori</div><div class='form-group-separator'></div>";
+                    
+                    $.ajax({url:"GetProfessorServlet?department=" + $("#department").val(), success: function (result) {
+                        $.each(result, function (k, person) {
+                                options+="<option value="+person.account.email+">"+person.name +" "+person.surname+"</option>";
+                            });
+                        
+                    },complete: function(){
+                        
+                        $.get('GetModuleServlet?matricula='+$("#teaching").val(),function (responseJson) {
+                            $.each(responseJson, function (key, module) {
+                            stringa+="<div class='row'><div class='col-sm-1'></div>";
+                            stringa+="<div class='form-group col-sm-4'>";
+                            stringa+="<span>Modulo di "+module.title+"</span><select id='" + module.title + "' name='"+module.title+"' class='form-control'>";
+                            stringa+=options;
+                            stringa+="</select></div></div>";
+                        });
+                        $("#modules").html(stringa);
+                            
+                        });
+                        
+                    }});
+                    
+                    
                 }
             }
-        }
-        
         </script>
 	<script src="assets/js/bootstrap.min.js"></script>
 	<script src="assets/js/TweenMax.min.js"></script>
@@ -384,8 +352,12 @@
 	<script src="assets/js/joinable.js"></script>
 	<script src="assets/js/xenon-api.js"></script>
 	<script src="assets/js/xenon-toggles.js"></script>
-
-
+        <link rel="stylesheet" href="assets/js/select2/select2.css">
+        <link href="assets/js/select2/select2-bootstrap.css" rel="stylesheet" type="text/css"/>
+        <script src="assets/js/select2/select2.min.js"></script>
+        <script src="assets/js/jquery-validate/jquery.validate.min.js" id="script-resource-7"></script>
+        <script src="assets/js/jquery-validate/localization/messages_it.min.js" type="text/javascript"></script>
+        <script src="assets/js/FunzioniOffertaFormativa.js" type="text/javascript"></script>
 	<!-- JavaScripts initializations and stuff -->
 	<script src="assets/js/xenon-custom.js"></script>
 

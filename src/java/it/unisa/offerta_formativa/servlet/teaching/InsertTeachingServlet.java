@@ -13,12 +13,12 @@ import it.unisa.offerta_formativa.beans.Module;
 import it.unisa.offerta_formativa.beans.ProfModuleClass;
 import it.unisa.offerta_formativa.beans.Teaching;
 import it.unisa.offerta_formativa.facade.InsertTeachingFacade;
-import it.unisa.offerta_formativa.manager.ClassManager;
-import it.unisa.integrazione.database.DegreeManager;
-import it.unisa.offerta_formativa.manager.ModuleManager;
-import it.unisa.offerta_formativa.manager.TeachingManager;
+import it.unisa.offerta_formativa.manager.Exceptions.ClassPartitionException;
+import it.unisa.offerta_formativa.manager.Exceptions.ModuleException;
+import it.unisa.offerta_formativa.manager.Exceptions.TeachingException;
 import it.unisa.offerta_formativa.moodle.manager.MoodleConnectionManager;
 import it.unisa.offerta_formativa.moodle.manager.MoodleCategoryManager;
+import it.unisa.offerta_formativa.moodle.moodle_rest.MoodleRestException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,6 +60,7 @@ public class InsertTeachingServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
+        String path = "/offertaFormativa/amministratore/teaching/";
         String matricula = "";
         int classNumber = 0;
         int moduleNumber = 0;
@@ -93,7 +94,7 @@ public class InsertTeachingServlet extends HttpServlet {
                     classNumber = Integer.parseInt(request.getParameter("classNumber"));
                     for (int j = 1; j <= classNumber; j++) {
                         if (classNumber == 1) {
-                            listClasses.add(new ClassPartition(matricula, request.getParameter("title")));
+                            listClasses.add(new ClassPartition(matricula, request.getParameter("className"+j)));
                         } else {
                             listClasses.add(new ClassPartition(request.getParameter("matricula"), request.getParameter("className" + j)));
                         }
@@ -107,18 +108,34 @@ public class InsertTeachingServlet extends HttpServlet {
                     }
                 }
                 facade.setProfModuleClass(list);
-
+                facade.setDepartmentAbbreviation(request.getParameter("department"));
+                facade.setDegree(request.getParameter("degree"));
                 facade.storeInDB();
-
+                request.getRequestDispatcher(path+"insertTeaching.jsp").forward(request, response);
             } else {
-                throw new Exception(checkFields(request));//campi errati
+                throw new TeachingException(checkFields(request));//campi errati
             }
 
-        } catch (Exception e) {
+        } catch (TeachingException e) {
             request.setAttribute("error", true);
-            request.setAttribute("errorMessage", e.getMessage());
-            request.getRequestDispatcher("/offertaFormativaJSP/amministratore/insertTeaching.jsp").forward(request, response);
+            request.setAttribute("errorMessage", "Errore nell'insegnamento:"+e.getMessage());
+            request.getRequestDispatcher(path+"insertTeaching.jsp").forward(request, response);
+        } catch (ClassPartitionException ex) {
+            request.setAttribute("error", true);
+            request.setAttribute("errorMessage", "Errore nelle classi:"+ex.getMessage());
+            request.getRequestDispatcher(path+"insertTeaching.jsp").forward(request, response);
+        } catch (ModuleException ex) {
+            request.setAttribute("error", true);
+            request.setAttribute("errorMessage", "Errore nei moduli:"+ex.getMessage());
+            request.getRequestDispatcher(path+"insertTeaching.jsp").forward(request, response);
+        } catch (MoodleRestException ex) {
+            request.setAttribute("error", true);
+            request.setAttribute("errorMessage", "Errore API REST Moodle:"+ex.getMessage());
+            request.getRequestDispatcher(path+"insertTeaching.jsp").forward(request, response);
         }
+        request.setAttribute("success", true);
+        request.setAttribute("successMessage", "Insegnamento e relative associazioni inserite con successo.");
+        request.getRequestDispatcher(path+"insertTeaching.jsp").forward(request, response);
     }
 
     public String checkFields(HttpServletRequest request) {

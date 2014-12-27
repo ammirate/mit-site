@@ -10,11 +10,16 @@ import it.unisa.offerta_formativa.beans.Teaching;
 import it.unisa.offerta_formativa.manager.ClassManager;
 import it.unisa.offerta_formativa.manager.CurriculumManager;
 import it.unisa.integrazione.database.DegreeManager;
+import it.unisa.offerta_formativa.manager.Exceptions.CurriculumException;
+import it.unisa.offerta_formativa.manager.Exceptions.TeachingException;
 import it.unisa.offerta_formativa.manager.ModuleManager;
+import it.unisa.offerta_formativa.manager.ParserHtmlManager;
 import it.unisa.offerta_formativa.manager.TeachingManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -33,6 +38,7 @@ public class ModifyTeachingServlet extends HttpServlet {
     private ModuleManager moduleMng = null;
     private TeachingManager teachingMng = null;
     private CurriculumManager currMng;
+    private final ParserHtmlManager parseMng;
 
     public ModifyTeachingServlet() {
         degreeMng = DegreeManager.getInstance();
@@ -40,6 +46,7 @@ public class ModifyTeachingServlet extends HttpServlet {
         moduleMng = ModuleManager.getInstance();
         teachingMng = TeachingManager.getInstance();
         currMng = CurriculumManager.getInstance();
+        parseMng = ParserHtmlManager.getInstance();
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -67,44 +74,46 @@ public class ModifyTeachingServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String path = "/offertaFormativa/amministratore/teaching/";
         if (request.getParameterMap().containsKey("oldMatricula")) {
+
             try {
-                if (checkFields(request).equalsIgnoreCase("")) {
-                    //FACCIO PRIMA L'UPDATE DEL TEACHING
-                    String oldMatricula = request.getParameter("oldMatricula");
-                    String newMatricula = request.getParameter("newMatricula");
-                    Teaching t = new Teaching(
-                            request.getParameter("title"),
-                            request.getParameter("abbreviation"),
-                            request.getParameter("oldMatricula"),
-                            request.getParameter("link"),
-                            Integer.parseInt(request.getParameter("year")),
-                            Integer.parseInt(request.getParameter("semester")),
-                            (Integer.parseInt(request.getParameter("active")) == 1) ? true : false);
-
-                    if (!request.getParameter("newMatricula").equalsIgnoreCase(oldMatricula)) { //se diversa da oldMatricula
-                        t.setMatricula(newMatricula);
-                    }
-                    try {
-                        teachingMng.updateTeaching(oldMatricula, t);
-                    } catch (Exception e) {
-                        request.setAttribute("error", true);
-                        request.setAttribute("errorMessage", e.getMessage());
-                        request.getRequestDispatcher("/offertaFormativaJSP/amministratore/modifyTeaching.jsp").forward(request, response);
-                    }
-                    //POI QUELLA DEL CURRICULUM ASSOCIATO SE NECESSARIO
-                    if (request.getParameterMap().containsKey("newCurriculumMatricula")) {
-                //DA IMPLEMETARE!!
-                        //currMng.updateCurriculumRelatedWithTeaching(oldCurrMatricula, newCurrMatricula,newMatricula);
-
-                    }
-                } else {
-                    throw new Exception(checkFields(request));
+                if (!checkFields(request).equalsIgnoreCase("")) {
+                    throw new TeachingException(checkFields(request));
                 }
-            } catch (Exception e) {
+                
+                //FACCIO PRIMA L'UPDATE DEL TEACHING
+                String oldMatricula = request.getParameter("oldMatricula");
+                String newMatricula = request.getParameter("newMatricula");
+                Teaching t = new Teaching(
+                        request.getParameter("title"),
+                        request.getParameter("abbreviation"),
+                        request.getParameter("oldMatricula"),
+                        request.getParameter("link"),
+                        Integer.parseInt(request.getParameter("year")),
+                        Integer.parseInt(request.getParameter("semester")),
+                        (Integer.parseInt(request.getParameter("active")) == 1) ? true : false);
+                
+                if (!request.getParameter("newMatricula").equalsIgnoreCase(oldMatricula)) { //se diversa da oldMatricula
+                    t.setMatricula(newMatricula);
+                }
+                
+                t.setEsse3Content(parseMng.getHtml(t.getLink(), "floating"));
+                teachingMng.updateTeaching(oldMatricula, t);
+                
+                //POI QUELLA DEL CURRICULUM ASSOCIATO SE NECESSARIO
+                if (request.getParameterMap().containsKey("curriculum")) {
+                    if(!request.getParameter("oldCurriculumMatricula").equalsIgnoreCase(request.getParameter("curriculum")))
+                        currMng.updateCurriculumhasTeaching(request.getParameter("oldCurriculumMatricula"), oldMatricula,request.getParameter("curriculum"),newMatricula);
+                }
+            } catch (TeachingException ex) {
                 request.setAttribute("error", true);
-                request.setAttribute("errorMessage", checkFields(request));
-                request.getRequestDispatcher("/offertaFormativaJSP/amministratore/modifyTeaching.jsp");
+                request.setAttribute("errorMessage", ex.getMessage());
+                request.getRequestDispatcher(path + "modifyTeaching.jsp");
+            } catch (CurriculumException ex) {
+                request.setAttribute("error", true);
+                request.setAttribute("errorMessage", "Errore lettura curriculum: "+ex.getMessage());
+                request.getRequestDispatcher(path + "modifyTeaching.jsp");
             }
 
         }
@@ -121,7 +130,7 @@ public class ModifyTeachingServlet extends HttpServlet {
     }// </editor-fold>
 
     public String checkFields(HttpServletRequest request) {
-        if (request.getParameter("matricula").length() < 10 || request.getParameter("matricula").length() > 10) {
+        if (request.getParameter("newMatricula").length() != 10) {
             return "Matricola errata. Non può essere diversa da 10 caratteri.";
         }
         if (request.getParameter("abbreviation").length() < 2) {

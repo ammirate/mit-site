@@ -6,14 +6,15 @@
 package it.unisa.offerta_formativa.servlet.profmoduleclass;
 
 import it.unisa.offerta_formativa.beans.Curriculum;
-import it.unisa.offerta_formativa.beans.Degree;
-import it.unisa.offerta_formativa.beans.Person;
+import it.unisa.model.Degree;
+import it.unisa.model.Person;
 import it.unisa.offerta_formativa.beans.ProfModuleClass;
 import it.unisa.offerta_formativa.manager.ClassManager;
 import it.unisa.offerta_formativa.manager.CurriculumManager;
 import it.unisa.integrazione.database.CycleManager;
 import it.unisa.integrazione.database.DegreeManager;
 import it.unisa.integrazione.database.DepartmentManager;
+import it.unisa.offerta_formativa.manager.Exceptions.CurriculumException;
 import it.unisa.offerta_formativa.manager.ModuleManager;
 import it.unisa.offerta_formativa.manager.old.PersonManager;
 import it.unisa.offerta_formativa.manager.ProfModuleClassManager;
@@ -23,6 +24,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -87,17 +90,22 @@ public class ShowModifyProfAssociationServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            String path="/offertaFormativaJSP/amministratore/";  
+            String path="/offertaFormativa/amministratore/classmodule/";  
             if(request.getParameterMap().containsKey("matricula") &&
                     request.getParameterMap().containsKey("moduleTitle") &&
                     request.getParameterMap().containsKey("classTitle") &&
                     request.getParameterMap().containsKey("mail")){
+                try {
+                    request.setAttribute("department_abbreviation",degreeMng.readDegree(currMng.getCurriculumsByTeaching(request.getParameter("matricula")).get(0).getDegreeMatricula()).getDepartmentAbbreviation());
                     request.setAttribute("matricula", request.getParameter("matricula"));
                     request.setAttribute("moduleTitle", request.getParameter("moduleTitle"));
                     request.setAttribute("classTitle", request.getParameter("classTitle"));
                     request.setAttribute("mail",request.getParameter("mail"));
                     request.setAttribute("profname", personMng.getPersonByEmail(request.getParameter("mail")).getName()+" "+personMng.getPersonByEmail(request.getParameter("mail")).getSurname());
                     request.getRequestDispatcher(path+"modifyAssociation.jsp").forward(request, response);
+                } catch (CurriculumException ex) {
+                    Logger.getLogger(ShowModifyProfAssociationServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
     }
 

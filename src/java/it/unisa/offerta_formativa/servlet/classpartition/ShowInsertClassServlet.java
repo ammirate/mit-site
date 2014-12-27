@@ -59,7 +59,7 @@ public class ShowInsertClassServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String path="/offertaFormativaJSP/amministratore/";
+        String path="/offertaFormativa/amministratore/classmodule/";
         request.setAttribute("departments",deptMng.getAllDepartments());
         request.setAttribute("cycles", cycleMng.getAllCycles());
         request.getRequestDispatcher(path+"insertClass.jsp").forward(request, response);

@@ -6,23 +6,30 @@
 package it.unisa.offerta_formativa.servlet.profmoduleclass;
 
 import it.unisa.offerta_formativa.beans.Curriculum;
-import it.unisa.offerta_formativa.beans.Degree;
-import it.unisa.offerta_formativa.beans.Person;
+import it.unisa.model.Degree;
+import it.unisa.model.Person;
 import it.unisa.offerta_formativa.beans.ProfModuleClass;
 import it.unisa.offerta_formativa.manager.ClassManager;
 import it.unisa.offerta_formativa.manager.CurriculumManager;
 import it.unisa.integrazione.database.CycleManager;
 import it.unisa.integrazione.database.DegreeManager;
 import it.unisa.integrazione.database.DepartmentManager;
+import it.unisa.offerta_formativa.manager.Exceptions.ClassPartitionException;
+import it.unisa.offerta_formativa.manager.Exceptions.ModuleException;
+import it.unisa.offerta_formativa.manager.Exceptions.TeachingException;
 import it.unisa.offerta_formativa.manager.ModuleManager;
-import it.unisa.offerta_formativa.manager.old.PersonManager;
+import it.unisa.integrazione.database.PersonManager;
+import it.unisa.integrazione.database.exception.ConnectionException;
 import it.unisa.offerta_formativa.manager.ProfModuleClassManager;
 import it.unisa.offerta_formativa.manager.TeachingManager;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -87,18 +94,30 @@ public class ShowAssociationServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            String path="/offertaFormativaJSP/amministratore/";  
+            String path="/offertaFormativa/amministratore/classmodule/";  
             if(request.getParameterMap().containsKey("matricula")){
-                String matricula =request.getParameter("matricula");
-                request.setAttribute("teaching", teachingMng.readTeaching(matricula));
-                request.setAttribute("modules", modMng.getModulesByTeaching(matricula));
-                request.setAttribute("classes", classMng.getClassesByTeaching(matricula));
-                HashMap<ProfModuleClass,String> map = new HashMap<>();
-                for(ProfModuleClass pmc :pmcMng.getByTeaching(matricula)){
-                    map.put(pmc, personMng.getPersonByEmail(pmc.getProfEmail()).getName()+" "+personMng.getPersonByEmail(pmc.getProfEmail()).getSurname());
+                try {
+                    String matricula=request.getParameter("matricula");
+                    request.setAttribute("teaching", teachingMng.readTeaching(matricula));
+                    request.setAttribute("modules", modMng.getModulesByTeaching(matricula));
+                    request.setAttribute("classes", classMng.getClassesByTeaching(matricula));
+                    HashMap<ProfModuleClass,String> map = new HashMap<>();
+                    for(ProfModuleClass pmc :pmcMng.getByTeaching(matricula)){
+                        map.put(pmc, personMng.getPersonByEmail(pmc.getProfEmail()).getName()+" "+personMng.getPersonByEmail(pmc.getProfEmail()).getSurname());
+                    }
+                    request.setAttribute("profmoduleclass", map);
+                    request.getRequestDispatcher(path+"listClassModule.jsp").forward(request, response);
+                } catch (TeachingException ex) {
+                    Logger.getLogger(ShowAssociationServlet.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ModuleException ex) {
+                    Logger.getLogger(ShowAssociationServlet.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassPartitionException ex) {
+                    Logger.getLogger(ShowAssociationServlet.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ShowAssociationServlet.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ConnectionException ex) {
+                    Logger.getLogger(ShowAssociationServlet.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                request.setAttribute("profmoduleclass", map);
-                request.getRequestDispatcher(path+"listClassModule.jsp").forward(request, response);
             }
     }
 
