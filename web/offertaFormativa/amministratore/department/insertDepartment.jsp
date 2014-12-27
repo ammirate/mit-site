@@ -196,7 +196,7 @@
                 </c:when>
             </c:choose>
         </div>
-    </div>
+   
     <!-- Bottom Scripts -->
     <script type="text/javascript">
         function RevertModify() {

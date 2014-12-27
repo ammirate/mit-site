@@ -3,16 +3,11 @@ package it.unisa.offerta_formativa.servlet.curriculum;
 import it.unisa.integrazione.database.CycleManager;
 import it.unisa.integrazione.database.DegreeManager;
 import it.unisa.integrazione.database.DepartmentManager;
-import it.unisa.model.Degree;
 import it.unisa.offerta_formativa.beans.Curriculum;
 import it.unisa.offerta_formativa.manager.CurriculumManager;
 import it.unisa.offerta_formativa.manager.Exceptions.CurriculumException;
-import it.unisa.offerta_formativa.moodle.manager.MoodleCategoryManager;
-import it.unisa.offerta_formativa.moodle.moodle_rest.MoodleRestException;
 import java.io.IOException;
 import static java.lang.System.out;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,7 +30,6 @@ public class InsertCurriculumServlet extends HttpServlet {
     private DegreeManager degreeMng;
     private DepartmentManager depMng;
     private CycleManager cyMng;
-    private MoodleCategoryManager mDeMng;
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -60,17 +54,6 @@ public class InsertCurriculumServlet extends HttpServlet {
 
     private void InsertCurriculum(Curriculum cur) {
         // TODO Auto-generated method stub
-        Degree degree = degreeMng.readDegree(cur.getDegreeMatricula());
-        mDeMng = MoodleCategoryManager.getInstance(depMng.getDepartmentByAbbreviation(degree.getDepartmentAbbreviation()).getUrlMoodle(), depMng.getDepartmentByAbbreviation(degree.getDepartmentAbbreviation()).getToken());
-        String cycleName = cyMng.getCycleByCycleNumber(degree.getCycle()).getTitle();
-        //////////////
-        int idDeg = 0;
-        try {
-            idDeg = mDeMng.getIdCategoryByParent(cycleName,degree.getTitle());
-        } catch (MoodleRestException ex) {
-            Logger.getLogger(InsertCurriculumServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        mDeMng.createCategory(cur.getTitle(), idDeg);
         cuMng.createCurriculum(cur);
     }
 
