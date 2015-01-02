@@ -39,6 +39,20 @@
                     <li><a href="${pageContext.request.contextPath}/ShowCurriculumServlet"> <span class="title">Modifica Curriculum</span>
                         </a></li>
                 </ul></li>
+                <li><a href="#"> <i class="linecons-tag"></i> 
+                    <span class="title">Insegnamenti</span>
+                </a>
+                <ul>
+                    <li><a href="${pageContext.request.contextPath}/ShowInsertTeachingServlet"> <span class="title">Inserisci Insegnamento</span>
+                        </a></li>
+                    <li><a href="${pageContext.request.contextPath}/ShowListTeachingServlet"> <span class="title">Visualizza Insegnamenti</span>
+                        </a></li>
+                    <li><a href="${pageContext.request.contextPath}/ShowInsertClassServlet"> <span class="title">Inserisci Classe</span>
+                        </a></li>
+                    <li><a href="${pageContext.request.contextPath}/ShowInsertModuleServlet"> <span class="title">Inserisci Modulo</span>
+                        </a></li>
+                </ul></li>
+                
         </ul>
     </div>
 </div>

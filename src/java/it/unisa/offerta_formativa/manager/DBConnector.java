@@ -43,7 +43,7 @@ public class DBConnector {
             Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(CONNECTION_STRING, "root", "");
         } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(DegreeManager.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(DegreeManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             return conn.createStatement();

@@ -2,6 +2,7 @@
     Document   : modifyClass
     Author     : Alessandro
 --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="it.unisa.offerta_formativa.beans.Teaching"%>
 <%@page import="it.unisa.offerta_formativa.beans.Curriculum"%>
 <%@page import="it.unisa.model.*"%>
@@ -45,128 +46,44 @@ public Teaching teaching;
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
 
+<style>
+            html .select2-drop .select2-results li.select2-highlighted{ //per la selection di select2
+                                                                        border-color: #cc3f44;
+                                                                        background-color:#3875d7;
+            }
+            form .error{ //per validation
+                         border-color: #cc3f44;
+                         color:#cc3f44;
+            }
 
+            form input.error{
+                border-color: #cc3f44;
+            }
+        </style>
 </head>
 <body class="page-body">
         <%
                 title = (String)request.getAttribute("title");
                 teaching = (Teaching) request.getAttribute("teaching");
 	%>
-	<nav class="navbar horizontal-menu navbar-fixed-top">
-		<!-- set fixed position by adding class "navbar-fixed-top" -->
-
-		<div class="navbar-inner">
-
-			<!-- Navbar Brand -->
-			<div class="navbar-brand">
-				<a href="offertaFormativaStudente.html" class="logo"> <img
-					src="assets/images/mitforsite.png" width="80" alt=""
-					class="hidden-xs" /> <img src="assets/images/mitforsitemini.png"
-					width="80" alt="" class="visible-xs" />
-				</a>
-			</div>
-
-			<!-- Mobile Toggles Links -->
-			<div class="nav navbar-mobile">
-
-				<!-- This will toggle the mobile menu and will be visible only on mobile devices -->
-				<div class="mobile-menu-toggle">
-
-					<a href="#" data-toggle="user-info-menu-horizontal"> <i
-						class="fa-key"></i>
-					</a> <a href="#" data-toggle="mobile-menu-horizontal"> <i
-						class="fa-bars"></i>
-					</a>
-				</div>
-			</div>
-
-			<div class="navbar-mobile-clear"></div>
-
-			<!-- main menu -->
-
-			<ul class="navbar-nav">
-				<li class="opened active"><a
-					href="offertaFormativaStudente.html"> <i
-						class="linecons-desktop"></i> <span class="title">Offerta
-							Formativa</span>
-				</a></li>
-				<li><a href="#"> <i class="linecons-graduation-cap"></i> <span
-						class="title">Gestione Tesi</span>
-				</a></li>
-				<li><a href="#l"> <i class="linecons-megaphone"></i> <span
-						class="title">Gestione Tirocinio</span>
-				</a></li>
-				<li><a href="#"> <i class="linecons-lightbulb"></i> <span
-						class="title">Dottorato</span>
-				</a></li>
-				<li><a href="#"> <i class="linecons-globe"></i> <span
-						class="title">Links</span>
-				</a>
-					<ul>
-						<li><a href="http://www.magistralemit.unisa.it/"
-							target="_blank"> <span class="title">DISTRA-MIT</span>
-						</a></li>
-						<li><a href="https://esse3web.unisa.it/unisa/Start.do"
-							target="_blank"> <span class="title">Esse3</span>
-						</a></li>
-					</ul></li>
-			</ul>
-			<!-- notifications and other links -->
-			<ul class="nav nav-userinfo navbar-right">
-				<li class="dropdown user-profile"><a href="#"
-					data-toggle="dropdown"> <img src="assets/images/user-1.png"
-						alt="user-image" class="img-circle img-inline userpic-32"
-						width="28" /> <span id="spaceForUsername"> </span>
-				</a>
-
-					<ul class="dropdown-menu user-profile-menu list-unstyled">
-						<li><a href="#"> <i class="fa-edit"></i> Profilo
-						</a></li>
-						<li class="last"><a href="#" id="logout"> <i
-								class="fa-lock"></i> Logout
-						</a></li>
-					</ul></li>
-			</ul>
-
-		</div>
-
-	</nav>
+	<%@include file="/offertaFormativa/topMenu.jsp" %>
 	<div class="page-container">
 		<!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
 
 		<!-- Add "fixed" class to make the sidebar fixed always to the browser viewport. -->
 		<!-- Adding class "toggle-others" will keep only one menu item open at a time. -->
 		<!-- Adding class "collapsed" collapse sidebar root elements and show only icons. -->
-		<div class="sidebar-menu toggle-others">
-			<div class="sidebar-menu-inner">
-				<ul id="main-menu" class="main-menu">
-					<!-- add class "multiple-expanded" to allow multiple submenus to open -->
-					<!-- class "auto-inherit-active-class" will automatically add "active" class for parent elements who are marked already with class "active" -->
-					<li class="opened active"><a href="#"> <i
-							class="linecons-cog"></i> <span class="title">Home</span>
-					</a></li>
-					<li id="funzionalita1Permission_0"><a href="#"> <i
-							class="linecons-cog"></i> <span class="title">Funzionalit&agrave;
-								01</span>
-					</a></li>
-					<li><a href="#"> <i class="linecons-note"></i> <span
-							class="title">Funzionalit&agrave; 02</span>
-					</a></li>
-					<li id="funzionalita3Permission_0"><a href="#"> <i
-							class="linecons-mail"></i> <span class="title">Funzionalit&agrave;
-								03</span>
-					</a>
-						<ul>
-							<li><a href="#"> <span class="title">INSERT</span>
-							</a></li>
-							<li><a href="#"> <span class="title">DELETE</span>
-							</a></li>
-							<li><a href="#"> <span class="title">VIEW</span>
-							</a></li>
-						</ul></li>
-				</ul>
-			</div>
-		</div>
+		<c:choose>
+                <c:when test="${sessionScope.person.account.typeOfAccount != 'admin'}">
+                    <script type="text/javascript">
+                        $(function () {
+                            $("#ErrorDialog").modal();
+                        });
+                    </script>
+                    <%@include file="/offertaFormativa/errorPermission.jsp" %>
+                </c:when>
+                <c:when test="${sessionScope.person.account.typeOfAccount == 'admin'}">
+                    <%@include file="/offertaFormativa/amministratore/lateralMenuAdmin.jsp" %>
 
 		<div class="main-content">
 
@@ -202,14 +119,14 @@ public Teaching teaching;
                                             <div class="row">
                                                 <div class="form-group col-sm-9">
                                                     <label for="title">Nome Module:</label>
-                                                    <input type="text" class="form-control" name="moduleTitle" value="<%out.print(title);%>">
+                                                    <input type="text" minlength="2" class="form-control" name="moduleTitle" value="<%out.print(title);%>">
                                                 </div>
                                                 <input type="text" hidden="true" name="oldModuleTitle" value="<%out.print(title);%>">
                                                 <input type="text" hidden="true" name="matricula" value="<%out.print(teaching.getMatricula());%>">
                                             </div>
                                             <div class="row">
                                                 <div class="form-group col-sm-2">
-                                                    <input type="submit" class="form-control" value="Modifica">
+                                                    <input type="submit" class="form-control" value="Modifica" onclick="$('#form').validate();">
                                                 </div>
                                             </div>
                                         </form>
@@ -245,7 +162,8 @@ public Teaching teaching;
 
 			</footer>
 		</div>
-
+            </c:when>
+            </c:choose>                                 
 	</div>
 	
 
@@ -340,8 +258,12 @@ public Teaching teaching;
 	<script src="assets/js/joinable.js"></script>
 	<script src="assets/js/xenon-api.js"></script>
 	<script src="assets/js/xenon-toggles.js"></script>
-
-
+        <link rel="stylesheet" href="assets/js/select2/select2.css">
+        <link href="assets/js/select2/select2-bootstrap.css" rel="stylesheet" type="text/css"/>
+        <script src="assets/js/select2/select2.min.js"></script>
+        <script src="assets/js/jquery-validate/jquery.validate.min.js" id="script-resource-7"></script>
+        <script src="assets/js/jquery-validate/localization/messages_it.min.js" type="text/javascript"></script>
+        <script src="assets/js/FunzioniOffertaFormativa.js" type="text/javascript"></script>
 	<!-- JavaScripts initializations and stuff -->
 	<script src="assets/js/xenon-custom.js"></script>
 

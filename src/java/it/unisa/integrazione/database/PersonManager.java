@@ -26,7 +26,6 @@ public class PersonManager {
         return instance;
 
     }
-    
 
     public void add(Person pPerson) throws SQLException, ConnectionException, MissingDataException {
         Connection connect = DBConnection.getConnection();
@@ -51,7 +50,7 @@ public class PersonManager {
         } else {
             sql += ") VALUES ( ";
         }
-        
+
         sql += "\"" + pPerson.getSsn() + "\",\""
                 + Utilities.emptyValue(pPerson.getName()) + "\",\"" + Utilities.emptyValue(pPerson.getSurname()) + "\",\""
                 + Utilities.emptyValue(pPerson.getPhone()) + "\",\"" + Utilities.emptyValue(pPerson.getCity()) + "\",\""
@@ -62,14 +61,14 @@ public class PersonManager {
                 + Utilities.emptyValue(pPerson.getWebPage()) + "\",\"" + Utilities.emptyValue(pPerson.getUniversity()) + "\",\""
                 + Utilities.emptyValue(pPerson.getMatricula()) + "\",\"" + Utilities.emptyValue(pPerson.getPosition()) + "\","
                 + pPerson.getCycle().getCycleNumber();
-        
+
         if (pPerson.getDegree() != null) {
-            sql += ",\"" 
-                + Utilities.emptyValue(pPerson.getDegree().getMatricula()) + "\")";
+            sql += ",\""
+                    + Utilities.emptyValue(pPerson.getDegree().getMatricula()) + "\")";
         } else {
             sql += ")";
         }
-        
+
         try {
             Statement stmt = connect.createStatement();
             stmt.executeUpdate(sql);
@@ -115,13 +114,14 @@ public class PersonManager {
 
                 person.setDepartment(DepartmentManager.getInstance().getDepartmentByAbbreviation("Department_abbreviation"));
                 person.setCycle(CycleManager.getInstance().getCycleByCycleNumber(rs.getInt("cycle")));
-                
-                if(rs.getString("degree_matricula") != null) {
+
+                if (rs.getString("degree_matricula") != null) {
                     person.setDegree(DegreeManager.getInstance().readDegree(person.getMatricula()));
                 }
-                
+
             }
-        } finally {DBConnection.releaseConnection(connection);
+        } finally {
+            DBConnection.releaseConnection(connection);
         }
 
         return person;
@@ -164,8 +164,8 @@ public class PersonManager {
                 person.setDepartment(DepartmentManager.getInstance().getDepartmentByAbbreviation("Department_abbreviation"));
                 person.setCycle(CycleManager.getInstance().getCycleByCycleNumber(rs.getInt("cycle")));
                 person.setAccount(AccountManager.getInstance().getAccoutnByEmail(pEmail));
-                
-                if(rs.getString("degree_matricula") != null) {
+
+                if (rs.getString("degree_matricula") != null) {
                     person.setDegree(DegreeManager.getInstance().readDegree(person.getMatricula()));
                 }
 
@@ -177,39 +177,44 @@ public class PersonManager {
 
         return person;
     }
-    
-    public ArrayList<Person> getProfessorByDepartment(String deptAbbrv) throws ConnectionException, SQLException{
-        Person person;
-        String query = "SELECT * FROM account as a INNER JOIN person as p ON p.Account_email=a.email WHERE p.Department_abbreviation='"+deptAbbrv+"' AND a.typeOfAccount='professore'";
-        ArrayList<Person> toReturn = new ArrayList<>();
-        Connection connection = DBConnection.getConnection();
 
+    public ArrayList<Person> getProfessorByDepartment(String deptAbbrv) throws ConnectionException, SQLException {
+        Person person;
+        Connection connection=null;
+        String query = "SELECT * FROM account as a INNER JOIN person as p ON p.Account_email=a.email WHERE p.Department_abbreviation='" + deptAbbrv + "' AND a.typeOfAccount='professor'";
+        ArrayList<Person> toReturn = new ArrayList<>();
+        try {
+            connection = DBConnection.getConnection();
             if (connection == null) {
                 throw new ConnectionException();
             }
 
-        Statement stmt = connection.createStatement();
-        ResultSet rs = stmt.executeQuery(query);
-        while(rs.next()){
-            person = new Person();
-            person.setSsn(rs.getString("SSN"));
-            person.setName(rs.getString("name"));
-            person.setSurname(rs.getString("surname"));
-            person.setPhone(rs.getString("phone"));
-            person.setCity(rs.getString("city"));
-            person.setAddress(rs.getString("address"));
-            person.setZipCode(rs.getString("zip_code"));
-            person.setGender(rs.getString("gender"));
-            person.setCitizenship(rs.getString("citizenship"));
-            person.setWebPage(rs.getString("web_page"));
-            person.setUniversity(rs.getString("university"));
-            person.setMatricula(rs.getString("matricula"));
-            person.setPosition(rs.getString("position"));
-            person.setAccount(AccountManager.getInstance().getAccoutnByEmail(rs.getString("Account_email")));
-            person.setDepartment(DepartmentManager.getInstance().getDepartmentByAbbreviation(rs.getString("Department_abbreviation")));
-            
-            toReturn.add(person);
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                person = new Person();
+                person.setSsn(rs.getString("SSN"));
+                person.setName(rs.getString("name"));
+                person.setSurname(rs.getString("surname"));
+                person.setPhone(rs.getString("phone"));
+                person.setCity(rs.getString("city"));
+                person.setAddress(rs.getString("address"));
+                person.setZipCode(rs.getString("zip_code"));
+                person.setGender(rs.getString("gender"));
+                person.setCitizenship(rs.getString("citizenship"));
+                person.setWebPage(rs.getString("web_page"));
+                person.setUniversity(rs.getString("university"));
+                person.setMatricula(rs.getString("matricula"));
+                person.setPosition(rs.getString("position"));
+                person.setAccount(AccountManager.getInstance().getAccoutnByEmail(rs.getString("Account_email")));
+                person.setDepartment(DepartmentManager.getInstance().getDepartmentByAbbreviation(rs.getString("Department_abbreviation")));
+
+                toReturn.add(person);
+            }
+        } finally {
+            DBConnection.releaseConnection(connection);
         }
+
         return toReturn;
     }
 }

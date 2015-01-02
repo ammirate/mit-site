@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +30,11 @@ public class LogoutServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         session.removeAttribute("person");
+        for(Cookie c : request.getCookies()){
+            if(c.getName().equalsIgnoreCase("moodlesession")){ 
+                c.setMaxAge(0);
+            }
+        }
         response.sendRedirect("index.jsp");
     }
 

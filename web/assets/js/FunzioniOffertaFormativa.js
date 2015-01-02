@@ -6,7 +6,9 @@ function changeSelect(){
     $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();});
     $("#degree").select2({placeholder:'Seleziona un degree',allowClear: true}).on('select2-open', function(){
     $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();});    
-    $("#curriculum").select2({allowClear: true}).on('select2-open', function(){
+    $("#curriculum").select2({placeholder:'Seleziona un curriculum',allowClear: true}).on('select2-open', function(){
+    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();});
+    $("#teaching").select2({placeholder:'Seleziona un insegnamento',allowClear: true}).on('select2-open', function(){
     $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();});
 }
 
