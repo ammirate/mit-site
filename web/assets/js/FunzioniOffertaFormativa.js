@@ -15,6 +15,7 @@ function changeSelect(){
 function loadDegree() {
     $.get('GetDegreeServlet?cycle=' + $('#cycle').val() + "&department=" + $('#department').val(), function (responseJson) {
         var $select = $('#degree');
+        $select.removeAttr("onclick");
         $select.find('option').remove();
         $('<option>').text("").appendTo($select);
         $.each(responseJson, function (key, value) {
@@ -25,6 +26,7 @@ function loadDegree() {
 function loadCycle(setdefault) {
     $.get('GetCycleServlet', function (responseJson) {
         var $select = $('#cycle');
+        $select.removeAttr("onclick");
         $select.find('option').remove();
         $('<option>').text("").appendTo($select);
         $.each(responseJson, function (key, value) {
@@ -36,6 +38,7 @@ function loadCycle(setdefault) {
 function loadDepartment(setdefault) {
     $.get('GetDepartmentServlet', function (responseJson) {
         var $select = $('#department');
+        $select.removeAttr("onclick");
         $select.find('option').remove();
         $('<option>').text("").appendTo($select);
         $.each(responseJson, function (key, value) {
@@ -48,6 +51,7 @@ function loadDepartment(setdefault) {
 function loadCurriculum(i) {
     $.get("GetCurriculumServlet?degree=" + i, function (responseJson) {
         var $select = $('#curriculum');
+        $select.removeAttr("onclick");
         $select.find('option').remove();
         $('<option>').text("").appendTo($select);
         $.each(responseJson, function (key, value) {

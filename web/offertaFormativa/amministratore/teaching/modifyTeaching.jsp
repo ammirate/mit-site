@@ -64,9 +64,8 @@
         <script type="text/javascript">
             $(window).load(function () {
                 
-                loadDepartment("<%out.print(dept.getAbbreviation());%>");
-                loadCycle("<%out.print(cycle.getNumber());%>");
-                changeSelect();
+                
+                //changeSelect();
             });
         </script>
 
@@ -149,15 +148,15 @@
                                 <div class='col-sm-1'></div>
                                 <div class="form-group col-sm-4">
                                     <label for="department">Dipartimento:</label> 
-                                    <select name="department" id="department" class="form-control" onchange="loadDegree();">
-                                        
+                                    <select name="department" id="department" class="form-control" onchange="loadDegree();" onclick="loadDepartment();" readonly>
+                                        <option selected="selected" value="<% out.print(dept.getAbbreviation()); %>"><% out.print(dept.getTitle()); %></option>
                                     </select>
                                 </div>
                                 <div class="col-sm-2"></div>
                                 <div class="form-group col-sm-4">
                                     <label for="cycle">Ciclo:</label> 
-                                    <select name="cycle" id="cycle" class="form-control" onchange="loadDegree();" >
-                                        
+                                    <select name="cycle" id="cycle" class="form-control" onchange="loadDegree();" onclick="loadCycle();" readonly >
+                                        <option selected="selected" value="<% out.print(cycle.getCycleNumber()); %>"><% out.print(cycle.getTitle()); %></option>
                                     </select>
                                 </div>
                             </div>
@@ -165,16 +164,16 @@
                                 <div class='col-sm-1'></div>
                                 <div class="form-group col-sm-4">
                                     <label for="degree">Corso di Laurea:</label> 
-                                    <select name="degree" class="form-control" id="degree" onchange="loadCurriculum(this.value);" >
-                                        
+                                    <select name="degree" class="form-control" id="degree" onchange="loadCurriculum(this.value);" onclick="loadDegree();" readonly >
+                                        <option selected="selected" value="<% out.print(degree.getMatricula()); %>"><% out.print(degree.getTitle()); %></option>
                                     </select>
                                 </div>
                                 <div class="col-sm-2"></div>
 
                                 <div class="form-group col-sm-4">
                                     <label for="curriculum">Curriculum:</label> 
-                                    <select name="curriculum" class="form-control" id="curriculum" >
-                                        
+                                    <select name="curriculum" class="form-control" id="curriculum" onclick="loadCurriculum();" readonly >
+                                        <option selected="selected" value="<% out.print(curr.getMatricula()); %>"><% out.print(curr.getTitle()); %></option>
                                     </select>
                                     <input hidden="true" type="text" value="<%out.print(curr.getMatricula());%>" name="oldCurriculumMatricula">
                                 </div>
