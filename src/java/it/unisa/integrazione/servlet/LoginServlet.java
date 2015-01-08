@@ -113,8 +113,9 @@ public class LoginServlet extends HttpServlet {
     // HTTP GET request
 	private Cookie loginMoodle(String username, String password) throws Exception {
                 String USER_AGENT = "Mozilla/5.0";
-		String url = "http://localhost/moodle/provalogin.php?username="+username+"&password="+password;
+		String url = "http://"+this.getServletContext().getVirtualServerName()+"/moodle/singlelogin.php?username="+username+"&password="+password;
 		URL obj = new URL(url);
+                System.out.println(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
  
 		//add reuqest header
