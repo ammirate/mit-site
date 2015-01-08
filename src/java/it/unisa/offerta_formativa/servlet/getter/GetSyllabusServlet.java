@@ -40,9 +40,12 @@ public class GetSyllabusServlet extends HttpServlet {
 	}
 
         private ArrayList<String> getHtml(String teaching_matricula){
+//            System.out.println("la matricola per l'HTML è " + teaching_matricula);
             ArrayList<String> toReturn=new ArrayList<String>();
             String html= tm.getHtmlSyllabus(teaching_matricula);
-            if(html.equalsIgnoreCase("Link di esse3 errato")){
+//            System.out.println("ho letto" + html);
+
+            if(html==null || html.equalsIgnoreCase("Link di esse3 errato")){
                  toReturn.add("Errore nel DataBase");
                  toReturn.add("Link di esse3 errato");
             } else {
