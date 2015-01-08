@@ -16,10 +16,10 @@ import java.util.logging.Logger;
 
 
 /**
- * Servlet implementation class Servlet
- * 
  * @author Davide
+ * Class to show ModifyCurriculum.jsp
  */
+
 @WebServlet("/ModifyCurriculumServlet")
 public class ModifyCurriculumServlet extends HttpServlet {
 

@@ -14,9 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class GetSyllabusServlet
- *
  * @author Davide
+ * Class to show ShowDepartmentList.jsp
  */
 @WebServlet("/ShowDepartmentServlet")
 public class ShowDepartmentServlet extends HttpServlet {

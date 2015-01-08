@@ -24,9 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class GetSyllabusServlet
- *
  * @author Davide
+ * Class to show ShowTeachingOfferList.jsp
  */
 @WebServlet("/ShowTeachingOfferServlet")
 public class ShowTeachingOfferServlet extends HttpServlet {
@@ -60,37 +59,13 @@ public class ShowTeachingOfferServlet extends HttpServlet {
         doPost(request, response);
     }
 
-    private HashMap CreateMap() {
-        HashMap< Department, HashMap<Degree, HashMap<Curriculum, ArrayList<Teaching>>>> map;
-        map = new HashMap< Department, HashMap< Degree, HashMap<Curriculum, ArrayList<Teaching>>>>();
-
-        for (Department d : dm.getAllDepartments()) {
-            map.put(d, new HashMap< Degree, HashMap<Curriculum, ArrayList<Teaching>>>());
-
-            for (Degree deg : degreeMng.getDegreesByDepartment(d.getAbbreviation())) {
-
-                map.get(d).put(deg, new HashMap<Curriculum, ArrayList<Teaching>>());
-
-                for (Curriculum c : cm.getCurriculumByDegree(deg.getMatricula())) {
-                    map.get(d).get(deg).put(c, new ArrayList<Teaching>());
-
-                    for (Teaching t : tm.getTeachingsByCurriculum(c.getMatricula())) {
-                        map.get(d).get(deg).get(c).add(t);
-                    }
-                }
-            }
-        }
-        return map;
-    }
-
+    
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
      * response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        request.setAttribute("cycles", cym.getAllCycles());
-        request.setAttribute("map", CreateMap());
         request.getRequestDispatcher("/offertaFormativa/ShowTeachingOfferList.jsp").forward(request, response);
     }
 }

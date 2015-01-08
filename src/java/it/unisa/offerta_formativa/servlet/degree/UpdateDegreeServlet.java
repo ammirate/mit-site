@@ -15,7 +15,8 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 
 /**
- * Servlet implementation class Servlet
+ * @author Davide
+ * Class to modify a degree in db
  */
 @WebServlet("/UpdateDegreeServlet")
 public class UpdateDegreeServlet extends HttpServlet {

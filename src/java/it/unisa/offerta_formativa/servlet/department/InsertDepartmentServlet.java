@@ -13,8 +13,8 @@ import javax.servlet.ServletContext;
 
 
 /**
- * 
  * @author Davide
+ * Class to create a new department in db
  */
 @WebServlet("/InsertDepartmentServlet")
 public class InsertDepartmentServlet extends HttpServlet {
