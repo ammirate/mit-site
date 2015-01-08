@@ -78,9 +78,10 @@ public class Installer extends HttpServlet {
      */
     public boolean install() {
         try {
-            MoodleRestCourse.createCategory(new MoodleCategory(2, "Triennale"));
-            MoodleRestCourse.createCategory(new MoodleCategory(3, "Magistrale"));
+            MoodleRestCourse.createCategory(new MoodleCategory(2, "Laurea Triennale"));
+            MoodleRestCourse.createCategory(new MoodleCategory(3, "Laurea Magistrale"));
             MoodleRestCourse.createCategory(new MoodleCategory(4, "Dottorato"));
+            MoodleRestCourse.createCategory(new MoodleCategory(5, "Ciclo Unico"));
             return true;
         } catch (UnsupportedEncodingException | MoodleRestException e) {
             // TODO Auto-generated catch block

@@ -68,8 +68,6 @@
                             </div>
                             <div class="panel-body">
 
-
-
                                 <script>
                                     jQuery(document).ready(function ($) {
                                         $('a[href="#layout-variants"]').on('click', function (ev) {
@@ -173,6 +171,7 @@
 
             </div>
         </div>
+    
             <!-- Bottom Scripts -->
             <script type="text/javascript">
                 jQuery(document).ready(function ($)

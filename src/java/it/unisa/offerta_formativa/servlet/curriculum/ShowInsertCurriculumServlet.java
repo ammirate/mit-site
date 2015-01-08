@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 
 /**
- * 
  * @author Davide
+ * Class to show insertCurriculum.jsp
  */
 @WebServlet("/ShowInsertCurriculumServlet")
 public class ShowInsertCurriculumServlet extends HttpServlet {

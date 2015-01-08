@@ -12,8 +12,10 @@ import it.unisa.model.Degree;
 import it.unisa.integrazione.database.DegreeManager;
 
 
+
 /**
- * Servlet implementation class Servlet
+ * @author Davide
+ * Class to show ModifyDegree.jsp
  */
 @WebServlet("/ModifyDegreeServlet")
 public class ModifyDegreeServlet extends HttpServlet {

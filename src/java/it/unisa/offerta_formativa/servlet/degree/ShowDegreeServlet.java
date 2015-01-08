@@ -16,9 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class GetSyllabusServlet
- *
  * @author Davide
+ * Class to show ShowDegreeList.jsp
  */
 @WebServlet("/ShowDegreeServlet")
 public class ShowDegreeServlet extends HttpServlet {

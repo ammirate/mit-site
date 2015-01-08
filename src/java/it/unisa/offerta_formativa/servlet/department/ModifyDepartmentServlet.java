@@ -13,7 +13,8 @@ import it.unisa.integrazione.database.DepartmentManager;
 
 
 /**
- * Servlet implementation class Servlet
+ * @author Davide
+ * Class to show ModifyDepartment.jsp
  */
 @WebServlet("/ModifyDepartmentServlet")
 public class ModifyDepartmentServlet extends HttpServlet {
