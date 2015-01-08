@@ -30,11 +30,6 @@ public class LogoutServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         session.removeAttribute("person");
-        for(Cookie c : request.getCookies()){
-            if(c.getName().equalsIgnoreCase("moodlesession")){ 
-                c.setMaxAge(0);
-            }
-        }
         response.sendRedirect("index.jsp");
     }
 

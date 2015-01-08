@@ -23,7 +23,7 @@ public class MoodleTeachingManager {
 	private static MoodleTeachingManager instance = null;
 	
 	private MoodleTeachingManager(String urlMoodle,String token){
-		MoodleCallRestWebService.init(urlMoodle, token, false);
+		MoodleCallRestWebService.init(urlMoodle+"/webservice/rest/server.php", token, false);
 	}
 	
 	/**

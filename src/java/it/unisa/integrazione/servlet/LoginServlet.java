@@ -62,32 +62,30 @@ public class LoginServlet extends HttpServlet {
                     out.println("location='login.jsp';");
                     out.println("</script>");
                 } else if (person.getAccount().getTypeOfAccount().equals("admin")) {
-                    response.addCookie(loginMoodle(username, password));
                     session.removeAttribute("loginError");
                     session.setAttribute("person", person);
                     response.sendRedirect("indexLog.jsp");
                 } else if (person.getAccount().getTypeOfAccount().equals("Bstudent")) {
-                    response.addCookie(loginMoodle(username, password));
+                    
                     session.removeAttribute("loginError");
                     session.setAttribute("person", person);
                     response.sendRedirect("indexLog.jsp");
                 } else if (person.getAccount().getTypeOfAccount().equals("Mstudent")) {
-                    response.addCookie(loginMoodle(username, password));
+                    
                     session.removeAttribute("loginError");
                     session.setAttribute("person", person);
                     response.sendRedirect("indexLog.jsp");
                 } else if (person.getAccount().getTypeOfAccount().equals("phd")) {
-                    response.addCookie(loginMoodle(username, password));
+                    
                     session.removeAttribute("loginError");
                     session.setAttribute("person", person);
                     response.sendRedirect("indexLog.jsp");
                 } else if (person.getAccount().getTypeOfAccount().equals("professor")) {
-                    response.addCookie(loginMoodle(username, password));
+                    
                     session.removeAttribute("loginError");
                     session.setAttribute("person", person);
                     response.sendRedirect("indexLog.jsp");
                 } else if (person.getAccount().getTypeOfAccount().equals("company")) {
-                    response.addCookie(loginMoodle(username, password));
                     session.removeAttribute("loginError");
                     session.setAttribute("person", person);
                     response.sendRedirect("indexLog.jsp");
@@ -108,41 +106,7 @@ public class LoginServlet extends HttpServlet {
         } finally {
             out.close();
         }
-    }
-
-    // HTTP GET request
-	private Cookie loginMoodle(String username, String password) throws Exception {
-                String USER_AGENT = "Mozilla/5.0";
-		String url = "http://"+this.getServletContext().getVirtualServerName()+"/moodle/singlelogin.php?username="+username+"&password="+password;
-		URL obj = new URL(url);
-                System.out.println(url);
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
- 
-		//add reuqest header
-		con.setRequestMethod("GET");
-		con.setRequestProperty("User-Agent", USER_AGENT);
- 
-		BufferedReader in = new BufferedReader(
-		        new InputStreamReader(con.getInputStream()));
-		String inputLine;
-                System.out.println(in);
-		StringBuffer resp = new StringBuffer();
- 
-		while ((inputLine = in.readLine()) != null) {
-			resp.append(inputLine);
-		}
-		in.close();
-                System.out.println(resp.toString());
-                String name = resp.toString().split("=")[0];
-                String value = resp.toString().replace(resp.toString().split("=")[0]+"=", "");
-                Cookie cookie = new Cookie(name, value.split(";")[0]);
-                System.out.println(cookie.getValue());
-                cookie.setPath("/");
-                cookie.setMaxAge(-1);
-                return cookie;
- 
-	}
-    
+    }  
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

@@ -33,7 +33,7 @@ public class MoodleCategoryManager {
      */
     public static MoodleCategoryManager getInstance(String urlMoodle, String token) {
         if (instance == null) {
-            instance = new MoodleCategoryManager(urlMoodle, token);
+            instance = new MoodleCategoryManager(urlMoodle+"/webservice/rest/server.php", token);
         }
         return instance;
     }

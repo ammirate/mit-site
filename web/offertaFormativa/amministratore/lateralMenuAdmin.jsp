@@ -52,6 +52,13 @@
                     <li><a href="${pageContext.request.contextPath}/ShowInsertModuleServlet"> <span class="title">Inserisci Modulo</span>
                         </a></li>
                 </ul></li>
+                <li><a href="#"> <i class="linecons-tag"></i> 
+                    <span class="title">E-learning</span>
+                </a>
+                <ul>
+                    <li><a href="${pageContext.request.contextPath}/MoodleLoginServlet?email=${sessionScope.person.account.email}"> <span class="title">Moodle</span>
+                        </a></li>
+                </ul></li>
                 
         </ul>
     </div>

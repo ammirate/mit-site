@@ -21,7 +21,7 @@ public class MoodleUserManager {
 	private static MoodleUserManager instance = null;
 	
 	private MoodleUserManager(String urlMoodle,String token){
-		MoodleCallRestWebService.init(urlMoodle, token, false);
+		MoodleCallRestWebService.init(urlMoodle+"/webservice/rest/server.php", token, false);
 	}
 	
 	/**

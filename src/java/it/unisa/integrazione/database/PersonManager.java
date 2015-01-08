@@ -161,7 +161,7 @@ public class PersonManager {
                 person.setMatricula(rs.getString("matricula"));
                 person.setPosition(rs.getString("position"));
 
-                person.setDepartment(DepartmentManager.getInstance().getDepartmentByAbbreviation("Department_abbreviation"));
+                person.setDepartment(DepartmentManager.getInstance().getDepartmentByAbbreviation(rs.getString("Department_abbreviation")));
                 person.setCycle(CycleManager.getInstance().getCycleByCycleNumber(rs.getInt("cycle")));
                 person.setAccount(AccountManager.getInstance().getAccoutnByEmail(pEmail));
 
