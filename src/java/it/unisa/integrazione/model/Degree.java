@@ -186,6 +186,8 @@ public class Degree implements Comparable<Degree> {
         this.esse3Content = esse3Content;
     }
 
-    
+    public Degree(){
+        
+    }
     
 }

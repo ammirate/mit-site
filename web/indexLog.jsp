@@ -82,7 +82,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="gestioneTesi/index.jsp">
                             <i class="linecons-graduation-cap"></i>
                             <span class="title">Gestione Tesi</span>
                         </a>
@@ -167,6 +167,13 @@
                             <a href="../../tirocinio/organizzazione/gestioneTirocinio&PlacementOrganizzazione.html">
                                 <i class="linecons-cog"></i>
                                 <span class="title">Offerta Tirocinio</span>
+                            </a>
+                        </li>
+                        
+                        <li id="gestioneTesi" class="opened active">
+                            <a href="gestioneTesi/index.jsp">
+                                <i class="fa-graduation-cap"></i>
+                                <span class="title">Gestione Tesi</span>
                             </a>
                         </li>
                     </ul>

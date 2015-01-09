@@ -3,12 +3,16 @@ package it.unisa.integrazione.database;
 import it.unisa.integrazione.database.exception.ConnectionException;
 import it.unisa.integrazione.database.exception.MissingDataException;
 import it.unisa.integrazione.database.utility.Utilities;
+import it.unisa.integrazione.model.Degree;
+import it.unisa.integrazione.model.Department;
 import it.unisa.integrazione.model.Person;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  *
@@ -254,7 +258,7 @@ public class PersonManager {
 
     public ArrayList<Person> getProfessorByDepartment(String deptAbbrv) throws ConnectionException, SQLException {
         Person person;
-        Connection connection=null;
+        Connection connection = null;
         String query = "SELECT * FROM account as a INNER JOIN person as p ON p.Account_email=a.email WHERE p.Department_abbreviation='" + deptAbbrv + "' AND a.typeOfAccount='professor'";
         ArrayList<Person> toReturn = new ArrayList<>();
         try {
@@ -291,7 +295,7 @@ public class PersonManager {
 
         return toReturn;
     }
-    
+
     public void updateCoverLetter(String pCoverLetter, String pSnn) throws SQLException, ConnectionException {
 
         Statement stmt = null;
@@ -313,7 +317,7 @@ public class PersonManager {
         }
 
     }
-    
+
     public ArrayList<Person> getPersonByTypeOfAccount(String typeOfACcount) throws SQLException, ConnectionException {
         Statement stmt = null;
         ResultSet rs = null;
@@ -348,7 +352,7 @@ public class PersonManager {
                 aPerson.setUniversity(rs.getString("university"));
                 aPerson.setMatricula(rs.getString("matricula"));
                 aPerson.setPosition(rs.getString("position"));
-                
+
                 person.add(aPerson);
 
             }
@@ -369,4 +373,276 @@ public class PersonManager {
 
         return person;
     }
+
+    public List<Person> getAllSupervisors() throws SQLException, ConnectionException {
+        List<Person> R = new ArrayList<Person>();
+        Department dipartimento = new Department();
+        Degree corso_laurea = new Degree();
+
+        Connection connection = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        String query = "SELECT * FROM person JOIN thesis_supervisor ON ssn = id_professor "
+                + "WHERE Account_email IN "
+                + "(SELECT email FROM account "
+                + "WHERE typeOfAccount = 'professor')";
+        try {
+            connection = DBConnection.getConnection();
+
+            if (connection == null) {
+                throw new ConnectionException();
+            }
+
+            stmt = connection.createStatement();
+            rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                Person person = new Person();
+                dipartimento.setAbbreviation(rs.getString("Department_abbreviation"));
+                corso_laurea.setMatricula(rs.getString("Degree_matricula"));
+                person.setSsn(rs.getString("SSN"));
+                person.setName(rs.getString("name"));
+                person.setSurname(rs.getString("surname"));
+                person.setPhone(rs.getString("phone"));
+                person.setCity(rs.getString("city"));
+                person.setAddress(rs.getString("address"));
+                person.setZipCode(rs.getString("zip_code"));
+                person.setGender(rs.getString("gender"));
+                person.setCitizenship(rs.getString("citizenship"));
+                person.setWebPage(rs.getString("web_page"));
+                person.setUniversity(rs.getString("university"));
+                person.setMatricula(rs.getString("matricula"));
+                person.setPosition(rs.getString("position"));
+                person.setDepartment(dipartimento);
+                person.setDegree(corso_laurea);
+                R.add(person);
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+
+            if (connection != null) {
+                DBConnection.releaseConnection(connection);
+            }
+        }
+
+        return R;
+    }
+
+    public Person getProfessorByThesisID(int thesis_id) throws SQLException, ConnectionException {
+        Person person = new Person();
+        Department dipartimento = new Department();
+        Degree corso_laurea = new Degree();
+        Connection connection = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        String query = "SELECT * FROM person "
+                + "WHERE ssn = "
+                + "   (SELECT id_professor FROM thesis_supervisor "
+                + "   WHERE id_thesis = " + thesis_id + ")";
+        try {
+            connection = DBConnection.getConnection();
+
+            if (connection == null) {
+                throw new ConnectionException();
+            }
+
+            stmt = connection.createStatement();
+            rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                dipartimento.setAbbreviation(rs.getString("Department_abbreviation"));
+                corso_laurea.setMatricula(rs.getString("Degree_matricula"));
+                person.setSsn(rs.getString("SSN"));
+                person.setName(rs.getString("name"));
+                person.setSurname(rs.getString("surname"));
+                person.setPhone(rs.getString("phone"));
+                person.setCity(rs.getString("city"));
+                person.setAddress(rs.getString("address"));
+                person.setZipCode(rs.getString("zip_code"));
+                person.setGender(rs.getString("gender"));
+                person.setCitizenship(rs.getString("citizenship"));
+                person.setWebPage(rs.getString("web_page"));
+                person.setUniversity(rs.getString("university"));
+                person.setMatricula(rs.getString("matricula"));
+                person.setPosition(rs.getString("position"));
+                person.setDepartment(dipartimento);
+                person.setDegree(corso_laurea);
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+
+            if (connection != null) {
+                DBConnection.releaseConnection(connection);
+            }
+        }
+
+        return person;
+    }
+
+    public List<Person> getAllStudents() throws SQLException, ConnectionException {
+        List<Person> R = new ArrayList<Person>();
+        Department dipartimento = new Department();
+        Degree corso_laurea = new Degree();
+
+        Statement stmt = null;
+        Connection connection = null;
+        ResultSet rs = null;
+        String query = "SELECT * FROM person JOIN thesis ON ssn = id_student "
+                + "WHERE Account_email IN "
+                + "(SELECT email FROM account "
+                + "WHERE typeOfAccount LIKE '%student')";
+        try {
+            connection = DBConnection.getConnection();
+
+            if (connection == null) {
+                throw new ConnectionException();
+            }
+
+            stmt = connection.createStatement();
+            rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                Person person = new Person();
+                dipartimento.setAbbreviation(rs.getString("Department_abbreviation"));
+                corso_laurea.setMatricula(rs.getString("Degree_matricula"));
+                person.setSsn(rs.getString("SSN"));
+                person.setName(rs.getString("name"));
+                person.setSurname(rs.getString("surname"));
+                person.setPhone(rs.getString("phone"));
+                person.setCity(rs.getString("city"));
+                person.setAddress(rs.getString("address"));
+                person.setZipCode(rs.getString("zip_code"));
+                person.setGender(rs.getString("gender"));
+                person.setCitizenship(rs.getString("citizenship"));
+                person.setWebPage(rs.getString("web_page"));
+                person.setUniversity(rs.getString("university"));
+                person.setMatricula(rs.getString("matricula"));
+                person.setPosition(rs.getString("position"));
+                person.setDepartment(dipartimento);
+                person.setDegree(corso_laurea);
+                R.add(person);
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+
+            if (connection != null) {
+                DBConnection.releaseConnection(connection);
+            }
+        }
+
+        return R;
+    }
+
+    public Person getStudentByID(String student_id) throws SQLException, ConnectionException {
+        Person person = new Person();
+        Department dipartimento = new Department();
+        Degree corso_laurea = new Degree();
+        Statement stmt = null;
+        Connection connection = null;
+        ResultSet rs = null;
+        String query = "SELECT * FROM person "
+                + "WHERE ssn = " + student_id;
+        try {
+            connection = DBConnection.getConnection();
+
+            if (connection == null) {
+                throw new ConnectionException();
+            }
+
+            stmt = connection.createStatement();
+            rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                dipartimento.setAbbreviation(rs.getString("Department_abbreviation"));
+                corso_laurea.setMatricula(rs.getString("Degree_matricula"));
+                person.setSsn(rs.getString("SSN"));
+                person.setName(rs.getString("name"));
+                person.setSurname(rs.getString("surname"));
+                person.setPhone(rs.getString("phone"));
+                person.setCity(rs.getString("city"));
+                person.setAddress(rs.getString("address"));
+                person.setZipCode(rs.getString("zip_code"));
+                person.setGender(rs.getString("gender"));
+                person.setCitizenship(rs.getString("citizenship"));
+                person.setWebPage(rs.getString("web_page"));
+                person.setUniversity(rs.getString("university"));
+                person.setMatricula(rs.getString("matricula"));
+                person.setPosition(rs.getString("position"));
+                person.setDepartment(dipartimento);
+                person.setDegree(corso_laurea);
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+
+            if (connection != null) {
+                DBConnection.releaseConnection(connection);
+            }
+        }
+
+        return person;
+    }
+
+    public ArrayList<Person> listaUtentiPerCorsoLaurea(String posizione, String corso_laurea) {
+        Connection db = null;
+        Person persona;
+        ResultSet rs = null;
+        ArrayList<Person> listaUtenti = null;
+        try {
+            db = DBConnection.getConnection();
+            listaUtenti = new ArrayList<Person>();
+
+            Statement aStatement = db.createStatement();
+            String query = "SELECT * FROM person,account WHERE account.email=person.Account_email AND account.typeOfAccount='" + posizione + "' AND person.degree_matricula='" + corso_laurea + "'";
+
+            rs = aStatement.executeQuery(query);
+
+            while (rs.next()) {
+                persona = new Person();
+                persona.setSsn(rs.getString("SSN"));
+                persona.setAddress(rs.getString("address"));
+                persona.setCitizenship(rs.getString("citizenship"));
+                persona.setCity(rs.getString("city"));
+                persona.setGender(rs.getString("gender"));
+                persona.setMatricula(rs.getString("matricula"));
+                persona.setName(rs.getString("name"));
+                persona.setPhone(rs.getString("phone"));
+                persona.setPosition(rs.getString("position"));
+                persona.setSurname(rs.getString("surname"));
+                persona.setUniversity(rs.getString("university"));
+                persona.setWebPage(rs.getString("web_page"));
+                persona.setZipCode(rs.getString("zip_code"));
+
+                listaUtenti.add(persona);
+
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger("PersonManager fail:" + ex.getMessage());
+        } finally {
+            DBConnection.releaseConnection(db);
+        }
+
+        return listaUtenti;
+    }
+
 }

@@ -99,7 +99,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="gestioneTesi.html">
+                        <a href="gestioneTesi/index.jsp">
                             <i class="linecons-graduation-cap"></i>
                             <span class="title">Gestione Tesi</span>
                         </a>
