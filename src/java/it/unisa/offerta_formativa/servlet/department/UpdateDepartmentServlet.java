@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import it.unisa.model.Department;
+import it.unisa.integrazione.model.Department;
 import it.unisa.integrazione.database.DepartmentManager;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;

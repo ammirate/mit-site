@@ -6,7 +6,7 @@ import it.unisa.integrazione.database.DegreeManager;
 
 import org.junit.Test;
 
-import it.unisa.model.Degree;
+import it.unisa.integrazione.model.Degree;
 import java.util.ArrayList;
 import java.util.List;
 

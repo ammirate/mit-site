@@ -1,6 +1,6 @@
 package old;
 
-import it.unisa.model.Person;
+import it.unisa.integrazione.model.Person;
 import org.junit.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;

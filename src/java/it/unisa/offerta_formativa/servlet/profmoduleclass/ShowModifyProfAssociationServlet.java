@@ -6,8 +6,8 @@
 package it.unisa.offerta_formativa.servlet.profmoduleclass;
 
 import it.unisa.offerta_formativa.beans.Curriculum;
-import it.unisa.model.Degree;
-import it.unisa.model.Person;
+import it.unisa.integrazione.model.Degree;
+import it.unisa.integrazione.model.Person;
 import it.unisa.offerta_formativa.beans.ProfModuleClass;
 import it.unisa.offerta_formativa.manager.ClassManager;
 import it.unisa.offerta_formativa.manager.CurriculumManager;

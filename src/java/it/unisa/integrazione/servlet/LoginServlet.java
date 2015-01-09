@@ -7,7 +7,7 @@ package it.unisa.integrazione.servlet;
 
 import it.unisa.integrazione.database.AccountManager;
 import it.unisa.integrazione.database.exception.ConnectionException;
-import it.unisa.model.Person;
+import it.unisa.integrazione.model.Person;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -101,9 +101,7 @@ public class LoginServlet extends HttpServlet {
             out.print("<h1>SQL Exception: </h1>" + sqlException.getMessage());
         } catch (ConnectionException connectionException) {
             out.print("<h1>Connection Exception</h1>");
-        } catch (Exception ex) {
-            out.print("<h1>Moodle Login error</h1>");
-        } finally {
+        }  finally {
             out.close();
         }
     }  

@@ -6,7 +6,7 @@
 package it.unisa.offerta_formativa.servlet.teaching;
 
 import it.unisa.offerta_formativa.beans.Curriculum;
-import it.unisa.model.Degree;
+import it.unisa.integrazione.model.Degree;
 import it.unisa.offerta_formativa.manager.CurriculumManager;
 import it.unisa.integrazione.database.CycleManager;
 import it.unisa.integrazione.database.DegreeManager;

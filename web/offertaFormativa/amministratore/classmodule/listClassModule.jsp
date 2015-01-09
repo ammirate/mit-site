@@ -3,7 +3,7 @@
     Author     : Alessandro
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page import="it.unisa.model.*"%>
+<%@page import="it.unisa.integrazione.model.*"%>
 <%@page import="java.util.Map.Entry"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="it.unisa.offerta_formativa.beans.ProfModuleClass"%>

@@ -3,7 +3,7 @@ package it.unisa.integrazione.database;
 import it.unisa.integrazione.database.exception.ConnectionException;
 import it.unisa.integrazione.database.exception.MissingDataException;
 import it.unisa.integrazione.database.utility.Utilities;
-import it.unisa.model.Person;
+import it.unisa.integrazione.model.Person;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;

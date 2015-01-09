@@ -1,7 +1,7 @@
 package it.unisa.offerta_formativa.servlet.degree;
 
 import it.unisa.integrazione.database.CycleManager;
-import it.unisa.model.Degree;
+import it.unisa.integrazione.model.Degree;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

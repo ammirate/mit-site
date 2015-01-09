@@ -114,17 +114,17 @@ public class ModifyTeachingServlet extends HttpServlet {
             } catch (TeachingException ex) {
                 request.setAttribute("error", true);
                 request.setAttribute("errorMessage", ex.getMessage());
-                request.getRequestDispatcher(path + "modifyTeaching.jsp");
+                request.getRequestDispatcher(path + "modifyTeaching.jsp").forward(request, response);
             } catch (CurriculumException ex) {
                 request.setAttribute("error", true);
                 request.setAttribute("errorMessage", "Errore lettura curriculum: "+ex.getMessage());
-                request.getRequestDispatcher(path + "modifyTeaching.jsp");
-            }
+                request.getRequestDispatcher(path + "modifyTeaching.jsp").forward(request, response);
+            } 
             request.setAttribute("success", true);
             request.setAttribute("matricula", t.getMatricula());
             request.setAttribute("curriculum", request.getParameter("curriculum"));
             request.setAttribute("successMessage", "Insegnamento modificato con successo.");
-            
+            request.getRequestDispatcher("/ShowModifyTeachingServlet").forward(request, response);
         }
     }
 

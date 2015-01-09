@@ -3,9 +3,9 @@
     Author     : Alessandro
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page import="it.unisa.model.Degree"%>
-<%@page import="it.unisa.model.Department"%>
-<%@page import="it.unisa.model.Cycle"%>
+<%@page import="it.unisa.integrazione.model.Degree"%>
+<%@page import="it.unisa.integrazione.model.Department"%>
+<%@page import="it.unisa.integrazione.model.Cycle"%>
 <%@page import="java.util.ArrayList"%>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"

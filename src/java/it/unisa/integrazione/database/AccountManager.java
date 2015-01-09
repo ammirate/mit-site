@@ -1,12 +1,12 @@
 package it.unisa.integrazione.database;
 
 import it.unisa.integrazione.database.exception.ConnectionException;
-import it.unisa.model.Account;
+import it.unisa.integrazione.model.Account;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import it.unisa.model.Person;
+import it.unisa.integrazione.model.Person;
 
 /**
  *

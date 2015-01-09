@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import it.unisa.model.Cycle;
+import it.unisa.integrazione.model.Cycle;
 import it.unisa.offerta_formativa.manager.CurriculumManager;
 import java.util.logging.Level;
 import java.util.logging.Logger;

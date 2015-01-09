@@ -7,8 +7,8 @@ package it.unisa.integrazione.servlet;
 
 import it.unisa.integrazione.database.AccountManager;
 import it.unisa.integrazione.database.exception.ConnectionException;
-import it.unisa.model.Account;
-import it.unisa.model.Person;
+import it.unisa.integrazione.model.Account;
+import it.unisa.integrazione.model.Person;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

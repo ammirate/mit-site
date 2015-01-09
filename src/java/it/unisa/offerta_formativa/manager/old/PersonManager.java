@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import it.unisa.model.Person;
+import it.unisa.integrazione.model.Person;
 
 /**
  *

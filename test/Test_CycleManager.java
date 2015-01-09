@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import it.unisa.model.Cycle;
+import it.unisa.integrazione.model.Cycle;
 import java.util.List;
 
 /**

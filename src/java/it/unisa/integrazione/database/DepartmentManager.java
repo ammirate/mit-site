@@ -8,7 +8,7 @@ package it.unisa.integrazione.database;
 import it.unisa.integrazione.database.exception.ConnectionException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import it.unisa.model.Department;
+import it.unisa.integrazione.model.Department;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;

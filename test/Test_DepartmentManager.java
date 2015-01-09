@@ -3,7 +3,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import it.unisa.integrazione.database.DepartmentManager;
 import org.junit.Test;
-import it.unisa.model.Department;
+import it.unisa.integrazione.model.Department;
 
 /**
  *

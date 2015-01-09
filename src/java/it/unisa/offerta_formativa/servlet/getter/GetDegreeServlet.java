@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import it.unisa.model.Degree;
+import it.unisa.integrazione.model.Degree;
 import it.unisa.integrazione.database.DegreeManager;
 import java.util.ArrayList;
 import java.util.Collections;

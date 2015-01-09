@@ -2,8 +2,8 @@
     Document   : ModifyDepartment
     Author     : Davide
 --%>
-<<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page import="it.unisa.model.Department"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page import="it.unisa.integrazione.model.Department"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1"%>
 
