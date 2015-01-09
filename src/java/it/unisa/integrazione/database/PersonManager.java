@@ -252,6 +252,46 @@ public class PersonManager {
         return person;
     }
 
+    public ArrayList<Person> getProfessorByDepartment(String deptAbbrv) throws ConnectionException, SQLException {
+        Person person;
+        Connection connection=null;
+        String query = "SELECT * FROM account as a INNER JOIN person as p ON p.Account_email=a.email WHERE p.Department_abbreviation='" + deptAbbrv + "' AND a.typeOfAccount='professor'";
+        ArrayList<Person> toReturn = new ArrayList<>();
+        try {
+            connection = DBConnection.getConnection();
+            if (connection == null) {
+                throw new ConnectionException();
+            }
+
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                person = new Person();
+                person.setSsn(rs.getString("SSN"));
+                person.setName(rs.getString("name"));
+                person.setSurname(rs.getString("surname"));
+                person.setPhone(rs.getString("phone"));
+                person.setCity(rs.getString("city"));
+                person.setAddress(rs.getString("address"));
+                person.setZipCode(rs.getString("zip_code"));
+                person.setGender(rs.getString("gender"));
+                person.setCitizenship(rs.getString("citizenship"));
+                person.setWebPage(rs.getString("web_page"));
+                person.setUniversity(rs.getString("university"));
+                person.setMatricula(rs.getString("matricula"));
+                person.setPosition(rs.getString("position"));
+                person.setAccount(AccountManager.getInstance().getAccoutnByEmail(rs.getString("Account_email")));
+                person.setDepartment(DepartmentManager.getInstance().getDepartmentByAbbreviation(rs.getString("Department_abbreviation")));
+
+                toReturn.add(person);
+            }
+        } finally {
+            DBConnection.releaseConnection(connection);
+        }
+
+        return toReturn;
+    }
+    
     public void updateCoverLetter(String pCoverLetter, String pSnn) throws SQLException, ConnectionException {
 
         Statement stmt = null;

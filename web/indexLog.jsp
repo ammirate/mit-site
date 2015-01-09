@@ -6,7 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -123,7 +123,7 @@
                     <c:choose>
                         <c:when test="${sessionScope.person == null}">
                             <li>
-                                <a href="register.html">
+                                <a href="register.jsp">
                                     <i class="fa-pencil"></i>
                                     <span class="title">Registrazione</span>
                                 </a>

@@ -16,6 +16,16 @@ public class Account {
     private String typeOfAccount;
     private boolean active;
 
+    public Account(String email, String password, String typeAccount) {
+        this.email = email;
+        this.password = password;
+        this.typeOfAccount = typeAccount;
+        active = true;
+    }
+
+    public Account() {
+    }
+
     public String getEmail() {
         return email;
     }

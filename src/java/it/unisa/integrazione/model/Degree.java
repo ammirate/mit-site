@@ -9,7 +9,7 @@ package it.unisa.integrazione.model;
  *
  * @author Alessandro
  */
-public class Degree {
+public class Degree implements Comparable<Degree> {
 
     /**
      * id of the degree and primary key in the DB. it's composed of 5 digit.
@@ -50,7 +50,7 @@ public class Degree {
      * @param link
      * @param titolo
      * @param ciclo
-     * @param departmentAbb 
+     * @param departmentAbb
      */
     public Degree(String matricola, String link, String titolo, int ciclo, String departmentAbb) {
         this.matricula = matricola;
@@ -60,8 +60,7 @@ public class Degree {
         this.departmentAbbreviation = departmentAbb;
         this.active = true;
     }
-    
-    
+
     public Degree(String matricola, String link, String titolo, int ciclo, String departmentAbb, boolean active) {
         this.matricula = matricola;
         this.link = link;
@@ -71,12 +70,12 @@ public class Degree {
         this.active = active;
     }
 
-    public String getMatricula(){
+    public String getMatricula() {
         return this.matricula;
     }
 
     /**
-     * 
+     *
      * @param sn the serial number of the degree
      */
     public void setMatricula(String sn) {
@@ -116,24 +115,25 @@ public class Degree {
         this.cycle = cycle;
     }
 
-    @Override
-    public String toString() {
+   public String toString() {
         String esc = "\'";
-        return "matricula=" + esc + matricula + esc + "," + 
-                "title=" + esc + title + esc + "," +
-                "link=" + esc + link + esc + "," +
-                "cycle_number=" + cycle + "," + 
-                "department_abbreviation=" + esc + departmentAbbreviation + esc + "," +
-                "active=" + (this.active? 1 : 0); 
+        return "matricula=" + esc + matricula + esc + ","
+                + "title=" + esc + title + esc + ","
+                + "link=" + esc + link + esc + ","
+                + "cycle_number=" + cycle + ","
+                + "department_abbreviation=" + esc + departmentAbbreviation + esc + ","
+                + "active=" + (this.active ? 1 : 0) + ","
+                + "esse3_content=" + esc + esse3Content + esc;
     }
 
     public String toStringQueryInsert() {
         String esc = "\'";
-        return esc + title + esc + "," +
-                esc + matricula + esc + "," +
-                esc + link + esc + "," + cycle + "," +
-               esc + departmentAbbreviation + esc + "," +
-                (this.active? 1 : 0);
+        return esc + title + esc + ","
+                + esc + matricula + esc + ","
+                + esc + link + esc + "," + cycle + ","
+                + esc + departmentAbbreviation + esc + ","
+                + (this.active ? 1 : 0) + ","
+                + esc + esse3Content + esc;
 //        return "\"" + serialNumber + "\",\"" + link + "\",\"" + title + "\"," + cycle + "," + serialNumber + ")";
     }
 
@@ -153,9 +153,7 @@ public class Degree {
     public void setDepartmentAbbreviation(String departmentAbbreviation) {
         this.departmentAbbreviation = departmentAbbreviation;
     }
-    
-    
-    
+
     public boolean isActive() {
         return active;
     }
@@ -164,4 +162,30 @@ public class Degree {
         this.active = active;
     }
 
+    @Override
+    public int compareTo(Degree deg) {
+
+        int result;
+        if(this.getCycle()>deg.getCycle())
+            result = 1;
+        else if (this.getCycle()==deg.getCycle())
+            result =0;
+        else result=-1;
+        if (result == 0) {
+            result = this.getTitle().compareTo(deg.getTitle());
+        }
+
+        return result;
+    }
+
+    public String getEsse3Content() {
+        return esse3Content;
+    }
+
+    public void setEsse3Content(String esse3Content) {
+        this.esse3Content = esse3Content;
+    }
+
+    
+    
 }
