@@ -157,7 +157,7 @@ public class accettaTesi extends HttpServlet {
                 }
             }
 
-            response.sendRedirect("gestioneTesi.jsp");
+            response.sendRedirect("gestioneTesi/index.jsp");
 
         } catch (ConnectionException ex) {
             Logger.getLogger(accettaTesi.class.getName()).log(Level.SEVERE, null, ex);

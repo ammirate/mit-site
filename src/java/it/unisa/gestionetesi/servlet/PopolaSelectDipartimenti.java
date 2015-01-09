@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +27,8 @@ import org.json.JSONObject;
  *
  * @author CosimoAlessandro
  */
+@WebServlet(name = "PopolaSelectDipartimenti", urlPatterns = {"/PopolaSelectDipartimenti"})
+
 public class PopolaSelectDipartimenti extends HttpServlet {
     private Logger logger = Logger.getLogger("db");
     private JSONObject dipartimento;

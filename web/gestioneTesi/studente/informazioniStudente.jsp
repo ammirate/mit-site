@@ -14,7 +14,7 @@
         <script>
             var codice_fiscale = '${person.ssn}';
             var tipo_account = '${person.account.typeOfAccount}';
-
+alert(codice_fiscale);
             $(document).ready(function () {
                 $.ajax({
                     url: 'RecuperaDatiUtente',

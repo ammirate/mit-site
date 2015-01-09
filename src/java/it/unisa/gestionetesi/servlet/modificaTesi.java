@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +27,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author CosimoAlessandro
  */
+@WebServlet(name = "modificaTesi", urlPatterns = {"/modificaTesi"})
+
 public class modificaTesi extends HttpServlet {
 
     final static Logger logger = Logger.getLogger("richiestaCompletamentoTesi");
@@ -77,7 +80,7 @@ public class modificaTesi extends HttpServlet {
             cronoRichiesta.setTipo("modifica");
 
             manager_cronologia.inserisciEvento(cronoRichiesta);
-            // response.sendRedirect("gestioneTesi.jsp");
+            // response.sendRedirect("gestioneTesi/index.jsp");
 
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(modificaTesi.class.getName()).log(Level.SEVERE, null, ex);

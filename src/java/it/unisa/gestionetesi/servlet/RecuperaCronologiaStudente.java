@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +32,9 @@ import org.json.JSONObject;
  *
  * @author ciro
  */
+
+@WebServlet(name = "RecuperaCronologiaStudente", urlPatterns = {"/RecuperaCronologiaStudente"})
+
 public class RecuperaCronologiaStudente extends HttpServlet {
 
     final static Logger logger = Logger.getLogger("RecuperaCronologiaStud");

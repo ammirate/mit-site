@@ -21,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +31,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author CosimoAlessandro
  */
+@WebServlet("/richiestaTesi")
 public class richiestaTesi extends HttpServlet {
 
     final static Logger logger = Logger.getLogger("richiestaTesi");
@@ -88,7 +90,7 @@ public class richiestaTesi extends HttpServlet {
             }
 
             //request.getRequestDispatcher("gestioneTesi.jsp").forward(request, response); // Forward to same page so that you can display error.
-            response.sendRedirect("gestioneTesi.jsp");
+            response.sendRedirect("gestioneTesi/index.jsp");
 
         } catch (ConnectionException ex) {
             Logger.getLogger(richiestaTesi.class.getName()).log(Level.SEVERE, null, ex);

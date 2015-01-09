@@ -130,9 +130,9 @@
                         </span>
 
                     </li>
-                    <li>
-                        <a href="${pageContext.request.contextPath}/LogoutServlet">
-                            <i class="fa-times-circle"></i>
+                     <li>
+                        <a href="../logout">
+                            <i class="fa-off"></i>
                             <span class="title">Logout</span>
                         </a>
                     </li>
