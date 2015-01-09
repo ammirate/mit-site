@@ -387,7 +387,7 @@ public class TeachingManager {
             stmt = connection.createStatement();
 
             String esc = "\'";
-            String query = "UPDATE " + TABLE + " SET " + esc + "esse3_content" + esc
+            String query = "UPDATE " + TABLE + " SET " + "esse3_content="+esc+content+esc
                     + " WHERE " + PKEY + "=" + esc + teachingMatricula + esc;
 //UPDATE teaching SET `esse3_content`="new content" WHERE `matricula`='0222500002'
             if (stmt.executeUpdate(query) == 1) {

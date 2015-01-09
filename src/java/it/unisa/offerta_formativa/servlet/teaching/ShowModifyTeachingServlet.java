@@ -84,6 +84,9 @@ public class ShowModifyTeachingServlet extends HttpServlet {
                 request.setAttribute("degree",d);
                 request.setAttribute("cycle", cycleMng.getCycleByCycleNumber(d.getCycle()));
                 request.setAttribute("department", deptMng.getDepartmentByAbbreviation(d.getDepartmentAbbreviation()));
+                if(request.getParameterMap().containsKey("success")){
+                    
+                }
                 request.getRequestDispatcher(path+"modifyTeaching.jsp").forward(request, response);
             } catch (CurriculumException ex) {
                 Logger.getLogger(ShowModifyTeachingServlet.class.getName()).log(Level.SEVERE, null, ex);

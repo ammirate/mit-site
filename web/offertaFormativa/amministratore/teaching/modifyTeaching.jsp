@@ -140,6 +140,9 @@
                         <p class="bg-danger" id="error" style="display:none;"><% out.print(request.getAttribute("errorMessage"));%></p>
                 </div>
                 <div class="row">
+                        <p class="bg-success" id="success" style="display:none;"><% out.print(request.getAttribute("successMessage"));%></p>
+                </div>
+                <div class="row">
                     <div class="col-sm-1"></div>
                     <div class="panel panel-default col-sm-10">
                         <div class="panel-heading">Modifica Insegnamento</div>

@@ -5,10 +5,15 @@
  */
 package it.unisa.offerta_formativa.servlet.getter;
 
+import com.google.gson.Gson;
+import it.unisa.integrazione.database.PersonManager;
+import it.unisa.integrazione.database.exception.ConnectionException;
 import it.unisa.model.Degree;
 import it.unisa.model.Person;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletConfig;
@@ -25,8 +30,11 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "GetProfessorServlet", urlPatterns = {"/GetProfessorServlet"})
 public class GetProfessorServlet extends HttpServlet {
-
-    public GetProfessorServlet(){}
+    private PersonManager persMng;
+    
+    public GetProfessorServlet(){
+        persMng = PersonManager.getInstance();
+    }
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -53,13 +61,22 @@ public class GetProfessorServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response){
         try {
-            response.setContentType("text/plain");
+            ArrayList<Person> professor= new ArrayList<>();
+            if(request.getParameterMap().containsKey("department")){
+                
+                String department = request.getParameter("department");
+                professor = persMng.getProfessorByDepartment(department);
+            
+            }
+            String finalJSON = new Gson().toJson(professor);
+            response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            String toRet="";
-            toRet+="<option value=fferrucci@unisa.it>Filomena Ferrucci</option>";
-            toRet+="<option value=adelucia@unisa.it>Andrea De Lucia</option>";
-            response.getWriter().write(toRet);
+            response.getWriter().write(finalJSON);
         } catch (IOException ex) {
+            Logger.getLogger(GetProfessorServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ConnectionException ex) {
+            Logger.getLogger(GetProfessorServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
             Logger.getLogger(GetProfessorServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }       

@@ -20,6 +20,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -75,6 +77,7 @@ public class ModifyTeachingServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = "/offertaFormativa/amministratore/teaching/";
+        Teaching t=null;
         if (request.getParameterMap().containsKey("oldMatricula")) {
 
             try {
@@ -85,7 +88,7 @@ public class ModifyTeachingServlet extends HttpServlet {
                 //FACCIO PRIMA L'UPDATE DEL TEACHING
                 String oldMatricula = request.getParameter("oldMatricula");
                 String newMatricula = request.getParameter("newMatricula");
-                Teaching t = new Teaching(
+                t = new Teaching(
                         request.getParameter("title"),
                         request.getParameter("abbreviation"),
                         request.getParameter("oldMatricula"),
@@ -98,8 +101,10 @@ public class ModifyTeachingServlet extends HttpServlet {
                     t.setMatricula(newMatricula);
                 }
                 
-                t.setEsse3Content(parseMng.getHtml(t.getLink(), "floating"));
-                teachingMng.updateTeaching(oldMatricula, t);
+                t.setEsse3Content(parseMng.getHtml(t.getLink(), "column1of2"));
+                
+                teachingMng.updateTeaching(t.getMatricula(), t);
+                teachingMng.setEsse3ContentForTeaching(t.getMatricula(), t.getEsse3Content());
                 
                 //POI QUELLA DEL CURRICULUM ASSOCIATO SE NECESSARIO
                 if (request.getParameterMap().containsKey("curriculum")) {
@@ -115,7 +120,11 @@ public class ModifyTeachingServlet extends HttpServlet {
                 request.setAttribute("errorMessage", "Errore lettura curriculum: "+ex.getMessage());
                 request.getRequestDispatcher(path + "modifyTeaching.jsp");
             }
-
+            request.setAttribute("success", true);
+            request.setAttribute("matricula", t.getMatricula());
+            request.setAttribute("curriculum", request.getParameter("curriculum"));
+            request.setAttribute("successMessage", "Insegnamento modificato con successo.");
+            
         }
     }
 

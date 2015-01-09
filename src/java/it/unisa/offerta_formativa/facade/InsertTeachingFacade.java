@@ -89,10 +89,11 @@ public class InsertTeachingFacade {
             throw new TeachingException("Un insegnamento con questa matricola è già presente.");
         } else {
             try {
-                teaching.setEsse3Content(parseMng.getHtml(teaching.getLink(), "infobox"));
+                teaching.setEsse3Content(parseMng.getHtml(teaching.getLink(), "column1of2"));
                 teachingMng.createTeaching(teaching);
-            } catch (Exception e) {
-                throw new TeachingException("L'insegnamento " + teaching.getTitle() + " non è stato inserito");
+                teachingMng.setEsse3ContentForTeaching(teaching.getMatricula(), teaching.getEsse3Content());
+            } catch (TeachingException e) {
+                throw new TeachingException("L'insegnamento " + teaching.getTitle() + " non è stato inserito: "+e.getMessage());
             }
 
             try {
@@ -134,8 +135,8 @@ public class InsertTeachingFacade {
                 String toadd="";
                 try {
                     if(!alreadyAdded.contains(listProf.get(k).getClassTitle())){ //se una classe è già presente in moodle non l'aggiungere
-                        if(listClass.size()!=1)toadd=" "+listProf.get(k).getClassTitle(); //se la classe è una sola allora non aggiunge niente
-                        moodleTeaching.createTeaching(teaching.getAbbreviation()+toadd, teaching.getTitle()+" -"+toadd, idYearCat);
+                        if(listClass.size()!=1)toadd=" - "+listProf.get(k).getClassTitle(); //se la classe è una sola allora non aggiunge niente
+                        moodleTeaching.createTeaching(teaching.getAbbreviation()+toadd, teaching.getTitle()+toadd, idYearCat);
                         alreadyAdded.add(listProf.get(k).getClassTitle());
                     }
                     pmcMng.create(listProf.get(k));

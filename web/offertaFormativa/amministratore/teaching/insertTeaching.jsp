@@ -202,7 +202,7 @@
                                         <div class="col-sm-1"></div>
                                         <div class="form-group col-sm-4">
                                             <label for="abbreviazione">Abbreviazione:</label>
-                                            <input minlength="2" type="text" class="form-control" name="abbreviation" placeholder="Abbreviazione" required />
+                                            <input minlength="2" maxlength="10" type="text" class="form-control" name="abbreviation" placeholder="Abbreviazione" required />
                                         </div>
                                         <div class="col-sm-2"></div>
                                         <div class="form-group col-sm-2">
