@@ -30,7 +30,7 @@ import org.json.JSONObject;
  * @author CosimoAlessandro
  */
 
-@WebServlet(name = "RecuperaDatiUtente", urlPatterns = {"./RecuperaDatiUtente"})
+@WebServlet(name = "RecuperaDatiUtente", urlPatterns = {"/RecuperaDatiUtente"})
 public class RecuperaDatiUtente extends HttpServlet {
     private final DegreeManager managerDegree= DegreeManager.getInstance();
     private final DepartmentManager managerDepartment= DepartmentManager.getInstance();
