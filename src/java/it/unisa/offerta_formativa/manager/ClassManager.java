@@ -5,6 +5,7 @@
  */
 package it.unisa.offerta_formativa.manager;
 
+import it.unisa.integrazione.database.DBConnection;
 import it.unisa.offerta_formativa.manager.old.DBConnector;
 import it.unisa.offerta_formativa.beans.ClassPartition;
 import it.unisa.offerta_formativa.manager.Exceptions.ClassPartitionException;
@@ -41,19 +42,22 @@ public class ClassManager {
      */
     public boolean createClass(ClassPartition classp) throws ClassPartitionException {
 
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
 
             String query = "INSERT INTO " + TABLE + "(teaching_matricula,title) VALUES(" + classp.toStringQueryInsert() + ")";
 //            System.out.println("Insert query : " + query);
             if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
                 return true;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new ClassPartitionException("Query failed to create a class");
         } finally {
-             DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return false;
     }
@@ -67,12 +71,16 @@ public class ClassManager {
      */
     public ClassPartition readClass(String teachingMatricula, String title) throws ClassPartitionException {
 
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
 
             String query = "SELECT * FROM " + TABLE + " WHERE title=" + esc + title + esc + " and "
                     + "teaching_matricula=" + esc + teachingMatricula + esc;
             rs = stmt.executeQuery(query);
+            connection.commit();
+
             while (rs.next()) {
                 return new ClassPartition(rs.getString("teaching_matricula"), rs.getString("title"));
             }
@@ -80,7 +88,7 @@ public class ClassManager {
             ex.printStackTrace();
             throw new ClassPartitionException("Query failed to read a class");
         } finally {
-             DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return new ClassPartition();
     }
@@ -94,21 +102,25 @@ public class ClassManager {
      */
     public boolean updateClass(ClassPartition oldClass, ClassPartition newClass) throws ClassPartitionException {
 
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
 
             String query = "UPDATE " + TABLE + " SET " + newClass.toString() + " WHERE "
                     + "title=" + esc + oldClass.getTitle() + esc + " and "
                     + "teaching_matricula=" + esc + oldClass.getTeachingMatricula() + esc;
             System.out.println(query);
             if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
+
                 return true;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new ClassPartitionException("Query failed to update class");
         } finally {
-             DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return false;
     }
@@ -121,20 +133,23 @@ public class ClassManager {
      * @return true if done.
      */
     public boolean deleteClass(String teachingMatricula, String title) throws ClassPartitionException {
-
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
 
             String query = "DELETE FROM " + TABLE + " WHERE title=" + esc + title + esc + " and "
                     + "teaching_matricula=" + esc + teachingMatricula + esc;
             if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
+
                 return true;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new ClassPartitionException("Query failed to delete class");
         } finally {
-             DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return false;
     }
@@ -162,13 +177,17 @@ public class ClassManager {
         if (idTeaching == null) {
             throw new IllegalArgumentException("Id cannot be null!");
         } else {
+            Connection connection = null;
             try {
-                stmt = DBConnector.openConnection();
+                connection = DBConnection.getConnection();
+                stmt = connection.createStatement();
 
                 String query = "SELECT * FROM " + TABLE
                         + " WHERE teaching_matricula=\"" + idTeaching + "\""
                         + " order by title";
                 rs = stmt.executeQuery(query);
+                connection.commit();
+
                 while (rs.next()) {
                     toReturn.add(new ClassPartition(idTeaching, rs.getString("title")));
                 }
@@ -176,7 +195,7 @@ public class ClassManager {
                 ex.printStackTrace();
                 throw new ClassPartitionException("Query getClassByTeaching failed");
             } finally {
-                 DBConnector.closeConnection();
+                DBConnection.releaseConnection(connection);
             }
         }
         return toReturn;
@@ -190,10 +209,14 @@ public class ClassManager {
     public ArrayList<ClassPartition> getAllClasses() throws ClassPartitionException {
 
         ArrayList<ClassPartition> toReturn = new ArrayList<>();
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
 
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " order by title");
+            connection.commit();
+
             while (rs.next()) {
                 toReturn.add(new ClassPartition(rs.getString("teaching_matricula"), rs.getString("title")));
             }
@@ -201,7 +224,7 @@ public class ClassManager {
             ex.printStackTrace();
             throw new ClassPartitionException("Query getAll failed");
         } finally {
-             DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return toReturn;
     }

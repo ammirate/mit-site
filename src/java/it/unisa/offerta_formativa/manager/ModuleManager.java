@@ -1,5 +1,6 @@
 package it.unisa.offerta_formativa.manager;
 
+import it.unisa.integrazione.database.DBConnection;
 import it.unisa.offerta_formativa.manager.old.DBConnector;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -38,20 +39,23 @@ public class ModuleManager {
      */
     public boolean createModule(Module m) throws ModuleException {
 
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
 
             String query = "INSERT INTO " + TABLE
                     + "(teaching_matricula,title) VALUES("
                     + m.toStringQueryInsert() + ")";
 
             if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
                 return true;
             }
         } catch (SQLException e) {
             throw new ModuleException("Create query failed!");
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return false;
     }
@@ -65,14 +69,17 @@ public class ModuleManager {
      */
     public Module readModule(String title, String teachinMatricula) throws ModuleException {
 
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
 
             String esc = "\'";
             String query = "SELECT * FROM " + TABLE + " WHERE title=" + esc + title + esc
                     + " and " + "teaching_matricula=" + esc + teachinMatricula + esc;
             //System.out.println(query);
             rs = stmt.executeQuery(query);
+            connection.commit();
             while (rs.next()) {
                 return getModuleFromResultSet(rs);
             }
@@ -80,7 +87,7 @@ public class ModuleManager {
             throw new ModuleException("update query failed!");
 
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return null;
     }
@@ -93,8 +100,10 @@ public class ModuleManager {
      */
     public boolean updateModule(Module oldModule, String newTitle) throws ModuleException {
 
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
 
             String esc = "\'";
             String query = "UPDATE " + TABLE + " SET title="
@@ -103,13 +112,14 @@ public class ModuleManager {
                     + " AND " + "title=" + esc + oldModule.getTitle() + esc;
             System.out.println(query);
             if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
                 return true;
             }
         } catch (SQLException e) {
             throw new ModuleException("update query failed!");
 
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return false;
     }
@@ -122,20 +132,23 @@ public class ModuleManager {
      */
     public boolean deleteModule(String title, String teachingMatricula) throws ModuleException {
 
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
 
             String esc = "\'";
             String query = "DELETE FROM " + TABLE + " WHERE title=" + esc + title + esc
                     + " and " + "teaching_matricula=" + esc + teachingMatricula + esc;
             if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
                 return true;
             }
         } catch (SQLException e) {
             throw new ModuleException("delete query failed!");
 
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return false;
     }
@@ -164,8 +177,10 @@ public class ModuleManager {
         if (teaching_matricula == null) {
             throw new IllegalArgumentException("id cannot be null!");
         } else {
+            Connection connection = null;
             try {
-                stmt = DBConnector.openConnection();
+                connection = DBConnection.getConnection();
+                stmt = connection.createStatement();
 
                 String query = "SELECT * FROM " + TABLE
                         + " WHERE teaching_matricula=\""
@@ -173,6 +188,7 @@ public class ModuleManager {
                         + " order by title";
 
                 rs = stmt.executeQuery(query);
+                connection.commit();
                 while (rs.next()) {
                     toReturn.add(getModuleFromResultSet(rs));
                 }
@@ -180,7 +196,7 @@ public class ModuleManager {
                 throw new ModuleException("read query failed!");
 
             } finally {
-                DBConnector.closeConnection();
+                DBConnection.releaseConnection(connection);
             }
         }
         return toReturn;
@@ -193,17 +209,20 @@ public class ModuleManager {
      */
     public ArrayList<Module> getAllModules() throws ModuleException {
         ArrayList<Module> toReturn = new ArrayList<Module>();
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
 
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " order by title");
+            connection.commit();
             while (rs.next()) {
                 toReturn.add(new Module(rs.getString("teaching_matricula"), rs.getString("title")));
             }
         } catch (SQLException e) {
             throw new ModuleException("getAll query failed!");
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return toReturn;
     }

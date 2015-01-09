@@ -1,5 +1,6 @@
 package it.unisa.offerta_formativa.manager;
 
+import it.unisa.integrazione.database.DBConnection;
 import it.unisa.offerta_formativa.manager.old.DBConnector;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -12,8 +13,6 @@ import it.unisa.offerta_formativa.beans.Teaching;
 import it.unisa.offerta_formativa.manager.Exceptions.CurriculumException;
 import it.unisa.offerta_formativa.manager.Exceptions.TeachingException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -45,17 +44,20 @@ public class CurriculumManager {
      * @return true if the insertion was successfull
      */
     public boolean createCurriculum(Curriculum curr) {
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
             String query = "INSERT INTO " + TABLE + "(matricula,title,degree_matricula,active) VALUES(" + curr.toStringQueryInsert() + ")";
             if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
                 return true;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RuntimeException("Insertion Query failed!");
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return false;
     }
@@ -68,21 +70,24 @@ public class CurriculumManager {
      */
     public boolean updateCurriculum(String oldCurrMatricula, Curriculum newCurriculum) throws CurriculumException {
 
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
 
             String query = "UPDATE " + TABLE + " SET " + newCurriculum.toString() + " WHERE "
                     + "matricula=" + esc + oldCurrMatricula + esc;
             System.out.println("update QUERY " + query);
 
             if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
                 return true;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new CurriculumException("Update Query failed!");
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return false;
     }
@@ -96,19 +101,22 @@ public class CurriculumManager {
      */
     public Curriculum readCurriculum(String matricula) throws CurriculumException {
 
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
 
             String query = "SELECT * FROM " + TABLE + " WHERE " + PKEY + "=" + esc + matricula + esc;
 //            System.out.println("READ QUERY" + query);
             rs = stmt.executeQuery(query);
+            connection.commit();
             while (rs.next()) {
                 return getCurriculumFromResultSet(rs);
             }
         } catch (SQLException ex) {
             throw new CurriculumException();
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return null;
     }
@@ -121,21 +129,24 @@ public class CurriculumManager {
      */
     public boolean deleteCurriculum(String matricula) throws CurriculumException {
 
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
 
             String query = "DELETE FROM " + TABLE + " WHERE "
                     + PKEY + "= " + esc + matricula + esc;
             //            System.out.println("READ QUERY" + query);
 //
             if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
                 return true;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new CurriculumException("Delete Query failed!");
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return false;
     }
@@ -148,11 +159,13 @@ public class CurriculumManager {
     public ArrayList<Curriculum> getAllCurriculums() {
 
         ArrayList<Curriculum> toReturn = new ArrayList<Curriculum>();
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
 
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " order by title");
-
+            connection.commit();
             while (rs.next()) {
                 Curriculum b = getCurriculumFromResultSet(rs);
                 toReturn.add(b);
@@ -161,7 +174,7 @@ public class CurriculumManager {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return toReturn;
     }
@@ -205,14 +218,16 @@ public class CurriculumManager {
      */
     public ArrayList<Curriculum> getCurriculumByDegree(String degreeMatricula) {
         ArrayList<Curriculum> toReturn = new ArrayList<Curriculum>();
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
 
             stmt = DBConnector.openConnection();
             rs = stmt.executeQuery("SELECT * FROM " + TABLE
                     + " WHERE degree_matricula=" + esc + degreeMatricula
                     + esc + "ORDER BY title");
-
+            connection.commit();
             while (rs.next()) {
                 Curriculum c = getCurriculumFromResultSet(rs);
                 toReturn.add(c);
@@ -221,7 +236,7 @@ public class CurriculumManager {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return toReturn;
     }
@@ -235,18 +250,22 @@ public class CurriculumManager {
      */
     public boolean curriculumHasTeaching(String curriculum_matricula, String teaching_matricula) throws CurriculumException {
 
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
+
             String query = "SELECT * FROM " + TABLE_LINK
                     + " WHERE teaching_matricula=" + esc + teaching_matricula + esc
                     + " AND curriculum_matricula=" + esc + curriculum_matricula + esc;
             rs = stmt.executeQuery(query);
+            connection.commit();
             rs.last();
             return (rs.getRow() != 0);
         } catch (SQLException ex) {
             throw new CurriculumException();
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
     }
 
@@ -259,15 +278,17 @@ public class CurriculumManager {
      */
     public List<Teaching> getTeachingsByCurriculm(String curriculum_matricula) throws TeachingException, CurriculumException {
 
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
 
             String query = "SELECT * FROM " + TABLE_LINK
                     + " WHERE curriculum_matricula=" + esc
                     + curriculum_matricula + esc;
             rs = stmt.executeQuery(query);
-            System.out.println("getTeachingsByCurriculm query " + query);
-
+//            System.out.println("getTeachingsByCurriculm query " + query);
+            connection.commit();
             List<String> teachingsMatricula = new ArrayList<>();
             List<Teaching> toReturn = new ArrayList<>();
 
@@ -284,7 +305,7 @@ public class CurriculumManager {
         } catch (SQLException ex) {
             throw new CurriculumException();
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
     }
 
@@ -295,8 +316,10 @@ public class CurriculumManager {
      */
     public boolean setTeachingInCurriculum(String teaching_matricula, String curriculum_matricula) throws CurriculumException {
 
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
 
             String query = "INSERT INTO " + TABLE_LINK
                     + "(teaching_matricula, curriculum_matricula) VALUES("
@@ -304,27 +327,28 @@ public class CurriculumManager {
                     + esc + curriculum_matricula + esc + ")";
             System.out.println(query);
             if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
                 return true;
             }
 
         } catch (SQLException ex) {
             throw new CurriculumException();
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return false;
     }
 
-    
     /**
      * update an element fron the table Curriculum_Has_Teaching in the DB
+     *
      * @param oldCurrMatricula the curriculum matricula to update
      * @param oldTeachMatricula the teaching matricula to update
      * @param newCurrMatr the new curriculum matricula
      * @param newTeachMatr the new teaching matricula
      * @return true if the update has success, else false
      * @throws TeachingException
-     * @throws CurriculumException 
+     * @throws CurriculumException
      */
     public boolean updateCurriculumhasTeaching(String oldCurrMatricula, String oldTeachMatricula,
             String newCurrMatr, String newTeachMatr) throws TeachingException, CurriculumException {
@@ -332,31 +356,35 @@ public class CurriculumManager {
         return setTeachingInCurriculum(newTeachMatr, newCurrMatr);
     }
 
-    
     /**
      * delete a row from the table Curriculum_Has_Teaching in the DB
+     *
      * @param teaching_matricula
      * @param curriculum_matricula
      * @return
-     * @throws TeachingException 
+     * @throws TeachingException
      */
     public boolean deleteCurriculumhasTeaching(String teaching_matricula, String curriculum_matricula) throws TeachingException {
         String query = "DELETE FROM " + TABLE_LINK + " WHERE "
-                +  "curriculum_matricula"+ "= "
+                + "curriculum_matricula" + "= "
                 + esc + curriculum_matricula + esc
                 + " AND " + "teaching_matricula" + "="
                 + esc + teaching_matricula + esc;
         System.out.println(query);
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
+
             if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
                 return true;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new TeachingException("Delete Query failed!");
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return false;
     }
@@ -381,8 +409,6 @@ public class CurriculumManager {
             return new Teaching(tit, abb, matr, link, year, sem, (active > 0));
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            DBConnector.closeConnection();
         }
         return null;
     }
@@ -397,10 +423,13 @@ public class CurriculumManager {
         String tmpMatricula = "";
         List<String> matriculas = new ArrayList<>();
 
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
 
             rs = stmt.executeQuery(whichCurriculumQUery);
+            connection.commit();
             while (rs.next()) {
                 matriculas.add(rs.getString("curriculum_matricula"));
             }
@@ -421,7 +450,7 @@ public class CurriculumManager {
         } catch (SQLException ex) {
             throw new CurriculumException();
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return toReturn;
     }

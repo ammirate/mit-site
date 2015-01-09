@@ -5,6 +5,7 @@ import org.junit.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import it.unisa.offerta_formativa.beans.Module;
+import it.unisa.offerta_formativa.manager.Exceptions.ModuleException;
 
 /**
  *
@@ -46,14 +47,14 @@ public class Test_ModuleManager extends TestCase {
         System.out.print("Done");
     }
 
-    public void TC_5_2_createModule() {
+    public void TC_5_2_createModule() throws ModuleException {
         System.out.println("Executing TC_5_2...");
         ModuleManager moduleManager = ModuleManager.getInstance();
         assertTrue(moduleManager.createModule(new Module("Service Management", "0222500002")));
         System.out.print("Done");
     }
 
-    public void TC_5_3_readModule() {
+    public void TC_5_3_readModule() throws ModuleException {
         System.out.println("Executing TC_5_3....");
         ModuleManager moduleManager = ModuleManager.getInstance();
         Module m = moduleManager.readModule("Service Management", "0222500002");
@@ -64,7 +65,7 @@ public class Test_ModuleManager extends TestCase {
         System.out.print("Done");
     }
 
-    public void TC_5_4_UpdateModule() {
+    public void TC_5_4_UpdateModule() throws ModuleException {
         System.out.println("Executing TC_5_4....");
         ModuleManager moduleManager = ModuleManager.getInstance();
         Module m = new Module("Service Management", "0222500002");
@@ -72,14 +73,14 @@ public class Test_ModuleManager extends TestCase {
         System.out.print("Done");
     }
 
-    public void TC_5_5_DeleteModule() {
+    public void TC_5_5_DeleteModule() throws ModuleException {
         System.out.println("Executing TC_5_5....");
         ModuleManager moduleManager = ModuleManager.getInstance();
         assertTrue(moduleManager.deleteModule("Project Management", "0222500002"));
         System.out.print("Done");
     }
 
-    public void TC_5_6_getModulesByTeaching() {
+    public void TC_5_6_getModulesByTeaching() throws ModuleException {
         // TODO Auto-generated method stub
         System.out.println("Executing TC_5_6....");
         ModuleManager moduleManager = ModuleManager.getInstance();
@@ -92,7 +93,7 @@ public class Test_ModuleManager extends TestCase {
         moduleManager.deleteModule("Project Management", "0222500002");
     }
 
-    public void TC_5_7_getAllModules() {
+    public void TC_5_7_getAllModules() throws ModuleException {
         // TODO Auto-generated method stub
         System.out.println("Executing TC_5_7....");
         ModuleManager moduleManager = ModuleManager.getInstance();

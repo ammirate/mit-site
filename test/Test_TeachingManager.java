@@ -31,15 +31,15 @@ public class Test_TeachingManager extends TestCase {
 
     public static TestSuite suite() {
         TestSuite suite = new TestSuite();
-//        suite.addTest(new Test_TeachingManager("TC_3_1_getInstance"));
-//        suite.addTest(new Test_TeachingManager("TC_3_2_createTeaching"));
-//        suite.addTest(new Test_TeachingManager("TC_3_3_updateTeaching"));
-//        suite.addTest(new Test_TeachingManager("TC_3_4_readTeaching"));
-//        suite.addTest(new Test_TeachingManager("TC_3_5_deleteTeaching"));
-//        suite.addTest(new Test_TeachingManager("TC_3_6_getAllTeachings"));
-//        suite.addTest(new Test_TeachingManager("TC_3_7_getTeachingsByYear"));
-//        suite.addTest(new Test_TeachingManager("TC_3_8_getTeachingsBySemester"));
-//        suite.addTest(new Test_TeachingManager("TC_3_9_areEqual"));
+        suite.addTest(new Test_TeachingManager("TC_3_1_getInstance"));
+        suite.addTest(new Test_TeachingManager("TC_3_2_createTeaching"));
+        suite.addTest(new Test_TeachingManager("TC_3_3_updateTeaching"));
+        suite.addTest(new Test_TeachingManager("TC_3_4_readTeaching"));
+        suite.addTest(new Test_TeachingManager("TC_3_5_deleteTeaching"));
+        suite.addTest(new Test_TeachingManager("TC_3_6_getAllTeachings"));
+        suite.addTest(new Test_TeachingManager("TC_3_7_getTeachingsByYear"));
+        suite.addTest(new Test_TeachingManager("TC_3_8_getTeachingsBySemester"));
+        suite.addTest(new Test_TeachingManager("TC_3_9_areEqual"));
         suite.addTest(new Test_TeachingManager("TC_3_10_getTeachingsByCurriculum"));
 
         return suite;

@@ -5,6 +5,7 @@ import org.junit.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import it.unisa.model.Cycle;
+import java.util.List;
 
 /**
  *
@@ -19,10 +20,12 @@ public class Test_CycleManager extends TestCase {
 
     public static TestSuite suite() {
         TestSuite suite = new TestSuite();
-        suite.addTest(new Test_CycleManager("TC_8_1_getInstance"));
-        suite.addTest(new Test_CycleManager("TC_8_2_createCycle"));
-        suite.addTest(new Test_CycleManager("TC_8_3_readCycle"));
-        suite.addTest(new Test_CycleManager("TC_8_4_updateCycle"));
+//        suite.addTest(new Test_CycleManager("TC_8_1_getInstance"));
+//        suite.addTest(new Test_CycleManager("TC_8_2_createCycle"));
+//        suite.addTest(new Test_CycleManager("TC_8_3_readCycle"));
+//        suite.addTest(new Test_CycleManager("TC_8_4_updateCycle"));
+        suite.addTest(new Test_CycleManager("TC_8_5_getAllCycle"));
+        
         return suite;
     }
 
@@ -77,5 +80,19 @@ public class Test_CycleManager extends TestCase {
         System.out.println("Done");
     }
 
+    
+     /**
+     * update a Cycle into the db
+     */
+    public void TC_8_5_getAllCycle() {
+        System.out.print("Executing TC_8_5....");
+        CycleManager cycleManager = CycleManager.getInstance();
+        List<Cycle> list = cycleManager.getAllCycles();
+        System.out.println(list);
+        System.out.println("Done");
+    }
+
+    
+    
 
 }

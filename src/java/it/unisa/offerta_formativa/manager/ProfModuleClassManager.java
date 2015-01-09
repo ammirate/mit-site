@@ -1,5 +1,6 @@
 package it.unisa.offerta_formativa.manager;
 
+import it.unisa.integrazione.database.DBConnection;
 import it.unisa.offerta_formativa.manager.old.DBConnector;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -31,8 +32,10 @@ public class ProfModuleClassManager {
 
     public boolean create(ProfModuleClass pmc) {
 
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
 
             String esc = "\'";
             String query = "INSERT INTO " + TABLE
@@ -46,13 +49,14 @@ public class ProfModuleClassManager {
                     + esc + pmc.getProfEmail() + esc
                     + ")";
             if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
                 return true;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RuntimeException("Insert Query Failed");
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return false;
     }
@@ -71,12 +75,15 @@ public class ProfModuleClassManager {
     public List<ProfModuleClass> getAllRelations() {
         List<ProfModuleClass> toReturn = new ArrayList<>();
 
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
 
             String esc = "\'";
             String query = "SELECT * FROM " + TABLE;
             rs = stmt.executeQuery(query);
+            connection.commit();
             while (rs.next()) {
                 toReturn.add(getProfModuleClassFromRS(rs));
             }
@@ -85,7 +92,7 @@ public class ProfModuleClassManager {
             ex.printStackTrace();
             throw new RuntimeException("Insert Query Failed");
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return toReturn;
     }
@@ -136,15 +143,19 @@ public class ProfModuleClassManager {
                 + "teaching_matricula= " + esc + pmc.getTeachingMatricula() + esc + " and "
                 + "module_title= " + esc + pmc.getModuleTitle() + esc + " and "
                 + "email_account= " + esc + pmc.getProfEmail() + esc;
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
+
             if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
                 return true;
             }
         } catch (SQLException ex) {
             Logger.getLogger(ProfModuleClassManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return false;
     }
@@ -161,9 +172,13 @@ public class ProfModuleClassManager {
                 + " WHERE " + "teaching_matricula= " + esc + teachingMatricula + esc;
         System.out.println(query);
 
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
+
             rs = stmt.executeQuery(query);
+            connection.commit();
             while (rs.next()) {
                 ProfModuleClass pmc = getProfModuleClassFromRS(rs);
                 toReturn.add(pmc);
@@ -171,7 +186,7 @@ public class ProfModuleClassManager {
         } catch (SQLException ex) {
             Logger.getLogger(ProfModuleClassManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return toReturn;
     }
@@ -187,9 +202,13 @@ public class ProfModuleClassManager {
         String query = "SELECT * FROM " + TABLE
                 + " WHERE " + "class_title= " + esc + classTitle + esc;
         System.out.println(query);
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
+
             rs = stmt.executeQuery(query);
+            connection.commit();
             while (rs.next()) {
                 ProfModuleClass pmc = getProfModuleClassFromRS(rs);
                 toReturn.add(pmc);
@@ -197,7 +216,7 @@ public class ProfModuleClassManager {
         } catch (SQLException ex) {
             Logger.getLogger(ProfModuleClassManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return toReturn;
     }
@@ -214,9 +233,13 @@ public class ProfModuleClassManager {
                 + " WHERE " + "module_title= " + esc + moduleTitle + esc;
         System.out.println(query);
 
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
+
             rs = stmt.executeQuery(query);
+            connection.commit();
             while (rs.next()) {
                 ProfModuleClass pmc = getProfModuleClassFromRS(rs);
                 toReturn.add(pmc);
@@ -224,7 +247,7 @@ public class ProfModuleClassManager {
         } catch (SQLException ex) {
             Logger.getLogger(ProfModuleClassManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return toReturn;
     }
@@ -241,9 +264,13 @@ public class ProfModuleClassManager {
                 + " WHERE " + "email_account= " + esc + email + esc;
         System.out.println(query);
 
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
+
             rs = stmt.executeQuery(query);
+            connection.commit();
             while (rs.next()) {
                 ProfModuleClass pmc = getProfModuleClassFromRS(rs);
                 toReturn.add(pmc);
@@ -251,7 +278,7 @@ public class ProfModuleClassManager {
         } catch (SQLException ex) {
             Logger.getLogger(ProfModuleClassManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return toReturn;
     }

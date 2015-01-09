@@ -5,7 +5,7 @@
  */
 package it.unisa.offerta_formativa.manager;
 
-import it.unisa.offerta_formativa.manager.old.DBConnector;
+import it.unisa.integrazione.database.DBConnection;
 import it.unisa.offerta_formativa.beans.Teaching;
 import it.unisa.offerta_formativa.manager.Exceptions.TeachingException;
 import java.sql.Connection;
@@ -48,21 +48,24 @@ public class TeachingManager {
         if (ins == null) {
             throw new IllegalArgumentException("The teaching which you're trying to insert is null");
         } else {
+            Connection connection = null;
             try {
-                stmt = DBConnector.openConnection();
+                connection = DBConnection.getConnection();
+                stmt = connection.createStatement();
 
                 String query = "INSERT INTO " + TABLE
                         + "(matricula,title,abbreviation,link,year,semester,active) VALUES("
                         + ins.toStringQueryInsert() + ")";
 
                 if (stmt.executeUpdate(query) == 1) {
+                    connection.commit();
                     return true;
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 throw new TeachingException("Insert Query Failed");
             } finally {
-                DBConnector.closeConnection();
+                DBConnection.releaseConnection(connection);
             }
         }
         return false;
@@ -78,19 +81,22 @@ public class TeachingManager {
         if (matricula == null || matricula.equals("") || matricula.length() > 10) {
             throw new IllegalArgumentException("Matricula format incorrect");
         } else {
+            Connection connection = null;
             try {
-                stmt = DBConnector.openConnection();
+                connection = DBConnection.getConnection();
+                stmt = connection.createStatement();
 
                 String query = "DELETE FROM " + TABLE
                         + " WHERE " + PKEY + "=\"" + matricula + "\"";
                 if (stmt.executeUpdate(query) == 1) {
+                    connection.commit();
                     return true;
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 throw new TeachingException("Delete Query failed!");
             } finally {
-                DBConnector.closeConnection();
+                DBConnection.releaseConnection(connection);
             }
         }
         return false;
@@ -106,21 +112,24 @@ public class TeachingManager {
         if (ins == null) {
             throw new IllegalArgumentException("The teaching which you're trying to update is null");
         } else {
+            Connection connection = null;
             try {
-                stmt = DBConnector.openConnection();
+                connection = DBConnection.getConnection();
+                stmt = connection.createStatement();
 
                 String esc = "\'";
                 String query = "UPDATE " + TABLE + " SET " + ins.toString()
                         + " WHERE " + PKEY + "=" + esc + teachingMatricula + esc;
 
                 if (stmt.executeUpdate(query) == 1) {
+                    connection.commit();
                     return true;
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 throw new TeachingException("Update Query Failed");
             } finally {
-                DBConnector.closeConnection();
+                DBConnection.releaseConnection(connection);
             }
         }
         return false;
@@ -137,13 +146,16 @@ public class TeachingManager {
         if (matricula == null || matricula.equals("") || matricula.length() > 10) {
             throw new IllegalArgumentException("Matricula format incorrect");
         } else {
+            Connection connection = null;
             try {
-                stmt = DBConnector.openConnection();
+                connection = DBConnection.getConnection();
+                stmt = connection.createStatement();
 
                 String query = "SELECT * FROM " + TABLE
                         + " WHERE " + PKEY + "=" + esc + matricula + esc;
 
                 rs = stmt.executeQuery(query);
+                connection.commit();
                 while (rs.next()) {
                     return getTeachingFromResultSet(rs);
                 }
@@ -151,7 +163,7 @@ public class TeachingManager {
             } catch (SQLException ex) {
                 throw new TeachingException("Read Query failed!");
             } finally {
-                DBConnector.closeConnection();
+                DBConnection.releaseConnection(connection);
             }
         }
         return null;
@@ -176,16 +188,20 @@ public class TeachingManager {
     public ArrayList<Teaching> getAllTeachings() {
         ArrayList<Teaching> toReturn = new ArrayList<>();
         String esc = "\"";
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
+
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " order by title");
+            connection.commit();
             while (rs.next()) {
                 toReturn.add(getTeachingFromResultSet(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return toReturn;
     }
@@ -200,9 +216,13 @@ public class TeachingManager {
         ResultSet rs2;
         String esc = "\"";
         ArrayList<Teaching> toReturn = new ArrayList<>();
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
+
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " WHERE year=" + year);
+            connection.commit();
             while (rs.next()) {
                 Teaching t = getTeachingFromResultSet(rs);
                 toReturn.add(t);
@@ -210,7 +230,7 @@ public class TeachingManager {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return toReturn;
     }
@@ -225,9 +245,13 @@ public class TeachingManager {
         ResultSet rs2;
         String esc = "\"";
         ArrayList<Teaching> toReturn = new ArrayList<>();
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
+
             rs = stmt.executeQuery("SELECT * FROM " + TABLE + " WHERE semester=" + semester);
+            connection.commit();
             while (rs.next()) {
                 Teaching t = getTeachingFromResultSet(rs);
                 toReturn.add(t);
@@ -236,7 +260,7 @@ public class TeachingManager {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return toReturn;
     }
@@ -256,10 +280,13 @@ public class TeachingManager {
         String tmpMatricula = "";
         List<String> matriculas = new ArrayList<>();
 
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
 
             rs = stmt.executeQuery(whichTeachingQUery);
+            connection.commit();
             while (rs.next()) {
                 matriculas.add(rs.getString("teaching_matricula"));
             }
@@ -282,7 +309,7 @@ public class TeachingManager {
         } catch (SQLException ex) {
             Logger.getLogger(CurriculumManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
 
         return toReturn;
@@ -318,17 +345,31 @@ public class TeachingManager {
      */
     public String getHtmlSyllabus(String teaching_matricula) {
         String htmlToReturn = null;
+        String linkEsse3 = null;
         String esc = "\"";
+        Connection connection = null;
         try {
-            stmt = DBConnector.openConnection();
-            rs = stmt.executeQuery("SELECT esse3_content FROM " + TABLE + " WHERE matricula=" + esc + teaching_matricula + esc);
-
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
+            rs = stmt.executeQuery("SELECT * FROM " + TABLE + " WHERE matricula=" + esc + teaching_matricula + esc);
+            connection.commit();
             while (rs.next()) {
                 htmlToReturn = rs.getString("esse3_content");
+                linkEsse3 = rs.getString("link");
+            }
+            if(htmlToReturn == null){
+//               ParserHtmlManager.getInstance().getHtml(linkEsse3, "<html>");
+               this.setEsse3ContentForTeaching(teaching_matricula, htmlToReturn);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (TeachingException ex) {
+            Logger.getLogger(TeachingManager.class.getName()).log(Level.SEVERE, null, ex);
         }
+        finally{
+            DBConnection.releaseConnection(connection);
+        }
+        
         return htmlToReturn;
     }
 
@@ -340,19 +381,24 @@ public class TeachingManager {
      * @return true if the update has success, else false
      */
     public boolean setEsse3ContentForTeaching(String teachingMatricula, String content) throws TeachingException {
+        Connection connection = null;
         try {
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
+
             String esc = "\'";
             String query = "UPDATE " + TABLE + " SET " + esc + "esse3_content" + esc
                     + " WHERE " + PKEY + "=" + esc + teachingMatricula + esc;
 //UPDATE teaching SET `esse3_content`="new content" WHERE `matricula`='0222500002'
             if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
                 return true;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new TeachingException("Update esse3Content Query Failed");
         } finally {
-            DBConnector.closeConnection();
+            DBConnection.releaseConnection(connection);
         }
         return false;
     }
