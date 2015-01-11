@@ -8,12 +8,10 @@ package it.unisa.gestionetesi.servlet;
 import it.unisa.integrazione.database.DegreeManager;
 import it.unisa.integrazione.database.DepartmentManager;
 import it.unisa.integrazione.database.PersonManager;
-import it.unisa.integrazione.database.exception.ConnectionException;
 import it.unisa.integrazione.model.Person;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -21,8 +19,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -53,12 +49,12 @@ public class RecuperaDatiUtente extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
 
             String ssn = request.getParameter("ssn");
-            String tipo = request.getParameter("tipo");
 
             Person p = new Person();
             manager_utente = new PersonManager();
             p = manager_utente.getPersonBySSN(ssn);
-            String titolo_corso_laurea= managerDegree.readDegree(p.getDegree().getMatricula()).getTitle();
+	    String matricula = p.getDegree().getMatricula();
+            String titolo_corso_laurea= managerDegree.readDegree(matricula).getTitle();
             String titolo_dipartimento= managerDepartment.getDepartmentByAbbreviation(p.getDepartment().getAbbreviation()).getTitle();
             
             JSONObject user_data = new JSONObject();

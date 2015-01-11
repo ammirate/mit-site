@@ -17,7 +17,7 @@
 
             $(document).ready(function () {
                 $.ajax({
-                    url: 'RecuperaDatiUtente',
+                    url: '${pageContext.request.contextPath}/RecuperaDatiUtente',
                     type: 'POST',
                     data: {ssn: codice_fiscale, tipo: tipo_account},
                     success: function (msg) {

@@ -8,15 +8,15 @@
 <html>
     <head>
 
-        <link rel="stylesheet" href="assets/js/select2/select2.css">
-        <link rel="stylesheet" href="assets/js/select2/select2-bootstrap.css">
+        <link rel="stylesheet" href="../assets/js/select2/select2.css">
+        <link rel="stylesheet" href="../assets/js/select2/select2-bootstrap.css">
 
 
 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Tesi Studente</title>
 	
-	<script src="assets/js/select2/select2.min.js"></script>
+	<script src="../assets/js/select2/select2.min.js"></script>
         
 	<script type="text/javascript">
             /**
@@ -123,7 +123,7 @@
 				});
 			    } else if(element_id === "degree") {		    
 				$.each(tesi, function() {
-				    select += "<option value='" + this['degree_abbrevation'] + 
+				    select += "<option value='" + this['degree_matricula'] + 
 					    "'>[" + this['degree_matricula'] + "] " + this['degree_title'] + "</option>\n";
 				});
 			    } else if(element_id === "title") {		    
@@ -152,7 +152,7 @@
             */
             $.fn.fillThesisSelectsAndTable = function() {
 		if(values[0] === "" && values[1] === "" && values[2] === "" && 
-			values[3] === "" && values[4] === "" && values[5] === "") {
+			values[3] === "" && values[4] === "" && values[5] === "" && values[6] === "") {
 		    $.fn.initializeAll();
 		    $("#tbody-tesi td").remove();
 		} else {

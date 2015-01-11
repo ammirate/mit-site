@@ -11,13 +11,13 @@
         <title>Lista Tesisti</title>
 
         <!-- Imported styles on this page -->
-        <link rel="stylesheet" href="assets/js/datatables/dataTables.bootstrap.css">
+        <link rel="stylesheet" href="../assets/js/datatables/dataTables.bootstrap.css">
 
         <script>
             var codice_fiscale = '${person.ssn}';
             $(document).ready(function () {
                 $.ajax({
-                    url: 'RecuperaTesisti',
+                    url: '${pageContext.request.contextPath}/RecuperaTesisti',
                     type: 'POST',
                     data: {id_docente: codice_fiscale},
                     success: function (msg) {
@@ -233,16 +233,16 @@
         </div>
 
         <!-- Bottom Scripts -->
-        <script src="assets/js/datatables/js/jquery.dataTables.min.js"></script>
+        <script src="../assets/js/datatables/js/jquery.dataTables.min.js"></script>
 
         <!-- Imported scripts on this page -->
-        <script src="assets/js/datatables/dataTables.bootstrap.js"></script>
-        <script src="assets/js/datatables/yadcf/jquery.dataTables.yadcf.js"></script>
-        <script src="assets/js/datatables/tabletools/dataTables.tableTools.min.js"></script>
+        <script src="../assets/js/datatables/dataTables.bootstrap.js"></script>
+        <script src="../assets/js/datatables/yadcf/jquery.dataTables.yadcf.js"></script>
+        <script src="../assets/js/datatables/tabletools/dataTables.tableTools.min.js"></script>
 
 
         <!-- JavaScripts initializations and stuff -->
-        <script src="assets/js/xenon-custom.js"></script>
+        <script src="../assets/js/xenon-custom.js"></script>
 
 
     </body>

@@ -12,7 +12,7 @@
     <body>
 
         <%
-            String tipo_utente= null;
+            String tipo_utente= "";
             Person p = (Person) session.getAttribute("person");
             String ssn=p.getSsn();
             String typeOfAccount = p.getAccount().getTypeOfAccount();

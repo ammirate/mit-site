@@ -9,22 +9,22 @@ import it.unisa.integrazione.database.PersonManager;
 import it.unisa.integrazione.model.Person;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  *
  * @author CosimoAlessandro
  */
+@WebServlet(name = "PopolaSelectProfessori", urlPatterns = {"/PopolaSelectProfessori"})
 public class PopolaSelectProfessori extends HttpServlet {
     private PersonManager managerUtente;
     private ArrayList<Person> listaUtenti= null;
