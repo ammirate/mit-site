@@ -196,10 +196,11 @@ public class PersonManager {
                 person.setDepartment(DepartmentManager.getInstance().getDepartmentByAbbreviation(rs.getString("Department_abbreviation")));
                 person.setCycle(CycleManager.getInstance().getCycleByCycleNumber(rs.getInt("cycle")));
                 person.setAccount(AccountManager.getInstance().getAccoutnByEmail(rs.getString("Account_email")));
+                String deg_mat_t = rs.getString("degree_matricula");
 
-                if (rs.getString("degree_matricula") != null) {
-		    String matricula = person.getMatricula().substring(0, 5);
-                    person.setDegree(DegreeManager.getInstance().readDegree(matricula));
+                if (deg_mat_t != null) {
+                    
+                    person.setDegree(DegreeManager.getInstance().readDegree(deg_mat_t));
                 }
 
             }
@@ -382,9 +383,9 @@ public class PersonManager {
 
     public List<Person> getAllSupervisors() throws SQLException, ConnectionException {
         List<Person> R = new ArrayList<Person>();
-	Person person = new Person();
-	Department dipartimento = null;
-	Degree corso_laurea = new Degree();
+        Person person = new Person();
+        Department dipartimento = null;
+        Degree corso_laurea = new Degree();
         Connection connection = null;
         Statement stmt = null;
         ResultSet rs = null;
@@ -403,9 +404,9 @@ public class PersonManager {
             rs = stmt.executeQuery(query);
 
             while (rs.next()) {
-		dipartimento = DepartmentManager.getInstance().getDepartmentByAbbreviation(rs.getString("Department_abbreviation"));
+                dipartimento = DepartmentManager.getInstance().getDepartmentByAbbreviation(rs.getString("Department_abbreviation"));
                 corso_laurea.setMatricula(rs.getString("Degree_matricula"));
-		person = new Person();
+                person = new Person();
                 person.setSsn(rs.getString("SSN"));
                 person.setName(rs.getString("name"));
                 person.setSurname(rs.getString("surname"));
@@ -463,7 +464,7 @@ public class PersonManager {
             while (rs.next()) {
                 dipartimento = DepartmentManager.getInstance().getDepartmentByAbbreviation(rs.getString("Department_abbreviation"));
                 corso_laurea.setMatricula(rs.getString("Degree_matricula"));
-		person = new Person();
+                person = new Person();
                 person.setSsn(rs.getString("SSN"));
                 person.setName(rs.getString("name"));
                 person.setSurname(rs.getString("surname"));
@@ -522,7 +523,7 @@ public class PersonManager {
             while (rs.next()) {
                 dipartimento = DepartmentManager.getInstance().getDepartmentByAbbreviation(rs.getString("Department_abbreviation"));
                 corso_laurea.setMatricula(rs.getString("Degree_matricula"));
-		person = new Person();
+                person = new Person();
                 person.setSsn(rs.getString("SSN"));
                 person.setName(rs.getString("name"));
                 person.setSurname(rs.getString("surname"));
@@ -578,7 +579,7 @@ public class PersonManager {
             while (rs.next()) {
                 dipartimento = DepartmentManager.getInstance().getDepartmentByAbbreviation(rs.getString("Department_abbreviation"));
                 corso_laurea.setMatricula(rs.getString("Degree_matricula"));
-		person = new Person();
+                person = new Person();
                 person.setSsn(rs.getString("SSN"));
                 person.setName(rs.getString("name"));
                 person.setSurname(rs.getString("surname"));
@@ -653,7 +654,7 @@ public class PersonManager {
 
         return listaUtenti;
     }
-    
+
     /* Tirocinio */
     /**
      *
