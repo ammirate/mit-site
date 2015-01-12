@@ -283,7 +283,7 @@
                                                 <option value>--Select--</option>
                                                 <option value="Azienda_pubblica">   Azienda Pubblica</option>
                                                 <option value="Azieda_privata">     Azienda Privata</option>
-                                                <option value="MIT">    Tirocinio Interno</option>
+                                                <option value="distra">    Tirocinio Interno</option>
                                                 <option value="Impresa_NO_PROFIT">  Impresa no Profit</option>
                                             </select>
                                         </div>
