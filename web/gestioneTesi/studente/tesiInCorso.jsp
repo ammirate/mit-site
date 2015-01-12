@@ -19,7 +19,7 @@
                     bootbox.confirm("Questa operazione sarà sottoposta a verifica del professore. Continuare?", function (result) {
                         if (result) {
                             $.ajax({
-                                url: 'richiestaCompletaTesi',
+                                url: '${pageContext.request.contextPath}/richiestaCompletaTesi',
                                 type: 'POST',
                                 data: {id_tesi: id},
                                 success: function (msg) {
@@ -43,7 +43,7 @@
               //  $('#send_memory').attr("disabled", true);
               //  $('#load_spinning').show();
                 $.ajax({
-                    url: 'modificaTesi',
+                    url: '${pageContext.request.contextPath}/modificaTesi',
                     type: 'POST',
                     data: {id_tesi:id, titolo:titolo, abstract:abstract, data_inizio:data_inizio, data_fine:data_fine, data_fine_prevista:data_fine_prevista},
                     success: function (msg) {
@@ -200,12 +200,12 @@
                                     size = size < 1024 ? (size + " KB") : (parseInt(size / 1024, 10) + " MB");
 
                                     var $el = $('<tr>\
-                                                                                                        <td class="text-center">' + (i++) + '</td>\
-                                                                                                        <td>' + file.name + '</td>\
-                                                                                                        <td><div class="progress progress-striped"><div class="progress-bar progress-bar-warning"></div></div></td>\
-                                                                                                        <td>' + size + '</td>\
-                                                                                                        <td>Uploading...</td>\
-                                                                                                </tr>');
+						    <td class="text-center">' + (i++) + '</td>\
+						    <td>' + file.name + '</td>\
+						    <td><div class="progress progress-striped"><div class="progress-bar progress-bar-warning"></div></div></td>\
+						    <td>' + size + '</td>\
+						    <td>Uploading...</td>\
+						</tr>');
 
                                     $example_dropzone_filetable.find('tbody').append($el);
                                     file.fileEntryTd = $el;
@@ -295,10 +295,10 @@
             </div>
         </div>
 
-        <script src="assets/js/datepicker/bootstrap-datepicker.js"></script>
-        <script src="assets/js/tagsinput/bootstrap-tagsinput.min.js"></script>
-        <script src="assets/js/bootbox/bootbox.js"></script>
-        <script src="assets/js/dropzone/dropzone.min.js"></script>
+        <script src="../assets/js/datepicker/bootstrap-datepicker.js"></script>
+        <script src="../assets/js/tagsinput/bootstrap-tagsinput.min.js"></script>
+        <script src="../assets/js/bootbox/bootbox.js"></script>
+        <script src="../assets/js/dropzone/dropzone.min.js"></script>
 
     </body>
 </html>

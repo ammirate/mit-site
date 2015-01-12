@@ -32,7 +32,7 @@
         <script>
             function reload_bacheca() {
                 location.reload();
-                //$('#bacheca').reload("gestioneTesi/bacheca.jsp");
+                $('#bacheca').load("gestioneTesi/bacheca.jsp");
             }
             ;
 
@@ -71,12 +71,12 @@
                         </div>
                         <div class="tab-pane" id="cronologia">
 
-                  
+			    <%@ include file="cronologia.jsp" %>
 
                         </div>
                         <div class="tab-pane" id="storico">
 
-                       
+			    <%@ include file="ricercaTesi.jsp" %>
 
                         </div>
 

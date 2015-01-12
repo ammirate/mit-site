@@ -8,10 +8,10 @@
 <html>
     <head>
 
-        <link rel="stylesheet" href="assets/js/select2/select2.css">
-        <link rel="stylesheet" href="assets/js/select2/select2-bootstrap.css">
-        <link rel="stylesheet" href="assets/js/multiselect/css/multi-select.css">
-        <link rel="stylesheet" href="assets/js/magicsuggest/css/magicsuggest-1.3.1-min.css">
+        <link rel="stylesheet" href="../assets/js/select2/select2.css">
+        <link rel="stylesheet" href="../assets/js/select2/select2-bootstrap.css">
+        <link rel="stylesheet" href="../assets/js/multiselect/css/multi-select.css">
+        <link rel="stylesheet" href="../assets/js/magicsuggest/css/magicsuggest-1.3.1-min.css">
 
 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -25,7 +25,7 @@
             $(document).ready(function () {
 
                 $.ajax({
-                    url: 'RecuperaDatiTesi',
+                    url: '${pageContext.request.contextPath}/RecuperaDatiTesi',
                     type: 'POST',
                     data: {id_studente: codice_fiscale},
                     success: function (msg) {
@@ -115,7 +115,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "PopolaSelectDipartimenti",
+                    url: "${pageContext.request.contextPath}/PopolaSelectDipartimenti",
                     success: function (data) {
                         // Parse the returned json data
                         if (data != "") {
@@ -142,7 +142,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "PopolaSelectCorsoLaurea",
+                    url: "${pageContext.request.contextPath}/PopolaSelectCorsoLaurea",
                     data: {abbr_dipartimento: dipartimento.value},
                     success: function (data) {
                         // Parse the returned json data
@@ -168,7 +168,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "PopolaSelectProfessori",
+                    url: "${pageContext.request.contextPath}/PopolaSelectProfessori",
                     data: {posizione: "professor", corso_laurea: corsoLaurea.value},
                     success: function (data) {
                         // Parse the returned json data
@@ -350,10 +350,10 @@
 %>
 
         <!--Bottom Scripts-->
-        <script src="assets/js/select2/select2.min.js"></script>
-        <script src="assets/js/jquery-validate/jquery.validate.min.js"></script>
-        <script src="assets/js/multiselect/js/jquery.multi-select.js"></script>
-        <script src="assets/js/magicsuggest/magicsuggest-1.3.1-min.js"></script>
+        <script src="../assets/js/select2/select2.min.js"></script>
+        <script src="../assets/js/jquery-validate/jquery.validate.min.js"></script>
+        <script src="../assets/js/multiselect/js/jquery.multi-select.js"></script>
+        <script src="../assets/js/magicsuggest/magicsuggest-1.3.1-min.js"></script>
 
     </body>
 </html>

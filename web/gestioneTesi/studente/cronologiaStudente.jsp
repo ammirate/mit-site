@@ -16,7 +16,7 @@
 
             $(document).ready(function () {
                 $.ajax({
-                    url: 'RecuperaCronologiaStudente',
+                    url: '${pageContext.request.contextPath}/RecuperaCronologiaStudente',
                     type: 'POST',
                     data: {id_studente: codice_fiscale},
                     success: function (cronologiaS) {
@@ -54,7 +54,7 @@
                                 var ID_Studente = array_cronologia.employees[i].ID_Studente;
                                 var ID_Docente = array_cronologia.employees[i].ID_Docente;
                                 var Data_Notifica = array_cronologia.employees[i].Data_Notifica;
-                                $("#testo" + i).html(" Con il prof. " + nomeDocente + ": " + testo + "");
+                                $("#testo" + i).html("<b>Con il prof. " + nomeDocente + ": </b>" + testo + "");
                                 $("#data" + i).html(Data_Notifica);
 
                             }
@@ -65,7 +65,7 @@
                             var str = " <time class=\"cbp_tmtime\" datetime=\"2014-10-03T18:30\"><span class=\"hidden\"> 03/10/2014</span> <span class=\"large\" id=\"data" + i + "\"></span></time> <div class=\"cbp_tmicon timeline-bg-gray\"> <i class=\"fa-user\"></i>  </div> <div class=\"cbp_tmlabel empty\"> <span id=\"testo" + i + "\" ></span>  </div> ";
                             temp.innerHTML = str;
                             $("#principale").append(temp);
-                            $("#testo" + i).html(" Messaggio di sistema: " + testo);
+                            $("#testo" + i).html("<b>Messaggio di sistema: </b>" + testo);
                             var dat = new Date();
                             var gg = dat.getDate();
                             var mm = (dat.getMonth() + 1);

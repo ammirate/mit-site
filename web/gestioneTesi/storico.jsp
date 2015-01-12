@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <%@  include file="../gestioneTesi/ricercaTesi.jsp" %>
+    <%@  include file="./ricercaTesi.jsp" %>
 
 </body>
 </html>

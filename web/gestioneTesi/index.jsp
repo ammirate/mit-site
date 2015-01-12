@@ -90,7 +90,7 @@
                                 class="linecons-desktop"></i> <span class="title">Offerta
                                 Formativa</span>
                         </a></li>
-                    <li><a href="gestioneTesi/index.jsp"> <i class="linecons-graduation-cap"></i> <span
+			<li><a href="index.jsp"> <i class="linecons-graduation-cap"></i> <span
                                 class="title">Gestione Tesi</span>
                         </a></li>
                     <li><a href="#l"> <i class="linecons-megaphone"></i> <span
