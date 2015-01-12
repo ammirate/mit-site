@@ -69,7 +69,10 @@ tpAdminFunction = {
                         stringToAppend_tmp = "<tr><td>";
                         stringToAppend_tmp += array[i].matricola + "</td><td>" + array[i].credenziali + "</td><td>";
                         stringToAppend_tmp += array[i].email + "</td><td>" + array[i].telefono + "</td><td>";
-                        stringToAppend_tmp += array[i].titolo + "</td><td>" + array[i].azienda + "</td><td>";
+                        if( array[i].azienda === undefined )
+                            stringToAppend_tmp += array[i].titolo + "</td><td>distra</td><td>";
+                        else stringToAppend_tmp += array[i].titolo + "</td><td>" + array[i].azienda + "</td><td>";
+                        
                         stringToAppend_tmp += array[i].questionario + "</td></tr>";
                         stringToAppend_tmp += array[i].matricola;
                         $(idTable).append(stringToAppend_tmp);
@@ -219,7 +222,7 @@ tpAdminFunction = {
                 $(idComboProf).empty();
                 $(idComboOrga).empty();
                 $(idComboStud).empty();
-                $(idComboOrga).append("<option value>---Select---</option>");
+                $(idComboOrga).append("<option value>distra</option>");
                 var array = parsed.organization;
                 for (var i = 0; i < array.length; i++) {
                     var stringToAppend_tmp = "";

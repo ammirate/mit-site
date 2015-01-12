@@ -98,7 +98,7 @@ public class getAllEntities extends HttpServlet {
                     
                     if((studentInformation.getStudentStatus() == 2)&&(trainingRequest.getStudentSSN()==null)){
                         JSONObject jsonTmpStu = new JSONObject();
-                        jsonTmpStu.put("credentialStudent", stud.getName()+" "+stud.getSurname());
+                        jsonTmpStu.put("credentialStudent", stud.getName()+" "+stud.getSurname()+", "+stud.getMatricula());
                         jsonTmpStu.put("SSNStudent",stud.getSsn());
                         arrayPerson.put(jsonTmpStu);
                     }

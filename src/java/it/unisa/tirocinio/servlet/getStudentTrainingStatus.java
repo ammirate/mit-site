@@ -8,9 +8,11 @@ package it.unisa.tirocinio.servlet;
 import it.unisa.integrazione.model.Person;
 import it.unisa.tirocinio.beans.StudentInformation;
 import it.unisa.tirocinio.beans.StudentStatus;
+import it.unisa.tirocinio.beans.TrainingRequest;
 import it.unisa.tirocinio.manager.concrete.ConcreteMessageForServlet;
 import it.unisa.tirocinio.manager.concrete.ConcreteStudentInformation;
 import it.unisa.tirocinio.manager.concrete.ConcreteStudentStatus;
+import it.unisa.tirocinio.manager.concrete.ConcreteTrainingRequest;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -51,10 +53,14 @@ public class getStudentTrainingStatus extends HttpServlet {
         int studentStatus = studentInformation.getStudentStatus();
         ConcreteStudentStatus studentStatusConcrete = ConcreteStudentStatus.getInstance();
         StudentStatus sStudent = studentStatusConcrete.readStudentStatus(studentStatus);
+        
+        ConcreteTrainingRequest aConcreteTrainingRequest = ConcreteTrainingRequest.getInstance();
+        TrainingRequest aTrainingRequest = aConcreteTrainingRequest.readTrainingRequestByStudent(person.getSsn());
                 
         message.setMessage("status", 1);
         message.setMessage("description", sStudent.getDescription());
         message.setMessage("idStudentStatus", studentStatus);
+        message.setMessage("enableQuestionnaire", aTrainingRequest.getTrainingStatus());
         aSession.setAttribute("message", message);
 
         response.sendRedirect(request.getContextPath() + "/tirocinio/studente/tphome.jsp");

@@ -34,7 +34,7 @@
 
         <script src="${pageContext.request.contextPath}/assets/js/jquery-1.11.1.min.js"></script>
         <script src="${pageContext.request.contextPath}/assets/js/tpLibrary.js"></script>
-        
+
         <c:choose>
             <c:when test="${sessionScope.person.account.typeOfAccount == 'professor'}">
                 <c:redirect url="/indexLog.jsp" />
@@ -60,9 +60,11 @@
             int requestStatus = (Integer) _message.getMessage("status");
             String description = (String) _message.getMessage("description");
             int studentStatus = (Integer) _message.getMessage("idStudentStatus");
+            int enableQuestionnaire = (Integer) _message.getMessage("enableQuestionnaire");
             pageContext.setAttribute("status", requestStatus);
             pageContext.setAttribute("description", description);
             pageContext.setAttribute("idStudentStatus", studentStatus);
+            pageContext.setAttribute("enableQuestionnaire", enableQuestionnaire);
         %>
 
         <%
@@ -83,6 +85,16 @@
                     </script>
                 </c:when>
                 <c:when test="${idStudentStatus == 2}">
+                    
+                        <c:if test="${enableQuestionnaire != 2}">
+                            <script>
+                                jQuery(document).ready(function ($) {
+                                    $("#ID_questionario_0").empty();
+                                });
+                            </script>
+                        </c:if>
+
+                    
                     <script>
                         jQuery(document).ready(function ($) {
                             $("#motivationReject").empty();
@@ -113,7 +125,7 @@
                 </c:otherwise>
             </c:choose>
         </c:if>
-        
+
     </head>
     <body class="page-body">
 
@@ -353,7 +365,7 @@
 
                     </div>
                 </div>
-                
+
             </div>
 
         </div>
