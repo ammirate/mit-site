@@ -32,6 +32,23 @@
 
         <script src="../assets/js/jquery-1.11.1.min.js"></script>
         <script type="text/javascript" src="script/index.js"></script>
+        
+        <c:choose>
+        <c:when test="${sessionScope.person == null}">
+            <c:redirect url="index.jsp" />
+        </c:when>
+
+    </c:choose>
+
+    <c:choose>
+        <c:when test="${(sessionScope.person != null)}">
+            <% Person login = ((Person) session.getAttribute("person"));
+                if (!login.getAccount().getTypeOfAccount().equals("phdadmin") && !login.getAccount().getTypeOfAccount().equals("phd")) {
+            %>  
+            <c:redirect url="index.jsp" />
+            <%}%>
+        </c:when>
+    </c:choose>
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>

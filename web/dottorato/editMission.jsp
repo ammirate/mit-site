@@ -4,6 +4,7 @@
     Author     : gemmacatolino
 --%>
 
+<%@page import="it.unisa.integrazione.model.Person"%>
 <%@page import="it.unisa.dottorato.phdProfile.missions.Mission"%>
 <%@page import="it.unisa.dottorato.phdProfile.missions.MissionManager"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -33,6 +34,23 @@
 
         <script src="../assets/js/jquery-1.11.1.min.js"></script>
         <script type="text/javascript" src="script/index.js"></script>
+        
+                <c:choose>
+            <c:when test="${sessionScope.person == null}">
+                <c:redirect url="index.jsp" />
+            </c:when>
+
+        </c:choose>
+
+        <c:choose>
+            <c:when test="${(sessionScope.person != null)}">
+                <% Person login = ((Person) session.getAttribute("person"));
+                    if (!login.getAccount().getTypeOfAccount().equals("phdadmin") && !login.getAccount().getTypeOfAccount().equals("phd")) {
+                %>  
+                <c:redirect url="index.jsp" />
+                <%}%>
+            </c:when>
+        </c:choose>
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -61,7 +79,7 @@
             <!-- Inclusione della pagina contenente il menù laterale -->
             <jsp:include page="lateralMenu.jsp"/>
 <%
-                int missionID = (Integer.parseInt("" + session.getAttribute("idMission")));
+                int missionID = (Integer.parseInt("" + request.getParameter("idMission")));
                 Mission mission = MissionManager.getInstance().getMissionById(missionID) ;%>
             <!-- Contenuto della pagina -->
 
@@ -78,7 +96,7 @@
                                 <h1>Modifica Mission</h1>
                             </div>
                             <div class="panel-body">
-                                <form class="form-horizontal" method="POST" action="UpdateMissionServlet">
+                                <form class="form-horizontal" method="POST" action="UpdateMissionServlet?idMission=<%= missionID%>">
                                     <div class="form-group">
                                         <table width="90%" align="center">
                                             <tr><td>

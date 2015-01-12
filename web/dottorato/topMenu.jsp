@@ -34,20 +34,15 @@
         <!-- main menu -->
 
         <ul class="navbar-nav">
+
             <li>
-                <a href="../index.jsp">
-                    <i class="fa fa-home"></i>
-                    <span class="title">Home</span>
-                </a>
-            </li>
-            <li>
-                <a href="../offertaFormativa.html">
+                <a href="${pageContext.request.contextPath}/ShowTeachingOfferServlet">
                     <i class="linecons-desktop"></i>
                     <span class="title">Offerta Formativa</span>
-                </a>
+                </a>	
             </li>
             <li>
-                <a href="../gestioneTesi.html">
+                <a href="../gestioneTesi/index.jsp">
                     <i class="linecons-graduation-cap"></i>
                     <span class="title">Gestione Tesi</span>
                 </a>
@@ -59,7 +54,7 @@
                 </a>
             </li>
             <li class="opened active">
-                <a href="index.jsp">
+                <a href="#">
                     <i class="linecons-lightbulb"></i>
                     <span class="title">Dottorato</span>
                 </a>

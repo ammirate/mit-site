@@ -94,12 +94,6 @@
 
                 <ul class="navbar-nav">
                     <li>
-                        <a href="index.jsp">
-                            <i class="fa fa-home"></i>
-                            <span class="title">Home</span>
-                        </a>
-                    </li>
-                    <li>
                         <a href="${pageContext.request.contextPath}/ShowTeachingOfferServlet">
                             <i class="linecons-desktop"></i>
                             <span class="title">Offerta Formativa</span>

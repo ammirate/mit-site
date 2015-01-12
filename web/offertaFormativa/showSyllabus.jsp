@@ -120,7 +120,10 @@
                 <c:when test="${sessionScope.person.account.typeOfAccount == 'professor'}">
                     <%@include file="/offertaFormativa/lateralMenuProf.jsp" %>
                 </c:when>
-                <c:when test="${sessionScope.person.account.typeOfAccount == 'student'}">
+                <c:when test="${sessionScope.person.account.typeOfAccount == 'Bstudent'}">
+                    <%@include file="/offertaFormativa/lateralMenuStud.jsp" %>
+                </c:when>
+                <c:when test="${sessionScope.person.account.typeOfAccount == 'Mstudent'}">
                     <%@include file="/offertaFormativa/lateralMenuStud.jsp" %>
                 </c:when>
                 <c:when test="${sessionScope.person.account.typeOfAccount == 'admin'}">

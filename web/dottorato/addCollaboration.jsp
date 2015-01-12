@@ -4,6 +4,7 @@
     Author     : gemmacatolino
 --%>
 
+<%@page import="it.unisa.integrazione.model.Person"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -38,17 +39,35 @@
                 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
 
+        <c:choose>
+            <c:when test="${sessionScope.person == null}">
+                <c:redirect url="index.jsp" />
+            </c:when>
+
+        </c:choose>
+
+        <c:choose>
+            <c:when test="${(sessionScope.person != null)}">
+                <% Person login = ((Person) session.getAttribute("person"));
+                    if (!login.getAccount().getTypeOfAccount().equals("phdadmin") && !login.getAccount().getTypeOfAccount().equals("phd")) {
+                %>  
+                <c:redirect url="index.jsp" />
+                <%}%>
+            </c:when>
+        </c:choose>
+
         <script type="text/javascript">
             function checkDate() {
                 var start = new Date($("#start-date").val());
                 var end = new Date($("#end-date").val());
-                
-                if(start > end) {
+
+                if (start > end) {
                     alert('La data di fine della collaborazione è precedente alla data di inizio!');
                 }
-            };
+            }
+            ;
         </script>
-        
+
     </head>
     <body class="page-body">
 

@@ -47,7 +47,10 @@ function initCycle() {
                 $("#cycle_form").get(0).reset();
                 $("#curriculumCycleList").empty();
                 $('#phdDifferentCurriculumList').find('option').remove();
+                $('#professorCycleList').find('option').remove();
+                $('#phdDifferentProfessorList').find('option').remove();
                 $("#professorConnectedCycleList li").remove();
+                
                 // Viene mostrati i pulsanti di invio e cancellazione ciclo
                 $("#resetCycleButton").hide();
                 $("#deleteCycleButton").show();
@@ -185,7 +188,8 @@ function initCycle() {
                 // Popolazione dataset con i docenti che possono essere scelti come coorinatori
                 getPersonList("professor", "#professorCycleList");
                 // Azione del pulsante per l'inserimento di un nuovo ciclo
-                $("#submitPhdCycle").click(function () {
+                $("#submitPhdCycle").click(function () {         
+                        
                     // Invio dati alla servlet per l'inserimento del ciclo
                     $.getJSON("InsertPhdCycle",
                             {idPhdCycle: $("#phdCycleId").val(),
@@ -233,6 +237,8 @@ function initCurriculum() {
                 $("#addCurriculumProfessorDiv").show();
 
                 $("#professorConnectedCurriculumList li").remove();
+                $('#professorCurriculumList').find('option').remove();
+                $('#phdDifferentProfessorCurriculumList').find('option').remove();
 
                 // Popolazione form con i dati del curriculum selezionato
                 $.getJSON("GetPhdCurriculum", {phdCurriculumName: $(this).attr('id')}, function (data) {
@@ -358,6 +364,7 @@ function initPhdStudent() {
         $("#phdStudentTitle").html("Assegna classe");
         // Popolazione dataset con i dottorandi a cui sono associate le classi
         getPersonList("phd", "#personList");
+        getPersonList("phdadmin", "#personList");
         var ssn;
         // Azione da compiere per la visualizzazione del pannello della classe dello studente selezionato
         $("#showPhdStudent").click(function () {
@@ -366,7 +373,7 @@ function initPhdStudent() {
             name = $("#phdUser").val();
             $("#phdStudentName").html(name);
             // Viene preso il campo SSN dell'utente selezionato
-            ssn = document.getElementsByName(name).item(0).text;
+            ssn = document.getElementsByName(name).item(0).getAttribute('id');
             // Viene mostrato il pulsante di inserimento
             $("#updateStudentPhdClass").hide();
             $("#deleteStudentPhdClass").hide();
@@ -426,6 +433,7 @@ function initPhdStudent() {
         $("#phdTutorTitle").html("Assegna tutor");
         // Popolazione dataset con i dottorandi a cui sono associate le classi
         getPersonList("phd", "#personTutorList");
+        getPersonList("phdadmin", "#personTutorList");
         var ssn;
         // Azione da compiere per la visualizzazione del pannello della classe dello studente selezionato
         $("#showTutor").click(function () {
@@ -434,7 +442,7 @@ function initPhdStudent() {
             name = $("#phdTutor").val();
             $("#studentTutorName").html(name);
             // Viene preso il campo SSN dell'utente selezionato
-            ssn = document.getElementsByName(name).item(0).text;
+            ssn = document.getElementsByName(name).item(0).getAttribute('id');
             // Viene mostrato il pulsante di inserimento
             $("#updateStudentTutor").hide();
             $("#deleteStudentTutor").hide();
@@ -453,6 +461,7 @@ function initPhdStudent() {
             $.getJSON("GetPersonByTypeOfAccount",
                     {typeOfAccount: 'professor'},
             function (data) {
+                $("#phdTutorList option").remove();
                 $.each(data.person, function (index, value) {
                     person = "<option class='optionItem' id='" + value.ssn + "' name='" + value.name + " " + value.surname + "' > " + value.name + " " + value.surname + "</option>";
                     $("#phdTutorList").append(person);

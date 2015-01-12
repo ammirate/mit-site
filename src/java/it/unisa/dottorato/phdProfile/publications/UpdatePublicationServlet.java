@@ -46,12 +46,12 @@ public class UpdatePublicationServlet extends HttpServlet {
             try {
                 response.setContentType("text/html;charset=UTF-8");
 
-                int idPublication = Integer.parseInt("" + request.getSession().getAttribute("idPublication"));
+                int idPublication = Integer.parseInt("" + request.getParameter("idPublication"));
                 String title = request.getParameter("title");
                 String authors = request.getParameter("authors");
                 String abstractText = request.getParameter("abstractText");
                 
-                String year = request.getParameter("pubYear");
+                String year = request.getParameter("year");
                 String type = request.getParameter("type");
                 String issue = request.getParameter("issue");
                 String numberPages = request.getParameter("numberPages");

@@ -29,7 +29,7 @@ public class LogoutServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         session.removeAttribute("person");
-        response.sendRedirect("index.jsp");
+        request.getRequestDispatcher("/ShowTeachingOfferServlet").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

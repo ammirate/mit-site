@@ -44,7 +44,7 @@ public class UpdateMissionServlet extends HttpServlet {
         try {
             response.setContentType("text/html;charset=UTF-8");
             
-            int missionID = Integer.parseInt("" + request.getSession().getAttribute("idMission"));
+            int missionID = Integer.parseInt("" + request.getParameter("idMission"));
             
             String place = request.getParameter("place");
             String description = request.getParameter("description");

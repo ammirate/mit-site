@@ -42,7 +42,7 @@
                     <li><a href="#l"> <i class="linecons-megaphone"></i> <span
                                 class="title">Gestione Tirocinio</span>
                         </a></li>
-                    <li><a href="#"> <i class="linecons-lightbulb"></i> <span
+                    <li><a href="dottorato/index.jsp"> <i class="linecons-lightbulb"></i> <span
                                 class="title">Dottorato</span>
                         </a></li>
                     <li><a href="#"> <i class="linecons-globe"></i> <span

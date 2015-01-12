@@ -55,11 +55,11 @@ public class LoginServlet extends HttpServlet {
                 } else if (person.getAccount().getTypeOfAccount().equals("Bstudent")) {
                     session.removeAttribute("loginError");
                     session.setAttribute("person", person);
-                    response.sendRedirect("indexLog.jsp");
+                    request.getRequestDispatcher("/ShowTeachingOfferServlet").forward(request, response);
                 } else if (person.getAccount().getTypeOfAccount().equals("Mstudent")) {
                     session.removeAttribute("loginError");
                     session.setAttribute("person", person);
-                    response.sendRedirect("indexLog.jsp");
+                    request.getRequestDispatcher("/ShowTeachingOfferServlet").forward(request, response);
                 } else if (person.getAccount().getTypeOfAccount().equals("phd")) {
                     session.removeAttribute("loginError");
                     session.setAttribute("person", person);
@@ -67,7 +67,7 @@ public class LoginServlet extends HttpServlet {
                 } else if (person.getAccount().getTypeOfAccount().equals("professor")) {
                     session.removeAttribute("loginError");
                     session.setAttribute("person", person);
-                    response.sendRedirect("indexLog.jsp");
+                    request.getRequestDispatcher("/ShowTeachingOfferServlet").forward(request, response);
                 } else if (person.getAccount().getTypeOfAccount().equals("company")) {
                     session.removeAttribute("loginError");
                     session.setAttribute("person", person);
@@ -75,7 +75,7 @@ public class LoginServlet extends HttpServlet {
                 } else if (person.getAccount().getTypeOfAccount().equals("admin")) {
                     session.removeAttribute("loginError");
                     session.setAttribute("person", person);
-                    response.sendRedirect("indexLog.jsp"); 
+                    request.getRequestDispatcher("/ShowTeachingOfferServlet").forward(request, response);
                 } else if (person.getAccount().getTypeOfAccount().equals("phdadmin")) {
                     session.removeAttribute("loginError");
                     session.setAttribute("person", person);

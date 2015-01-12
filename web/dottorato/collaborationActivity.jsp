@@ -91,20 +91,18 @@
                                     <% for (Collaboration collaboration : collaborations) {%>
                                     <tr>
                                         <td><%= collaboration.getIstitution()%></td>
-                    <td><%= collaboration.getDescription()%></td>		
-                    <td><%= collaboration.getStartDate()%></td>
-                    <td><%= collaboration.getEndDate()%></td>
-
-                                        <% session.setAttribute("idCollaboration", collaboration.getIdCollaboration());%>
+                                        <td><%= collaboration.getDescription()%></td>		
+                                        <td><%= collaboration.getStartDate()%></td>
+                                        <td><%= collaboration.getEndDate()%></td>
 
                                         <td width="20px"> <button type="button" class="btn btn-white" title="modifica">
-                            <span class="glyphicon glyphicon-cog" aria-hidden="true"onclick="location.href = 'editCollaboration.jsp'" ></span>
-                        </button>
+                                                <span class="glyphicon glyphicon-cog" aria-hidden="true"onclick="location.href = 'editCollaboration.jsp?idCollaboration=<%= collaboration.getIdCollaboration() %>'" ></span>
+                                            </button>
                                         </td>
                                         <td width="20px">
-                                           <button type="button" class="btn btn-white"title="delete">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true" onclick="location.href = '<%= "DeleteCollaborationServlet?id=" + collaboration.getIdCollaboration()%>'" ></span>
-                        </button>
+                                            <button type="button" class="btn btn-white"title="delete">
+                                                <span class="glyphicon glyphicon-remove" aria-hidden="true" onclick="location.href = '<%= "DeleteCollaborationServlet?id=" + collaboration.getIdCollaboration()%>'" ></span>
+                                            </button>
                                         </td>
                                     </tr>
                                     <% }%>
@@ -117,7 +115,7 @@
 
                 </div>
             </div>
-                                
+
         </div>
 
     </body>

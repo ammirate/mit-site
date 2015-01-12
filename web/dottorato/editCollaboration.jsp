@@ -4,6 +4,7 @@
     Author     : gemmacatolino
 --%>
 
+<%@page import="it.unisa.integrazione.model.Person"%>
 <%@page import="it.unisa.dottorato.phdProfile.collaborations.CollaborationManager"%>
 <%@page import="it.unisa.dottorato.phdProfile.collaborations.Collaboration"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -34,6 +35,23 @@
         <script src="../assets/js/jquery-1.11.1.min.js"></script>
         <script type="text/javascript" src="script/index.js"></script>
 
+        <c:choose>
+            <c:when test="${sessionScope.person == null}">
+                <c:redirect url="index.jsp" />
+            </c:when>
+
+        </c:choose>
+
+        <c:choose>
+            <c:when test="${(sessionScope.person != null)}">
+                <% Person login = ((Person) session.getAttribute("person"));
+                    if (!login.getAccount().getTypeOfAccount().equals("phdadmin") && !login.getAccount().getTypeOfAccount().equals("phd")) {
+                %>  
+                <c:redirect url="index.jsp" />
+                <%}%>
+            </c:when>
+        </c:choose>
+
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
                 <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -44,13 +62,14 @@
             function checkDate() {
                 var start = new Date($("#start-date").val());
                 var end = new Date($("#end-date").val());
-                
-                if(start > end) {
+
+                if (start > end) {
                     alert('La data di fine della collaborazione è precedente alla data di inizio!');
                 }
-            };
+            }
+            ;
         </script>
-        
+
     </head>
     <body class="page-body">
 
@@ -63,7 +82,7 @@
 
             <!-- Contenuto della pagina -->
             <%
-                int collaborationID = (Integer.parseInt("" + session.getAttribute("idCollaboration")));
+                int collaborationID = (Integer.parseInt("" + request.getParameter("idCollaboration")));
                 Collaboration collaboration = CollaborationManager.getInstance().getCollaborationById(collaborationID);%>
 
             <div class="main-content" id="content">
@@ -79,7 +98,7 @@
                                 <h1>Modifica Collaborazione</h1>
                             </div>
                             <div class="panel-body">
-                                <form class="form-horizontal" method="POST" action="UpdateCollaboration">
+                                <form class="form-horizontal" method="POST" action="UpdateCollaboration?idCollaboration=<%= collaborationID%>">
                                     <div class="form-group">
                                         <table width="90%" align="center">
                                             <tr><td>

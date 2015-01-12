@@ -25,24 +25,17 @@
                 </a>
             </li>
 
-            <li id="funzionalita3Permission_0">
+            <li>
                 <a href="phdProfessors.jsp">
                     <i class="linecons-star"></i>
                     <span class="title">Collegio docenti</span>
                 </a>
             </li>
             
-            <li id="funzionalita3Permission_0">
+            <li>
                 <a href="phdStudents.jsp">
                     <i class="linecons-search"></i>
                     <span class="title">Dottorandi</span>
-                </a>
-            </li>
-            
-            <li id="funzionalita3Permission_0">
-                <a href="gestionepresenze.jsp">
-                    <i class="linecons-search"></i>
-                    <span class="title">Gestione Presenze</span>
                 </a>
             </li>
 
@@ -59,6 +52,11 @@
                             <span class="title" id="prova">Profilo</span>
                         </a>
                     </li>
+                    
+                    <%} 
+                        if (loggedPerson.getAccount().getTypeOfAccount().equals("phd") || loggedPerson.getAccount().getTypeOfAccount().equals("phdadmin")
+                                || loggedPerson.getAccount().getTypeOfAccount().equals("professor") || loggedPerson.getAccount().getTypeOfAccount().equals("admin")) {
+                    %>  
 
 
                     <li id="funzionalita3Permission_0">
@@ -69,7 +67,7 @@
                     </li>
 
 
-                    <%}  if (loggedPerson.getAccount().getTypeOfAccount().equals("phdadmin") || loggedPerson.getAccount().getTypeOfAccount().equals("professoradmin")) { %>
+                    <%} if (loggedPerson.getAccount().getTypeOfAccount().equals("phdadmin") || loggedPerson.getAccount().getTypeOfAccount().equals("admin")) { %>
 
 
                     <li id="funzionalita3Permission_0">

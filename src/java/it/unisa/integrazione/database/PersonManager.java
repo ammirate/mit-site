@@ -141,7 +141,7 @@ public class PersonManager {
 
         if (pPerson.getCoverLetter() != null) {
             sql += ", cover_letter = '"
-                    + pPerson.getCoverLetter()
+                    + it.unisa.dottorato.utility.Utility.Replace(pPerson.getCoverLetter())
                     + "'";
         }
 

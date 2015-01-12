@@ -46,7 +46,7 @@ public class UpdateCollaborationServlet extends HttpServlet {
             try {
                 response.setContentType("text/html;charset=UTF-8");
 
-                int collaborationID = Integer.parseInt("" + request.getSession().getAttribute("idCollaboration"));
+                int collaborationID = Integer.parseInt("" + request.getParameter("idCollaboration"));
                 String istitution = request.getParameter("istitution");
                 String description = request.getParameter("description");
                 String startDate = request.getParameter("startDate");

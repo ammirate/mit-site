@@ -95,12 +95,8 @@
                                         <td><%= mission.getStartDate()%></td>
                                         <td><%= mission.getEndDate()%></td>
                                         
-                                         <% session.setAttribute("idMission", mission.getIdMission());%>
-
-
-
                                         <td width="20px"> <button type="button" class="btn btn-white" title="modifica">
-                                                <span class="glyphicon glyphicon-cog" aria-hidden="true"onclick="location.href = 'editMission.jsp'" ></span>
+                                                <span class="glyphicon glyphicon-cog" aria-hidden="true"onclick="location.href = 'editMission.jsp?idMission=<%= mission.getIdMission()%>'" ></span>
                                             </button>
                                         </td>
                                         <td width="20px">

@@ -49,7 +49,7 @@ function initCycleList() {
             // servlet per avere le informazioni riguardanti un determinato curriculum
             $.getJSON("GetPhdCurriculumsNamesByPhdCycle", {phdCycleId: cSelected}, function (data) {
                 $.each(data.curriculumNames, function (index, value) {
-                    var curriculumDiv = "<div class='panel-curriculum col-sm-4 text-center pointer'> <a href='curriculum.jsp'> <h4> " + value + " </h4>  </a> </div>";
+                    var curriculumDiv = "<div class='panel-curriculum col-sm-4 text-center pointer'> <a href='curriculum.jsp?curriculumName=" + value + "'> <h4> " + value + " </h4>  </a> </div>";
                     $("#curriculumList").append(curriculumDiv);
                 });
             });
