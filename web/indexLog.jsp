@@ -88,7 +88,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="${pageContext.request.contextPath}/tirocinio/index.jsp">
                             <i class="linecons-megaphone"></i>
                             <span class="title">Gestione Tirocinio</span>
                         </a>

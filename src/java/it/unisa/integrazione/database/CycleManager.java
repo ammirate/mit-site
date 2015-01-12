@@ -1,5 +1,6 @@
 package it.unisa.integrazione.database;
 
+import it.unisa.integrazione.database.exception.ConnectionException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,6 +9,8 @@ import java.util.ArrayList;
 
 import it.unisa.integrazione.model.Cycle;
 import it.unisa.offerta_formativa.manager.CurriculumManager;
+import it.unisa.tirocinio.manager.concrete.ConcreteOrganization;
+import java.sql.CallableStatement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -165,6 +168,52 @@ public class CycleManager {
             return new Cycle(cycleNum, title);
         } catch (SQLException ex) {
             Logger.getLogger(CycleManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    /* Tirocinio */
+    /* --- --- */
+    /**
+     *
+     * @param cycleNumber
+     * @return a Cycle object if read operation from db is correct, null
+     * otherwise
+     */
+    public Cycle readCycle(int cycleNumber) {
+        Connection connection = null;
+        CallableStatement aCallableStatement = null;
+
+        try {
+            connection = DBConnection.getConnection();
+
+            if (connection == null) {
+                throw new ConnectionException();
+            }
+            
+            Cycle aCycle = new Cycle();
+            aCallableStatement = connection.prepareCall("{call getCycle(?)}");
+            aCallableStatement.setInt("pkCycle", cycleNumber);
+            ResultSet rs = aCallableStatement.executeQuery();
+
+            while (rs.next()) {
+                aCycle.setCycleNumber(rs.getInt("cycle_number"));
+                aCycle.setTitle(rs.getString("title"));
+            }
+            rs.close();
+            return aCycle;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConcreteOrganization.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        } catch (ConnectionException ex) {
+            Logger.getLogger(CycleManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                aCallableStatement.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CycleManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            DBConnection.releaseConnection(connection);
         }
         return null;
     }

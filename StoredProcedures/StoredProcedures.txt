@@ -1,0 +1,710 @@
+		--- QUESTIONNAIRE ---
+		
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertQuestionnaire`( in studentSSN VARCHAR(16), in companyName VARCHAR(45), in typologyOrganization VARCHAR(45), in firs VARCHAR(5), in secon VARCHAR(5), in third VARCHAR(5), in fourth VARCHAR(5), in fifth VARCHAR(5), in sixth VARCHAR(5), in seventh VARCHAR(5) )
+BEGIN
+INSERT INTO questionnaire VALUES (studentSSN,companyName,typologyOrganization,firs,secon,third,fourth,fifth,sixth,seventh);
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: 
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `selectQuestionnaire` ( in studentSSN VARCHAR(16) )
+BEGIN
+SELECT * FROM questionnaire WHERE student_ssn = studentSSN;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: 
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `selectAllQuestionnaires` ( )
+BEGIN
+SELECT * FROM questionnaire;
+END
+
+		--- STUDENT STATUS ---
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: 
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertStudentTrainingStatus` ( in description VARCHAR(45) )
+BEGIN
+INSERT INTO student_status (description) VALUES (description);
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: 
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getStudentTrainingStatus` ( in pkStudentStatus INT )
+BEGIN
+SELECT * FROM student_status WHERE id_student_status = pkStudentStatus;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: 
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllStudentTrainingStatus` ()
+BEGIN
+SELECT * FROM student_status;
+END
+
+		--- TRAINING STATUS ---
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: 
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTrainingStatus` ( in pkTrainingStatus INT )
+BEGIN
+SELECT * FROM training_status WHERE id_training_status = pkTrainingStatus;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: 
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertTrainingStatus` ( in description VARCHAR(45) )
+BEGIN
+INSERT INTO training_status (description) VALUES (description);
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: 
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllTrainingStatus` ()
+BEGIN
+SELECT * FROM training_status;
+END
+
+		---REJECTED TRAINING MESSAGE ---
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getRejectedTrainingMessage`(in pkRejectedTrainingMessage INT)
+BEGIN
+SELECT * FROM rejected_training_message WHERE id_rejected_training_message = pkRejectedTrainingMessage;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getRejectedTrainingMessageBySSN`(in ssn VARCHAR(16))
+BEGIN
+SELECT * FROM rejected_training_message WHERE fk_person = ssn;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllRejectedTrainingMessage`(in pkRejectedTrainingMessage INT)
+BEGIN
+SELECT * FROM rejected_training_message;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertRejectedTrainingMessage`(in message LONGTEXT,in personSSN VARCHAR(16))
+BEGIN
+INSERT INTO rejected_training_message (description,fk_person) VALUES (message,personSSN);
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateRejectedTrainingMessage`(in message LONGTEXT,in personSSN VARCHAR(16))
+BEGIN
+UPDATE rejected_training_message SET description = message WHERE fk_person = personSSN;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteRejectedTrainingMessage` ( in pkRejectedTraining INT )
+BEGIN
+DELETE FROM rejected_training_message WHERE id_rejected_training_message = pkRejectedTraining;
+END
+
+		--- TRAINING OFFER ---
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteTrainingOffer` ( in pkTraining INT )
+BEGIN
+DELETE FROM training_offer WHERE id_training_offer = pkTraining;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllTrainingOffers` ( )
+BEGIN
+SELECT * FROM training_offer;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertInnerTraining` ( in trainingDescription LONGTEXT, in FK_PersonSSN VARCHAR(16), in FK_Department VARCHAR(50) )
+BEGIN
+INSERT INTO training_offer (description, fk_person, fk_department) values (trainingDescription, FK_PersonSSN, FK_Department);
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getInnerTrainingOffer`( in pkProfessor VARCHAR(16) )
+BEGIN
+SELECT * FROM training_offer WHERE fk_person = pkProfessor ORDER BY id_training_offer DESC;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertOuterTraining` ( in trainingDescription LONGTEXT, in FK_Organization VARCHAR(16), in FK_PersonSSN VARCHAR(16), in FK_Department VARCHAR(50))
+BEGIN
+INSERT INTO training_offer (description, fk_organization, fk_person, fk_department) VALUES (trainingDescription, FK_Organization, FK_PersonSSN, FK_Department);
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOuterTrainingOffer`( in pkOrganization varchar(16) )
+BEGIN
+SELECT * FROM training_offer WHERE fk_organization = pkOrganization ORDER BY id_training_offer DESC;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTrainingOffer`( in pkTrainingOffer INT )
+BEGIN
+SELECT * FROM training_offer WHERE id_training_offer = pkTrainingOffer;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateTrainingOffer`( in idTrainingOffer INT, in description LONGTEXT, in FK_Organization VARCHAR(16), in FK_PersonSSN VARCHAR(16), in FK_Department VARCHAR(50) )
+BEGIN
+if FK_Organization is null
+	then
+	UPDATE training_offer SET description = description, fk_person = FK_PersonSSN, fk_department = FK_Department WHERE id_training_offer = idTrainingOffer;
+else 
+	UPDATE training_offer SET description = description, fk_organization = FK_Organization, fk_person = FK_PersonSSN, fk_department = FK_Department WHERE id_training_offer = idTrainingOffer;
+END if;
+END
+
+		--- DEPARTMENT ---
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getDepartment` ( in pkDepartment VARCHAR(50) )
+BEGIN
+SELECT * FROM department WHERE abbreviation = pkDepartment;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllDepartment` ()
+BEGIN
+SELECT * FROM department;
+END
+
+		--- PENDING ACCEPTANCE ---
+ 
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: Ex getStudentAttendece
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllPendingStudents`()
+BEGIN
+SELECT * from pending_acceptance;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: Ex getStudentAttendece
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getPendingStudent`( in pkPersonSSN VARCHAR(16) )
+BEGIN
+SELECT * from pending_acceptance where SSN = pkPersonSSN;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deletePendingAcceptanceByStudent`(in studentSSN VARCHAR(16) )
+BEGIN
+ DELETE FROM pending_acceptance WHERE fk_person = studentSSN;
+END
+
+		--- STUDENT INFORMATION ---
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `storeUploadFile`(in CVPath Varchar(200), in ATPath Varchar(200), in studentSSN Varchar(16) )
+BEGIN
+DECLARE foundSet INT default false;
+DECLARE student_ssn VARCHAR(16);
+-- Cursore for check if the FK of student status is setting or not
+DECLARE selectCur CURSOR FOR SELECT SSN FROM student_information WHERE SSN = studentSSN;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET foundSet = true; 
+open selectCur;
+fetch selectCur into student_ssn;
+if foundSet=false
+	then
+	UPDATE student_information Set curriculum_vitae_path = CVPath , accademic_transcript_path = ATPath, fk_student_status = '3' WHERE SSN = student_ssn;
+	call startTrainingRequest(studentSSN);
+else if foundSet=true
+	then
+	INSERT INTO student_information  (SSN, curriculum_vitae_path, accademic_transcript_path, fk_student_status) values (studentSSN,CVPath,ATPath,'3');
+	call startTrainingRequest(studentSSN);
+END if;
+END if;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `startTrainingRequest`(in  studentSSN VARCHAR(16))
+BEGIN
+declare pathCVCheck int;
+declare pathATCheck int;
+set pathCVCheck = checkCVExistence(studentSSN);
+set pathATCheck = checkATExistence(studentSSN);
+if pathCVCheck = false 
+	then SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Curriculum Vitae not inserted.';
+	else if pathATCheck =false
+		THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Accademic Transcript not inserted.';
+	else 
+		insert into pending_acceptance (request_date, fk_person) values (current_date,studentSSN)  ;
+END if;
+END if;
+END
+
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `changeStudentStatus`( in studentSSN VARCHAR(16), in status INT )
+BEGIN
+DECLARE studentStatus INT;
+DECLARE selectCur CURSOR FOR SELECT fk_student_status FROM student_information WHERE student_information.SSN = studentSSN;
+open selectCur;
+fetch selectCur into studentStatus;
+
+if status != '3'
+	then
+	if studentStatus = '3'
+		then
+		UPDATE student_information SET fk_student_status = status WHERE SSN = studentSSN;
+		call deletePendingAcceptanceByStudent(studentSSN);
+END IF;
+END IF;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getStudentInformation` ( in ss VARCHAR(16) )
+BEGIN
+SELECT * FROM student_information WHERE SSN = ss;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: 
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateStudentInformation`  ( in ss VARCHAR(16), in CV VARCHAR(200), in AcT VARCHAR(200), in fk_status INT )
+BEGIN
+UPDATE student_information SET curriculum_vitae_path = CV, accademic_transcript_path = AcT, fk_student_status = fk_status WHERE SSN = ss;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: Ex getStudentInformation
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllStudentInformation`()
+BEGIN
+SELECT * FROM student_information;
+END
+
+		--- ORGANIZATION ---
+ 
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: Ex getOrganizationForPrimaryKey
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrganizationByPrimaryKey`( in vatNumber VARCHAR(16) )
+BEGIN
+SELECT * FROM organization WHERE vat_number = vatNumber;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: Ex getOrganizationForAccount
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrganizationByAccount`( in fkAccount VARCHAR(100) )
+BEGIN
+SELECT * FROM organization WHERE fk_account = fkAccount;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: 
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllOrganizations`()
+BEGIN
+SELECT * FROM organization;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: 
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateOrganization`  ( in vatNumber VARCHAR(16), in companyName VARCHAR(45), in city VARCHAR(45), in address VARCHAR(45), in phone VARCHAR(45), in email VARCHAR(100), in personSSN VARCHAR(16), in accountEmail VARCHAR(100), in tutorSSN VARCHAR(16) )
+BEGIN
+UPDATE organization SET company_name = company_name, city = city, address = address, phone = phone, email = email, fk_account = accountEmail, fk_professor = personSSN, fk_external_tutor = tutorSSN WHERE vat_number = vatNumber;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: ready3.0
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertOrganization` ( in vatNumber VARCHAR(16), in companyName VARCHAR(45), in city VARCHAR(45), in address VARCHAR(45), in phone VARCHAR(45), in email VARCHAR(100), in personSSN VARCHAR(16), in accountEmail VARCHAR(100), in tutorSSN VARCHAR(16) )
+BEGIN
+INSERT INTO organization ( vat_number, company_name, city, address, phone, email, fk_account, fk_professor, fk_external_tutor) values (vatNumber, companyName, city, address, phone, email, accountEmail, personSSN, tutorSSN);
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: 
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOwnOrganizations`( in professorSSN VARCHAR(16) )
+BEGIN
+SELECT * FROM organization WHERE fk_professor = professorSSN;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteOrganization` ( in vatNumber VARCHAR(16) )
+BEGIN
+DELETE FROM organization WHERE vat_number = vatNumber;
+END
+
+		—- TRAINING REQUEST ——
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertTrainingRequest` ( in trainingDescription LONGTEXT, in title VARCHAR(45), in FK_TrainingStatus INT, in FK_Person VARCHAR(16), in FK_Organization VARCHAR(16), in FK_StudentInformationSSN VARCHAR(16) )
+BEGIN
+INSERT INTO training_request (description, title, fk_training_status, fk_person, fk_organization, student_information_SSN) VALUES (trainingDescription, title, FK_TrainingStatus, FK_Person, FK_Organization, FK_StudentInformationSSN);
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteTrainingRequest` ( in idTrainingRequest INT )
+BEGIN
+DELETE FROM training_request WHERE id_training_request = idTrainingRequest;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateTrainingRequest` ( in ID INT, in trainingDescription LONGTEXT, in titl VARCHAR(45), in FK_TrainingStatus INT, in FK_Perso VARCHAR(16), in FK_Organizatio VARCHAR(16), in FK_StudentInformationSSN VARCHAR(16) )
+BEGIN
+UPDATE training_request SET description = trainingDescription, title = titl, fk_training_status = FK_TrainingStatus, fk_person = FK_Perso, fk_organization = FK_Organizatio, student_information_SSN = FK_StudentInformationSSN WHERE id_training_request = ID;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: Ex getOrganizationForPrimaryKey
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTrainingRequest`( in idTrainingRequest INT )
+BEGIN
+SELECT * FROM training_request WHERE id_training_request = idTrainingRequest;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: 
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllTrainingRequests`()
+BEGIN
+SELECT * FROM training_request;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: 
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOwnTrainingRequests`( in vatNumber VARCHAR(16) )
+BEGIN
+SELECT * FROM training_request WHERE fk_organization = vatNumber;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: 
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getStudentInformationTrainingRequests`( in SSN VARCHAR(16) )
+BEGIN
+SELECT * FROM training_request WHERE student_information_SSN = SSN;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: 
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getInnerTrainingRequests`( in SSN VARCHAR(16) )
+BEGIN
+SELECT * FROM training_request WHERE fk_person = SSN;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: Ho controllato che nella where clause si mette IS NULL, non = NULL
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllInternships`()
+BEGIN
+SELECT * FROM training_request WHERE fk_organization IS NULL;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: Ho controllato che nella where clause si mette IS NULL, non = NULL
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getIsInternships`(in idTrainingRequest INT)
+BEGIN
+SELECT * FROM training_request WHERE fk_organization IS NULL AND id_training_request = idTrainingRequest;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `changeTrainingStatus` ( in ID INT, in FK_TrainingStatus INT )
+BEGIN
+UPDATE training_request SET fk_training_status = FK_TrainingStatus WHERE id_training_request = ID;
+END
+
+		--- ACCOUNT ---
+		
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: 
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertAccount` ( in emailInput VARCHAR(100), in passwordInput VARCHAR(45), in typology VARCHAR(45), in activeInput TINYINT(1) )
+BEGIN
+INSERT INTO account VALUES (emailInput,passwordInput,typology,activeInput);
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: 
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAccount`( in pkAccount VARCHAR(100) )
+BEGIN
+SELECT * FROM Account WHERE email = pkAccount;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: 
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllAccounts`()
+BEGIN
+SELECT * FROM Account;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: 
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTypeOfAccount`(in pkAccount VARCHAR(100) )
+BEGIN
+SELECT typeOfAccount FROM Account WHERE email = pkAccount;
+END
+
+		--- CYCLE ---
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: 
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getCycle`( in pkCycle INT )
+BEGIN
+SELECT * FROM cycle WHERE cycle_number = pkCycle;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: 
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllCycle`()
+BEGIN
+SELECT * FROM cycle;
+END
+
+		--- PERSON ---	
+		
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: Ex getStudentAttendece
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getPerson`( in personSSN VARCHAR(16) )
+BEGIN
+SELECT * FROM person WHERE SSN = personSSN;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: Ex getStudentAttendece
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getPersonByMatricula`( in matric VARCHAR(10) )
+BEGIN
+SELECT * FROM person WHERE matricula = matric;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: Ex getStudentAttendece
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getPersonByAccount`( in email VARCHAR(100) )
+BEGIN
+SELECT * FROM person WHERE Account_email = email;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: Ex getStudentAttendece
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllPeople`( )
+BEGIN
+SELECT * FROM person;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: Ex getStudentAttendece
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTypeOfAccountPerson`(in personEmail VARCHAR(100) )
+BEGIN
+SELECT typeOfAccount FROM account WHERE email = personEmail;
+END
+
+
+

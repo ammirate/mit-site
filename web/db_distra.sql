@@ -441,7 +441,7 @@ DROP TABLE IF EXISTS `pending_acceptance`;
 
 CREATE TABLE `pending_acceptance` (
   `id_pending_acceptance` int(11) NOT NULL AUTO_INCREMENT,
-  `date_request` date DEFAULT NULL,
+  `request_date` date DEFAULT NULL,
   `fk_person` varchar(16) NOT NULL,
   PRIMARY KEY (`id_pending_acceptance`),
   KEY `fk_StudentAttendence_Student1_idx` (`fk_person`),
@@ -866,6 +866,23 @@ CREATE TABLE `training_status` (
   `description` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id_training_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `db_distra`.`questionnaire` ;
+
+CREATE TABLE IF NOT EXISTS `db_distra`.`questionnaire` (
+  `student_ssn` VARCHAR(16) NOT NULL,
+  `company_name` VARCHAR(45) NOT NULL,
+  `typology_organization` VARCHAR(45) NULL,
+  `first_question` VARCHAR(45) NULL,
+  `second_question` VARCHAR(45) NULL,
+  `third_question` VARCHAR(45) NULL,
+  `fourth_question` VARCHAR(45) NULL,
+  `fifth_question` VARCHAR(45) NULL,
+  `sixth_question` VARCHAR(45) NULL,
+  `seventh_question` VARCHAR(45) NULL,
+  PRIMARY KEY (`student_ssn`))
+ENGINE = InnoDB;
 
 
 

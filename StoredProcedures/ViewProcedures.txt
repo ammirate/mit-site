@@ -1,0 +1,48 @@
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE PROCEDURE `getStudentTrainingForProfessor` (in  professorSSN VARCHAR(16), in functionID int )
+BEGIN
+if(functionID = 1)
+THEN
+	SELECT * FROM studentinactivetraining WHERE fk_person = professorSSN;
+	ELSEIF (functionID =2)
+	THEN
+		SELECT * FROM studentactivetraining WHERE fk_person = professorSSN;
+		ELSEIF (functionID =3)
+		then
+			SELECT * FROM studentendedtraining WHERE fk_person = professorSSN;
+			ELSEIF (functionID =4)
+		then
+			SELECT * FROM studentwaitingquestionnaire WHERE fk_person = professorSSN;
+	END IF;
+
+END
+
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE PROCEDURE `getAllStudentTraining` (in  professorSSN VARCHAR(16), in functionID int )
+BEGIN
+if(functionID = 1)
+THEN
+	SELECT * FROM studentinactivetraining ;
+	ELSEIF (functionID =2)
+	THEN
+		SELECT * FROM studentactivetraining ;
+		ELSEIF (functionID =3)
+		then
+			SELECT * FROM studentendedtraining ;
+			ELSEIF (functionID =4)
+		then
+			SELECT * FROM studentwaitingquestionnaire ;
+	END IF;
+
+END

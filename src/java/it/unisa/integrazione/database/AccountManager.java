@@ -7,6 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import it.unisa.integrazione.model.Person;
+import it.unisa.tirocinio.manager.concrete.ConcreteOrganization;
+import java.sql.CallableStatement;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -107,5 +112,166 @@ public class AccountManager {
         }
 
         return account;
+    }
+    
+    /* --- Tirocinio --- */
+    /**
+     *
+     * @param account
+     * @return true if account is created, false otherwise
+     */
+    public boolean createAccount(Account account) throws SQLException {
+        Connection connection = null;
+        CallableStatement aCallableStatement = null;
+
+        try {
+            connection = DBConnection.getConnection();
+
+            if (connection == null) {
+                throw new ConnectionException();
+            }
+
+            if (account == null) {
+                throw new NullPointerException("Account is null!");
+            }
+
+            aCallableStatement = connection.prepareCall("{call insertAccount(?,?,?,?)}");
+            aCallableStatement.setString("emailInput", account.getEmail());
+            aCallableStatement.setString("passwordInput", account.getPassword());
+            aCallableStatement.setString("typology", account.getTypeOfAccount());
+            aCallableStatement.setBoolean("activeInput", account.isActive());
+            int check = aCallableStatement.executeUpdate();
+            connection.commit();
+            return check > 0;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConcreteOrganization.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } catch (ConnectionException ex) {
+            Logger.getLogger(AccountManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            aCallableStatement.close();
+            DBConnection.releaseConnection(connection);
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param email
+     * @return an Account object if reading operation is correct, null otherwise
+     */
+    public Account readAccount(String email) throws SQLException {
+        Connection connection = null;
+        CallableStatement aCallableStatement = null;
+
+        try {
+            connection = DBConnection.getConnection();
+
+            if (connection == null) {
+                throw new ConnectionException();
+            }
+
+            Account anAccount = new Account();
+            aCallableStatement = connection.prepareCall("{call getAccount(?)}");
+            aCallableStatement.setString("pkAccount", email);
+            ResultSet rs = aCallableStatement.executeQuery();
+
+            while (rs.next()) {
+                anAccount.setEmail(rs.getString("email"));
+                anAccount.setPassword(rs.getString("password"));
+                anAccount.setTypeOfAccount(rs.getString("typeOfAccount"));
+                anAccount.setActive(rs.getBoolean("active"));
+            }
+            rs.close();
+            return anAccount;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConcreteOrganization.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        } catch (ConnectionException ex) {
+            Logger.getLogger(AccountManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            aCallableStatement.close();
+            DBConnection.releaseConnection(connection);
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @return an ArrayList of Account if DB select is correct, null otherwise
+     */
+    public ArrayList<Account> getAllAccounts() throws ConnectionException, SQLException {
+
+        ArrayList<Account> accounts = new ArrayList<Account>();
+        Account anAccount = null;
+        Connection connection = null;
+        CallableStatement aCallableStatement = null;
+
+        try {
+            connection = DBConnection.getConnection();
+
+            if (connection == null) {
+                throw new ConnectionException();
+            }
+
+            aCallableStatement = connection.prepareCall("{call getAllAccounts()}");
+            ResultSet rs = aCallableStatement.executeQuery();
+
+            while (rs.next()) {
+                anAccount = new Account();
+                anAccount.setEmail(rs.getString("email"));
+                anAccount.setPassword(rs.getString("password"));
+                anAccount.setTypeOfAccount(rs.getString("typeOfAccount"));
+                anAccount.setActive(rs.getBoolean("active"));
+                accounts.add(anAccount);
+            }
+            rs.close();
+            return accounts;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ConcreteOrganization.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        } finally {
+            aCallableStatement.close();
+            DBConnection.releaseConnection(connection);
+        }
+    }
+
+    /**
+     *
+     * @param email
+     * @return type of account
+     */
+    public String getTypeOfAccount(String email) throws SQLException {
+        Connection connection = null;
+        CallableStatement aCallableStatement = null;
+
+        try {
+            connection = DBConnection.getConnection();
+
+            if (connection == null) {
+                throw new ConnectionException();
+            }
+
+            String aTypeOfAccount = null;
+            aCallableStatement = connection.prepareCall("{call getTypeOfAccount(?)}");
+            aCallableStatement.setString("pkAccount", email);
+            ResultSet rs = aCallableStatement.executeQuery();
+
+            while (rs.next()) {
+                aTypeOfAccount = rs.getString("typeOfAccount");
+            }
+            rs.close();
+            return aTypeOfAccount;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConcreteOrganization.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        } catch (ConnectionException ex) {
+            Logger.getLogger(AccountManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            aCallableStatement.close();
+            DBConnection.releaseConnection(connection);
+        }
+        return null;
     }
 }
