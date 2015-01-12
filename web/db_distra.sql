@@ -693,6 +693,12 @@ CREATE TABLE IF NOT EXISTS `student_status` (
 
 -- --------------------------------------------------------
 
+
+INSERT INTO `db_distra`.`student_status` (`id_student_status`, `description`) VALUES ('1', 'Rifiutato');
+INSERT INTO `db_distra`.`student_status` (`id_student_status`, `description`) VALUES ('2', 'Accettato');
+INSERT INTO `db_distra`.`student_status` (`id_student_status`, `description`) VALUES ('3', 'In attesa');
+INSERT INTO `db_distra`.`student_status` (`id_student_status`, `description`) VALUES ('4', 'Non inviato');
+
 --
 -- Struttura della tabella `tag`
 --
@@ -867,6 +873,10 @@ CREATE TABLE IF NOT EXISTS `training_status` (
   PRIMARY KEY (`id_training_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+
+INSERT INTO `db_distra`.`training_status` (`id_training_status`, `description`) VALUES ('1', 'Iniziato');
+INSERT INTO `db_distra`.`training_status` (`id_training_status`, `description`) VALUES ('2', 'Pre-completamento');
+INSERT INTO `db_distra`.`training_status` (`id_training_status`, `description`) VALUES ('3', 'Completo');
 --
 -- Limiti per le tabelle scaricate
 --
@@ -1071,6 +1081,26 @@ ALTER TABLE `training_request`
   ADD CONSTRAINT `fk_training_request_student_information1` FOREIGN KEY (`student_information_SSN`) REFERENCES `student_information` (`SSN`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `training_request_ibfk_1` FOREIGN KEY (`fk_person`) REFERENCES `person` (`SSN`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `training_request_ibfk_2` FOREIGN KEY (`fk_organization`) REFERENCES `organization` (`vat_number`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+-- -----------------------------------------------------
+-- Table `db_distra`.`questionnaire`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `db_distra`.`questionnaire` ;
+
+CREATE TABLE IF NOT EXISTS `db_distra`.`questionnaire` (
+  `student_ssn` VARCHAR(16) NOT NULL,
+  `company_name` VARCHAR(45) NOT NULL,
+  `typology_organization` VARCHAR(45) NULL,
+  `first_question` VARCHAR(45) NULL,
+  `second_question` VARCHAR(45) NULL,
+  `third_question` VARCHAR(45) NULL,
+  `fourth_question` VARCHAR(45) NULL,
+  `fifth_question` VARCHAR(45) NULL,
+  `sixth_question` VARCHAR(45) NULL,
+  `seventh_question` VARCHAR(45) NULL,
+  PRIMARY KEY (`student_ssn`))
+ENGINE = InnoDB;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
