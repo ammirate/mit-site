@@ -51,36 +51,44 @@ public class GetCycleServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        ArrayList<HashMap<String,String>> arrlist = new ArrayList<HashMap<String,String>>();
-            HashMap<String,String> map;
-            ArrayList<Cycle> cycles = new ArrayList<Cycle>();
-            if(request.getParameterMap().containsKey("department")){
-                ArrayList<Degree> degrees = degreeMng.getDegreesByDepartment(request.getParameter("department"));
-                ArrayList<Cycle> allCycles= cycleMng.getAllCycles();
-                ArrayList<Integer> checkCycle = new ArrayList<Integer>();
-                for(Degree d: degrees){
-                   for(Cycle c: allCycles){
-                       if(d.getCycle()==c.getNumber()){
-                           if(!checkCycle.contains(c.getNumber())){
-                               cycles.add(c);
-                               checkCycle.add(c.getNumber());
-                           }
-                       }
-                   }
-                  
+        ArrayList<HashMap<String, String>> arrlist = new ArrayList<HashMap<String, String>>();
+        HashMap<String, String> map;
+        ArrayList<Cycle> cycles = new ArrayList<Cycle>();
+        if (request.getParameterMap().containsKey("department")) {
+            ArrayList<Degree> degrees = degreeMng.getDegreesByDepartment(request.getParameter("department"));
+            ArrayList<Cycle> allCycles = cycleMng.getAllCycles();
+            Collections.sort(allCycles);
+            ArrayList<Integer> checkCycle = new ArrayList<Integer>();
+            for (Degree d : degrees) {
+                for (int i = 0; i < 3; i++) {
+                    Cycle c = allCycles.get(i);
+                    if (d.getCycle() == c.getNumber()) {
+                        if (!checkCycle.contains(c.getNumber())) {
+                            cycles.add(c);
+                            checkCycle.add(c.getNumber());
+                        }
+                    }
                 }
-            } else cycles = cycleMng.getAllCycles();
-            Collections.sort(cycles);
-            for(Cycle c : cycles){
-                    map = new HashMap<String,String>();
-                    map.put("cycle_number", ""+c.getNumber());
-                    map.put("title", c.getTitle());
-                    arrlist.add(map);
-                }
-            String finalJSON = new Gson().toJson(arrlist);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(finalJSON);
+            }
+        } else {
+            ArrayList<Cycle> allCycles = cycleMng.getAllCycles();
+            Collections.sort(allCycles);
+            for (int i = 0; i < 3; i++) {
+                Cycle c = allCycles.get(i);
+                cycles.add(c);
+            }
+        }
+        Collections.sort(cycles);
+        for (Cycle c : cycles) {
+            map = new HashMap<String, String>();
+            map.put("cycle_number", "" + c.getNumber());
+            map.put("title", c.getTitle());
+            arrlist.add(map);
+        }
+        String finalJSON = new Gson().toJson(arrlist);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(finalJSON);
     }
 
     /**

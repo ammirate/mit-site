@@ -36,68 +36,7 @@
         <link rel="stylesheet" href="assets/css/custom.css">
 
         <script src="assets/js/jquery-1.11.1.min.js"></script>
-        <script>
-            jQuery(document).ready(
-                    function () {
-                        $.ajax({url: "GetDegreeServlet?idCycle=1", success: function (result) {
-                                $("#degree").html(result);
-                            }});
-                    },
-                    function ($) {
-                        /*bisogna metterla in ogni pagina*/
-                        $(window).on('beforeunload', function (e) {
-                            if (localStorage.getItem("rememberMeForLogin") == "no") {
-                                localStorage.removeItem("username");
-                                localStorage.removeItem("typology");
-                                localStorage.removeItem("primaryKey");
-
-                                localStorage.removeItem("offertaFormativa");
-                                localStorage.removeItem("gestioneTesi");
-                                localStorage.removeItem("gestioneTirocinio");
-                                localStorage.removeItem("dottorato");
-                                localStorage.removeItem("superAmministratore");
-                                window.location.href = "index.html";
-                            }
-                        });
-
-                        //quì ci vanno gli ID delle funzionalità che verranno messe all interno del menù laterale...basta copiare una riga e incollarla,
-                        //facendo attenzione a cambiare l'ID
-                        //Es: $("pippopaperino_"+localStorage.getItem("offertaFormativa")).empty();
-                        //ovviamente la localStorage cambia a seconda se si sta nella pagina di offerta formativa, gestione tesi, ecc...
-                        $(
-                                "#funzionalita1Permission_"
-                                + localStorage.getItem("offertaFormativa"))
-                                .empty();
-                        $(
-                                "#funzionalita3Permission_"
-                                + localStorage.getItem("offertaFormativa"))
-                                .empty();
-
-                        //if(localStorage.getItem("username")==null){
-                        //	window.location.replace("pageError.html");
-                        //}
-
-                        $("#spaceForUsername").html(
-                                localStorage.getItem("username") + ", "
-                                + localStorage.getItem("primaryKey")
-                                + ' <i class="fa-angle-down"></i>');
-
-                        $("#logout").click(function () {
-                            localStorage.removeItem("username");
-                            localStorage.removeItem("typology");
-                            localStorage.removeItem("primaryKey");
-                            window.location.href = "index.html";
-
-                            localStorage.removeItem("offertaFormativa");
-                            localStorage.removeItem("gestioneTesi");
-                            localStorage.removeItem("gestioneTirocinio");
-                            localStorage.removeItem("dottorato");
-                            localStorage.removeItem("superAmministratore");
-
-                        });
-                    });
-        </script>
-
+        
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
                         <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>

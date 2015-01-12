@@ -104,9 +104,9 @@
 
                                         <div> <br> </div>    
 
-                                        <div class="row col-sm-12">
+                                        <div class="row col-sm-12 table-responsive">
 
-                                            <table class="table table-hover responsive" id="department">
+                                            <table class="table table-striped" id="department">
 
                                             </table>
 

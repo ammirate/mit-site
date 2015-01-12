@@ -15,7 +15,6 @@ import it.unisa.offerta_formativa.manager.Exceptions.CurriculumException;
 import it.unisa.offerta_formativa.manager.Exceptions.TeachingException;
 import it.unisa.offerta_formativa.manager.TeachingManager;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -30,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ShowModifyTeachingServlet", urlPatterns = {"/ShowModifyTeachingServlet"})
 public class ShowModifyTeachingServlet extends HttpServlet {
+
     private final DegreeManager degreeMng;
     private final CycleManager cycleMng;
     private final TeachingManager teachingMng;
@@ -44,8 +44,6 @@ public class ShowModifyTeachingServlet extends HttpServlet {
         deptMng = DepartmentManager.getInstance();
     }
 
-    
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -58,7 +56,7 @@ public class ShowModifyTeachingServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doPost(request,response);
+        doPost(request, response);
     }
 
     /**
@@ -72,27 +70,33 @@ public class ShowModifyTeachingServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String path="/offertaFormativa/amministratore/teaching/";
-        if(request.getParameterMap().containsKey("matricula") && request.getParameterMap().containsKey("curriculum")){
+        String path = "/offertaFormativa/amministratore/teaching/";
+        if ((request.getParameterMap().containsKey("matricula") && request.getParameterMap().containsKey("curriculum"))
+                || (request.getAttribute("matricula") != null && request.getAttribute("curriculum") != null)) {
             try {
                 String matricula = request.getParameter("matricula");
+                if(request.getAttribute("matricula") != null) matricula=(String)request.getAttribute("matricula");
+                
                 String curriculumMatricula = request.getParameter("curriculum");
+                if(request.getAttribute("curriculum") != null)curriculumMatricula=(String)request.getAttribute("curriculum");
                 Curriculum c = currMng.readCurriculum(curriculumMatricula);
                 request.setAttribute("curriculum", c);
                 request.setAttribute("teaching", teachingMng.readTeaching(matricula));
                 Degree d = degreeMng.readDegree(c.getDegreeMatricula());
-                request.setAttribute("degree",d);
+                request.setAttribute("degree", d);
                 request.setAttribute("cycle", cycleMng.getCycleByCycleNumber(d.getCycle()));
                 request.setAttribute("department", deptMng.getDepartmentByAbbreviation(d.getDepartmentAbbreviation()));
-                if(request.getParameterMap().containsKey("success")){
-                    
+                if (request.getAttribute("success")!=null) {
+                    request.setAttribute("success",true);
+                    request.setAttribute("successMessage", (String)request.getAttribute("successMessage"));
                 }
-                request.getRequestDispatcher(path+"modifyTeaching.jsp").forward(request, response);
+                request.getRequestDispatcher(path + "modifyTeaching.jsp").forward(request, response);
             } catch (CurriculumException ex) {
                 Logger.getLogger(ShowModifyTeachingServlet.class.getName()).log(Level.SEVERE, null, ex);
             } catch (TeachingException ex) {
                 Logger.getLogger(ShowModifyTeachingServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } else {
         }
     }
 

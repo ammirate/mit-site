@@ -20,6 +20,7 @@ import it.unisa.offerta_formativa.manager.TeachingManager;
 import it.unisa.offerta_formativa.moodle.manager.MoodleConnectionManager;
 import it.unisa.offerta_formativa.moodle.manager.MoodleCategoryManager;
 import it.unisa.offerta_formativa.moodle.manager.MoodleTeachingManager;
+import it.unisa.offerta_formativa.moodle.manager.MoodleUserManager;
 import it.unisa.offerta_formativa.moodle.moodle_rest.MoodleRestException;
 import java.util.Calendar;
 import java.util.Date;
@@ -58,6 +59,7 @@ public class InsertTeachingFacade {
         pmcMng = ProfModuleClassManager.getInstance();
         moodleConn = MoodleConnectionManager.getInstance();
         parseMng = ParserHtmlManager.getInstance();
+        
     }
 
     public void setDepartmentAbbreviation(String depAbb) {
@@ -119,6 +121,7 @@ public class InsertTeachingFacade {
             }
             
             //SETTINGS FOR MOODLE*******************************************
+            MoodleUserManager moodleUserMng = MoodleUserManager.getInstance(deptMng.getDepartmentByAbbreviation(department_abbreviation).getUrlMoodle(),deptMng.getDepartmentByAbbreviation(department_abbreviation).getToken());
             MoodleCategoryManager moodleDegree = MoodleCategoryManager.getInstance(deptMng.getDepartmentByAbbreviation(department_abbreviation).getUrlMoodle(),deptMng.getDepartmentByAbbreviation(department_abbreviation).getToken());
             MoodleTeachingManager moodleTeaching = MoodleTeachingManager.getInstance(deptMng.getDepartmentByAbbreviation(department_abbreviation).getUrlMoodle(),deptMng.getDepartmentByAbbreviation(department_abbreviation).getToken());
             int idCat = moodleDegree.getIdCategoryByParent(cycleMng.getCycleByCycleNumber(degreeMng.readDegree(degree_matricula).getCycle()).getTitle(),
@@ -136,7 +139,9 @@ public class InsertTeachingFacade {
                 try {
                     if(!alreadyAdded.contains(listProf.get(k).getClassTitle())){ //se una classe è già presente in moodle non l'aggiungere
                         if(listClass.size()!=1)toadd=" - "+listProf.get(k).getClassTitle(); //se la classe è una sola allora non aggiunge niente
-                        moodleTeaching.createTeaching(teaching.getAbbreviation()+toadd, teaching.getTitle()+toadd, idYearCat);
+                        int coursid = moodleTeaching.createTeaching(teaching.getAbbreviation()+toadd, teaching.getTitle()+toadd, idYearCat);
+                        int idprof = moodleUserMng.getIdByUsername(listProf.get(k).getProfEmail());
+                        moodleTeaching.assignTeacher(idprof, coursid);
                         alreadyAdded.add(listProf.get(k).getClassTitle());
                     }
                     pmcMng.create(listProf.get(k));

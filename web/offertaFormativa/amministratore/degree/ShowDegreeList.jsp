@@ -124,9 +124,9 @@
 
                                         <div> <br> </div><div> <br> </div>    
 
-                                        <div class="row col-sm-12">
+                                        <div class="row col-sm-12 table-responsive">
 
-                                            <table class="table table-hover responsive" id="degree">
+                                            <table class="table table-striped" id="degree">
 
                                             </table>
 

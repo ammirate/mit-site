@@ -4,19 +4,7 @@
  * and open the template in the editor.
  */
 package it.unisa.offerta_formativa.servlet;
-
-import it.unisa.offerta_formativa.beans.Curriculum;
-import it.unisa.integrazione.model.Degree;
-import it.unisa.integrazione.model.Department;
-import it.unisa.offerta_formativa.beans.Teaching;
-import it.unisa.offerta_formativa.manager.CurriculumManager;
-import it.unisa.integrazione.database.CycleManager;
-import it.unisa.integrazione.database.DegreeManager;
-import it.unisa.integrazione.database.DepartmentManager;
-import it.unisa.offerta_formativa.manager.TeachingManager;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,23 +19,12 @@ import javax.servlet.http.HttpServletResponse;
 public class ShowTeachingOfferServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private DepartmentManager dm;
-    private DegreeManager degreeMng;
-    private TeachingManager tm;
-    private CurriculumManager cm;
-    private CycleManager cym;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
     public ShowTeachingOfferServlet() {
         super();
-        // TODO Auto-generated constructor stub   
-        dm = DepartmentManager.getInstance();
-        degreeMng = DegreeManager.getInstance();
-        tm = TeachingManager.getInstance();
-        cm = CurriculumManager.getInstance();
-        cym = CycleManager.getInstance();
     }
 
     /**
