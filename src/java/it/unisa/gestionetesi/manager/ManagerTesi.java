@@ -526,10 +526,7 @@ public class ManagerTesi {
             db = DBConnection.getConnection();
 
             Statement aStatement = db.createStatement();
-            if(titolo){
-                
-                
-            }
+            
             String update = "UPDATE thesis SET Title = '" + titolo + "' , Abstract = ' " + abstr + "', Start_Date = '" + data_inizio + "', Expected_End_Date = '" + data_fine_prevista + "', End_Date = '" + data_fine + "' WHERE ID = " + id_tesi;
 	    System.out.println(update);
             aStatement.executeUpdate(update);
