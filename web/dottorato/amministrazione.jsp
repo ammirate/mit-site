@@ -254,7 +254,7 @@
                                     <label>Nome:</label>
                                     <div class="input-group">
                                         <span class="input-group-addon"></span>
-                                        <input type="text" id="phdCurriculumName" class="form-control" name="name" placeholder="Inserisci il nome del curriculum" pattern="[a-z]+" required/>
+                                        <input type="text" id="phdCurriculumName" class="form-control" name="name" placeholder="Inserisci il nome del curriculum" required/>
                                     </div>
                                 </div>
 

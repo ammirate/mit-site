@@ -150,7 +150,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="dottorato/index.jsp">
                             <i class="linecons-lightbulb"></i>
                             <span class="title">Dottorato</span>
                         </a>
