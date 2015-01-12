@@ -71,7 +71,7 @@ public class LoginServlet extends HttpServlet {
                 } else if (person.getAccount().getTypeOfAccount().equals("company")) {
                     session.removeAttribute("loginError");
                     session.setAttribute("person", person);
-                    response.sendRedirect("indexLog.jsp");
+                    response.sendRedirect(request.getContextPath()+"/tirocinio/organizzazione/tporganizzazione.jsp");
                 } else if (person.getAccount().getTypeOfAccount().equals("admin")) {
                     session.removeAttribute("loginError");
                     session.setAttribute("person", person);

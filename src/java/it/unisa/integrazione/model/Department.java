@@ -33,6 +33,7 @@ public class Department implements Comparable<Department>{
 	}
 
     public Department() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
         public String getTitle() {

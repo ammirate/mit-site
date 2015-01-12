@@ -3,15 +3,20 @@ package it.unisa.integrazione.database;
 import it.unisa.integrazione.database.exception.ConnectionException;
 import it.unisa.integrazione.database.exception.MissingDataException;
 import it.unisa.integrazione.database.utility.Utilities;
+import it.unisa.integrazione.model.Account;
+import it.unisa.integrazione.model.Cycle;
 import it.unisa.integrazione.model.Degree;
 import it.unisa.integrazione.model.Department;
 import it.unisa.integrazione.model.Person;
+import it.unisa.tirocinio.manager.concrete.ConcreteOrganization;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -647,6 +652,388 @@ public class PersonManager {
         }
 
         return listaUtenti;
+    }
+    
+    /* Tirocinio */
+    /**
+     *
+     * @param SSN
+     * @return a Person object if reading operation from Database is correct,
+     * null otherwise
+     */
+    public Person readPerson(String SSN) {
+        Person aPerson = new Person();
+
+        Connection connection = null;
+        CallableStatement aCallableStatement = null;
+
+        try {
+            connection = DBConnection.getConnection();
+
+            if (connection == null) {
+                throw new ConnectionException();
+            }
+            aCallableStatement = connection.prepareCall("{call getPerson(?)}");
+            aCallableStatement.setString("personSSN", SSN);
+            ResultSet rs = aCallableStatement.executeQuery();
+
+            while (rs.next()) {
+                AccountManager anAccount = AccountManager.getInstance();
+                Account account = anAccount.readAccount(rs.getString("Account_email"));
+                aPerson.setAccount(account);
+                aPerson.setAddress(rs.getString("address"));
+                aPerson.setCitizenship(rs.getString("citizenship"));
+                aPerson.setCity(rs.getString("city"));
+                CycleManager aCycle = CycleManager.getInstance();
+                Cycle cycle = aCycle.readCycle(rs.getInt("cycle"));
+                aPerson.setCycle(cycle);
+                DepartmentManager aDepartment = DepartmentManager.getInstance();
+                Department department = aDepartment.readDepartment(rs.getString("Department_abbreviation"));
+                aPerson.setDepartment(department);
+                aPerson.setGender(rs.getString("gender"));
+                aPerson.setMatricula(rs.getString("matricula"));
+                aPerson.setName(rs.getString("name"));
+                aPerson.setPhone(rs.getString("phone"));
+                aPerson.setPosition(rs.getString("position"));
+                aPerson.setSsn(rs.getString("SSN"));
+                aPerson.setSurname(rs.getString("surname"));
+                aPerson.setUniversity(rs.getString("university"));
+                aPerson.setWebPage(rs.getString("web_page"));
+                aPerson.setZipCode(rs.getString("zip_code"));
+            }
+            rs.close();
+            return aPerson;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConcreteOrganization.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        } catch (ConnectionException ex) {
+            Logger.getLogger(PersonManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                aCallableStatement.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CycleManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            DBConnection.releaseConnection(connection);
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @return an ArrayList of Person if reading operation from Database is
+     * correct, null otherwise
+     */
+    public ArrayList<Person> getAllPeople() {
+        ArrayList<Person> people = new ArrayList<Person>();
+        Person aPerson = null;
+        Connection connection = null;
+        CallableStatement aCallableStatement = null;
+
+        try {
+            connection = DBConnection.getConnection();
+
+            if (connection == null) {
+                throw new ConnectionException();
+            }
+            aCallableStatement = connection.prepareCall("{call getAllPeople()}");
+            ResultSet rs = aCallableStatement.executeQuery();
+
+            while (rs.next()) {
+                aPerson = new Person();
+                AccountManager anAccount = AccountManager.getInstance();
+                Account account = anAccount.readAccount(rs.getString("Account_email"));
+                aPerson.setAccount(account);
+                aPerson.setAddress(rs.getString("address"));
+                aPerson.setCitizenship(rs.getString("citizenship"));
+                aPerson.setCity(rs.getString("city"));
+                CycleManager aCycle = CycleManager.getInstance();
+                Cycle cycle = aCycle.readCycle(rs.getInt("cycle"));
+                aPerson.setCycle(cycle);
+                DepartmentManager aDepartment = DepartmentManager.getInstance();
+                Department department = aDepartment.readDepartment(rs.getString("Department_abbreviation"));
+                aPerson.setDepartment(department);
+                aPerson.setGender(rs.getString("gender"));
+                aPerson.setMatricula(rs.getString("matricula"));
+                aPerson.setName(rs.getString("name"));
+                aPerson.setPhone(rs.getString("phone"));
+                aPerson.setPosition(rs.getString("position"));
+                aPerson.setSsn(rs.getString("SSN"));
+                aPerson.setSurname(rs.getString("surname"));
+                aPerson.setUniversity(rs.getString("university"));
+                aPerson.setWebPage(rs.getString("web_page"));
+                aPerson.setZipCode(rs.getString("zip_code"));
+                people.add(aPerson);
+            }
+            rs.close();
+            return people;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConcreteOrganization.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        } catch (ConnectionException ex) {
+            Logger.getLogger(PersonManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                aCallableStatement.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CycleManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            DBConnection.releaseConnection(connection);
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param email
+     * @return type of account of a certain email address
+     */
+    public String getTypeOfAccountPerson(String email) {
+        AccountManager account = AccountManager.getInstance();
+        try {
+            return account.readAccount(email).getTypeOfAccount();
+        } catch (SQLException ex) {
+            Logger.getLogger(PersonManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param email
+     * @return true if an email address belongs to a student, false otherwise
+     */
+    public boolean isAStudent(String email) {
+        String Bstudent = "Bstudent";
+        String Mstudent = "Mstudent";
+        String phd = "phd";
+
+        String variable = this.getTypeOfAccountPerson(email);
+        //Sys
+        return variable.equalsIgnoreCase(Bstudent) || variable.equalsIgnoreCase(Mstudent) || variable.equalsIgnoreCase(phd);
+    }
+
+    /**
+     *
+     * @param email
+     * @return true if an email address belongs to a professor, false otherwise
+     */
+    public boolean isAProfessor(String email) {
+        String professor = "professor";
+        String professore = "professore";
+
+        String variable = this.getTypeOfAccountPerson(email);
+
+        return variable.equalsIgnoreCase(professor) || variable.equalsIgnoreCase(professore);
+    }
+
+    /**
+     *
+     * @param email
+     * @return true if an email address belongs to an organization, false
+     * otherwise
+     */
+    public boolean isAnOrganization(String email) {
+        String org = "organization";
+        String orga = "company";
+
+        String variable = this.getTypeOfAccountPerson(email);
+
+        return variable.equalsIgnoreCase(org) || variable.equalsIgnoreCase(orga);
+    }
+
+    /**
+     *
+     * @param email
+     * @return true if an email address belongs to an administrator, false
+     * otherwise
+     */
+    public boolean isAnAdministrator(String email) {
+        String adm = "administrator";
+        String amm = "admin";
+
+        String variable = this.getTypeOfAccountPerson(email);
+
+        return variable.equalsIgnoreCase(adm) || variable.equalsIgnoreCase(amm);
+    }
+
+    /**
+     *
+     * @param email
+     * @return a Person Object if there is a professor represented by a certain
+     * email address, null otherwise
+     */
+    public Person getProfessor(String email) {
+        if (this.isAProfessor(email)) {
+            return this.readPersonByAccount(email);
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param email
+     * @return a Person Object if there is a student represented by a certain
+     * email address, null otherwise
+     */
+    public Person getStudent(String email) {
+        if (this.isAStudent(email)) {
+            return this.readPersonByAccount(email);
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param email
+     * @return a Person Object if there is an organization represented by a
+     * certain email address, null otherwise
+     */
+    public Person getOrganization(String email) {
+        if (this.isAnOrganization(email)) {
+            return this.readPersonByAccount(email);
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param email
+     * @return a Person Object if there is an administrator represented by a
+     * certain email address, null otherwise
+     */
+    public Person getAdministrator(String email) {
+        if (this.isAnAdministrator(email)) {
+            return this.readPersonByAccount(email);
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param email
+     * @return a Person object if there is a person into Database with the given
+     * email address
+     */
+    public Person readPersonByAccount(String email) {
+        Person aPerson = new Person();
+        AccountManager anAccount = AccountManager.getInstance();
+        CycleManager aCycle = CycleManager.getInstance();
+        DepartmentManager aDepartment = DepartmentManager.getInstance();
+        Connection connection = null;
+        CallableStatement aCallableStatement = null;
+
+        try {
+            connection = DBConnection.getConnection();
+
+            if (connection == null) {
+                throw new ConnectionException();
+            }
+
+            aCallableStatement = connection.prepareCall("{call getPersonByAccount(?)}");
+            aCallableStatement.setString("email", email);
+            ResultSet rs = aCallableStatement.executeQuery();
+
+            while (rs.next()) {
+                Account account = anAccount.readAccount(rs.getString("Account_email"));
+                aPerson.setAccount(account);
+                aPerson.setAddress(rs.getString("address"));
+                aPerson.setCitizenship(rs.getString("citizenship"));
+                aPerson.setCity(rs.getString("city"));
+                Cycle cycle = aCycle.readCycle(rs.getInt("cycle"));
+                aPerson.setCycle(cycle);
+                Department department = aDepartment.readDepartment(rs.getString("Department_abbreviation"));
+                aPerson.setDepartment(department);
+                aPerson.setGender(rs.getString("gender"));
+                aPerson.setMatricula(rs.getString("matricula"));
+                aPerson.setName(rs.getString("name"));
+                aPerson.setPhone(rs.getString("phone"));
+                aPerson.setPosition(rs.getString("position"));
+                aPerson.setSsn(rs.getString("SSN"));
+                aPerson.setSurname(rs.getString("surname"));
+                aPerson.setUniversity(rs.getString("university"));
+                aPerson.setWebPage(rs.getString("web_page"));
+                aPerson.setZipCode(rs.getString("zip_code"));
+            }
+            rs.close();
+            return aPerson;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConcreteOrganization.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        } catch (ConnectionException ex) {
+            Logger.getLogger(PersonManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                aCallableStatement.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CycleManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            DBConnection.releaseConnection(connection);
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param matricula
+     * @return
+     */
+    public Person getPersonByMatricula(String matricula) {
+        Person aPerson = new Person();
+        Connection connection = null;
+        CallableStatement aCallableStatement = null;
+
+        try {
+            connection = DBConnection.getConnection();
+
+            if (connection == null) {
+                throw new ConnectionException();
+            }
+
+            aCallableStatement = connection.prepareCall("{call getPersonByMatricula(?)}");
+            aCallableStatement.setString("matric", matricula);
+            ResultSet rs = aCallableStatement.executeQuery();
+
+            while (rs.next()) {
+                AccountManager anAccount = AccountManager.getInstance();
+                Account account = anAccount.readAccount(rs.getString("Account_email"));
+                aPerson.setAccount(account);
+                aPerson.setAddress(rs.getString("address"));
+                aPerson.setCitizenship(rs.getString("citizenship"));
+                aPerson.setCity(rs.getString("city"));
+                CycleManager aCycle = CycleManager.getInstance();
+                Cycle cycle = aCycle.readCycle(rs.getInt("cycle"));
+                aPerson.setCycle(cycle);
+                DepartmentManager aDepartment = DepartmentManager.getInstance();
+                Department department = aDepartment.readDepartment(rs.getString("Department_abbreviation"));
+                aPerson.setDepartment(department);
+                aPerson.setGender(rs.getString("gender"));
+                aPerson.setMatricula(rs.getString("matricula"));
+                aPerson.setName(rs.getString("name"));
+                aPerson.setPhone(rs.getString("phone"));
+                aPerson.setPosition(rs.getString("position"));
+                aPerson.setSsn(rs.getString("SSN"));
+                aPerson.setSurname(rs.getString("surname"));
+                aPerson.setUniversity(rs.getString("university"));
+                aPerson.setWebPage(rs.getString("web_page"));
+                aPerson.setZipCode(rs.getString("zip_code"));
+            }
+            rs.close();
+            return aPerson;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConcreteOrganization.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        } catch (ConnectionException ex) {
+            Logger.getLogger(PersonManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                aCallableStatement.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CycleManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            DBConnection.releaseConnection(connection);
+        }
+        return null;
     }
 
 }

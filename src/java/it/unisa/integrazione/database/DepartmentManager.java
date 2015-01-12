@@ -9,9 +9,13 @@ import it.unisa.integrazione.database.exception.ConnectionException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import it.unisa.integrazione.model.Department;
+import it.unisa.tirocinio.manager.concrete.ConcreteOrganization;
+import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -194,6 +198,51 @@ public class DepartmentManager {
             return new Department(abbreviation, tit, url, token);
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        return null;
+    }
+    
+    /* --- Tirocinio --- */
+    /**
+     *
+     * @param department
+     * @return a Department object if reading operation from Database is
+     * correct, null otherwise
+     */
+    public Department readDepartment(String department) {
+        Connection connection = null;
+        CallableStatement aCallableStatement = null;
+
+        try {
+            connection = DBConnection.getConnection();
+
+            if (connection == null) {
+                throw new ConnectionException();
+            }
+
+            Department aDepartment = new Department();
+            aCallableStatement = connection.prepareCall("{call getDepartment(?)}");
+            aCallableStatement.setString("pkDepartment", department);
+            ResultSet rs = aCallableStatement.executeQuery();
+
+            while (rs.next()) {
+                aDepartment.setAbbreviation(rs.getString("abbreviation"));
+                aDepartment.setTitle(rs.getString("title"));
+            }
+            rs.close();
+            return aDepartment;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConcreteOrganization.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        } catch (ConnectionException ex) {
+            Logger.getLogger(DepartmentManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                aCallableStatement.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CycleManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            DBConnection.releaseConnection(connection);
         }
         return null;
     }
