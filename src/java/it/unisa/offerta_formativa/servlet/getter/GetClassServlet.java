@@ -6,9 +6,9 @@
 package it.unisa.offerta_formativa.servlet.getter;
 
 import com.google.gson.Gson;
-import it.unisa.offerta_formativa.beans.Module;
-import it.unisa.offerta_formativa.manager.Exceptions.ModuleException;
-import it.unisa.offerta_formativa.manager.ModuleManager;
+import it.unisa.offerta_formativa.beans.ClassPartition;
+import it.unisa.offerta_formativa.manager.ClassManager;
+import it.unisa.offerta_formativa.manager.Exceptions.ClassPartitionException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -21,19 +21,42 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Alessandro
+ * @author daniele
  */
-@WebServlet(name = "GetModuleServlet", urlPatterns = {"/GetModuleServlet"})
-public class GetModuleServlet extends HttpServlet {
-
-    private ModuleManager modMng;
+@WebServlet(name = "GetClassServlet", urlPatterns = {"/GetClassServlet"})
+public class GetClassServlet extends HttpServlet {
     
-    public GetModuleServlet() {
+    private ClassManager classMng;
+    public GetClassServlet(){
         
-        modMng = ModuleManager.getInstance();
+        classMng = ClassManager.getInstance();
     }
-
     
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        ArrayList<ClassPartition> classes = new ArrayList<>();
+        if(request.getParameterMap().containsKey("matricula")){
+            try {
+                classes = classMng.getClassesByTeaching(request.getParameter("matricula"));
+            } catch (ClassPartitionException ex) {
+                Logger.getLogger(GetClassServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        String finalJSON = new Gson().toJson(classes);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(finalJSON);
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -47,7 +70,7 @@ public class GetModuleServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            doPost(request,response);
+        processRequest(request, response);
     }
 
     /**
@@ -61,18 +84,7 @@ public class GetModuleServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            ArrayList<Module> modules = new ArrayList<Module>();
-            if(request.getParameterMap().containsKey("matricula")){
-                try {
-                    modules = modMng.getModulesByTeaching(request.getParameter("matricula"));
-                } catch (ModuleException ex) {
-                    Logger.getLogger(GetModuleServlet.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            String finalJSON = new Gson().toJson(modules);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(finalJSON);
+        processRequest(request, response);
     }
 
     /**

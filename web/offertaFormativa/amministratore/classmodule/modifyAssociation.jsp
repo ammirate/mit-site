@@ -125,31 +125,31 @@
                                 <div class="col-sm-1"></div>
                                 <div class="panel panel-default col-sm-10">
                                 <!-- Default panel contents -->
-                                <div class="panel-heading">Modifica Professore</div>
+                                <div class="panel-heading" style="text-align: center; ">Modifica Professore</div>
                                 <form action="ModifyProfAssociationServlet" method="post" role="form" id="form" class="form-horizontal">
                                 <div class="panel-body ">
                                 
                                     <div class="row">
                                         <div class="form-group col-sm-4">
-                                            <label for="link">Classe:</label>
+                                            <label for="link" style="color: black; font-weight: bold">Classe:</label>
                                             <input type="text" name="class" id="class" class="form-control"  value="<%out.println(classTitle);%>" readonly>
                                         </div>
                                         <div class="form-group col-sm-2"></div>
                                         <div class="form-group col-sm-4">
-                                            <label for="link">Modulo:</label>
+                                            <label for="link" style="color: black; font-weight: bold">Modulo:</label>
                                             <input type="text" name="module" id="module" class="form-control" value="<%out.println(moduleTitle);%>" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-sm-4">
-                                            <label for="prof">Docente:</label>
+                                            <label for="prof" style="color: black; font-weight: bold">Docente:</label>
                                             <select id="prof" name="prof" class="form-control">
                                                 
                                             </select>
                                         </div>
                                         <div class="form-group col-sm-2"></div>
                                         <div class="form-group col-sm-4">
-                                            <label for="prof">Docente attuale:</label>
+                                            <label for="prof" style="color: black; font-weight: bold">Docente attuale:</label>
                                             <input type="text" name="oldprofname" id="oldprofname" class="form-control" value="<%out.print(profname);%>" readonly >
                                             <input type="hidden" name="oldprofmail" id="oldprofmail" class="form-control" value="<%out.print(mail);%>"  >
                                             <input type="hidden" name="matricula" id="matricula" class="form-control" value="<%out.print(matricula);%>"  >

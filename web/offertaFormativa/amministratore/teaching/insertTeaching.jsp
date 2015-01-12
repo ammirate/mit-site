@@ -46,16 +46,6 @@
                 loadModules(1);
                 changeSelect();
 
-               // $.ajax({crossDomain: true,
-                 //   type: "GET",
-                 //   contentType: "application/json; charset=utf-8",
-                 //   async: false,
-                 //   url: "http://localhost/moodle/provalogin.php",
-                 //   data: {username: 'admin', password: ''},
-                 //   dataType: "jsonp",
-                 //   jsonpCallback: function (content) {
-                 //   }});
-
             });
         </script>
 
@@ -147,21 +137,23 @@
                             <p class="bg-success" id="success" style="display:none;"><% out.print(request.getAttribute("successMessage"));%></p>
                         </div>
                         <div class="row">
+                            
                             <div class="col-sm-1"></div>
                             <div class="panel panel-default col-sm-10">
-                                <div class="panel-heading">Inserimento Insegnamento</div>
+                                <div class="panel-heading" style="text-align: center; ">Inserimento Insegnamento</div>
+                                <div class="row">   <br></div>
                                 <form action="InsertTeachingServlet" method="post" role="form" id="form" class="form-horizontal">
                                     <div class="row">
                                         <div class="col-sm-1"></div>
                                         <div class="form-group col-sm-4">
-                                            <label for="department">Dipartimento:</label> 
+                                            <label for="department" style="color: black; font-weight: bold">Dipartimento:</label> 
                                             <select name="department" id="department" class="form-control" onchange="loadDegree();">
 
                                             </select>
                                         </div>
                                         <div class="col-sm-2"></div>
                                         <div class="form-group col-sm-4">
-                                            <label for="cycle">Ciclo:</label> 
+                                            <label for="cycle" style="color: black; font-weight: bold">Ciclo:</label> 
                                             <select name="cycle" class="form-control" id="cycle"  onchange="loadDegree();">
 
                                             </select>
@@ -170,7 +162,7 @@
                                     <div class="row">
                                         <div class="col-sm-1"></div>
                                         <div class="form-group col-sm-4">
-                                            <label for="degree">Corso di Laurea:</label> 
+                                            <label for="degree" style="color: black; font-weight: bold">Corso di Laurea:</label> 
                                             <select name="degree" class="form-control" id="degree" onchange="loadCurriculum(this.value);">
 
                                             </select>
@@ -178,7 +170,7 @@
                                         <div class="col-sm-2"></div>
 
                                         <div class="form-group col-sm-4">
-                                            <label for="curriculum">Curriculum:</label> 
+                                            <label for="curriculum" style="color: black; font-weight: bold">Curriculum:</label> 
                                             <select name="curriculum" class="form-control" id="curriculum">
 
                                             </select>
@@ -188,12 +180,12 @@
                                     <div class="row">
                                         <div class="col-sm-1"></div>
                                         <div class="form-group col-sm-4">
-                                            <label for="matricula">Matricola:</label>
+                                            <label for="matricula" style="color: black; font-weight: bold">Matricola:</label>
                                             <input  minlength="10" maxlength="10" type="text" class="form-control" name="matricula" placeholder="Matricola"  required />
                                         </div>
                                         <div class="col-sm-2"></div>
                                         <div class="form-group col-sm-4">
-                                            <label for="title">Nome:</label>
+                                            <label for="title" style="color: black; font-weight: bold">Nome:</label>
                                             <input minlength="5" type="text" class="form-control" name="title" placeholder="Nome dell'insegnamento" required />
                                         </div>
                                     </div>
@@ -201,12 +193,12 @@
                                     <div class="row">
                                         <div class="col-sm-1"></div>
                                         <div class="form-group col-sm-4">
-                                            <label for="abbreviazione">Abbreviazione:</label>
+                                            <label for="abbreviazione" style="color: black; font-weight: bold">Abbreviazione:</label>
                                             <input minlength="2" maxlength="10" type="text" class="form-control" name="abbreviation" placeholder="Abbreviazione" required />
                                         </div>
                                         <div class="col-sm-2"></div>
                                         <div class="form-group col-sm-2">
-                                            <label for="year">Anno:</label> 
+                                            <label for="year" style="color: black; font-weight: bold">Anno:</label> 
                                             <select name="year" class="form-control">
                                                 <option value=1>1</option>
                                                 <option value=2>2</option>
@@ -218,7 +210,7 @@
 
                                         <div class="col-sm-1"></div>
                                         <div class="form-group col-sm-2">
-                                            <label for="semester">Semestre:</label> 
+                                            <label for="semester" style="color: black; font-weight: bold">Semestre:</label> 
                                             <select name="semester" class="form-control">
                                                 <option value=1>1</option>
                                                 <option value=2>2</option>
@@ -230,14 +222,14 @@
                                     <div class="row">
                                         <div class="col-sm-1"></div>
                                         <div class="form-group col-sm-10">
-                                            <label for="link">Link al sillabus:</label>
+                                            <label for="link" style="color: black; font-weight: bold">Link al sillabus:</label>
                                             <input  type="url" name="link"   class="form-control" placeholder="link" required />
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-1"></div>
                                         <div class="form-group col-sm-4">
-                                            <label for="classNumber">Classi:</label> 
+                                            <label for="classNumber" style="color: black; font-weight: bold">Classi:</label> 
                                             <select id="classNumber" name="classNumber" class="form-control" onchange="loadClasses(this.value);">
                                                 <option value=1>Default</option>
                                                 <option value=2>2</option>
@@ -245,7 +237,7 @@
                                         </div>
                                         <div class="form-group col-sm-2"></div>
                                         <div class="form-group col-sm-4">
-                                            <label for="moduleNumber">Moduli:</label> 
+                                            <label for="moduleNumber" style="color: black; font-weight: bold">Moduli:</label> 
                                             <select id="moduleNumber" name="moduleNumber" class="form-control" onchange="loadModules(this.value);" >
                                                 <option value=1>Default</option>
                                                 <option value=2>2</option>
@@ -325,10 +317,10 @@
                                                     var moduleNum = $("#moduleNumber option:selected").val();
                                                     var classNum = $("#classNumber option:selected").val();
                                                     for (j = 1; j <= classNum; j++) {
-                                                        stringa += "<div class='lead'>Associa Docenti a Classe " + j + " - " + $("#className" + j).val() + "</div>";
+                                                        stringa += "<div class='lead'>Associa Docenti a Classe \"" + $("#className" + j).val() + "\"</div>";
                                                         for (i = 1; i <= moduleNum; i++) {
                                                             stringa += "<div class='row'>";
-                                                            stringa += "<div class='col-sm-1'></div><div class='form-group col-sm-2'><label for='module'>" + $("#moduleName" + i).val() + "</label><select class='form-control' name='docente" + j + "-" + i + "' id='docente" + j + "-" + i + "'></select></div>";
+                                                            stringa += "<div class='col-sm-1'></div><div class='form-group col-sm-6'><label for='module'>" + $("#moduleName" + i).val() + "</label><select class='form-control' name='docente" + j + "-" + i + "' id='docente" + j + "-" + i + "'></select></div>";
                                                             stringa += "</div>";
                                                             if (!($("#moduleName" + i).val() == '') && !($("#className" + j).val() == '')) {
                                                                 count++;

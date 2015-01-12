@@ -8,7 +8,6 @@ package it.unisa.offerta_formativa.servlet.module;
 import it.unisa.offerta_formativa.manager.Exceptions.TeachingException;
 import it.unisa.offerta_formativa.manager.TeachingManager;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -55,7 +54,7 @@ public class ShowModifyModuleServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String path="/offertaFormativa/amministratore/moduleclass/";
+        String path="/offertaFormativa/amministratore/classmodule/";
         if(request.getParameterMap().containsKey("matricula") && request.getParameterMap().containsKey("moduleTitle")){
             try {
                 String matricula = request.getParameter("matricula");

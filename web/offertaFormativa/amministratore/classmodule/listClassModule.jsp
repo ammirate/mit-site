@@ -119,9 +119,11 @@
                         <p class="bg-success" id="success" style="display:none;"><% out.print(request.getAttribute("successMessage"));%></p>
                     </div>
 
-
-                <h3><% out.print(teaching.getMatricula() + " - " + teaching.getTitle() + "");%></h3>
-                <h1></h1>
+                    <div class="row "><div class="col-sm-1"></div>
+                        <div class="panel col-sm-10"><h2><% out.print(teaching.getMatricula() + " - " + teaching.getTitle() + "");%></h2></div>
+                        <div class="col-sm-1"></div>
+                    </div>        
+                
                 <div class="row ">
                     <div class="col-sm-1"></div>
                     <div class=" col-sm-10">
@@ -129,7 +131,7 @@
                         
                         <div class="panel panel-default clearfix">
                             <!-- Default panel contents -->
-                            <div class="panel-heading">Classi associate all'insegnamento</div>
+                            <div class="panel-heading" style="text-align: center; ">Classi associate all'insegnamento</div>
                             <div class="panel-body ">
                                 <!-- Table -->
                                 <div class="row table-responsive">
@@ -167,7 +169,7 @@
                     <div class="col-sm-10">
                         <div class="panel panel-default">
                             <!-- Default panel contents -->
-                            <div class="panel-heading">Moduli associati all'insegnamento</div>
+                            <div class="panel-heading" style="text-align: center;">Moduli associati all'insegnamento</div>
                             <!-- Table -->
                             <div class="panel-body">
 
@@ -208,7 +210,7 @@
                     <div class="col-sm-10">
                         <div class="panel panel-default">
                             <!-- Default panel contents -->
-                            <div class="panel-heading">Associazione dei Docenti</div>
+                            <div class="panel-heading" style="text-align: center;">Associazione dei Docenti</div>
                             <!-- Table -->
                             <div class="panel-body">
                                 <div class="row table-responsive">

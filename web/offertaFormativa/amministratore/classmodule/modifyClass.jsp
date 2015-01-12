@@ -125,16 +125,16 @@ public Teaching teaching;
                             <p class="bg-success" id="success" style="display:none;"><% out.print(request.getAttribute("successMessage"));%></p>
                         </div>
                         <div class="row">
-                            <form class="form" action="ModifyClassServlet" method="post">
+                            <form class="form" id="form" action="ModifyClassServlet" method="post">
                             <div class="col-sm-1"></div>
                             <div class="panel panel-default col-sm-10 clearfix">
                                 <!-- Default panel contents -->
-                                <div class="panel-heading"><%out.print(teaching.getMatricula() + " - " + teaching.getTitle());%></div>
+                                <div class="panel-heading" style="text-align: center;"><%out.print(teaching.getMatricula() + " - " + teaching.getTitle());%></div>
                                 <div class="panel-body ">
                                     <form action="InsertTeachingServlet" method="post" role="form" >
                                         <div class="row">
                                             <div class="form-group col-sm-9">
-                                                <label for="title">Nome Classe:</label>
+                                                <label for="title" style="color: black; font-weight: bold">Nome Classe:</label>
                                                 <input type="text" minlength="2" class="form-control" value="<%out.print(title);%>" name="classTitle">
                                             </div>
                                             <input type="text" hidden="true" name="oldClassTitle" value="<%out.print(title);%>">

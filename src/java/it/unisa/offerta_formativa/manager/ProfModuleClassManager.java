@@ -123,10 +123,69 @@ public class ProfModuleClassManager {
      * @return
      */
     public boolean updateProfessor(String profEmail, ProfModuleClass pmc) {
-        pmc.setProfEmail(profEmail);
+        
         ProfModuleClassManager manager = ProfModuleClassManager.getInstance();
         if (manager.delete(pmc)) {
+            pmc.setProfEmail(profEmail);
             return manager.create(pmc);
+        }
+        return false;
+    }
+    
+    /**
+     *
+     * @param c
+     * @param pmc
+     * @return
+     */
+    public boolean updateClassTitle(String newClassTitle, String oldClassTitle,String matricula) {
+        String esc = "\'";
+        String query = "UPDATE " + TABLE + " SET class_title="+esc+newClassTitle+esc+
+                " WHERE class_title="+esc+oldClassTitle+esc +
+                " AND teaching_matricula="+esc+matricula+esc;
+        System.out.println(query);        
+        Connection connection = null;
+        try {
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
+
+            if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProfModuleClassManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DBConnection.releaseConnection(connection);
+        }
+        return false;
+    }
+    
+    /**
+     *
+     * @param c
+     * @param pmc
+     * @return
+     */
+    public boolean updateModuleTitle(String newModuleTitle, String oldModuleTitle,String matricula) {
+        String esc = "\'";
+        String query = "UPDATE " + TABLE + " SET module_title="+esc+newModuleTitle+esc+
+                " WHERE module_title="+esc+oldModuleTitle+esc +
+                " AND teaching_matricula="+esc+matricula+esc;
+        System.out.println(query);        
+        Connection connection = null;
+        try {
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
+
+            if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProfModuleClassManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DBConnection.releaseConnection(connection);
         }
         return false;
     }
@@ -282,5 +341,59 @@ public class ProfModuleClassManager {
         }
         return toReturn;
     }
+    
+    /**
+     *
+     * @param pmc
+     * @return
+     */
+    public boolean deleteByClass(String classTitle, String matricula) {
+        String esc = "\'";
+        String query = "DELETE FROM " + TABLE + " WHERE "
+                + "class_title= " + esc + classTitle + esc + " and "
+                + "teaching_matricula= " + esc + matricula + esc;
+        Connection connection = null;
+        try {
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
 
+            if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProfModuleClassManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DBConnection.releaseConnection(connection);
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param pmc
+     * @return
+     */
+    public boolean deleteByModule(String moduleTitle, String matricula) {
+        String esc = "\'";
+        String query = "DELETE FROM " + TABLE + " WHERE "
+                + "module_title= " + esc + moduleTitle + esc + " and "
+                + "teaching_matricula= " + esc + matricula + esc;
+        Connection connection = null;
+        try {
+            connection = DBConnection.getConnection();
+            stmt = connection.createStatement();
+
+            if (stmt.executeUpdate(query) == 1) {
+                connection.commit();
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProfModuleClassManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DBConnection.releaseConnection(connection);
+        }
+        return false;
+    }
+    
 }

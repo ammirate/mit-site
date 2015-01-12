@@ -15,6 +15,9 @@ function changeSelect(){
 function loadDegree() {
     $.get('GetDegreeServlet?cycle=' + $('#cycle').val() + "&department=" + $('#department').val(), function (responseJson) {
         var $select = $('#degree');
+        $select.select2('val', '');
+        //$('#curriculum').find('option').remove();
+        $('#curriculum').select2('val', '');
         $select.removeAttr("onclick");
         $select.find('option').remove();
         $('<option>').text("").appendTo($select);

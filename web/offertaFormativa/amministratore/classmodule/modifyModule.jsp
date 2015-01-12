@@ -113,12 +113,12 @@ public Teaching teaching;
                                 <div class="col-sm-1"></div>
                                 <div class="panel panel-default col-sm-10 clearfix">
                                     <!-- Default panel contents -->
-                                    <div class="panel-heading"><%out.print(teaching.getMatricula() + " - " + teaching.getTitle());%></div>
+                                    <div class="panel-heading" style="text-align: center;"><%out.print(teaching.getMatricula() + " - " + teaching.getTitle());%></div>
                                     <div class="panel-body ">
                                         <form action="InsertTeachingServlet" method="post" role="form" >
                                             <div class="row">
                                                 <div class="form-group col-sm-9">
-                                                    <label for="title">Nome Module:</label>
+                                                    <label for="title" style="color: black; font-weight: bold">Nome Modulo:</label>
                                                     <input type="text" minlength="2" class="form-control" name="moduleTitle" value="<%out.print(title);%>">
                                                 </div>
                                                 <input type="text" hidden="true" name="oldModuleTitle" value="<%out.print(title);%>">

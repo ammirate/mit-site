@@ -5,11 +5,8 @@
  */
 package it.unisa.offerta_formativa.servlet.profmoduleclass;
 
-import it.unisa.integrazione.database.DegreeManager;
 import it.unisa.offerta_formativa.beans.ProfModuleClass;
 import it.unisa.offerta_formativa.manager.ClassManager;
-import it.unisa.offerta_formativa.manager.CurriculumManager;
-import it.unisa.offerta_formativa.manager.Exceptions.CurriculumException;
 import it.unisa.offerta_formativa.manager.ModuleManager;
 import it.unisa.offerta_formativa.manager.ProfModuleClassManager;
 import it.unisa.offerta_formativa.manager.TeachingManager;
@@ -19,7 +16,6 @@ import it.unisa.offerta_formativa.manager.Exceptions.ClassPartitionException;
 import it.unisa.offerta_formativa.manager.Exceptions.ModuleException;
 import it.unisa.offerta_formativa.manager.Exceptions.TeachingException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -87,7 +83,6 @@ public class ModifyProfAssociationServlet extends HttpServlet {
                 }
                 request.setAttribute("profmoduleclass", map);
                 request.getRequestDispatcher(path+"listClassModule.jsp").forward(request, response);
-                request.getRequestDispatcher(path+"listClassModule.jsp").forward(request,response);
             }catch (SQLException ex) {
                 Logger.getLogger(ModifyProfAssociationServlet.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ConnectionException ex) {

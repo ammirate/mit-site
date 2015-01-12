@@ -63,8 +63,8 @@
 
         <script type="text/javascript">
             $(window).load(function () {
-                
-                
+                $("#active").val("<% out.print((teaching.isActive())?"1":"0"); %>");
+                $("#year").val("<% out.print(teaching.getYear()); %>");
                 //changeSelect();
             });
         </script>
@@ -145,19 +145,20 @@
                 <div class="row">
                     <div class="col-sm-1"></div>
                     <div class="panel panel-default col-sm-10">
-                        <div class="panel-heading">Modifica Insegnamento</div>
+                        <div class="panel-heading" style="text-align: center; ">Modifica Insegnamento</div>
                         <form action="ModifyTeachingServlet" method="post" role="form" id="form" class="form-horizontal">
+                            <div class="row"><br></div>
                             <div class="row">
                                 <div class='col-sm-1'></div>
                                 <div class="form-group col-sm-4">
-                                    <label for="department">Dipartimento:</label> 
+                                    <label for="department" style="color: black; font-weight: bold">Dipartimento:</label> 
                                     <select name="department" id="department" class="form-control" onchange="loadDegree();" onclick="loadDepartment();" readonly>
                                         <option selected="selected" value="<% out.print(dept.getAbbreviation()); %>"><% out.print(dept.getTitle()); %></option>
                                     </select>
                                 </div>
                                 <div class="col-sm-2"></div>
                                 <div class="form-group col-sm-4">
-                                    <label for="cycle">Ciclo:</label> 
+                                    <label for="cycle" style="color: black; font-weight: bold">Ciclo:</label> 
                                     <select name="cycle" id="cycle" class="form-control" onchange="loadDegree();" onclick="loadCycle();" readonly >
                                         <option selected="selected" value="<% out.print(cycle.getCycleNumber()); %>"><% out.print(cycle.getTitle()); %></option>
                                     </select>
@@ -166,7 +167,7 @@
                             <div class="row">
                                 <div class='col-sm-1'></div>
                                 <div class="form-group col-sm-4">
-                                    <label for="degree">Corso di Laurea:</label> 
+                                    <label for="degree" style="color: black; font-weight: bold">Corso di Laurea:</label> 
                                     <select name="degree" class="form-control" id="degree" onchange="loadCurriculum(this.value);" onclick="loadDegree();" readonly >
                                         <option selected="selected" value="<% out.print(degree.getMatricula()); %>"><% out.print(degree.getTitle()); %></option>
                                     </select>
@@ -174,7 +175,7 @@
                                 <div class="col-sm-2"></div>
 
                                 <div class="form-group col-sm-4">
-                                    <label for="curriculum">Curriculum:</label> 
+                                    <label for="curriculum" style="color: black; font-weight: bold">Curriculum:</label> 
                                     <select name="curriculum" class="form-control" id="curriculum" onclick="loadCurriculum();" readonly >
                                         <option selected="selected" value="<% out.print(curr.getMatricula()); %>"><% out.print(curr.getTitle()); %></option>
                                     </select>
@@ -185,12 +186,12 @@
                             <div class="row">
                                 <div class='col-sm-1'></div>
                                 <div class="form-group col-sm-4">
-                                    <label for="matricula">Vecchia Matricola:</label>
+                                    <label for="matricula" style="color: black; font-weight: bold">Vecchia Matricola:</label>
                                     <input type="text" class="form-control" name="oldMatricula" id="oldMatricula" placeholder="Matricola" value="<%out.println(teaching.getMatricula());%>" readonly>
                                 </div>
                                 <div class="col-sm-2"></div>
                                 <div class="form-group col-sm-4">
-                                    <label for="matricula">Nuova Matricola:</label>
+                                    <label for="matricula" style="color: black; font-weight: bold">Nuova Matricola:</label>
                                     <input type="text" minlength="10" maxlength="10" class="form-control" name="newMatricula" id="newMatricula" placeholder="Matricola" value="<%out.println(teaching.getMatricula());%>" required >
                                 </div>
                                 <div class="col-sm-1"></div>
@@ -200,13 +201,13 @@
                             <div class="row">
                                 <div class='col-sm-1'></div>
                                 <div class="form-group col-sm-4">
-                                    <label for="title">Nome:</label>
+                                    <label for="title" style="color: black; font-weight: bold">Nome:</label>
                                     <input type="text" minlength="5" class="form-control" name="title" id="title" placeholder="Nome dell'insegnamento" value="<% out.println(teaching.getTitle()); %>">
                                 </div>
 
                                 <div class="col-sm-2"></div>
                                 <div class="form-group col-sm-4">
-                                    <label for="abbreviazione">Abbreviazione:</label>
+                                    <label for="abbreviazione" style="color: black; font-weight: bold">Abbreviazione:</label>
                                     <input type="text" minlength="2" class="form-control" name="abbreviation" id="abbreviation" placeholder="Abbreviazione" value="<%out.println(teaching.getAbbreviation());%>">
                                 </div>
                                 <div class="col-sm-1"></div>
@@ -214,24 +215,32 @@
                             <div class="row">
                                 <div class='col-sm-1'></div>
                                 <div class="form-group col-sm-2">
-                                    <label for="year">Anno:</label> 
-                                    <select name="year" id="year" class="form-control">
-                                        <%out.println("<option value="+teaching.getYear()+">"+teaching.getYear()+"</option>");%>
-                                    </select>
+                                    <label for="year" style="color: black; font-weight: bold">Anno:</label> 
+                                    
+                                        <select name="year" id="year" class="form-control">
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                        </select>
+                                    
                                 </div>
 
                                 <div class="col-sm-1"></div>
                                 <div class="form-group col-sm-2">
-                                    <label for="semester">Semestre:</label> 
+                                    <label for="semester" style="color: black; font-weight: bold">Semestre:</label> 
                                     <select name="semester" id="semester" class="form-control">
                                         <%out.println("<option value="+teaching.getSemester()+">"+teaching.getSemester()+"</option>");%>
                                     </select>
                                 </div>
                                 <div class="col-sm-2"></div>
                                 <div class="form-group col-sm-2">
-                                    <label for="active">Attivo:</label> 
+                                    <label for="active" style="color: black; font-weight: bold">Attivo:</label> 
                                     <select name="active" id="active" class="form-control">
-                                        <%out.println("<option value="+((teaching.isActive())?1:0)+">"+((teaching.isActive())?"SI":"NO")+"</option>");%>
+                                        <option value="1">SI</option>
+                                        <option value="0">NO</option>
+                                        
                                     </select>
                                 </div>
                             </div>
@@ -239,7 +248,7 @@
                             <div class="row">
                                 <div class='col-sm-1'></div>
                                 <div class="form-group col-sm-10">
-                                    <label for="link">Link al sillabus:</label>
+                                    <label for="link" style="color: black; font-weight: bold">Link al sillabus:</label>
                                     <input type="text" name="link" id="link" class="form-control" placeholder="link" value="<%out.println(teaching.getLink());%>" >
                                 </div>
                             </div>

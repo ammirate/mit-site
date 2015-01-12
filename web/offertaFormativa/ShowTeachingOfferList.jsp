@@ -131,6 +131,8 @@
                                     <div class="col-sm-1"></div>
 
                                     <div class="col-md-10">
+                                        <label style="color: black; font-weight: bold; font-size:medium;">Esami:</label>
+                                        <div> <br> </div>
                                         <ul class="list-group list-group-minimal" id="offer_list">
 
                                         </ul>

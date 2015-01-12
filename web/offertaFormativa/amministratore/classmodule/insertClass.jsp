@@ -131,20 +131,20 @@
                             <div class="col-sm-1"></div>
                             <div class="panel panel-default col-sm-10 clearfix">
                                 <!-- Default panel contents -->
-                                <div class="panel-heading">Inserimento Classe</div>
+                                <div class="panel-heading" style="text-align: center;">Inserimento Classe</div>
                                 <div class="panel-body ">
                                     <form action="InsertClassServlet" method="post" role="form" class="form-horizontal">
                                         <div class="row">
                                             <div class="col-sm-1"></div>
                                             <div class="form-group col-sm-4">
-                                                <label for="department">Dipartimento:</label> 
+                                                <label for="department" style="color: black; font-weight: bold">Dipartimento:</label> 
                                                 <select name="department" id="department" class="form-control">
                                                     
                                                 </select>
                                             </div>
                                             <div class="col-sm-2"></div>
                                             <div class="form-group col-sm-4">
-                                                <label for="cycle">Ciclo:</label> 
+                                                <label for="cycle" style="color: black; font-weight: bold">Ciclo:</label> 
                                                 <select name="cycle" id="cycle" class="form-control" onchange="loadDegree(this.value);">
                                                     
                                                 </select>
@@ -153,7 +153,7 @@
                                         <div class="row">
                                             <div class="col-sm-1"></div>
                                             <div class="form-group col-sm-4">
-                                                <label for="degree">Corso di Laurea:</label> 
+                                                <label for="degree" style="color: black; font-weight: bold">Corso di Laurea:</label> 
                                                 <select name="degree" class="form-control" id="degree" onchange="loadCurriculum(this.value);">
 
                                                 </select>
@@ -161,7 +161,7 @@
                                             <div class="col-sm-2"></div>
 
                                             <div class="form-group col-sm-4">
-                                                <label for="curriculum">Curriculum:</label> 
+                                                <label for="curriculum" style="color: black; font-weight: bold">Curriculum:</label> 
                                                 <select name="curriculum" class="form-control" id="curriculum" onchange="loadTeaching(this.value);">
                                                 </select>
                                             </div>
@@ -169,13 +169,13 @@
                                         <div class="row">
                                             <div class="col-sm-1"></div>
                                             <div class="form-group col-sm-4">
-                                                <label for="teaching">Insegnamento:</label> 
+                                                <label for="teaching" style="color: black; font-weight: bold">Insegnamento:</label> 
                                                 <select name="teaching" class="form-control" id="teaching" onchange="$('#classdiv').show();">
                                                 </select>
                                             </div>
                                             <div class="col-sm-2"></div>
                                             <div class="form-group col-sm-4" id="classdiv" style="display:none;">
-                                                <label for="classname">Classe:</label> 
+                                                <label for="classname" style="color: black; font-weight: bold">Classe:</label> 
                                                 <input type="text" id="classname" minlength="2" name="classname" class="form-control" onkeyup="loadAssociation(this.value);" >
                                             </div>
                                         </div>
@@ -243,6 +243,7 @@
                     $.ajax({url:"GetProfessorServlet?department=" + $("#department").val(), success: function (result) {
                         $.each(result, function (k, person) {
                                 options+="<option value="+person.account.email+">"+person.name +" "+person.surname+"</option>";
+                                
                             });
                         
                     },complete: function(){
@@ -251,12 +252,12 @@
                             $.each(responseJson, function (key, module) {
                             stringa+="<div class='row'><div class='col-sm-1'></div>";
                             stringa+="<div class='form-group col-sm-4'>";
-                            stringa+="<span>Modulo di "+module.title+"</span><select id='" + module.title + "' name='"+module.title+"' class='form-control'>";
+                            stringa+="<span style='color: black; font-weight: bold'>Modulo di "+module.title+"</span><select id='" + module.title + "' name='"+module.title+"' class='form-control'>";
                             stringa+=options;
                             stringa+="</select></div></div>";
-                        });
-                        $("#modules").html(stringa);
-                            
+                            });
+                            console.log(stringa);
+                            $("#modules").html(stringa);
                         });
                         
                     }});

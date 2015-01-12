@@ -6,8 +6,6 @@
 package it.unisa.offerta_formativa.servlet.classpartition;
 
 import it.unisa.offerta_formativa.manager.ClassManager;
-import it.unisa.integrazione.database.CycleManager;
-import it.unisa.integrazione.database.DepartmentManager;
 import it.unisa.offerta_formativa.beans.ProfModuleClass;
 import it.unisa.offerta_formativa.manager.Exceptions.ClassPartitionException;
 import it.unisa.offerta_formativa.manager.Exceptions.ModuleException;
@@ -18,11 +16,8 @@ import it.unisa.offerta_formativa.manager.TeachingManager;
 import it.unisa.integrazione.database.PersonManager;
 import it.unisa.integrazione.database.exception.ConnectionException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -85,6 +80,7 @@ public class DeleteClassServlet extends HttpServlet {
             if (request.getParameterMap().containsKey("matricula") && request.getParameterMap().containsKey("title")) {
                 if(!checkFields(request).equalsIgnoreCase(""))throw new ClassPartitionException(checkFields(request));
                 classMng.deleteClass( request.getParameter("matricula"),request.getParameter("title"));
+                pmcMng.deleteByClass(request.getParameter("title"), request.getParameter("matricula"));
                 request.setAttribute("matricula", request.getAttribute("matricula"));
                 request.setAttribute("successMessage", "Eliminazione della classe avvenuta con successo");
                 request.setAttribute("success", true);
