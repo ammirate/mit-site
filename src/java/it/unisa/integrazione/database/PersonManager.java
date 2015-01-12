@@ -193,7 +193,8 @@ public class PersonManager {
                 person.setAccount(AccountManager.getInstance().getAccoutnByEmail(rs.getString("Account_email")));
 
                 if (rs.getString("degree_matricula") != null) {
-                    person.setDegree(DegreeManager.getInstance().readDegree(person.getMatricula()));
+		    String matricula = person.getMatricula().substring(0, 5);
+                    person.setDegree(DegreeManager.getInstance().readDegree(matricula));
                 }
 
             }
@@ -376,9 +377,9 @@ public class PersonManager {
 
     public List<Person> getAllSupervisors() throws SQLException, ConnectionException {
         List<Person> R = new ArrayList<Person>();
-        Department dipartimento = new Department();
-        Degree corso_laurea = new Degree();
-
+	Person person = new Person();
+	Department dipartimento = null;
+	Degree corso_laurea = new Degree();
         Connection connection = null;
         Statement stmt = null;
         ResultSet rs = null;
@@ -397,9 +398,9 @@ public class PersonManager {
             rs = stmt.executeQuery(query);
 
             while (rs.next()) {
-                Person person = new Person();
-                dipartimento.setAbbreviation(rs.getString("Department_abbreviation"));
+		dipartimento = DepartmentManager.getInstance().getDepartmentByAbbreviation(rs.getString("Department_abbreviation"));
                 corso_laurea.setMatricula(rs.getString("Degree_matricula"));
+		person = new Person();
                 person.setSsn(rs.getString("SSN"));
                 person.setName(rs.getString("name"));
                 person.setSurname(rs.getString("surname"));
@@ -435,7 +436,7 @@ public class PersonManager {
 
     public Person getProfessorByThesisID(int thesis_id) throws SQLException, ConnectionException {
         Person person = new Person();
-        Department dipartimento = new Department();
+        Department dipartimento = null;
         Degree corso_laurea = new Degree();
         Connection connection = null;
         Statement stmt = null;
@@ -455,8 +456,9 @@ public class PersonManager {
             rs = stmt.executeQuery(query);
 
             while (rs.next()) {
-                dipartimento.setAbbreviation(rs.getString("Department_abbreviation"));
+                dipartimento = DepartmentManager.getInstance().getDepartmentByAbbreviation(rs.getString("Department_abbreviation"));
                 corso_laurea.setMatricula(rs.getString("Degree_matricula"));
+		person = new Person();
                 person.setSsn(rs.getString("SSN"));
                 person.setName(rs.getString("name"));
                 person.setSurname(rs.getString("surname"));
@@ -491,7 +493,8 @@ public class PersonManager {
 
     public List<Person> getAllStudents() throws SQLException, ConnectionException {
         List<Person> R = new ArrayList<Person>();
-        Department dipartimento = new Department();
+        Person person = new Person();
+        Department dipartimento = null;
         Degree corso_laurea = new Degree();
 
         Statement stmt = null;
@@ -512,9 +515,9 @@ public class PersonManager {
             rs = stmt.executeQuery(query);
 
             while (rs.next()) {
-                Person person = new Person();
-                dipartimento.setAbbreviation(rs.getString("Department_abbreviation"));
+                dipartimento = DepartmentManager.getInstance().getDepartmentByAbbreviation(rs.getString("Department_abbreviation"));
                 corso_laurea.setMatricula(rs.getString("Degree_matricula"));
+		person = new Person();
                 person.setSsn(rs.getString("SSN"));
                 person.setName(rs.getString("name"));
                 person.setSurname(rs.getString("surname"));
@@ -550,13 +553,13 @@ public class PersonManager {
 
     public Person getStudentByID(String student_id) throws SQLException, ConnectionException {
         Person person = new Person();
-        Department dipartimento = new Department();
+        Department dipartimento = null;
         Degree corso_laurea = new Degree();
         Statement stmt = null;
         Connection connection = null;
         ResultSet rs = null;
         String query = "SELECT * FROM person "
-                + "WHERE ssn = " + student_id;
+                + "WHERE ssn = '" + student_id + "'";
         try {
             connection = DBConnection.getConnection();
 
@@ -568,8 +571,9 @@ public class PersonManager {
             rs = stmt.executeQuery(query);
 
             while (rs.next()) {
-                dipartimento.setAbbreviation(rs.getString("Department_abbreviation"));
+                dipartimento = DepartmentManager.getInstance().getDepartmentByAbbreviation(rs.getString("Department_abbreviation"));
                 corso_laurea.setMatricula(rs.getString("Degree_matricula"));
+		person = new Person();
                 person.setSsn(rs.getString("SSN"));
                 person.setName(rs.getString("name"));
                 person.setSurname(rs.getString("surname"));

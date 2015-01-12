@@ -27,8 +27,7 @@ import org.json.JSONObject;
  *
  * @author CosimoAlessandro
  */
-@WebServlet(name = "PopolaSelectDipartimenti", urlPatterns = {"/PopolaSelectDipartimenti"})
-
+@WebServlet("/PopolaSelectDipartimenti")
 public class PopolaSelectDipartimenti extends HttpServlet {
     private Logger logger = Logger.getLogger("db");
     private JSONObject dipartimento;

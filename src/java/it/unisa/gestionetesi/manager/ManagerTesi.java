@@ -45,9 +45,9 @@ public class ManagerTesi {
             tesiStatement = db.createStatement();
             String query = "INSERT INTO thesis (Description, ID_Student, Thesis_Status)"
                     + "VALUES ('" + tesi.getDescrizione() + "', '" + tesi.getId_studente() + "' , '0')";
-            boolean f = tesiStatement.execute(query, Statement.RETURN_GENERATED_KEYS);
+           tesiStatement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
             db.commit();
-            logger.info(" eseguo la query di inserimento  " + f);
+            logger.info(" eseguo la query di inserimento tesi " );
 
         } catch (SQLException ex) {
             Logger.getLogger(ManagerTesi.class.getName()).log(Level.SEVERE, null, ex);
@@ -526,8 +526,11 @@ public class ManagerTesi {
             db = DBConnection.getConnection();
 
             Statement aStatement = db.createStatement();
-
-            String update = "UPDATE thesis SET Title = '" + titolo + "' , Abstract = '" + abstr + "', Start_Date = '" + data_inizio + "', Expected_End_Date = '" + data_fine_prevista + "', End_Date = '" + data_fine + "' WHERE ID = " + id_tesi;
+            if(titolo){
+                
+                
+            }
+            String update = "UPDATE thesis SET Title = '" + titolo + "' , Abstract = ' " + abstr + "', Start_Date = '" + data_inizio + "', Expected_End_Date = '" + data_fine_prevista + "', End_Date = '" + data_fine + "' WHERE ID = " + id_tesi;
 	    System.out.println(update);
             aStatement.executeUpdate(update);
 	    db.commit();

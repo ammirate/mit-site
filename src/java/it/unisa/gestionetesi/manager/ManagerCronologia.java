@@ -41,7 +41,7 @@ public class ManagerCronologia {
             String q = "INSERT INTO `chronology`(text, ID_Professor, ID_Student, Type)"
                     + "VALUES ( '" + crono.getTesto() + " ', '" + crono.getId_docente() + "' , '" + crono.getId_studente() + "', '" + crono.getTipo() + "')";
  
-            aStatement.execute(q);
+            aStatement.executeUpdate(q);
             db.commit();
         } catch (SQLException ex) {
             logger.info("query fallita: " + ex.getMessage());
