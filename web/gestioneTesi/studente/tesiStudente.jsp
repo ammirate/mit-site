@@ -71,6 +71,13 @@
                             $("#attesa").hide();
                             $("#richiesta").hide();
                             $("#inCorso").show();
+                            
+                            $('#titolo').val(titolo);
+                            $('#abstract').val(abstract);
+                            $('#data_inizio').val(data_inizio);
+                            $('#data_fine_prevista').val(data_fine_prevista);
+                            $('#data_fine').val(data_fine);
+
                             /*
                              // Use jQuery's each to iterate over the opts value
                              var professors = [];
@@ -98,13 +105,22 @@
 
                             });
                         }
-                        
+
                         if (stato_tesi == 2) {
+                            
                             $("#button_completa").prop("disabled", true);
                             $("#button_modifica").prop("disabled", true);
                             $("#titolo_panel_tesi_in_corso").html("Richiesta di completamento tesi in attesa")
                         }
 
+                        if (stato_tesi == 3) {
+                             $("#attesa").hide();
+                            $("#richiesta").hide();
+                            $("#inCorso").show();
+                            $("#button_completa").prop("disabled", true);
+                            $("#button_modifica").prop("disabled", true);
+                            $("#titolo_panel_tesi_in_corso").html("Tesi Completata")
+                        }
 
                     }
                 });
@@ -347,7 +363,7 @@
         </div>
 
         <%              //  }
-%>
+        %>
 
         <!--Bottom Scripts-->
         <script src="../assets/js/select2/select2.min.js"></script>

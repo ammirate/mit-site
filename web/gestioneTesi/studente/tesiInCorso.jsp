@@ -35,19 +35,25 @@
             $(document).on("click", "#button_modifica", function (e) {
                 e.preventDefault();
 
-               var titolo = $('#titolo').val();
-               var abstract = $('#abstract').val();
-               var data_inizio = $('#data_inizio').val();
-               var data_fine_prevista = $('#data_fine_prevista').val();
-               var data_fine = $('#data_fine').val();
-              //  $('#send_memory').attr("disabled", true);
-              //  $('#load_spinning').show();
+                var titolo = $('#titolo').val();
+                var abstract = $('#abstract').val();
+                var data_inizio = $('#data_inizio').val();
+                var data_fine_prevista = $('#data_fine_prevista').val();
+                var data_fine = $('#data_fine').val();
+                $('#button_modifica').attr("disabled", true);
+
                 $.ajax({
                     url: '${pageContext.request.contextPath}/modificaTesi',
                     type: 'POST',
-                    data: {id_tesi:id, titolo:titolo, abstract:abstract, data_inizio:data_inizio, data_fine:data_fine, data_fine_prevista:data_fine_prevista},
+                    data: {id_tesi: id, titolo: titolo, abstract: abstract, data_inizio: data_inizio, data_fine: data_fine, data_fine_prevista: data_fine_prevista},
                     success: function (msg) {
-                        alert("modifica riuscita");
+
+
+                        $('#button_modifica').attr("disabled", false);
+                        $('#success').fadeIn();
+                        $('#success').fadeOut(4000);
+
+
                     }
                 });
 
@@ -200,12 +206,12 @@
                                     size = size < 1024 ? (size + " KB") : (parseInt(size / 1024, 10) + " MB");
 
                                     var $el = $('<tr>\
-						    <td class="text-center">' + (i++) + '</td>\
-						    <td>' + file.name + '</td>\
-						    <td><div class="progress progress-striped"><div class="progress-bar progress-bar-warning"></div></div></td>\
-						    <td>' + size + '</td>\
-						    <td>Uploading...</td>\
-						</tr>');
+                                                    <td class="text-center">' + (i++) + '</td>\
+                                                    <td>' + file.name + '</td>\
+                                                    <td><div class="progress progress-striped"><div class="progress-bar progress-bar-warning"></div></div></td>\
+                                                    <td>' + size + '</td>\
+                                                    <td>Uploading...</td>\
+                                                </tr>');
 
                                     $example_dropzone_filetable.find('tbody').append($el);
                                     file.fileEntryTd = $el;
@@ -291,6 +297,13 @@
                         <span>Tesi Completata</span>
                     </button>
                 </div>
+
+                <div class="col-sm-6">
+                    <div id="success" style="display:none" class="alert alert-success">
+                        <h4 style="margin-bottom:0">Modifica avvenuta con successo.</h4>
+                    </div>
+                </div>
+
 
             </div>
         </div>
