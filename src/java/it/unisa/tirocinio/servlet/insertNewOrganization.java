@@ -63,7 +63,7 @@ public class insertNewOrganization extends HttpServlet {
         organization.setEmail(request.getParameter("email"));
         account.setEmail(request.getParameter("emailAccount"));
         account.setPassword(request.getParameter("password"));
-        account.setTypeOfAccount("organization");
+        account.setTypeOfAccount("company");
         account.setActive(true);
         Department department = new Department();
         Cycle cycle = new Cycle();

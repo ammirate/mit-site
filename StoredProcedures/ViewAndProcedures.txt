@@ -1,0 +1,110 @@
+CREATE 
+    ALGORITHM = UNDEFINED 
+    DEFINER = `root`@`localhost` 
+    SQL SECURITY DEFINER
+VIEW `numberoftrainingfororg` AS
+    SELECT 
+        `training_request`.`fk_organization` AS `fk_organization`,
+        COUNT(0) AS `counter`
+    FROM
+        `training_request`
+    GROUP BY `training_request`.`fk_organization`
+    
+    
+CREATE 
+    ALGORITHM = UNDEFINED 
+    DEFINER = `root`@`localhost` 
+    SQL SECURITY DEFINER
+VIEW `studentendedtraining` AS
+    SELECT 
+        `training_request`.`student_information_SSN` AS `student_information_SSN`,
+        `training_request`.`fk_person` AS `fk_person`
+    FROM
+        `training_request`
+    WHERE
+        (`training_request`.`fk_training_status` = 3)
+      
+      
+      
+CREATE 
+    ALGORITHM = UNDEFINED 
+    DEFINER = `root`@`localhost` 
+    SQL SECURITY DEFINER
+VIEW `studentinactivetraining` AS
+    SELECT 
+        `student_information`.`SSN` AS `SSN`
+    FROM
+        `student_information`
+    WHERE
+        ((`student_information`.`fk_student_status` = 4)
+            OR (`student_information`.`fk_student_status` = 'null'))
+            
+            
+CREATE 
+    ALGORITHM = UNDEFINED 
+    DEFINER = `root`@`localhost` 
+    SQL SECURITY DEFINER
+VIEW `studentstartedtraining` AS
+    SELECT 
+        `training_request`.`student_information_SSN` AS `student_information_SSN`,
+        `training_request`.`fk_person` AS `fk_person`
+    FROM
+        `training_request`
+    WHERE
+        (`training_request`.`fk_training_status` = 1)
+        
+        
+
+CREATE 
+    ALGORITHM = UNDEFINED 
+    DEFINER = `root`@`localhost` 
+    SQL SECURITY DEFINER
+VIEW `studentwaitingquestionnaire` AS
+    SELECT 
+        `training_request`.`student_information_SSN` AS `student_information_SSN`,
+        `training_request`.`fk_person` AS `fk_person`
+    FROM
+        `training_request`
+    WHERE
+        (`training_request`.`fk_training_status` = 2)
+        
+        
+        
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getStudentTrainingAdminView`( in functionID int )
+BEGIN
+if(functionID = 1)
+THEN
+	SELECT * FROM studentinactivetraining ;
+	ELSEIF (functionID =2)
+	THEN
+		SELECT * FROM studentstartedtraining ;
+		ELSEIF (functionID =3)
+		THEN
+			SELECT * FROM studentendedtraining ;
+			ELSEIF (functionID =4)
+			THEN
+				SELECT * FROM studentwaitingquestionnaire ;
+	END IF;
+
+END
+
+
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getStudentTrainingProfessorView`(in  professorSSN VARCHAR(16), in functionID int )
+BEGIN
+if(functionID = 1)
+THEN
+	SELECT * FROM studentinactivetraining ;
+	ELSEIF (functionID =2)
+	THEN
+		SELECT * FROM studentstartedtraining WHERE fk_person = professorSSN;
+		ELSEIF (functionID =3)
+		then
+			SELECT * FROM studentendedtraining WHERE fk_person = professorSSN;
+			ELSEIF (functionID =4)
+			then
+				SELECT * FROM studentwaitingquestionnaire WHERE fk_person = professorSSN;
+	END IF;
+
+END

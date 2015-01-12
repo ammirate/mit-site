@@ -265,7 +265,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label" for="organizationVAT">Organizzazione</label>
                                         <div class="col-sm-9">
-                                            <select name="organizationVAT" id="comboboxOrganization" class="form-control" data-validate="required" data-message-required="Per favore, inserisci l\'azienda.">
+                                            <select name="organizationVAT" id="comboboxOrganization" class="form-control">
                                             </select>
                                         </div>
                                     </div><br>
