@@ -135,30 +135,29 @@
 
                         </div>
 
-                        <label class="col-sm-2 text-primary text-right" for="tagsinput-1">Seleziona Relatori</label>
 
-                        <div class="col-sm-6 pull-right">
+                        <div class="col-sm-7 pull-right">
 
                             <script type="text/javascript">
                                 jQuery(document).ready(function ($)
                                 {
-                                    $("#multi-select").multiSelect({
-                                        afterInit: function ()
-                                        {
-                                            // Add alternative scrollbar to list
-                                            this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
-                                        },
-                                        afterSelect: function ()
-                                        {
-                                            // Update scrollbar size
-                                            this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
-                                        }
+                                    $("#seleziona_relatori").select2({
+                                        placeholder: 'Seleziona correlatori...',
+                                        allowClear: true
+                                    }).on('select2-open', function ()
+                                    {
+                                        // Adding Custom Scrollbar
+                                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                                     });
+
                                 });
                             </script>
-                            <select class="form-control" multiple="multiple" id="multi-select"  name="professors[]">
-                                <option>Ciao</option>
+
+                            <select class="form-control" id="seleziona_relatori" multiple>
+                                <option></option>
+
                             </select>
+
 
                         </div>
                     </div>
