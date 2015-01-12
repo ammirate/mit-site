@@ -8,6 +8,7 @@ import it.unisa.integrazione.database.exception.ConnectionException;
 import it.unisa.integrazione.database.exception.MissingDataException;
 import it.unisa.integrazione.model.Account;
 import it.unisa.integrazione.model.Person;
+import it.unisa.offerta_formativa.moodle.manager.MoodleUserManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -25,7 +26,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "RegistrationServlet", urlPatterns = {"/registration"})
 public class RegistrationServlet extends HttpServlet {
-
+    MoodleUserManager mUserManager;
+    private DepartmentManager depMng;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -110,6 +112,10 @@ public class RegistrationServlet extends HttpServlet {
             out.println("</script>");
             
            // response.sendRedirect("login.jsp");
+            
+            depMng = DepartmentManager.getInstance();
+            mUserManager = MoodleUserManager.getInstance(depMng.getDepartmentByAbbreviation(DepartmentManager.getInstance().getDepartmentByAbbreviation(department).getAbbreviation()).getUrlMoodle(), depMng.getDepartmentByAbbreviation(DepartmentManager.getInstance().getDepartmentByAbbreviation(department).getAbbreviation()).getToken());
+            mUserManager.createUser(email, password, name, surname, email);
             
         } catch (SQLException ex) {
             Logger.getLogger(RegistrationServlet.class.getName()).log(Level.SEVERE, null, ex);

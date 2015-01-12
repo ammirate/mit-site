@@ -42,41 +42,46 @@ public class MoodleLoginServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException, ConnectionException {
-                response.setContentType("text/html;charset=UTF-8");
-                PrintWriter out = response.getWriter();
-                Account userAccount = AccountManager.getInstance().getAccoutnByEmail(request.getParameter("email"));
-                Person p = AccountManager.getInstance().login(userAccount.getEmail(), userAccount.getPassword());
-                String USER_AGENT = "Mozilla/5.0";
-		URL obj = new URL(p.getDepartment().getUrlMoodle()+"\\singlelogin.php?username="+userAccount.getEmail()+"&password="+userAccount.getPassword());
-                
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-                System.out.println(p.getDepartment().getUrlMoodle()+"\\singlelogin.php?username="+"admin"+"&password="+userAccount.getPassword());
-		//add reuqest header
-		con.setRequestMethod("GET");
-		con.setRequestProperty("User-Agent", USER_AGENT);
- 
-		BufferedReader in = new BufferedReader(
-		        new InputStreamReader(con.getInputStream()));
-		String inputLine;
-                System.out.println(in);
-		StringBuffer resp = new StringBuffer();
- 
-		while ((inputLine = in.readLine()) != null) {
-			resp.append(inputLine);
-		}
-		in.close();
-                System.out.println(resp.toString());
-                String name = resp.toString().split("=")[0];
-                String value = resp.toString().replace(resp.toString().split("=")[0]+"=", "");
-                Cookie cookie = new Cookie(name, value.split(";")[0]);
-                System.out.println(cookie.getValue());
-                cookie.setPath("/");
-                cookie.setMaxAge(-1);
-                response.addCookie(cookie);
-                out.println("<script type=\"text/javascript\">");
-                //out.println("alert('Account non attivo');");
-                out.println("location='"+p.getDepartment().getUrlMoodle()+"';");
-                out.println("</script>");
+        Cookie killMyCookie = new Cookie("Eliminator", null);
+        killMyCookie.setMaxAge(0);
+        killMyCookie.setPath("/");
+        response.addCookie(killMyCookie);
+
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        Account userAccount = AccountManager.getInstance().getAccoutnByEmail(request.getParameter("email"));
+        Person p = AccountManager.getInstance().login(userAccount.getEmail(), userAccount.getPassword());
+        String USER_AGENT = "Mozilla/5.0";
+        URL obj = new URL(p.getDepartment().getUrlMoodle() + "\\singlelogin.php?username=" + userAccount.getEmail() + "&password=" + userAccount.getPassword());
+
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        System.out.println(p.getDepartment().getUrlMoodle() + "\\singlelogin.php?username=" + "admin" + "&password=" + userAccount.getPassword());
+        //add reuqest header
+        con.setRequestMethod("GET");
+        con.setRequestProperty("User-Agent", USER_AGENT);
+
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        System.out.println(in);
+        StringBuffer resp = new StringBuffer();
+
+        while ((inputLine = in.readLine()) != null) {
+            resp.append(inputLine);
+        }
+        in.close();
+        System.out.println(resp.toString());
+        String name = resp.toString().split("=")[0];
+        String value = resp.toString().replace(resp.toString().split("=")[0] + "=", "");
+        Cookie cookie = new Cookie(name, value.split(";")[0]);
+        System.out.println(cookie.getValue());
+        cookie.setPath("/");
+        cookie.setMaxAge(-1);
+        response.addCookie(cookie);
+        out.println("<script type=\"text/javascript\">");
+        //out.println("alert('Account non attivo');");
+        out.println("location='" + p.getDepartment().getUrlMoodle() + "';");
+        out.println("</script>");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

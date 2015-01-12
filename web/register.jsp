@@ -320,14 +320,14 @@
                                             <option value=""></option>
                                         </optgroup>
                                         <optgroup label="Triennale">
-                                            <option value="EM">Corso di Laurea in Economia e Management</option>
+                                            <option value="Economia e Management">Corso di Laurea in Economia e Management</option>
                                         </optgroup>
                                         <optgroup label="Magistrale">
-                                            <option value="CMA">Corso di Laurea in Consulenza e Management Aziendale</option>
-                                            <option value="MIT">Corso di Laurea in Tecnologie Informatiche e Management</option>
+                                            <option value="Consulenza e Management Aziendale">Corso di Laurea in Consulenza e Management Aziendale</option>
+                                            <option value="Tecnologie Informatiche e Management">Corso di Laurea in Tecnologie Informatiche e Management</option>
                                         </optgroup>
                                         <optgroup label="Dottorato">
-                                            <option value="DMIT">Corso di Dottorato in Management & Information Technology</option>
+                                            <option value="Management and Information Technology">Corso di Dottorato in Management & Information Technology</option>
                                         </optgroup>
                                         </select>
 
