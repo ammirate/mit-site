@@ -39,7 +39,7 @@
                     <li><a href="gestioneTesi/index.jsp"> <i class="linecons-graduation-cap"></i> <span
                                 class="title">Gestione Tesi</span>
                         </a></li>
-                    <li><a href="#l"> <i class="linecons-megaphone"></i> <span
+                    <li><a href="tirocinio/index.jsp"> <i class="linecons-megaphone"></i> <span
                                 class="title">Gestione Tirocinio</span>
                         </a></li>
                     <li><a href="dottorato/index.jsp"> <i class="linecons-lightbulb"></i> <span

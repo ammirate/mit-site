@@ -31,22 +31,22 @@
         
         <c:choose>
             <c:when test="${sessionScope.person.account.typeOfAccount == 'Bstudent'}">
-                <c:redirect url="/indexLog.jsp" />
+                <c:redirect url="/ShowTeachingOfferServlet" />
             </c:when>
             <c:when test="${sessionScope.person.account.typeOfAccount == 'Mstudent'}">
-                <c:redirect url="/indexLog.jsp" />
+                <c:redirect url="/ShowTeachingOfferServlet" />
             </c:when>
             <c:when test="${sessionScope.person.account.typeOfAccount == 'phd'}">
-                <c:redirect url="/indexLog.jsp" />
+                <c:redirect url="/ShowTeachingOfferServlet" />
             </c:when>
             <c:when test="${sessionScope.person.account.typeOfAccount == 'phdadmin'}">
-                <c:redirect url="/indexLog.jsp" />
+                <c:redirect url="/ShowTeachingOfferServlet" />
             </c:when>
             <c:when test="${sessionScope.person.account.typeOfAccount == 'admin'}">
-                <c:redirect url="/indexLog.jsp" />
+                <c:redirect url="/ShowTeachingOfferServlet" />
             </c:when>
             <c:when test="${sessionScope.person.account.typeOfAccount == 'company'}">
-                <c:redirect url="/indexLog.jsp" />
+                <c:redirect url="/ShowTeachingOfferServlet" />
             </c:when>
         </c:choose>
 

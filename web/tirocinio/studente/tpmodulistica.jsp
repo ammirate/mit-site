@@ -92,13 +92,13 @@
         
         <c:choose>
             <c:when test="${sessionScope.person.account.typeOfAccount == 'professor'}">
-                <c:redirect url="/indexLog.jsp" />
+                <c:redirect url="/ShowTeachingOfferServlet" />
             </c:when>
             <c:when test="${sessionScope.person.account.typeOfAccount == 'admin'}">
-                <c:redirect url="/indexLog.jsp" />
+                <c:redirect url="/ShowTeachingOfferServlet" />
             </c:when>
             <c:when test="${sessionScope.person.account.typeOfAccount == 'company'}">
-                <c:redirect url="/indexLog.jsp" />
+                <c:redirect url="/ShowTeachingOfferServlet" />
             </c:when>
         </c:choose>
 

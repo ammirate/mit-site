@@ -60,7 +60,7 @@
 
 
                     <li id="funzionalita3Permission_0">
-                        <a href="#">
+                        <a href="${pageContext.request.contextPath}/MoodleLoginServlet?email=${sessionScope.person.account.email}">
                             <i class="linecons-calendar"></i>
                             <span class="title">Calendario <br> corsi e seminari</span>
                         </a>
